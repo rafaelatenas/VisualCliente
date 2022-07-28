@@ -10,237 +10,244 @@ import { Button, Container } from '@mui/material';
 import Carousel from './carrusel';
 import './home.css';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
-
+import { CardDesktop, HeaderDesktop } from './homeComponents';
 class Home extends React.Component {
     
-    componentDidMount(){
-        var elements_menu = [
-            0,
-            1,
-            2,
-            3,
-            4,
-        ]
-        var boton = [
-            document.getElementById('menu_1'),
-            document.getElementById('menu_2'),
-            document.getElementById('menu_3'),
-            document.getElementById('menu_4'),
-            document.getElementById('menu_5')
-        ]
-        const elemento_desplegable = document.getElementsByClassName("deplegable");
-        boton.forEach(item => {
-            item.addEventListener('click',()=>{
-                for (const j of elements_menu) {
-                    var valor_boton = Array.from(item.id);
-                    var valor_desplegable = Array.from(elemento_desplegable[j].id)
-                    var comparador = valor_boton[5] === valor_desplegable[12];
-                    var valor_elemento = elemento_desplegable[j].style.display;
-                    if (valor_elemento === "none" & comparador === true) {
-                        elemento_desplegable[j].style.display = "block"
-                        const image_container = document.querySelectorAll('.image-container');
-                        for (let w = 0; w < image_container.length; w++) {
-                            if (w===j) {
-                                elemento_desplegable[j].style.width=`${image_container[w].clientWidth}px`
-                                elemento_desplegable[j].style.left =`${image_container[w].getBoundingClientRect().left}px`  
-                            }
-                        }
-                        elemento_desplegable[j].animate([
-                            { opacity: '0' },
-                            { opacity: '1' }
-                        ], {
-                            duration: 1000,
-                            fill: 'forwards',
-                        });
-                        boton[j].animate(
-                            [
-                                { transform: 'rotate(0deg)' },
-                                { transform: 'rotate(180deg)' }
-                            ], {
-                                duration: 700,
-                                fill: 'forwards'
-                            });
-                    }else if (valor_elemento === "block") {
-                        boton[j].animate(
-                            [
-                                { transform: 'rotate(180deg)' },
-                                { transform: 'rotate(0deg)' }
-                            ], {
-                                duration: 700,
-                                fill: 'forwards'
-                            });
-                        elemento_desplegable[j].animate([
-                            { opacity: '1' },
-                            { opacity: '0' }
-                        ], {
-                            duration: 1000,
-                            fill: 'forwards',
-                        })
-                        setTimeout(() => {
-                            elemento_desplegable[j].style.display = 'none'
-                        }, 1000);
-                    }
-                }
-            })
-        });
-        
-        const opciones_usuario = document.getElementById('opciones_usuario');
-        const contenedoropciones = document.getElementById('contenedoropciones');
-        var contadorClick;
-        var acumuladorClik = 0;
-        opciones_usuario.addEventListener('click',()=>{
-            acumuladorClik = acumuladorClik +1;
-            contadorClick = contadorClick++;
-            let iterador = acumuladorClik%2
-            switch (iterador) {
-                case 1:
-                    contenedoropciones.animate([
-                        {transform: 'scale(1)'}
-                    ],
-                    {
-                        fill:'forwards',
-                        duration:1200
-                    }
-                    )
-                    document.querySelector('section').addEventListener('click', () => {
-                        contenedoropciones.animate([
-                            {transform: 'scale(0)'}
-                        ],
-                            {
-                                fill:'forwards',
-                                duration:1200
-                            }
-                        )
-                    });
-                    document.querySelector('footer').addEventListener('click', () => {
-                        contenedoropciones.animate([
-                            {transform: 'scale(0)'}
-                        ],
-                            {
-                                fill:'forwards',
-                                duration:1200
-                            }
-                        )
-                    })
-                    break;
-                case 0:
-                    contenedoropciones.animate([
-                        {transform: 'scale(0)'}
-                    ],
-                    {
-                        fill:'forwards',
-                        duration:1200
-                    }
-                    )
-                    break;
-                default:
-                    break;   
-            }
-            document.querySelector('section').addEventListener('click', () => {
-                contenedoropciones.animate([
-                    {transform: 'scale(0)'}
-                ],
-                    {
-                        fill:'forwards',
-                        duration:1200
-                    }
-                )
-            });
-            document.querySelector('footer').addEventListener('click', () => {
-                contenedoropciones.animate([
-                    {transform: 'scale(0)'}
-                ],
-                    {
-                        fill:'forwards',
-                        duration:1200
-                    }
-                )
-            })
-        });
-
-        //--- Redireccionar a información de los servicios---//
-
-        var prueba = [
-            "Canales y Cadenas",
-            "NSE",
-            "Top Sku`s ",
-            "Top Proveedores",
-            "Categoría",
-            "Ranking Categorías",
-            "Omnibus",
-            "valor 8",
-            "valor 9",
-        ]
-        
-        const slide = document.querySelectorAll(".slide")
-        var texto_modal = document.getElementById('texto_modal')
-        var modal = document.getElementById('modal')
-        for (const iterador_slide of slide) {
-            iterador_slide.addEventListener('click', () => {
-                setTimeout(() => {
-                    modal.style.display = "block"
-                }, 500);
-                for (const j of elements_menu) {
-                    const elemento_desplegable = document.getElementsByClassName("deplegable");
-                    var valor_elemento = elemento_desplegable[j].style.display;
-                    if (valor_elemento === "block") {
-                        boton[j].animate(
-                            [
-                                { transform: 'rotate(180deg)' },
-                                { transform: 'rotate(0deg)' }
-                            ], {
-                                duration: 700,
-                                fill: 'forwards'
-                            });
-                        elemento_desplegable[j].animate([
-                            { opacity: '1' },
-                            { opacity: '0' }
-                        ], {
-                            duration: 1000,
-                            fill: 'forwards',
-                        })
-                        setTimeout(() => {
-                            elemento_desplegable[j].style.display = 'none'
-                        }, 1000);
-                    }
-                }
-                for (let n = 0; n < prueba.length; n++) {
-                    const elemento = n + 1;
-                    var valor_imagen = iterador_slide.children[0].dataset.icon
-                    if (`${valor_imagen}` === `${elemento}`) {
-                        var p;
-                        p = document.createElement('p');
-                        p.id = "prueba";
-                        p.innerHTML = prueba[n];
-                        texto_modal.appendChild(p);
-                    }
-                    const numero_hijo = texto_modal.childElementCount;
-                    if ((numero_hijo > 1)) {
-                        texto_modal.removeChild(texto_modal.children[0]);
-                    }
-                }
-            })
-            
-            document.querySelector('section').addEventListener('click', () => {
-                modal.style.display = "none"
-            })
-            document.querySelector('header').addEventListener('click', () => {
-                modal.style.display = "none"
-            });
+    constructor(props){
+        super(props);
+        this.state={
+            withdScreen:window.innerWidth,
         }
-
-      //-- -- --carousel de animación footer-- -- -- //
-        const pausa = document.querySelector(".slider");
-        const slide_track = document.getElementById("slide-track");
-        slide_track.style.width = `${window.screen.width*3}px`
-        pausa.addEventListener('mouseover', () => {
-            slide_track.style.animationPlayState = "paused"
-        });
-        pausa.addEventListener('mouseout', () => {
-            slide_track.style.animationPlayState = "running"
-        });  
-
     }
+
+    // componentDidMount(){
+    //     var elements_menu = [
+    //         0,
+    //         1,
+    //         2,
+    //         3,
+    //         4,
+    //     ]
+    //     var boton = [
+    //         document.getElementById('menu_1'),
+    //         document.getElementById('menu_2'),
+    //         document.getElementById('menu_3'),
+    //         document.getElementById('menu_4'),
+    //         document.getElementById('menu_5')
+    //     ]
+    //     const elemento_desplegable = document.getElementsByClassName("deplegable");
+    //     boton.forEach(item => {
+    //         item.addEventListener('click',()=>{
+    //             for (const j of elements_menu) {
+    //                 var valor_boton = Array.from(item.id);
+    //                 var valor_desplegable = Array.from(elemento_desplegable[j].id)
+    //                 var comparador = valor_boton[5] === valor_desplegable[12];
+    //                 var valor_elemento = elemento_desplegable[j].style.display;
+    //                 if (valor_elemento === "none" & comparador === true) {
+    //                     elemento_desplegable[j].style.display = "block"
+    //                     const image_container = document.querySelectorAll('.image-container');
+    //                     for (let w = 0; w < image_container.length; w++) {
+    //                         if (w===j) {
+    //                             elemento_desplegable[j].style.width=`${image_container[w].clientWidth}px`
+    //                             elemento_desplegable[j].style.left =`${image_container[w].getBoundingClientRect().left}px`  
+    //                         }
+    //                     }
+    //                     elemento_desplegable[j].animate([
+    //                         { opacity: '0' },
+    //                         { opacity: '1' }
+    //                     ], {
+    //                         duration: 1000,
+    //                         fill: 'forwards',
+    //                     });
+    //                     boton[j].animate(
+    //                         [
+    //                             { transform: 'rotate(0deg)' },
+    //                             { transform: 'rotate(180deg)' }
+    //                         ], {
+    //                             duration: 700,
+    //                             fill: 'forwards'
+    //                         });
+    //                 }else if (valor_elemento === "block") {
+    //                     boton[j].animate(
+    //                         [
+    //                             { transform: 'rotate(180deg)' },
+    //                             { transform: 'rotate(0deg)' }
+    //                         ], {
+    //                             duration: 700,
+    //                             fill: 'forwards'
+    //                         });
+    //                     elemento_desplegable[j].animate([
+    //                         { opacity: '1' },
+    //                         { opacity: '0' }
+    //                     ], {
+    //                         duration: 1000,
+    //                         fill: 'forwards',
+    //                     })
+    //                     setTimeout(() => {
+    //                         elemento_desplegable[j].style.display = 'none'
+    //                     }, 1000);
+    //                 }
+    //             }
+    //         })
+    //     });
+        
+    //     const opciones_usuario = document.getElementById('opciones_usuario');
+    //     const contenedoropciones = document.getElementById('contenedoropciones');
+    //     var contadorClick;
+    //     var acumuladorClik = 0;
+    //     opciones_usuario.addEventListener('click',()=>{
+    //         acumuladorClik = acumuladorClik +1;
+    //         contadorClick = contadorClick++;
+    //         let iterador = acumuladorClik%2
+    //         switch (iterador) {
+    //             case 1:
+    //                 contenedoropciones.animate([
+    //                     {transform: 'scale(1)'}
+    //                 ],
+    //                 {
+    //                     fill:'forwards',
+    //                     duration:1200
+    //                 }
+    //                 )
+    //                 document.querySelector('section').addEventListener('click', () => {
+    //                     contenedoropciones.animate([
+    //                         {transform: 'scale(0)'}
+    //                     ],
+    //                         {
+    //                             fill:'forwards',
+    //                             duration:1200
+    //                         }
+    //                     )
+    //                 });
+    //                 document.querySelector('footer').addEventListener('click', () => {
+    //                     contenedoropciones.animate([
+    //                         {transform: 'scale(0)'}
+    //                     ],
+    //                         {
+    //                             fill:'forwards',
+    //                             duration:1200
+    //                         }
+    //                     )
+    //                 })
+    //                 break;
+    //             case 0:
+    //                 contenedoropciones.animate([
+    //                     {transform: 'scale(0)'}
+    //                 ],
+    //                 {
+    //                     fill:'forwards',
+    //                     duration:1200
+    //                 }
+    //                 )
+    //                 break;
+    //             default:
+    //                 break;   
+    //         }
+    //         document.querySelector('section').addEventListener('click', () => {
+    //             contenedoropciones.animate([
+    //                 {transform: 'scale(0)'}
+    //             ],
+    //                 {
+    //                     fill:'forwards',
+    //                     duration:1200
+    //                 }
+    //             )
+    //         });
+    //         document.querySelector('footer').addEventListener('click', () => {
+    //             contenedoropciones.animate([
+    //                 {transform: 'scale(0)'}
+    //             ],
+    //                 {
+    //                     fill:'forwards',
+    //                     duration:1200
+    //                 }
+    //             )
+    //         })
+    //     });
+
+    //     //--- Redireccionar a información de los servicios---//
+
+    //     var prueba = [
+    //         "Canales y Cadenas",
+    //         "NSE",
+    //         "Top Sku`s ",
+    //         "Top Proveedores",
+    //         "Categoría",
+    //         "Ranking Categorías",
+    //         "Omnibus",
+    //         "valor 8",
+    //         "valor 9",
+    //     ]
+        
+    //     const slide = document.querySelectorAll(".slide")
+    //     var texto_modal = document.getElementById('texto_modal')
+    //     var modal = document.getElementById('modal')
+    //     for (const iterador_slide of slide) {
+    //         iterador_slide.addEventListener('click', () => {
+    //             setTimeout(() => {
+    //                 modal.style.display = "block"
+    //             }, 500);
+    //             for (const j of elements_menu) {
+    //                 const elemento_desplegable = document.getElementsByClassName("deplegable");
+    //                 var valor_elemento = elemento_desplegable[j].style.display;
+    //                 if (valor_elemento === "block") {
+    //                     boton[j].animate(
+    //                         [
+    //                             { transform: 'rotate(180deg)' },
+    //                             { transform: 'rotate(0deg)' }
+    //                         ], {
+    //                             duration: 700,
+    //                             fill: 'forwards'
+    //                         });
+    //                     elemento_desplegable[j].animate([
+    //                         { opacity: '1' },
+    //                         { opacity: '0' }
+    //                     ], {
+    //                         duration: 1000,
+    //                         fill: 'forwards',
+    //                     })
+    //                     setTimeout(() => {
+    //                         elemento_desplegable[j].style.display = 'none'
+    //                     }, 1000);
+    //                 }
+    //             }
+    //             for (let n = 0; n < prueba.length; n++) {
+    //                 const elemento = n + 1;
+    //                 var valor_imagen = iterador_slide.children[0].dataset.icon
+    //                 if (`${valor_imagen}` === `${elemento}`) {
+    //                     var p;
+    //                     p = document.createElement('p');
+    //                     p.id = "prueba";
+    //                     p.innerHTML = prueba[n];
+    //                     texto_modal.appendChild(p);
+    //                 }
+    //                 const numero_hijo = texto_modal.childElementCount;
+    //                 if ((numero_hijo > 1)) {
+    //                     texto_modal.removeChild(texto_modal.children[0]);
+    //                 }
+    //             }
+    //         })
+            
+    //         document.querySelector('section').addEventListener('click', () => {
+    //             modal.style.display = "none"
+    //         })
+    //         document.querySelector('header').addEventListener('click', () => {
+    //             modal.style.display = "none"
+    //         });
+    //     }
+
+    //   //-- -- --carousel de animación footer-- -- -- //
+    //     const pausa = document.querySelector(".slider");
+    //     const slide_track = document.getElementById("slide-track");
+    //     slide_track.style.width = `${window.screen.width*3}px`
+    //     pausa.addEventListener('mouseover', () => {
+    //         slide_track.style.animationPlayState = "paused"
+    //     });
+    //     pausa.addEventListener('mouseout', () => {
+    //         slide_track.style.animationPlayState = "running"
+    //     });  
+
+    // }
     PowerBi=(e)=>{
         var modal = document.getElementById('modal');
         var texto_modal = document.getElementById('texto_modal')
@@ -265,28 +272,12 @@ class Home extends React.Component {
 	render() {
 		return(
             <Container className='containerBox'>
-                <header>
-                    <div className='components-header'>
-                        <img className='logo-atenas' src={logo_atenas} alt="Logo Atenas"></img>
-                        <img className='Logo-atenas' src={atenas_logo} alt="Logo Atenas"></img>
-                        <div id="opciones_usuario" className='opcionesUsuario'>
-                            <Button className='union' startIcon={<ManageAccountsIcon style={{fill:'#575756', fontSize:'2em', width:'auto', minHeight:'28px', flexShrink:'initial'}}/>}></Button>
-                        </div>
-                        <div id="contenedoropciones" className="contenedoropcionesUsuario">
-                            <Button startIcon={<ExitToApp style={{fill:'#575756', fontSize:'2em', width:'auto', minHeight:'28px', flexShrink:'initial'}}/>} style={{display:'flex',width: '90%', height:'auto', alignItems:'center'}}>
-                                <Link style={{fontSize:'.8em'}} to={"/"}>Salir</Link>
-                            </Button>
-                            <Button startIcon={<Settings style={{fill:'#575756', fontSize:'2em', width:'auto', minHeight:'28px', flexShrink:'initial'}}/>} style={{display:'flex',width: '90%', height:'auto',alignItems:'center'}}>
-                                <Link style={{fontSize:'.8em'}} to={"CambiarC/CambiarC"}>Contraseña</Link>
-                            </Button>
-                        </div>
-                            
-                        <div className='content-usuario'>
-                        </div>
-                    </div>
-                </header>
+                {this.state.withdScreen > 900 ? <HeaderDesktop/> : ''}
+                <Container>
+                    <CardDesktop/>
+                </Container>
 
-                <section className="container">
+                {/* <section className="container">
                     <article className="gallery">
                         <div className="gallery-container">
                             <div className="gallery-item gallery-item-1" data-index="1" id="wop">
@@ -352,7 +343,7 @@ class Home extends React.Component {
                             </div>
                         </div>
                     </aside>
-                </section>
+                </section> */}
                 
                 <aside id="modal"  style={{display:'none'}}>
                     <section id="texto_modal"></section>
