@@ -1,0 +1,44 @@
+/* Estilos de Data Table */
+
+.css-1w5m2wr-MuiDataGrid-virtualScroller::-webkit-scrollbar {
+    -webkit-appearance: none;
+}
+.css-1w5m2wr-MuiDataGrid-virtualScroller::-webkit-scrollbar:vertical {
+    width: 15px;
+    padding-left: 2px;
+}
+.css-1w5m2wr-MuiDataGrid-virtualScroller::-webkit-scrollbar-button:increment,
+.tableContainer::-webkit-scrollbar-button {
+    display: none;
+}
+.tableContainer::-webkit-scrollbar:horizontal {
+    height: 10px;
+}
+.css-1w5m2wr-MuiDataGrid-virtualScroller::-webkit-scrollbar-thumb {
+    background-color: #575756;
+    border-radius: 20px;
+    border: 2px solid #f1f2f3;
+}
+.css-1w5m2wr-MuiDataGrid-virtualScroller::-webkit-scrollbar-track {
+    border-radius: 10px;
+}
+
+
+.css-1xif2b4-MuiPopper-root-MuiDataGrid-menu .MuiDataGrid-menuList {
+    outline: 0;
+    background: rgb(0 0 0 / 34%);
+    width: 100%;
+}
+
+.css-1xif2b4-MuiPopper-root-MuiDataGrid-menu .MuiDataGrid-menuList button {
+    background: transparent;
+    border: none;
+    padding: 2%;
+    cursor: pointer;
+}
+
+.swal2-container.swal2-center.swal2-backdrop-show{
+    z-index: 1600;
+}
+
+

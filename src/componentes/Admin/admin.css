@@ -1,0 +1,116 @@
+.cuerpo-modificable{
+    width: 95%;
+    height: 100%;
+    position: relative;
+    left: 5%;
+    display: grid;
+    justify-items: center;
+    grid-template-columns: 10% 90%;
+    grid-template-rows: 10% 90%;
+}
+
+/* Estilos Menu */
+.sidebar-navigation {
+    display: inline-block;
+    min-height: 100vh;
+    width: 5%;
+    background-color: #fff;
+    
+}
+.sidebar-navigation ul {
+    text-align: center;
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+    width: 100%;
+    height: 90vh;
+}
+.header-logo{
+    width: 100%;
+    height: 10%;
+    text-align: center;
+    color: #fff;
+}
+.header-logo img{
+    width: 100%;
+    height: 100%;
+    margin-top: 15%;
+    padding: 10%;
+}
+.sidebar-navigation ul li {
+    width: 100%;
+    height: 10%;
+    cursor: pointer;
+    transition: all ease-out 120ms;
+}
+.sidebar-navigation ul li a{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all ease 450ms;
+    width: 100%;
+    height: 100%;
+}
+.sidebar-navigation ul li .tooltip,
+.header-logo .tooltipH {
+    display: inline-block;
+    position: absolute;
+    background-color: #313443;
+    padding: 8px 15px;
+    border-radius: 5px;
+    left: 7%;
+    opacity: 0;
+    visibility: hidden;
+    font-size: 13px;
+    letter-spacing: .5px;
+    z-index: 20;
+    
+}
+
+.sidebar-navigation ul li .tooltip:before,
+.header-logo .tooltipH:before {
+    content: '';
+    
+    display: block;
+    position: absolute;
+    left: -4px;
+    top: 10px;
+    transform: rotate(45deg);
+    width: 10px;
+    height: 10px;
+    background-color: inherit;
+}
+.sidebar-navigation ul li:hover {
+    background-color: #575756;
+}
+.sidebar-navigation ul li:hover svg path{
+    fill: #fff;
+}
+.sidebar-navigation ul li:hover .tooltip,
+.header-logo:hover .tooltipH {
+    visibility: visible;
+    opacity: 1;
+}
+.sidebar-navigation ul li.active {
+    background-color: #575756;
+    fill: #fff;
+}
+.sidebar-navigation ul li.active svg path{
+    fill: #fff;
+}
+.sidebar-navigation ul li a svg{ 
+    width: 50%;
+    height: 50%;
+}
+
+.sidebar-navigation ul li.active a svg {
+    width: 50%;
+    height: 50%;
+    color: #98D7EC;
+}
+
+/* Fin Estilos Menu */
+
+

@@ -1,0 +1,164 @@
+@font-face {
+    font-family: 'Lucida Sans Demibold Roman';
+    src: url(../fonts/Lucida\ Sans\ Demibold\ Roman.ttf) format('TRUETYPE');
+    font-style: normal;
+    font-weight: 600;
+}
+
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+    overflow: hidden;
+}
+
+main {
+    width: 100vw;
+    height: 100vh;
+    background: rgb(6, 41, 78);
+    background: linear-gradient(180deg, rgba(6, 41, 78, 1) 0%, rgba(6, 51, 97, 1) 7%, rgba(9, 61, 113, 0.9724264705882353) 12%, rgba(3, 69, 124, 0.9948354341736695) 16%, rgba(3, 80, 143, 1) 24%, rgba(3, 80, 143, 1) 74%, rgba(10, 70, 128, 0.97) 84%, rgba(9, 61, 113, 0.98) 90%, rgba(6, 51, 97, 1) 95%, rgba(6, 41, 78, 1) 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.card {
+    height: 65%;
+    width: 90%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-image: url(../Images/logo-cuadro.png);
+    background-repeat: no-repeat;
+    background-size: 100%;
+    background-position: center;
+}
+
+.card-login {
+    position: relative;
+    top: 16%;
+    width: 90%;
+    height: 60%;
+    display: flex;
+    justify-content: center;
+}
+
+.eye-show {
+    width: 7%;
+    height: 7%;
+    position: absolute;
+    top: 31%;
+    left: 85%;
+}
+
+
+/* modificacion */
+
+.form-body {
+    height: 70%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.form-group {
+    width: 100%;
+    background: #ffff;
+    border-radius: 2em;
+    height: 20%;
+}
+
+.form {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    height: 70%;
+    width: 90%;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0 13px;
+    height: 100%;
+    border-radius: 2em;
+    color: #000;
+    opacity: .7;
+    border: none;
+    font-weight: 600;
+}
+
+.buttons {
+    width: 100%;
+    height: 30%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.interaction {
+    width: 40%;
+    height: 60%;
+    border-radius: 2em;
+    border: none;
+}
+
+.log-in {
+    background: #F6B232;
+    font-family: 'Lucida Sans Demibold Roman', sans-serif;
+    font-size: 16px;
+}
+
+.log-in:hover {
+    cursor: pointer;
+    background: #e49b15;
+}
+
+.log-in a {
+    color: #ffff;
+    text-decoration: none;
+}
+
+@media screen and (min-width: 400px) {
+    .card {
+        height: 420px;
+        width: 400px;
+    }
+}
+
+@media screen and (min-width: 1367px) {
+    .card {
+        height: 75%;
+        width: 30%;
+    }
+    .card-login {
+        top: 17%;
+        width: 85%;
+        height: 60%;
+    }
+    .form-group {
+        height: 22%;
+    }
+    .form-control {
+        font-size: 20px;
+    }
+    .log-in {
+        font-size: 30px;
+    }
+}
+
+@media screen and (min-width: 2000px) {
+    .card-login {
+        top: 25%;
+        width: 80%;
+        height: 65%;
+    }
+    .form-group {
+        height: 26%;
+    }
+    .form-control {
+        font-size: 24px;
+        padding: 0 20px;
+    }
+}

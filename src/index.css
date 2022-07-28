@@ -1,0 +1,32 @@
+
+@font-face {
+  font-family: 'Lucida Sans Demibold Roman';
+  src: url(./landing/fonts/lucida\ sans\ demibold\ roman.ttf) format('TRUETYPE');
+  font-style: normal;
+  font-weight: 600;
+}
+body {
+  margin: 0;
+  font-family: 'Lucida Sans Demibold Roman', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+#root{
+  width: 100vw;
+  height: 100vh; 
+}
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+main {
+  background: rgb(6, 41, 78);
+  background: linear-gradient(180deg, rgba(6, 41, 78, 1) 0%, rgba(6, 51, 97, 1) 7%, rgba(9, 61, 113, 0.9724264705882353) 12%, rgba(3, 69, 124, 0.9948354341736695) 16%, rgba(3, 80, 143, 1) 24%, rgba(3, 80, 143, 1) 74%, rgba(10, 70, 128, 0.97) 84%, rgba(9, 61, 113, 0.98) 90%, rgba(6, 51, 97, 1) 95%, rgba(6, 41, 78, 1) 100%);
+  
+}
