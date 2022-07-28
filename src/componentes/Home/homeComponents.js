@@ -1,13 +1,13 @@
 import React from "react";
 import { ManageAccounts, ExitToApp, Settings, AdminPanelSettings } from "@mui/icons-material";
-import { Box, Card, CardContent, Paper, SpeedDial, SpeedDialAction, Typography} from "@mui/material";
+import { Box, Card, CardContent, IconButton, Paper, Popover, SpeedDial, SpeedDialAction, Typography} from "@mui/material";
 import logoAtenas from '../../landing/Images/ats_logo-elise-blanca.png'
 import { makeStyles } from "@material-ui/styles";
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
+/* -- Modulos Header -- */
 export function HeaderMovile(){
 
 }
-
 export function HeaderDesktop(){
     const styles = useStyles();
     const actions = [
@@ -45,32 +45,6 @@ export function HeaderDesktop(){
         </Box>
     )
 }
-
-export function CardDesktop(){
-
-    const reports = [
-        {name:'WOP'},
-        {name:'Retail Scanning'},
-        {name:'Home Pantry'},
-        {name:'Excecution'},
-        {name:'CI'},
-    ]
-
-    return(
-        <Box>
-            {reports.map((report)=>(
-                <Card>
-                    <CardContent>
-                        <Typography>{report.name}</Typography>   
-                    </CardContent>
-                    <KeyboardArrowDownRoundedIcon/>
-                    <Paper></Paper>
-                </Card>
-            ))}
-        </Box>
-    )
-}
-
 const useStyles = makeStyles(()=>({
     BoxPrimary:{
         width:'90%',
@@ -100,5 +74,120 @@ const useStyles = makeStyles(()=>({
         height:'10%',
         borderTopLeftRadius:'1.5em',
         borderBottomLeftRadius:'1.5em'
+    }
+}))
+
+/* -- Modulos Tarjetas de Reportes -- */
+export function CardDesktop(){
+    const styles = useStylesCard();
+    const reports = [
+        {name:'WOP'},
+        {name:'Retail Scanning'},
+        {name:'Home Pantry'},
+        {name:'Excecution'},
+        {name:'CI'},
+    ]
+
+    return(
+        <Box className={styles.Boxcards}>
+            {reports.map((report)=>(
+                <Card className={styles.Card}>
+                    <CardContent className={styles.CardContent}>
+                        <Typography>{report.name}</Typography>   
+                    </CardContent>
+                    <IconButton>
+                       <KeyboardArrowDownRoundedIcon/> 
+                    </IconButton>
+                    <Popover><Typography sx={{ p: 1 }}>I use Popover.</Typography></Popover>
+                </Card>
+            ))}
+        </Box>
+    )
+}
+const useStylesCard = makeStyles(()=>({
+    Boxcards:{
+        display:'flex',
+        width:'100%',
+        height:'100%',
+        alignItems:'center',
+        justifyContent:'space-around',
+    },
+    Card:{
+        backgroundColor:'transparent',
+        width:'10%',
+        height:'100%',
+        display:'flex',
+        alignItems:'center',
+        flexDirection:'column'
+    },
+    CardContent:{
+        backgroundColor:'#fff',
+        width:'100%',
+        height:'50%',
+        borderRadius:'1em'
+    },
+    PaperCards:{
+        width:'100%',
+        height:'auto',
+        backgroundColor:'#fff',
+
+    }
+}))
+/* -- Modulo Carousel -- */
+export function CarouselFooter(){
+    const styles = useStylesCarousel();
+    const reports = [
+        {name:1},
+        {name:2},
+        {name:3},
+        {name:4},
+        {name:5},
+        {name:6},
+        {name:7},
+        {name:8},
+        {name:9},
+        {name:10},
+    ]
+    return(
+        <Box className={styles.BoxCarousel}>
+            {reports.map((report)=>(
+                <IconButton className={styles.CardsCarousel}>
+                    <Card>
+                        <CardContent>{report.name}</CardContent>
+                    </Card>
+                </IconButton>
+            ))}
+        </Box>
+    )
+}
+
+const useStylesCarousel = makeStyles (()=>({
+    BoxCarousel:{
+        backgroundColor:'#fff',
+        width:'100%',
+        height:'85%',
+        display:'inline-flex',
+        justifyContent:'space-around',
+        "&:before, &:after": {
+            background: 'linear-gradient(to right, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%)',
+            content: '""',
+            height: '20%',
+            width:200,
+            position: 'absolute',
+            zIndex: 2,
+        },
+        '&::after': {
+            right: 0,
+            top: '80%',
+            transform:'rotateZ(180deg)'
+        },
+    
+        '&::before' :{
+            left: 0,
+            top: '80%'
+        }
+    },
+    CardsCarousel:{
+        
     }
 }))

@@ -7,14 +7,41 @@ main {
 }
 
 /* Media query para Tablets y Movile */
+
+
+
 .containerBox{
     padding: 0 !important;
     margin: 0!important;
     max-width:none !important;
     width: 100%;
     height: 100%;
+    display: flex !important;
+    align-items: center;
+    flex-direction: column;
+    justify-content: space-between;
 }
-
+.containerCard{
+    height: 45%;
+    display: flex !important;
+    /* flex-direction: row; */
+    align-content: center;
+    justify-content: center;
+    margin:0 !important;
+    padding: 0 !important;
+    max-width: none !important;
+}
+.containerCarousel{
+    padding: 0 !important;
+    margin: 0!important;
+    max-width:none !important;
+    width: 100%;
+    height: 20%;
+    background-color: #fff;
+    display: flex !important;
+    align-items: center;
+}
+/*-- Estilo componente Header Desktop --*/
 .makeStyles-boxSecundary-2 {
     animation: logo;
     animation-duration: 2.5s;

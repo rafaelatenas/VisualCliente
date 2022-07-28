@@ -10,9 +10,9 @@ import { Button, Container } from '@mui/material';
 import Carousel from './carrusel';
 import './home.css';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
-import { CardDesktop, HeaderDesktop } from './homeComponents';
+import { CardDesktop, CarouselFooter, HeaderDesktop } from './homeComponents';
+
 class Home extends React.Component {
-    
     constructor(props){
         super(props);
         this.state={
@@ -273,10 +273,12 @@ class Home extends React.Component {
 		return(
             <Container className='containerBox'>
                 {this.state.withdScreen > 900 ? <HeaderDesktop/> : ''}
-                <Container>
+                <Container className='containerCard'>
                     <CardDesktop/>
                 </Container>
-
+                <Container className='containerCarousel'>
+                    <CarouselFooter/>
+                </Container>
                 {/* <section className="container">
                     <article className="gallery">
                         <div className="gallery-container">
@@ -345,7 +347,7 @@ class Home extends React.Component {
                     </aside>
                 </section> */}
                 
-                <aside id="modal"  style={{display:'none'}}>
+                {/* <aside id="modal"  style={{display:'none'}}>
                     <section id="texto_modal"></section>
                 </aside> 
 
@@ -361,7 +363,7 @@ class Home extends React.Component {
                     <div className="complementary-buttons">
                         <Carousel/>
                     </div>
-                </footer>
+                </footer> */}
             </Container>
             
                 
