@@ -1,12 +1,11 @@
-import React from "react";
+import React, { useState } from "react";
 import { ManageAccounts, ExitToApp, Settings, AdminPanelSettings } from "@mui/icons-material";
-import { Box, Card, CardContent, IconButton, Paper, Popover, SpeedDial, SpeedDialAction, Typography} from "@mui/material";
+import { Box, Card, CardContent, Collapse, Container, IconButton, Paper, Popover, SpeedDial, SpeedDialAction, Typography} from "@mui/material";
 import logoAtenas from '../../landing/Images/ats_logo-elise-blanca.png'
 import { makeStyles } from "@material-ui/styles";
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 /* -- Modulos Header -- */
 export function HeaderMovile(){
-
 }
 export function HeaderDesktop(){
     const styles = useStyles();
@@ -20,45 +19,59 @@ export function HeaderDesktop(){
     const handleOpenSpeedDial = () => setOpenSpeedDial(true);
     const handleCloseSpeedDial = () => setOpenSpeedDial(false);
     return(
-        <Box className={styles.BoxPrimary}>
-            <img className={styles.logoAtenas} src={logoAtenas} alt='Logo Atenas Grupo Consulto. Elise Blanca' title=""/>
-            <Box className={styles.boxSecundary} sx={{transform: 'translateZ(0px)'}}>
-                <SpeedDial
-                    ariaLabel="SpeedDial controlled open example"
-                    icon={<ManageAccounts />}
-                    onClose={handleCloseSpeedDial}
-                    onOpen={handleOpenSpeedDial}
-                    open={openSpeedDial}
-                    direction={"down"}
-                >
-                    {actions.map((action) => (
-                    <SpeedDialAction
-                        key={action.name}
-                        icon={action.icon}
-                        tooltipTitle={action.name}
-                        onClick={handleCloseSpeedDial}
-                    />
-                    ))}
-                </SpeedDial>
-            </Box>
-            <Paper className={styles.paperUser}></Paper>
-        </Box>
+        <Container className={styles.ContainerBox}>
+            <Box className={`${styles.BoxPrimary} BoxTainer`}>
+                <img className={styles.logoAtenas} src={logoAtenas} alt='Logo Atenas Grupo Consulto. Elise Blanca' title=""/>
+                <Box className={styles.boxSecundary}>
+                    <SpeedDial
+                        ariaLabel="SpeedDial controlled open example"
+                        icon={<ManageAccounts/>}
+                        onClose={handleCloseSpeedDial}
+                        onOpen={handleOpenSpeedDial}
+                        open={openSpeedDial}
+                        direction={'left'}
+                    >
+                        {actions.map((action) => (
+                        <SpeedDialAction
+                            key={action.name}
+                            icon={action.icon}
+                            tooltipTitle={action.name}
+                            onClick={handleCloseSpeedDial}
+                        />
+                        ))}
+                    </SpeedDial>
+                </Box>
+            </Box>    
+            <Paper className={`${styles.paperUser} boxSecundaryLogo`}></Paper>
+        </Container>
     )
 }
 const useStyles = makeStyles(()=>({
-    BoxPrimary:{
-        width:'90%',
+    ContainerBox:{
+        width:'100%',
         height: '15%',
-        display:'inline-flex',
         overflow:'visible',
-        margin:'2% 5% 0 5%',
+        margin:'2% 0% 0% !important',
+        //display:'flex',
+        alignItems:'center',
+        padding:'0 !important',
+        maxWidth:'none'
+    },
+    BoxPrimary:{
+        width:'100%',
+        height: '100%',
+        overflow:'visible',
+        display:'inline-flex',
         justifyContent:'space-between',
         alignItems:'center'
     },
     boxSecundary:{
-        width:'10%',
+        width:'auto',
         height:'60%',
-        overflow:'visible'
+        overflow:'visible',
+        '& div button':{
+            boxShadow:'none'
+        }
     },
     logoAtenas:{
         minWidth:75,
@@ -67,38 +80,43 @@ const useStyles = makeStyles(()=>({
         maxWidth:95
     },
     paperUser:{
-        position:'absolute',
-        right:'-10%',
+        position:'relative',
+        left:'100%',
+        top:'-90%',
         background:'red',
-        width:'15%',
-        height:'10%',
+        width:'20%',
+        height:'65%',
         borderTopLeftRadius:'1.5em',
-        borderBottomLeftRadius:'1.5em'
+        borderBottomLeftRadius:'1.5em',
+        borderRadius:0,
     }
 }))
 
 /* -- Modulos Tarjetas de Reportes -- */
-export function CardDesktop(){
+
+export function CardDesktop(props){
+    const size = 40
     const styles = useStylesCard();
     const reports = [
-        {name:'WOP'},
-        {name:'Retail Scanning'},
-        {name:'Home Pantry'},
-        {name:'Excecution'},
-        {name:'CI'},
+        {key: 1 , name:'WOP'},
+        {key: 2 , name:'Retail Scanning'},
+        {key: 3 , name:'Home Pantry'},
+        {key: 4 , name:'Excecution'},
+        {key: 5 , name:'CI'},
     ]
+
+    
 
     return(
         <Box className={styles.Boxcards}>
             {reports.map((report)=>(
-                <Card className={styles.Card}>
+                <Card className={styles.Card} key={report.key}>
                     <CardContent className={styles.CardContent}>
                         <Typography>{report.name}</Typography>   
                     </CardContent>
-                    <IconButton>
-                       <KeyboardArrowDownRoundedIcon/> 
+                    <IconButton onClick={(e)=>props.PropsCardPopoverClose(e)} style={{padding:0}}>
+                       <KeyboardArrowDownRoundedIcon style={{fill:'#fff', fontSize:'50px' }} id={report.key}></KeyboardArrowDownRoundedIcon>
                     </IconButton>
-                    <Popover><Typography sx={{ p: 1 }}>I use Popover.</Typography></Popover>
                 </Card>
             ))}
         </Box>
@@ -114,45 +132,67 @@ const useStylesCard = makeStyles(()=>({
     },
     Card:{
         backgroundColor:'transparent',
-        width:'10%',
+        width:'15%',
         height:'100%',
         display:'flex',
         alignItems:'center',
-        flexDirection:'column'
+        flexDirection:'column',
+        boxShadow:'none'
     },
     CardContent:{
         backgroundColor:'#fff',
-        width:'100%',
-        height:'50%',
-        borderRadius:'1em'
+        width:'80%',
+        height:'40%',
+        borderRadius:'1.2em',
+        minWidth:160,
+        maxWidth:250,
+        minHeight:115,
     },
     PaperCards:{
         width:'100%',
         height:'auto',
         backgroundColor:'#fff',
 
+    },
+    Collapse:{
+        width:'100%',
+        height:'100% !important',
+        borderRadius:'1.2em',
+        background:'#04172b73',
+        overflowY:'visible !important'
     }
+
 }))
 /* -- Modulo Carousel -- */
-export function CarouselFooter(){
+export function CarouselFooter(props){
     const styles = useStylesCarousel();
     const reports = [
-        {name:1},
-        {name:2},
-        {name:3},
-        {name:4},
-        {name:5},
-        {name:6},
-        {name:7},
-        {name:8},
-        {name:9},
-        {name:10},
+        {name:1, key:1},
+        {name:2, key:2},
+        {name:3, key:3},
+        {name:4, key:4},
+        {name:5, key:5},
+        {name:6, key:6},
+        {name:7, key:7},
+        {name:8, key:8},
+        {name:9, key:9},
+        {name:10, key:10},
+        {name:1, key:11},
+        {name:2, key:12},
+        {name:3, key:13},
+        {name:4, key:14},
+        {name:5, key:15},
+        {name:6, key:16},
+        {name:7, key:17},
+        {name:8, key:18},
+        {name:9, key:19},
+        {name:10, key:20},
     ]
     return(
-        <Box className={styles.BoxCarousel}>
+        <Box className="CardsCarousel">
             {reports.map((report)=>(
-                <IconButton className={styles.CardsCarousel}>
-                    <Card>
+                <IconButton className="slide" key={report.key} onMouseEnter={} onClick={(e)=>props.PropsFooterDesktop(report.key, e)}>
+                    <Card className={styles.Card}>
                         <CardContent>{report.name}</CardContent>
                     </Card>
                 </IconButton>
@@ -162,32 +202,11 @@ export function CarouselFooter(){
 }
 
 const useStylesCarousel = makeStyles (()=>({
-    BoxCarousel:{
-        backgroundColor:'#fff',
-        width:'100%',
-        height:'85%',
-        display:'inline-flex',
-        justifyContent:'space-around',
-        "&:before, &:after": {
-            background: 'linear-gradient(to right, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%)',
-            content: '""',
-            height: '20%',
-            width:200,
-            position: 'absolute',
-            zIndex: 2,
-        },
-        '&::after': {
-            right: 0,
-            top: '80%',
-            transform:'rotateZ(180deg)'
-        },
-    
-        '&::before' :{
-            left: 0,
-            top: '80%'
-        }
-    },
     CardsCarousel:{
-        
+
+    },
+    Card:{
+        width:'100%',
+        height:'100%'
     }
 }))

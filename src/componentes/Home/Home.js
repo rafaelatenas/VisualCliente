@@ -6,7 +6,7 @@ import gear from '../../landing/favicon/gear-solid.svg';
 import user from '../../landing/favicon/user-solid.svg';
 import atenas_logo from '../../landing/Images/ats_logo-blanco-elises-.png';
 import logo_atenas from '../../landing/Images/ats_logo-elise-blanca.png';
-import { Button, Container } from '@mui/material';
+import { Box, Button, Container, Typography, Modal, IconButton, Collapse, CardContent, Popover, Card } from '@mui/material';
 import Carousel from './carrusel';
 import './home.css';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
@@ -17,237 +17,37 @@ class Home extends React.Component {
         super(props);
         this.state={
             withdScreen:window.innerWidth,
+            openModal:false,
+            textModal:'',
+            idPopover:'',
+            anchorEl:null,
+        }
+    }
+    
+    handleOpenModal=(datos)=>{
+        this.state.openModal? this.setState({anchorEl:e.currentTarget}):this.setState({anchorEl:null})
+
+        this.setState({openModal:!this.state.openModal, textModal:datos})
+    }
+    handleCloseModal=()=>{
+        this.setState({openModal:!this.state.openModal})
+    }
+
+    handleClosePopover=(e)=>{
+        this.state.anchorEl === null? this.setState({anchorEl:e.currentTarget}):this.setState({anchorEl:null})
+        this.setState({idPopover:e.target.id})
+        switch (this.state.idPopover === parseInt(e.target.id)) {
+            case true:
+                this.state.anchorEl === null? this.setState({anchorEl:e.currentTarget}):this.setState({anchorEl:null})
+                break;
+            case false:
+                this.state.anchorEl === null? this.setState({anchorEl:e.currentTarget}):this.setState({anchorEl:null})
+                break;
+            default:
+                break;
         }
     }
 
-    // componentDidMount(){
-    //     var elements_menu = [
-    //         0,
-    //         1,
-    //         2,
-    //         3,
-    //         4,
-    //     ]
-    //     var boton = [
-    //         document.getElementById('menu_1'),
-    //         document.getElementById('menu_2'),
-    //         document.getElementById('menu_3'),
-    //         document.getElementById('menu_4'),
-    //         document.getElementById('menu_5')
-    //     ]
-    //     const elemento_desplegable = document.getElementsByClassName("deplegable");
-    //     boton.forEach(item => {
-    //         item.addEventListener('click',()=>{
-    //             for (const j of elements_menu) {
-    //                 var valor_boton = Array.from(item.id);
-    //                 var valor_desplegable = Array.from(elemento_desplegable[j].id)
-    //                 var comparador = valor_boton[5] === valor_desplegable[12];
-    //                 var valor_elemento = elemento_desplegable[j].style.display;
-    //                 if (valor_elemento === "none" & comparador === true) {
-    //                     elemento_desplegable[j].style.display = "block"
-    //                     const image_container = document.querySelectorAll('.image-container');
-    //                     for (let w = 0; w < image_container.length; w++) {
-    //                         if (w===j) {
-    //                             elemento_desplegable[j].style.width=`${image_container[w].clientWidth}px`
-    //                             elemento_desplegable[j].style.left =`${image_container[w].getBoundingClientRect().left}px`  
-    //                         }
-    //                     }
-    //                     elemento_desplegable[j].animate([
-    //                         { opacity: '0' },
-    //                         { opacity: '1' }
-    //                     ], {
-    //                         duration: 1000,
-    //                         fill: 'forwards',
-    //                     });
-    //                     boton[j].animate(
-    //                         [
-    //                             { transform: 'rotate(0deg)' },
-    //                             { transform: 'rotate(180deg)' }
-    //                         ], {
-    //                             duration: 700,
-    //                             fill: 'forwards'
-    //                         });
-    //                 }else if (valor_elemento === "block") {
-    //                     boton[j].animate(
-    //                         [
-    //                             { transform: 'rotate(180deg)' },
-    //                             { transform: 'rotate(0deg)' }
-    //                         ], {
-    //                             duration: 700,
-    //                             fill: 'forwards'
-    //                         });
-    //                     elemento_desplegable[j].animate([
-    //                         { opacity: '1' },
-    //                         { opacity: '0' }
-    //                     ], {
-    //                         duration: 1000,
-    //                         fill: 'forwards',
-    //                     })
-    //                     setTimeout(() => {
-    //                         elemento_desplegable[j].style.display = 'none'
-    //                     }, 1000);
-    //                 }
-    //             }
-    //         })
-    //     });
-        
-    //     const opciones_usuario = document.getElementById('opciones_usuario');
-    //     const contenedoropciones = document.getElementById('contenedoropciones');
-    //     var contadorClick;
-    //     var acumuladorClik = 0;
-    //     opciones_usuario.addEventListener('click',()=>{
-    //         acumuladorClik = acumuladorClik +1;
-    //         contadorClick = contadorClick++;
-    //         let iterador = acumuladorClik%2
-    //         switch (iterador) {
-    //             case 1:
-    //                 contenedoropciones.animate([
-    //                     {transform: 'scale(1)'}
-    //                 ],
-    //                 {
-    //                     fill:'forwards',
-    //                     duration:1200
-    //                 }
-    //                 )
-    //                 document.querySelector('section').addEventListener('click', () => {
-    //                     contenedoropciones.animate([
-    //                         {transform: 'scale(0)'}
-    //                     ],
-    //                         {
-    //                             fill:'forwards',
-    //                             duration:1200
-    //                         }
-    //                     )
-    //                 });
-    //                 document.querySelector('footer').addEventListener('click', () => {
-    //                     contenedoropciones.animate([
-    //                         {transform: 'scale(0)'}
-    //                     ],
-    //                         {
-    //                             fill:'forwards',
-    //                             duration:1200
-    //                         }
-    //                     )
-    //                 })
-    //                 break;
-    //             case 0:
-    //                 contenedoropciones.animate([
-    //                     {transform: 'scale(0)'}
-    //                 ],
-    //                 {
-    //                     fill:'forwards',
-    //                     duration:1200
-    //                 }
-    //                 )
-    //                 break;
-    //             default:
-    //                 break;   
-    //         }
-    //         document.querySelector('section').addEventListener('click', () => {
-    //             contenedoropciones.animate([
-    //                 {transform: 'scale(0)'}
-    //             ],
-    //                 {
-    //                     fill:'forwards',
-    //                     duration:1200
-    //                 }
-    //             )
-    //         });
-    //         document.querySelector('footer').addEventListener('click', () => {
-    //             contenedoropciones.animate([
-    //                 {transform: 'scale(0)'}
-    //             ],
-    //                 {
-    //                     fill:'forwards',
-    //                     duration:1200
-    //                 }
-    //             )
-    //         })
-    //     });
-
-    //     //--- Redireccionar a información de los servicios---//
-
-    //     var prueba = [
-    //         "Canales y Cadenas",
-    //         "NSE",
-    //         "Top Sku`s ",
-    //         "Top Proveedores",
-    //         "Categoría",
-    //         "Ranking Categorías",
-    //         "Omnibus",
-    //         "valor 8",
-    //         "valor 9",
-    //     ]
-        
-    //     const slide = document.querySelectorAll(".slide")
-    //     var texto_modal = document.getElementById('texto_modal')
-    //     var modal = document.getElementById('modal')
-    //     for (const iterador_slide of slide) {
-    //         iterador_slide.addEventListener('click', () => {
-    //             setTimeout(() => {
-    //                 modal.style.display = "block"
-    //             }, 500);
-    //             for (const j of elements_menu) {
-    //                 const elemento_desplegable = document.getElementsByClassName("deplegable");
-    //                 var valor_elemento = elemento_desplegable[j].style.display;
-    //                 if (valor_elemento === "block") {
-    //                     boton[j].animate(
-    //                         [
-    //                             { transform: 'rotate(180deg)' },
-    //                             { transform: 'rotate(0deg)' }
-    //                         ], {
-    //                             duration: 700,
-    //                             fill: 'forwards'
-    //                         });
-    //                     elemento_desplegable[j].animate([
-    //                         { opacity: '1' },
-    //                         { opacity: '0' }
-    //                     ], {
-    //                         duration: 1000,
-    //                         fill: 'forwards',
-    //                     })
-    //                     setTimeout(() => {
-    //                         elemento_desplegable[j].style.display = 'none'
-    //                     }, 1000);
-    //                 }
-    //             }
-    //             for (let n = 0; n < prueba.length; n++) {
-    //                 const elemento = n + 1;
-    //                 var valor_imagen = iterador_slide.children[0].dataset.icon
-    //                 if (`${valor_imagen}` === `${elemento}`) {
-    //                     var p;
-    //                     p = document.createElement('p');
-    //                     p.id = "prueba";
-    //                     p.innerHTML = prueba[n];
-    //                     texto_modal.appendChild(p);
-    //                 }
-    //                 const numero_hijo = texto_modal.childElementCount;
-    //                 if ((numero_hijo > 1)) {
-    //                     texto_modal.removeChild(texto_modal.children[0]);
-    //                 }
-    //             }
-    //         })
-            
-    //         document.querySelector('section').addEventListener('click', () => {
-    //             modal.style.display = "none"
-    //         })
-    //         document.querySelector('header').addEventListener('click', () => {
-    //             modal.style.display = "none"
-    //         });
-    //     }
-
-    //   //-- -- --carousel de animación footer-- -- -- //
-    //     const pausa = document.querySelector(".slider");
-    //     const slide_track = document.getElementById("slide-track");
-    //     slide_track.style.width = `${window.screen.width*3}px`
-    //     pausa.addEventListener('mouseover', () => {
-    //         slide_track.style.animationPlayState = "paused"
-    //     });
-    //     pausa.addEventListener('mouseout', () => {
-    //         slide_track.style.animationPlayState = "running"
-    //     });  
-
-    // }
     PowerBi=(e)=>{
         var modal = document.getElementById('modal');
         var texto_modal = document.getElementById('texto_modal')
@@ -273,104 +73,56 @@ class Home extends React.Component {
 		return(
             <Container className='containerBox'>
                 {this.state.withdScreen > 900 ? <HeaderDesktop/> : ''}
+                <Modal
+                    className='Modal'
+                    open={this.state.openModal}
+                    onClose={this.handleCloseModal}
+                    aria-labelledby="Modal de Presentacion a Descripcion de Reportes"
+                    aria-describedby="Muestra una Descripcion del contenido de los reportes"
+                >
+                    <Box className='boxModal'>
+                        <Card className='cardModal'>
+                            <CardContent className='cardModal'>
+                                <IconButton onClick={this.handleCloseModal} title='Cerrar Modal'>
+                                <CloseRounded></CloseRounded>
+                            </IconButton>
+                            <Typography>{this.state.textModal}</Typography>
+                            </CardContent>
+                        </Card>
+                    </Box>
+                </Modal>
                 <Container className='containerCard'>
-                    <CardDesktop/>
+                    <CardDesktop 
+                        PropsCardPopoverClose={this.handleClosePopover}
+                        PropsCardPopover={this.state.openPopover}
+                        PropsIdPopover={this.state.idPopover}
+                    />
+                    <Popover
+                        open={Boolean(this.state.anchorEl)}
+                        onClose={this.handleClosePopover}
+                        anchorEl={this.state.anchorEl}
+                        //anchorPosition={{ top: this.state.medidas.top + this.state.medidas.top*0.2, left: this.state.medidas.left }}
+                        anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'center',
+                        }}
+                        transformOrigin={{
+                            vertical: 'top',
+                            horizontal: 'center',
+                        }}
+                        style={{backgroundColor:'trasnparent', position:'absolute'}}
+                    >
+                        <CardContent style={{background:'#04172b73'}}>
+                            The content of the Popover.
+                        </CardContent>
+                    </Popover>
                 </Container>
-                <Container className='containerCarousel'>
-                    <CarouselFooter/>
+                <Container class='BoxCarousel containerCarousel'>
+                    <CarouselFooter PropsFooterDesktop={this.handleOpenModal}/>
                 </Container>
-                {/* <section className="container">
-                    <article className="gallery">
-                        <div className="gallery-container">
-                            <div className="gallery-item gallery-item-1" data-index="1" id="wop">
-                                <button id="img_1" className="image-container"></button>
-                                <img id="menu_1" src={angle_down} alt="Show Menu"></img>
-                            </div>
-                            <div className="gallery-item gallery-item-2" data-index="2" id="scanning">
-                                <button id="img_2" className="image-container"></button>
-                                <img id="menu_2" src={angle_down} alt="Show Menu"></img>
-                            </div>
-                            <div className="gallery-item gallery-item-3" data-index="3" id="home_pantry">
-                                <button id="img_3" className="image-container"></button>
-                                <img id="menu_3" src={angle_down} alt="Show Menu"></img>
-                            </div>
-                            <div className="gallery-item gallery-item-4" data-index="4" id="execution">
-                                <button id="img_4" className="image-container"></button>
-                                <img id="menu_4" src={angle_down} alt="Show Menu"></img>
-                            </div>
-                            <div className="gallery-item gallery-item-5" data-index="5" id="CI">
-                                <button id="img_5" className="image-container"></button>
-                                <img id="menu_5" src={angle_down} alt="Show Menu"></img>
-                            </div>
-                        </div>
-                        <div className="gallery-controls"></div>
-                    </article>
-                    <aside style={{display:'none'}} className="deplegable" id="despelgable_1">
-                        <div className="container-desplegable">
-                            <div className="content-desplegable">
-                                <div id="elementsWOP">
-                                    <Link to={'/data'}>data</Link>
-                                    <Link to={'/management/panel'}>admin</Link>
-                                    <button id='wopBi' onClick={this.PowerBi}>WOP</button>
-                                    <button id='manejadorBi' onClick={this.PowerBi}>WOP</button>
-                                </div>
-                            </div>
-                        </div>
-                    </aside>
-                    <aside style={{display:'none'}} className="deplegable" id="despelgable_2">
-                        <div className="container-desplegable">
-                            <div className="content-desplegable">
-                                <div id="elementsRSc"></div>
-                            </div>
-                        </div>
-                    </aside>
-                    <aside style={{display:'none'}} className="deplegable" id="despelgable_3">
-                        <div className="container-desplegable">
-                            <div className="content-desplegable">
-                                <div id="elementsHP"></div>
-                            </div>
-                        </div>
-                    </aside>
-                    <aside style={{display:'none'}} className="deplegable" id="despelgable_4">
-                        <div className="container-desplegable">
-                            <div className="content-desplegable">
-                                <div id="elementsExc"></div>
-                            </div>
-                        </div>
-                    </aside>
-                    <aside style={{display:'none'}} className="deplegable" id="despelgable_5">
-                        <div className="container-desplegable">
-                            <div className="content-desplegable">
-                                <div id="elementsCI"></div>
-                            </div>
-                        </div>
-                    </aside>
-                </section> */}
-                
-                {/* <aside id="modal"  style={{display:'none'}}>
-                    <section id="texto_modal"></section>
-                </aside> 
-
-                <footer>
-                    <div id="barUser" className="bar-user">
-                        <img src="" alt=""></img>
-                    </div>
-                    <div className="modificables">
-                        <ExitToApp className="log_out"></ExitToApp>
-                        <HomeOutlined className="home"></HomeOutlined>
-                        <Settings className="config"></Settings>
-                    </div>
-                    <div className="complementary-buttons">
-                        <Carousel/>
-                    </div>
-                </footer> */}
             </Container>
-            
-                
-            
         )
     }
 }
 
 export default Home;
-

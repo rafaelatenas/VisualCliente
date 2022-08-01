@@ -36,26 +36,125 @@ main {
     margin: 0!important;
     max-width:none !important;
     width: 100%;
-    height: 20%;
+    height: 18%;
     background-color: #fff;
     display: flex !important;
     align-items: center;
 }
 /*-- Estilo componente Header Desktop --*/
-.makeStyles-boxSecundary-2 {
+.boxSecundaryLogo {
     animation: logo;
+    animation-fill-mode: forwards;
     animation-duration: 2.5s;
-    animation-timing-function: cubic-bezier(0.79, 1.4, 1, 1);
-    animation-delay: 3s;
+    animation-timing-function:linear;
     }
     
 
 @keyframes logo {
-        0% {
-            transform: translateX(0px);
-        }
-        100% {
-            transform: translateX(20px);
-
-        }
+    0% {
+        transform: translateX(0%);
     }
+    100% {
+        transform: translateX(-80%);
+    }
+}
+.BoxTainer {
+    animation: Container;
+    animation-fill-mode: forwards;
+    animation-duration: 2.5s;
+    animation-timing-function:linear;
+    }
+    
+
+@keyframes Container {
+    0% {
+        width: 100%;
+        margin-left: 0%;
+    }
+    100% {
+        width: 75%;
+        margin-left: 5%;
+    }
+}
+
+
+
+/*--- Estilos de Footer y Animación de Scroll ---*/
+    @keyframes scroll {
+        0% {
+            transform: translateX(0);
+       }
+        100% {
+            transform: translateX(calc(-250px * 10));
+       }
+   }
+    .BoxCarousel {
+        background: white;
+        box-shadow: 0 10px 20px -5px rgba(0, 0, 0, .125);
+        margin: auto;
+        overflow: hidden;
+        position: relative;
+        width: 100%;
+   }
+    .BoxCarousel::before, .BoxCarousel::after {
+        background: linear-gradient(to right, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 23%) 100%);
+        content: "";
+        height: 100%;
+        position: absolute;
+        width: 200px;
+        z-index: 2;
+   }
+    .BoxCarousel::after {
+        right: 0;
+        top: 0;
+        transform: rotateZ(180deg);
+   }
+    .BoxCarousel::before {
+        left: 0;
+        top: 0;
+   }
+    .BoxCarousel .CardsCarousel {
+        animation: scroll 40s linear infinite;
+        display: flex;
+        width: 100%;
+        height: 100%;
+        overflow: visible;
+   }
+    .BoxCarousel .slide {
+        height: 100%;
+        min-width: 180px;
+        max-width: 300px;
+        width: 100%;
+   }
+    .Modal{
+        width:100%;
+        height:82%
+    }
+    .Modal .css-i9fmh8-MuiBackdrop-root-MuiModal-backdrop{
+        height: 82%;
+    }
+    .boxModal{
+        width: 50%;
+        height: 60%;
+        position: absolute;
+        background: #fff;
+        left: 25%;
+        top: 25%;
+        border-radius: 1.2em;
+        max-width: 700px;
+        min-width: 450px;
+    }
+    .cardModal{
+        width: 100%;
+        height: 100%;
+    }
+@media screen and (min-width: 1800px) {
+    @keyframes scroll {
+        0% {
+            transform: translateX(0);
+       }
+        100% {
+            transform: translateX(calc(-310px * 10));
+       }
+   }
+}
