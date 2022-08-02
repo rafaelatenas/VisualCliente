@@ -1,18 +1,51 @@
 import React, { useState } from "react";
 import { ManageAccounts, ExitToApp, Settings, AdminPanelSettings } from "@mui/icons-material";
-import { Box, Card, CardContent, Collapse, Container, IconButton, Paper, Popover, SpeedDial, SpeedDialAction, Typography} from "@mui/material";
-import logoAtenas from '../../landing/Images/ats_logo-elise-blanca.png'
+import { Box, Card, CardContent, Link, Container, getNativeSelectUtilityClasses, IconButton, Paper, Popover, SpeedDial, SpeedDialAction, Typography} from "@mui/material";
+import eliseAtenas from '../../landing/Images/ats_logo-elise-blanca.png'
+import logoAtenas from '../../landing/Images/ats_logo-blanco-elises.png'
 import { makeStyles } from "@material-ui/styles";
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
+import { NavLink } from "react-router-dom";
+
+const reports = [
+    {key: 1 , name:'WOP'},
+    {key: 2 , name:'Retail Scanning'},
+    {key: 3 , name:'Home Pantry'},
+    {key: 4 , name:'Excecution'},
+    {key: 5 , name:'CI'},
+]
+
 /* -- Modulos Header -- */
 export function HeaderMovile(){
+    const styles = useStylesMoViles();
+    const withdScreen=window.innerWidth;
+    const heightScreen=window.innerHeight;
+    
+    return(
+        <Box className={styles.Box}>
+            <img className={styles.ImgLogo} src={logoAtenas} alt='Logo Atenas Grupo Consulto. Elise Blanca' title=""/>
+        </Box>
+    )
 }
+const useStylesMoViles = makeStyles((withdScreen, heightScreen)=>({
+    Box:{
+        width:'100%',
+        height:'25%',
+        display:'inline-flex',
+        justifyContent:'center',
+        alignItems:'flex-end'
+    },
+    ImgLogo:{
+        width:'auto',
+        height:'90%',
+    }
+}))
 export function HeaderDesktop(){
     const styles = useStyles();
     const actions = [
-        { icon: <ExitToApp />, name: 'Salir' },
-        { icon: <Settings />, name: 'Configuraciones' },
-        { icon: <AdminPanelSettings />, name: 'Panel Administrativo' },
+        { icon: <NavLink className={styles.LinkIcons} to={'/'} ><ExitToApp className={styles.IconsSpeedDial}/></NavLink> , name: 'Salir', admin:0 },
+        { icon: <NavLink className={styles.LinkIcons} to={'home/CambiarC/CambiarC'} ><Settings className={styles.IconsSpeedDial}/></NavLink>, name: 'Configuraciones', admin:0 },
+        { icon: <NavLink className={styles.LinkIcons} to={'management/panel'} ><AdminPanelSettings className={styles.IconsSpeedDial}/></NavLink>, name: 'Panel Administrativo', admin:1 },
 
     ];
     const [openSpeedDial, setOpenSpeedDial] = React.useState(false);
@@ -21,7 +54,7 @@ export function HeaderDesktop(){
     return(
         <Container className={styles.ContainerBox}>
             <Box className={`${styles.BoxPrimary} BoxTainer`}>
-                <img className={styles.logoAtenas} src={logoAtenas} alt='Logo Atenas Grupo Consulto. Elise Blanca' title=""/>
+                <img className={styles.eliseAtenas} src={eliseAtenas} alt='Logo Atenas Grupo Consulto. Elise Blanca' title=""/>
                 <Box className={styles.boxSecundary}>
                     <SpeedDial
                         ariaLabel="SpeedDial controlled open example"
@@ -31,14 +64,24 @@ export function HeaderDesktop(){
                         open={openSpeedDial}
                         direction={'left'}
                     >
-                        {actions.map((action) => (
-                        <SpeedDialAction
+                        {actions.map((action) =>{ 
+                            //Validación de Tipos de Usuario (Administrador y Cliente)
+                            // switch (key) {
+                            //     case value:
+                                    
+                            //         break;
+                            
+                            //     default:
+
+                            //         break;
+                            // }
+                        return(<SpeedDialAction
+                            id={action.id}
                             key={action.name}
                             icon={action.icon}
                             tooltipTitle={action.name}
-                            onClick={handleCloseSpeedDial}
-                        />
-                        ))}
+                        />)
+                        })}
                     </SpeedDial>
                 </Box>
             </Box>    
@@ -73,7 +116,7 @@ const useStyles = makeStyles(()=>({
             boxShadow:'none'
         }
     },
-    logoAtenas:{
+    eliseAtenas:{
         minWidth:75,
         minHeight:79,
         maxHeight:100,
@@ -83,29 +126,45 @@ const useStyles = makeStyles(()=>({
         position:'relative',
         left:'100%',
         top:'-90%',
-        background:'red',
         width:'20%',
         height:'65%',
         borderTopLeftRadius:'1.5em',
         borderBottomLeftRadius:'1.5em',
         borderRadius:0,
+    },
+    LinkIcons:{
+        display: 'flex',
+        alignItems: 'flex-start',
+    },
+    IconsSpeedDial:{
+        width:'100%',
+        height:'100%',
+        padding:'10%',
+        fill:'#575756'
     }
 }))
 
 /* -- Modulos Tarjetas de Reportes -- */
+export function CardMovile(){
+    const styles = useStylesCardMovile()
+    return(
+        <Container>
+            <Box>
+                {reports.map((report)=>{
+                    <Card>
+                        <CardContent></CardContent>
+                    </Card>
+                })}
+            </Box>
+        </Container>
+    )
+}
+const useStylesCardMovile = makeStyles(()=>({
+
+}))
 
 export function CardDesktop(props){
-    const size = 40
     const styles = useStylesCard();
-    const reports = [
-        {key: 1 , name:'WOP'},
-        {key: 2 , name:'Retail Scanning'},
-        {key: 3 , name:'Home Pantry'},
-        {key: 4 , name:'Excecution'},
-        {key: 5 , name:'CI'},
-    ]
-
-    
 
     return(
         <Box className={styles.Boxcards}>
@@ -164,6 +223,12 @@ const useStylesCard = makeStyles(()=>({
 
 }))
 /* -- Modulo Carousel -- */
+export function footerMovile() {
+    const styles = usefooterMovile();
+}
+const usefooterMovile = makeStyles (()=>({
+
+}))
 export function CarouselFooter(props){
     const styles = useStylesCarousel();
     const reports = [
@@ -188,10 +253,11 @@ export function CarouselFooter(props){
         {name:9, key:19},
         {name:10, key:20},
     ]
+    const [paused, setPaused]=useState(false)
     return(
-        <Box className="CardsCarousel">
+        <Box className="CardsCarousel" style={paused ? {animationPlayState: 'paused'}:{animationPlayState:'running'}} onMouseEnter={()=>setPaused(true)} onMouseLeave={()=>setPaused(false)}>
             {reports.map((report)=>(
-                <IconButton className="slide" key={report.key} onMouseEnter={} onClick={(e)=>props.PropsFooterDesktop(report.key, e)}>
+                <IconButton className="slide" key={report.key}  onClick={(e)=>props.PropsFooterOpenModal(report.key, e)}>
                     <Card className={styles.Card}>
                         <CardContent>{report.name}</CardContent>
                     </Card>
@@ -202,9 +268,6 @@ export function CarouselFooter(props){
 }
 
 const useStylesCarousel = makeStyles (()=>({
-    CardsCarousel:{
-
-    },
     Card:{
         width:'100%',
         height:'100%'

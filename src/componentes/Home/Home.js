@@ -1,16 +1,8 @@
-import { Close, CloseRounded, ExitToApp, HomeOutlined, Settings } from '@material-ui/icons';
+import { CloseRounded} from '@material-ui/icons';
 import React from 'react';
-import { Link } from 'react-router-dom';
-import angle_down from '../../landing/favicon/angle-down-solid.svg';
-import gear from '../../landing/favicon/gear-solid.svg';
-import user from '../../landing/favicon/user-solid.svg';
-import atenas_logo from '../../landing/Images/ats_logo-blanco-elises-.png';
-import logo_atenas from '../../landing/Images/ats_logo-elise-blanca.png';
-import { Box, Button, Container, Typography, Modal, IconButton, Collapse, CardContent, Popover, Card } from '@mui/material';
-import Carousel from './carrusel';
+import { Box, Container, Typography, Modal, IconButton, CardContent, Popover, Card } from '@mui/material';
 import './home.css';
-import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
-import { CardDesktop, CarouselFooter, HeaderDesktop } from './homeComponents';
+import { CardDesktop, CarouselFooter, HeaderDesktop, HeaderMovile } from './homeComponents';
 
 class Home extends React.Component {
     constructor(props){
@@ -23,15 +15,17 @@ class Home extends React.Component {
             anchorEl:null,
         }
     }
-    
+    /*Controles Modal */
     handleOpenModal=(datos)=>{
-        this.state.openModal? this.setState({anchorEl:e.currentTarget}):this.setState({anchorEl:null})
+        console.log(document.getElementsByClassName('CardsCarousel'))
+        //this.state.openModal? this.setState({anchorEl:e.currentTarget}):this.setState({anchorEl:null})
 
-        this.setState({openModal:!this.state.openModal, textModal:datos})
+        this.setState({openModal:true, textModal:datos})
     }
     handleCloseModal=()=>{
         this.setState({openModal:!this.state.openModal})
     }
+    /*Controles Popover */
 
     handleClosePopover=(e)=>{
         this.state.anchorEl === null? this.setState({anchorEl:e.currentTarget}):this.setState({anchorEl:null})
@@ -69,29 +63,7 @@ class Home extends React.Component {
         texto_modal.innerHTML = iframe;
     }
     
-	render() {
-		return(
-            <Container className='containerBox'>
-                {this.state.withdScreen > 900 ? <HeaderDesktop/> : ''}
-                <Modal
-                    className='Modal'
-                    open={this.state.openModal}
-                    onClose={this.handleCloseModal}
-                    aria-labelledby="Modal de Presentacion a Descripcion de Reportes"
-                    aria-describedby="Muestra una Descripcion del contenido de los reportes"
-                >
-                    <Box className='boxModal'>
-                        <Card className='cardModal'>
-                            <CardContent className='cardModal'>
-                                <IconButton onClick={this.handleCloseModal} title='Cerrar Modal'>
-                                <CloseRounded></CloseRounded>
-                            </IconButton>
-                            <Typography>{this.state.textModal}</Typography>
-                            </CardContent>
-                        </Card>
-                    </Box>
-                </Modal>
-                <Container className='containerCard'>
+    CardDesktop = ()=>{return( <>
                     <CardDesktop 
                         PropsCardPopoverClose={this.handleClosePopover}
                         PropsCardPopover={this.state.openPopover}
@@ -116,10 +88,67 @@ class Home extends React.Component {
                             The content of the Popover.
                         </CardContent>
                     </Popover>
+                </>)}
+
+    footerDesktop = <Container class='BoxCarousel containerCarousel'>
+                        <CarouselFooter PropsFooterOpenModal={this.handleOpenModal}/>
+                    </Container>
+
+	render() {
+		return(
+            <Container className='containerBox'>
+                {this.state.withdScreen > 850 ? <HeaderDesktop/> : <HeaderMovile/>}
+                <Modal
+                    className='Modal'
+                    open={this.state.openModal}
+                    onClose={this.handleCloseModal}
+                    aria-labelledby="Modal de Presentacion a Descripcion de Reportes"
+                    aria-describedby="Muestra una Descripcion del contenido de los reportes"
+                >
+                    <Box className='boxModal'>
+                        <Card className='cardModal'>
+                            <CardContent className='cardModal'>
+                                <IconButton onClick={this.handleCloseModal} title='Cerrar Modal'>
+                                <CloseRounded></CloseRounded>
+                            </IconButton>
+                            <Typography>{this.state.textModal}</Typography>
+                            </CardContent>
+                        </Card>
+                    </Box>
+                </Modal>
+                <Container className='containerCard'>
+                {this.state.withdScreen > 850 ? 
+                
+                    <>
+                    <CardDesktop 
+                        PropsCardPopoverClose={this.handleClosePopover}
+                        PropsCardPopover={this.state.openPopover}
+                        PropsIdPopover={this.state.idPopover}
+                    />
+                    <Popover
+                        open={Boolean(this.state.anchorEl)}
+                        onClose={this.handleClosePopover}
+                        anchorEl={this.state.anchorEl}
+                        //anchorPosition={{ top: this.state.medidas.top + this.state.medidas.top*0.2, left: this.state.medidas.left }}
+                        anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'center',
+                        }}
+                        transformOrigin={{
+                            vertical: 'top',
+                            horizontal: 'center',
+                        }}
+                        style={{backgroundColor:'trasnparent', position:'absolute'}}
+                    >
+                        <CardContent style={{background:'#04172b73'}}>
+                            The content of the Popover.
+                        </CardContent>
+                    </Popover>
+                    </>: ''}
+
                 </Container>
-                <Container class='BoxCarousel containerCarousel'>
-                    <CarouselFooter PropsFooterDesktop={this.handleOpenModal}/>
-                </Container>
+                {this.state.withdScreen > 850 ? this.footerDesktop : ''}
+
             </Container>
         )
     }
