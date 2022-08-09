@@ -1,18 +1,36 @@
 import React, { useState } from "react";
 import { ManageAccounts, ExitToApp, Settings, AdminPanelSettings } from "@mui/icons-material";
-import { Box, Card, CardContent, Link, Container, getNativeSelectUtilityClasses, IconButton, Paper, Popover, SpeedDial, SpeedDialAction, Typography} from "@mui/material";
+import { Box, Card, CardContent, Container, IconButton, Paper, Popover, SpeedDial, SpeedDialAction, Typography} from "@mui/material";
 import eliseAtenas from '../../landing/Images/ats_logo-elise-blanca.png'
 import logoAtenas from '../../landing/Images/ats_logo-blanco-elises.png'
 import { makeStyles } from "@material-ui/styles";
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 import { NavLink } from "react-router-dom";
+//Imagenes Reportes
+import WOP from '../../landing/Images/ATSLogoWop.png'
+import RScanning from '../../landing/Images/ATSLogoRScanning.png'
+import HPantry from '../../landing/Images/ATSLogoHP.png'
+import Excecution from '../../landing/Images/ATSLogoExecution.png'
+import CI from '../../landing/Images/ATSLogoCI.png'
+// Iconos Reportes
+import NSE from '../../landing/Images/IconATSNSE.jpg'
+import CanalesCadenas from '../../landing/Images/IconATSCanalesCadenas.jpg'
+import Categorias from '../../landing/Images/IconATSCategorias.png'
+import Omnibus from '../../landing/Images/IconATSOmnibus.png'
+import RankingCategorias from '../../landing/Images/IconATSRankingCategorias.png'
+import TopProveedores from '../../landing/Images/IconATSTopProveedores.jpg'
+import TopSkus from '../../landing/Images/IconATSTopSkus.png'
+
+
+const urlProduccion = 'visualCliente/';
 
 const reports = [
-    {key: 1 , name:'WOP'},
-    {key: 2 , name:'Retail Scanning'},
-    {key: 3 , name:'Home Pantry'},
-    {key: 4 , name:'Excecution'},
-    {key: 5 , name:'CI'},
+    {key: 1 , name:'WOP', icon:WOP, style:{height:'90%'}},
+    {key: 2 , name:'Retail Scanning', icon:RScanning, style:{height:'80%', width:'80%'}},
+    {key: 3 , name:'Home Pantry', icon:HPantry, style:{height:'85%'}},
+    {key: 4 , name:'CI', icon:CI, style:{height:'90%', minWidth:100, minHeight:120, padding:'5%'}},
+    {key: 5 , name:'Execution', icon:Excecution, style:{height:'80%', width:'80%'}},
+    
 ]
 
 /* -- Modulos Header -- */
@@ -43,9 +61,9 @@ const useStylesMoViles = makeStyles((withdScreen, heightScreen)=>({
 export function HeaderDesktop(){
     const styles = useStyles();
     const actions = [
-        { icon: <NavLink className={styles.LinkIcons} to={'/'} ><ExitToApp className={styles.IconsSpeedDial}/></NavLink> , name: 'Salir', admin:0 },
-        { icon: <NavLink className={styles.LinkIcons} to={'home/CambiarC/CambiarC'} ><Settings className={styles.IconsSpeedDial}/></NavLink>, name: 'Configuraciones', admin:0 },
-        { icon: <NavLink className={styles.LinkIcons} to={'management/panel'} ><AdminPanelSettings className={styles.IconsSpeedDial}/></NavLink>, name: 'Panel Administrativo', admin:1 },
+        { icon: <NavLink className={styles.LinkIcons} to={'/visualCliente/'} ><ExitToApp className={styles.IconsSpeedDial}/></NavLink> , name: 'Salir', admin:0 },
+        { icon: <NavLink className={styles.LinkIcons} to={'/visualCliente/home/CambiarC/CambiarC'} ><Settings className={styles.IconsSpeedDial}/></NavLink>, name: 'Configuraciones', admin:0 },
+        { icon: <NavLink className={styles.LinkIcons} to={'/visualCliente/management/panel'} ><AdminPanelSettings className={styles.IconsSpeedDial}/></NavLink>, name: 'Panel Administrativo', admin:1 },
 
     ];
     const [openSpeedDial, setOpenSpeedDial] = React.useState(false);
@@ -171,7 +189,7 @@ export function CardDesktop(props){
             {reports.map((report)=>(
                 <Card className={styles.Card} key={report.key}>
                     <CardContent className={styles.CardContent}>
-                        <Typography>{report.name}</Typography>   
+                        <img style={report.style} src={report.icon} alt={`Logo Atenas Grupo Consultor. Repote ${report.name}`} title=""/>  
                     </CardContent>
                     <IconButton onClick={(e)=>props.PropsCardPopoverClose(e)} style={{padding:0}}>
                        <KeyboardArrowDownRoundedIcon style={{fill:'#fff', fontSize:'50px' }} id={report.key}></KeyboardArrowDownRoundedIcon>
@@ -200,12 +218,16 @@ const useStylesCard = makeStyles(()=>({
     },
     CardContent:{
         backgroundColor:'#fff',
-        width:'80%',
-        height:'40%',
-        borderRadius:'1.2em',
+        width:'90%',
+        height:'45%',
+        borderRadius:'1em',
         minWidth:160,
         maxWidth:250,
-        minHeight:115,
+        minHeight:120,
+        padding:'0% !important',
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent:'center'
     },
     PaperCards:{
         width:'100%',
@@ -232,26 +254,20 @@ const usefooterMovile = makeStyles (()=>({
 export function CarouselFooter(props){
     const styles = useStylesCarousel();
     const reports = [
-        {name:1, key:1},
-        {name:2, key:2},
-        {name:3, key:3},
-        {name:4, key:4},
-        {name:5, key:5},
-        {name:6, key:6},
-        {name:7, key:7},
-        {name:8, key:8},
-        {name:9, key:9},
-        {name:10, key:10},
-        {name:1, key:11},
-        {name:2, key:12},
-        {name:3, key:13},
-        {name:4, key:14},
-        {name:5, key:15},
-        {name:6, key:16},
-        {name:7, key:17},
-        {name:8, key:18},
-        {name:9, key:19},
-        {name:10, key:20},
+        {name:'NSE', key:1, icon:NSE},
+        {name:"Top Sku's", key:2, icon:TopSkus},
+        {name:'Top Proveedores', key:3, icon:TopProveedores},
+        {name:'Categorías', key:4, icon:Categorias},
+        {name:'Ranking Categorías', key:5, icon:RankingCategorias},
+        {name:'Omnibus', key:6, icon:Omnibus},
+        {name:'Canales y Cadenas', key:7, icon:CanalesCadenas},
+        {name:'NSE', key:8, icon:NSE},
+        {name:"Top Sku's", key:9, icon:TopSkus},
+        {name:'Top Proveedores', key:10, icon:TopProveedores},
+        {name:'Categorías', key:11, icon:Categorias},
+        {name:'Ranking Categorías', key:12, icon:RankingCategorias},
+        {name:'Omnibus', key:13, icon:Omnibus},
+        {name:'Canales y Cadenas', key:14, icon:CanalesCadenas},
     ]
     const [paused, setPaused]=useState(false)
     return(
@@ -259,7 +275,9 @@ export function CarouselFooter(props){
             {reports.map((report)=>(
                 <IconButton className="slide" key={report.key}  onClick={(e)=>props.PropsFooterOpenModal(report.key, e)}>
                     <Card className={styles.Card}>
-                        <CardContent>{report.name}</CardContent>
+                        <CardContent className={styles.containerCard}>
+                            <img style={{width:'auto', height:'100%'}} src={report.icon} alt={`Icono Atenas Grupo Consultor. Reporte ${report.name}`} title=""/>    
+                        </CardContent>
                     </Card>
                 </IconButton>
             ))}
@@ -270,6 +288,12 @@ export function CarouselFooter(props){
 const useStylesCarousel = makeStyles (()=>({
     Card:{
         width:'100%',
-        height:'100%'
+        height:'100%',
+        maxWidth:200
+    },
+    containerCard:{
+        width:'100%',
+        height:'100%',
+        padding:'0% !important'
     }
 }))

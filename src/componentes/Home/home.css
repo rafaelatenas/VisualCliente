@@ -8,7 +8,16 @@ main {
 
 /* Media query para Tablets y Movile */
 
+.menuComponent .css-1poimk-MuiPaper-root-MuiMenu-paper-MuiPaper-root-MuiPopover-paper {
+    background:#1f1f1f !important;
+    min-width: 200px;
+    min-height: 120px;
+}
 
+.Item:hover{
+    transform: scale(1.2, 1.5);
+    transform-origin: left;
+}
 
 .containerBox{
     padding: 0 !important;
@@ -85,7 +94,7 @@ main {
             transform: translateX(0);
        }
         100% {
-            transform: translateX(calc(-250px * 10));
+            transform: translateX(calc(-200px * 7));
        }
    }
     .BoxCarousel {
@@ -126,6 +135,7 @@ main {
         min-width: 180px;
         max-width: 300px;
         width: 100%;
+        border-radius: 0% !important;
    }
     .Modal{
         width:100%;
@@ -155,7 +165,7 @@ main {
             transform: translateX(0);
        }
         100% {
-            transform: translateX(calc(-310px * 10));
+            transform: translateX(calc(-310px * 7));
        }
    }
 }

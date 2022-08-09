@@ -1,9 +1,10 @@
 import { CloseRounded} from '@material-ui/icons';
 import React from 'react';
-import { Box, Container, Typography, Modal, IconButton, CardContent, Popover, Card } from '@mui/material';
+import { Box, Container, Typography, Modal, IconButton, CardContent, Popover, Card, List, ListItem, ListItemText, Paper, MenuList, Menu, MenuItem } from '@mui/material';
 import './home.css';
 import { CardDesktop, CarouselFooter, HeaderDesktop, HeaderMovile } from './homeComponents';
-
+import { Link, NavLink } from 'react-router-dom';
+const urlProduccion = 'visualCliente/';
 class Home extends React.Component {
     constructor(props){
         super(props);
@@ -17,16 +18,31 @@ class Home extends React.Component {
     }
     /*Controles Modal */
     handleOpenModal=(datos)=>{
-        console.log(document.getElementsByClassName('CardsCarousel'))
-        //this.state.openModal? this.setState({anchorEl:e.currentTarget}):this.setState({anchorEl:null})
-
         this.setState({openModal:true, textModal:datos})
     }
     handleCloseModal=()=>{
         this.setState({openModal:!this.state.openModal})
     }
     /*Controles Popover */
-
+    reports=[
+        {id:1, key:1, url:'/visualCliente/data', padre:'WOP', name:'Resumen Táctico'},
+        {id:1, key:2, url:'', padre:'WOP', name:'Eficiencia Operativa'},
+        {id:1, key:3, url:'', padre:'WOP', name:'Ranking de Tiendas'},
+        {id:1, key:4, url:'', padre:'WOP', name:'Panel de Canedas'},
+        {id:2, key:5, url:'', padre:'Retail Scanning', name:'Reporte Retail Scanning'},
+        {id:2, key:6, url:'', padre:'Retail Scanning', name:'Money Market'},
+        {id:2, key:7, url:'', padre:'Retail Scanning', name:'Categories Performance'},
+        {id:2, key:8, url:'', padre:'Retail Scanning', name:'Suppliers Performance'},
+        {id:2, key:9, url:'', padre:'Retail Scanning', name:'Skus Performance'},
+        {id:3, key:10, url:'', padre:'Home Pantry', name:'Canales y Cadenas'},
+        {id:3, key:11, url:'', padre:'Home Pantry', name:'NSE'},
+        {id:3, key:12, url:'', padre:'Home Pantry', name:'Categorías'},
+        {id:4, key:13, url:'', padre:'CI', name:'Omnibus'},
+        {id:4, key:14, url:'', padre:'CI', name:'CI a la Medida'},
+        {id:4, key:15, url:'', padre:'CI', name:'Reportes Sindicados'},
+        {id:5, key:16, url:'', padre:'Execution', name:'Censo Caracas'},
+        {id:5, key:17, url:'', padre:'Execution', name:'Censo Maracaibo'},
+    ]
     handleClosePopover=(e)=>{
         this.state.anchorEl === null? this.setState({anchorEl:e.currentTarget}):this.setState({anchorEl:null})
         this.setState({idPopover:e.target.id})
@@ -62,33 +78,6 @@ class Home extends React.Component {
 
         texto_modal.innerHTML = iframe;
     }
-    
-    CardDesktop = ()=>{return( <>
-                    <CardDesktop 
-                        PropsCardPopoverClose={this.handleClosePopover}
-                        PropsCardPopover={this.state.openPopover}
-                        PropsIdPopover={this.state.idPopover}
-                    />
-                    <Popover
-                        open={Boolean(this.state.anchorEl)}
-                        onClose={this.handleClosePopover}
-                        anchorEl={this.state.anchorEl}
-                        //anchorPosition={{ top: this.state.medidas.top + this.state.medidas.top*0.2, left: this.state.medidas.left }}
-                        anchorOrigin={{
-                            vertical: 'bottom',
-                            horizontal: 'center',
-                        }}
-                        transformOrigin={{
-                            vertical: 'top',
-                            horizontal: 'center',
-                        }}
-                        style={{backgroundColor:'trasnparent', position:'absolute'}}
-                    >
-                        <CardContent style={{background:'#04172b73'}}>
-                            The content of the Popover.
-                        </CardContent>
-                    </Popover>
-                </>)}
 
     footerDesktop = <Container class='BoxCarousel containerCarousel'>
                         <CarouselFooter PropsFooterOpenModal={this.handleOpenModal}/>
@@ -118,34 +107,36 @@ class Home extends React.Component {
                 </Modal>
                 <Container className='containerCard'>
                 {this.state.withdScreen > 850 ? 
-                
                     <>
                     <CardDesktop 
                         PropsCardPopoverClose={this.handleClosePopover}
                         PropsCardPopover={this.state.openPopover}
                         PropsIdPopover={this.state.idPopover}
                     />
-                    <Popover
-                        open={Boolean(this.state.anchorEl)}
-                        onClose={this.handleClosePopover}
-                        anchorEl={this.state.anchorEl}
-                        //anchorPosition={{ top: this.state.medidas.top + this.state.medidas.top*0.2, left: this.state.medidas.left }}
-                        anchorOrigin={{
-                            vertical: 'bottom',
-                            horizontal: 'center',
-                        }}
-                        transformOrigin={{
-                            vertical: 'top',
-                            horizontal: 'center',
-                        }}
-                        style={{backgroundColor:'trasnparent', position:'absolute'}}
+                    <Menu
+                    anchorEl={this.state.anchorEl}
+                    open={Boolean(this.state.anchorEl)}
+                    onClose={this.handleClosePopover}
+                    className='menuComponent'
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'center',
+                    }}
+                    transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'center',
+                    }}
                     >
-                        <CardContent style={{background:'#04172b73'}}>
-                            The content of the Popover.
-                        </CardContent>
-                    </Popover>
+                            {this.reports.map((report)=>{
+                                if (parseInt(this.state.idPopover) === report.id)
+                                return(
+                                    <MenuItem className='Item' key={report.key} style={{ justifyContent:'flex-start', marginLeft:'10%', overflow:'visible !important'}}>
+                                        <NavLink className='LinkReport' to={report.url} style={{textDecoration:'none', color:'#fff', fontSize:'.85em'}}>{report.name}</NavLink>
+                                    </MenuItem>
+                                )
+                            })}
+                    </Menu>
                     </>: ''}
-
                 </Container>
                 {this.state.withdScreen > 850 ? this.footerDesktop : ''}
 

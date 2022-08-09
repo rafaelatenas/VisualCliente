@@ -636,7 +636,7 @@ export default function DATA(){
        </Main>
        <Button className='atras'
          style={{background: 'transparent',position:'fixed',border:'0.2em solid #fff',minWidth:'50px', borderRadius:'50%'}}
-         variant="contained" href='./Home'>
+         variant="contained" href='./home'>
            <ArrowBack style={{fontSize:'2.5em', fill:'#fff'}}></ArrowBack>
        </Button>
     </Box>

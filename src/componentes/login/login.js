@@ -168,7 +168,7 @@ class Login extends React.Component {
               <FormHelperText>{this.state.formErrors.Password}</FormHelperText>
             </FormControl>
               
-            <Button className="button" variant="outlined" disabled={!this.state.ValidToken} onClick={this.enviarDatos}>Confirmar</Button>
+             <Button className="button" variant="outlined" href='/visualCliente/home' >Confirmar</Button> 
           </FormControl>
             
         </Box>
@@ -182,5 +182,5 @@ class Login extends React.Component {
       </section>
     )
   };
-}
+}{/*disabled={!this.state.ValidToken} onClick={this.enviarDatos}*/}
 export default Login;

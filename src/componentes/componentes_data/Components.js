@@ -160,7 +160,7 @@ export function DrawerComponent(open){
                         </Menu>
                         <Button className='buttonPopover' style={{width:'100%', borderRadius:'1.5em', margin:'.3em 0', padding:'0px !important'}}
                             aria-describedby={open.id} variant="contained" 
-                            onClick={()=>{window.location = '/'}}>
+                            onClick={()=>{window.location = '/visualCliente/'}}>
                             Salir
                         </Button>
                     </div>
@@ -184,11 +184,11 @@ export function BotonUsuario(open){
             >
                 <MenuIcon  style={{fontSize:'35px',fill:'#fff'}}/>
             </IconButton>
-            <Stack className={styles.Stack}>
+            {/* <Stack className={styles.Stack}>
                 <Tooltip title={localStorage.getItem('Login')} arrow placement="right">
                     <Avatar className={styles.Avatar}></Avatar>
             </Tooltip>
-            </Stack>
+            </Stack> */}
         </Toolbar>
     )
 }

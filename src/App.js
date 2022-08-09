@@ -12,18 +12,20 @@ import ActivarUsuario from './componentes/ActivarUsuario/activarUsuario';
 import VisualizarData from './componentes/Data/VisualizarData';
 
 function App() {
+  // const urlPrueba = ""
+  const urlProduccion = 'visualCliente/';
   return (  
     <BrowserRouter>
         <Routes>
-            <Route exact path="/" element={<Login/>} />
-            <Route exact path="home" element={<Home/>} />
-            <Route exact path="data" element={<DataReport/>} />
+            <Route exact path={urlProduccion} element={<Login/>} />
+            <Route exact path={urlProduccion+"home"} element={<Home/>} />
+            <Route exact path={urlProduccion+"data"} element={<DataReport/>} />
             <Route exact path="/activar/usuario" element={<ActivarUsuario/>}  />
             {/* Componentes de Gestión de Usuario */}
             <Route exact path="home/CambiarC/CambiarC" element={<CambiarC/>}/>
-            <Route exact path="management/panel" element={<Admin/>}/>
-            <Route exact path='/management/panel/createUser' element={<Usuario/>}/>
-            <Route exact path='/management/panel/createPerfil' element={<Perfiles/>}/>
+            <Route exact path={urlProduccion+"management/panel"} element={<Admin/>}/>
+            <Route exact path={urlProduccion+'management/panel/createUser'} element={<Usuario/>}/>
+            <Route exact path={urlProduccion+'management/panel/createPerfil'} element={<Perfiles/>}/>
             <Route exact path='data/dataTable' element={<VisualizarData/>}/>
         </Routes>
     </BrowserRouter>  

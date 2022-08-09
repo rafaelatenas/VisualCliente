@@ -1,6 +1,3 @@
-/* *{
-    font-family: Lucida-Sans-Demibold-Roman, sans-serif;
-}
 .Contenedordata{
     display: flex;
     flex-direction: row-reverse;
@@ -333,4 +330,4 @@ li.MuiListItem-root.MuiListItem-gutters {
         font-size: 18px;
         border: none;
     }
-} */
+}
