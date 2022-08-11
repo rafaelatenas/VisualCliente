@@ -13,7 +13,7 @@ import VisualizarData from './componentes/Data/VisualizarData';
 
 function App() {
   // const urlPrueba = ""
-  const urlProduccion = 'visualCliente/';
+  const urlProduccion = 'retailservices/';
   return (  
     <BrowserRouter>
         <Routes>

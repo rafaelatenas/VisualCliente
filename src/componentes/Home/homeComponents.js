@@ -22,7 +22,7 @@ import TopProveedores from '../../landing/Images/IconATSTopProveedores.jpg'
 import TopSkus from '../../landing/Images/IconATSTopSkus.png'
 
 
-const urlProduccion = 'visualCliente/';
+const urlProduccion = 'retailservices/';
 
 const reports = [
     {key: 1 , name:'WOP', icon:WOP, style:{height:'90%'}},
@@ -61,9 +61,9 @@ const useStylesMoViles = makeStyles((withdScreen, heightScreen)=>({
 export function HeaderDesktop(){
     const styles = useStyles();
     const actions = [
-        { icon: <NavLink className={styles.LinkIcons} to={'/visualCliente/'} ><ExitToApp className={styles.IconsSpeedDial}/></NavLink> , name: 'Salir', admin:0 },
-        { icon: <NavLink className={styles.LinkIcons} to={'/visualCliente/home/CambiarC/CambiarC'} ><Settings className={styles.IconsSpeedDial}/></NavLink>, name: 'Configuraciones', admin:0 },
-        { icon: <NavLink className={styles.LinkIcons} to={'/visualCliente/management/panel'} ><AdminPanelSettings className={styles.IconsSpeedDial}/></NavLink>, name: 'Panel Administrativo', admin:1 },
+        { icon: <NavLink className={styles.LinkIcons} to={'/retailservices/'} ><ExitToApp className={styles.IconsSpeedDial}/></NavLink> , name: 'Salir', admin:0 },
+        { icon: <NavLink className={styles.LinkIcons} to={'/retailservices/home/CambiarC/CambiarC'} ><Settings className={styles.IconsSpeedDial}/></NavLink>, name: 'Configuraciones', admin:0 },
+        { icon: <NavLink className={styles.LinkIcons} to={'/retailservices/management/panel'} ><AdminPanelSettings className={styles.IconsSpeedDial}/></NavLink>, name: 'Panel Administrativo', admin:1 },
 
     ];
     const [openSpeedDial, setOpenSpeedDial] = React.useState(false);

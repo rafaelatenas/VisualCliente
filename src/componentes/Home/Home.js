@@ -4,7 +4,7 @@ import { Box, Container, Typography, Modal, IconButton, CardContent, Popover, Ca
 import './home.css';
 import { CardDesktop, CarouselFooter, HeaderDesktop, HeaderMovile } from './homeComponents';
 import { Link, NavLink } from 'react-router-dom';
-const urlProduccion = 'visualCliente/';
+const urlProduccion = 'retailservices/';
 class Home extends React.Component {
     constructor(props){
         super(props);
@@ -25,7 +25,7 @@ class Home extends React.Component {
     }
     /*Controles Popover */
     reports=[
-        {id:1, key:1, url:'/visualCliente/data', padre:'WOP', name:'Resumen Táctico'},
+        {id:1, key:1, url:'/retailservices/data', padre:'WOP', name:'Resumen Táctico'},
         {id:1, key:2, url:'', padre:'WOP', name:'Eficiencia Operativa'},
         {id:1, key:3, url:'', padre:'WOP', name:'Ranking de Tiendas'},
         {id:1, key:4, url:'', padre:'WOP', name:'Panel de Canedas'},

@@ -17,31 +17,31 @@ class MenuAdmin extends React.Component{
                 <ul id="lista" className="lista">
                     <li>
                         <Tooltip title="Gestión de Usuarios" arrow placement="right">
-                            <Link to={'/visualCliente/management/panel/createUser'}>
+                            <Link to={'/retailservices/management/panel/createUser'}>
                                 <Person style={{fill:'#000000'}}></Person>
                             </Link>
                         </Tooltip>
                     </li>
                     <li>
                         <Tooltip title="Gestión de Perfiles" arrow placement="right">
-                            <Link to={'/visualCliente/management/panel/createPerfil'}>
+                            <Link to={'/retailservices/management/panel/createPerfil'}>
                                 <Group style={{fill:'#000000'}}></Group>
                             </Link>
                         </Tooltip>
                     </li>
                     <li>
                         <Tooltip title="Salir" arrow placement="right">
-                            <Link to={'/visualCliente/management/panel/createUser'}><ExitToApp style={{fill:'#000000'}}></ExitToApp></Link>
+                            <Link to={'/retailservices/management/panel/createUser'}><ExitToApp style={{fill:'#000000'}}></ExitToApp></Link>
                         </Tooltip>
                     </li>
                     <li>
                         <Tooltip title="Salir" arrow placement="right">
-                            <Link to={'/visualCliente/data'}><ExitToApp style={{fill:'#000000'}}></ExitToApp></Link>
+                            <Link to={'/retailservices/data'}><ExitToApp style={{fill:'#000000'}}></ExitToApp></Link>
                         </Tooltip>
                     </li>
                     <li>
                         <Tooltip title="Salir" arrow placement="right">
-                            <Link to={'/visualCliente/'}>
+                            <Link to={'/retailservices/'}>
                                 <ExitToApp style={{fill:'#000000'}}></ExitToApp>
                             </Link>
                         </Tooltip>
