@@ -161,7 +161,7 @@ class Login extends React.Component {
               <OutlinedInput id="outlined-adornment-password" type={this.state.showPassword?  'text' : 'password'} name='Password' value={this.state.Password} onChange={this.handleUserInput}
                 endAdornment={
                 <IconButton style={{width:'10%',height:'100%', margin:-7}} aria-label="toggle password visibility" onClick={this.handleClickShowPassword}  edge="end">
-                  {this.state.showPassword ? <VisibilityOff/> : <Visibility/>}
+                  {this.state.showPassword ? <VisibilityOff className='iconVisibility'/> : <Visibility className='iconVisibility'/>}
                 </IconButton>
                 }
               />
