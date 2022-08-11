@@ -17,6 +17,9 @@
 .env.development.local
 .env.test.local
 .env.production.local
+.env.REACT_APP_PUBLIC_KEY
+.env.REACT_APP_SECRET_KEY
+
 
 npm-debug.log*
 yarn-debug.log*
