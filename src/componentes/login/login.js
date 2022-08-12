@@ -8,6 +8,7 @@ import { Visibility, VisibilityOff} from '@material-ui/icons';
 import { IconButton, Button} from '@mui/material';
 import ReCAPTCHA from 'react-google-recaptcha';
 import './login.css'
+import logoElise from '../../landing/Images/ATSElise.png'
 const recaptchaRef = React.createRef();
 
 
@@ -23,6 +24,7 @@ class Login extends React.Component {
         passwordValid: false,
         formValid: false,
         ValidToken: false,
+        withdScreen:window.innerWidth,
       }
     }
     validateField(fieldName, value) {
@@ -84,6 +86,7 @@ class Login extends React.Component {
       e.preventDefault();
       const {Email,Password}=this.state;
       var responseKey = recaptchaRef.current.getValue();
+      console.log(responseKey)
       var datosEnviar={
         email:Email,
         password:Password,
@@ -103,12 +106,9 @@ class Login extends React.Component {
           title: ''+result.data.message+' '+nombre+' '+apellidos+'',
           confirmButtonText: `Ok`,
       })    
-      var cliente = result.data.Cliente;
-        if (cliente === 'ATENAS') {
-          window.location.href = 'management/panel'
-        } else {
-          console.log('no')
-        }  
+        var resulSucess = result.data.success;
+        
+        console.log(resulSucess) 
       }).catch(err => {
           console.log(err)
           if(err.response) {
@@ -126,6 +126,8 @@ class Login extends React.Component {
     /* Validación Google */
     handleChange = value => {
       if (value !== null) {
+        var responseKey = recaptchaRef.current.getValue();
+        console.log(responseKey)
         this.isHuman()
       }
     }
@@ -154,9 +156,10 @@ class Login extends React.Component {
       <section className="login">
         <Box id='card-login' className="card-login">
           <FormControl className="Form">
-            <TextField error={this.state.formErrors.Email === ''? false: true} style={this.state.formErrors.Email === ''? {height:'15%'}: {height:'20%', minHeight:60}} helperText={this.state.formErrors.Email} className='email' 
+            <img className='logoLogin' src={logoElise} alt="Logo Atenas" title=''/>
+            <TextField error={this.state.formErrors.Email === ''? false: true} helperText={this.state.formErrors.Email} className={this.state.formErrors.Email === ''? 'email': 'email error'} 
               variant="outlined" label="Correo" type='text' name='Email' value={this.state.Email} onChange={this.handleUserInput}/>
-            <FormControl error={this.state.formErrors.Password === ''? false: true} style={this.state.formErrors.Password === ''? {height:'15%'}: {height:'20%', minHeight:60}} className='password'>
+            <FormControl error={this.state.formErrors.Password === ''? false: true} className={this.state.formErrors.Password === ''? 'password': 'password error'} >
               <InputLabel  style={{ zIndex:'30',background:'transparent'}} htmlFor="outlined-adornment-password">Contraseña</InputLabel>
               <OutlinedInput id="outlined-adornment-password" type={this.state.showPassword?  'text' : 'password'} name='Password' value={this.state.Password} onChange={this.handleUserInput}
                 endAdornment={
@@ -168,7 +171,7 @@ class Login extends React.Component {
               <FormHelperText>{this.state.formErrors.Password}</FormHelperText>
             </FormControl>
               
-             <Button className="button" variant="outlined" href='/retailservices/home' >Confirmar</Button> 
+             <Button className="button" variant="outlined" disabled={!this.state.ValidToken} onClick={this.enviarDatos}>Confirmar</Button> 
           </FormControl>
             
         </Box>
@@ -182,5 +185,5 @@ class Login extends React.Component {
       </section>
     )
   };
-}{/*disabled={!this.state.ValidToken} onClick={this.enviarDatos}*/}
+}
 export default Login;

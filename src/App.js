@@ -18,7 +18,7 @@ function App() {
     <BrowserRouter>
         <Routes>
             <Route exact path={urlProduccion} element={<Login/>} />
-            <Route exact path={urlProduccion+"home"} element={<Home/>} />
+            <Route exact path={urlProduccion+"home/:id"} element={<Home/>} />
             <Route exact path={urlProduccion+"data"} element={<DataReport/>} />
             <Route exact path="/activar/usuario" element={<ActivarUsuario/>}  />
             {/* Componentes de Gestión de Usuario */}

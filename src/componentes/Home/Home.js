@@ -86,7 +86,7 @@ class Home extends React.Component {
 	render() {
 		return(
             <Container className='containerBox'>
-                {this.state.withdScreen > 850 ? <HeaderDesktop/> : <HeaderMovile/>}
+                {this.state.withdScreen > 1080 ? <HeaderDesktop/> : <HeaderMovile/>}
                 <Modal
                     className='Modal'
                     open={this.state.openModal}
@@ -106,7 +106,7 @@ class Home extends React.Component {
                     </Box>
                 </Modal>
                 <Container className='containerCard'>
-                {this.state.withdScreen > 850 ? 
+                {this.state.withdScreen > 1080 ? 
                     <>
                     <CardDesktop 
                         PropsCardPopoverClose={this.handleClosePopover}
@@ -138,7 +138,7 @@ class Home extends React.Component {
                     </Menu>
                     </>: ''}
                 </Container>
-                {this.state.withdScreen > 850 ? this.footerDesktop : ''}
+                {this.state.withdScreen > 1080 ? this.footerDesktop : ''}
 
             </Container>
         )
