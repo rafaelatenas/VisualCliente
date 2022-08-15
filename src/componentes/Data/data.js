@@ -13,9 +13,6 @@ import withReactContent from 'sweetalert2-react-content'
 import {DrawerComponent, BotonUsuario, CardComponents, HeaderComponent} from '../componentes_data/Components';
 import { SelectCanales, SelectCategorias, SelectFabricantes, SelectMarcas, SelectPeriodos, SelectRegiones } from '../componentes_data/Selects';
 import Alert from '@mui/material/Alert';
-import Collapse from '@mui/material/Collapse';
-
-
 const MySwal = withReactContent(Swal)
 const toast = MySwal.mixin({
   toast: true,
@@ -636,8 +633,8 @@ export default function DATA(){
        </Main>
        <Button className='atras'
          style={{background: 'transparent',position:'fixed',border:'0.2em solid #fff',minWidth:'50px', borderRadius:'50%'}}
-         variant="contained" href='./home'>
-           <ArrowBack style={{fontSize:'2.5em', fill:'#fff'}}></ArrowBack>
+         variant="contained" href='/retailservices/home'>
+            <ArrowBack style={{fontSize:'2.5em', fill:'#fff'}}></ArrowBack>
        </Button>
     </Box>
   );

@@ -20,6 +20,7 @@ import Omnibus from '../../landing/Images/IconATSOmnibus.png'
 import RankingCategorias from '../../landing/Images/IconATSRankingCategorias.png'
 import TopProveedores from '../../landing/Images/IconATSTopProveedores.jpg'
 import TopSkus from '../../landing/Images/IconATSTopSkus.png'
+import { useAuthContext } from "../context/authContext";
 
 
 const urlProduccion = 'retailservices/';
@@ -38,7 +39,6 @@ export function HeaderMovile(){
     const styles = useStylesMoViles();
     const withdScreen=window.innerWidth;
     const heightScreen=window.innerHeight;
-    
     return(
         <Box className={styles.Box}>
             <img className={styles.ImgLogo} src={logoAtenas} alt='Logo Atenas Grupo Consulto. Elise Blanca' title=""/>
@@ -58,10 +58,13 @@ const useStylesMoViles = makeStyles((withdScreen, heightScreen)=>({
         height:'90%',
     }
 }))
-export function HeaderDesktop(){
+export function HeaderDesktop(props){
+    const {logout, isAuthenticated}=useAuthContext();
+
+    console.log(isAuthenticated)
     const styles = useStyles();
     const actions = [
-        { icon: <NavLink className={styles.LinkIcons} to={'/retailservices/'} ><ExitToApp className={styles.IconsSpeedDial}/></NavLink> , name: 'Salir', admin:0 },
+        { icon: <ExitToApp className={styles.IconsSpeedDial} onClick={()=>logout()}/>, name: 'Salir', admin:0 },
         { icon: <NavLink className={styles.LinkIcons} to={'/retailservices/home/CambiarC/CambiarC'} ><Settings className={styles.IconsSpeedDial}/></NavLink>, name: 'Configuraciones', admin:0 },
         { icon: <NavLink className={styles.LinkIcons} to={'/retailservices/management/panel'} ><AdminPanelSettings className={styles.IconsSpeedDial}/></NavLink>, name: 'Panel Administrativo', admin:1 },
 

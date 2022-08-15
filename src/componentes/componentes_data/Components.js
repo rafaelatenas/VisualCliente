@@ -12,6 +12,7 @@ import MenuItem from '@mui/material/MenuItem';
 import './componentes.css'
 import Alert from '@mui/material/Alert';
 import Collapse from '@mui/material/Collapse';
+import { useAuthContext } from "../context/authContext";
 
 let icon;
 
@@ -236,6 +237,7 @@ export function HeaderComponent(){
     )
 }
 export function DrawerComponentView(open){
+    const {logout} = useAuthContext
     const styles= useStyles();
     const handleDirectURL=(e)=>{
         console.log(e.target.innerText)
@@ -351,7 +353,7 @@ export function DrawerComponentView(open){
                         </Menu>
                         <Button className='buttonPopover' style={{width:'100%', borderRadius:'1.5em', margin:'.3em 0',}}
                             aria-describedby={open.id} variant="contained" 
-                            onClick={()=>{window.location = '/'}}>
+                            onClick={()=>logout()}>
                             Salir
                         </Button>
                     </div>

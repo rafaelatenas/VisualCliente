@@ -8,6 +8,7 @@ const urlProduccion = 'retailservices/';
 class Home extends React.Component {
     constructor(props){
         super(props);
+        console.log(props)
         this.state={
             withdScreen:window.innerWidth,
             openModal:false,
@@ -25,7 +26,7 @@ class Home extends React.Component {
     }
     /*Controles Popover */
     reports=[
-        {id:1, key:1, url:'/retailservices/data', padre:'WOP', name:'Resumen Táctico'},
+        {id:1, key:1, url:'/retailservices/home/data', padre:'WOP', name:'Resumen Táctico'},
         {id:1, key:2, url:'', padre:'WOP', name:'Eficiencia Operativa'},
         {id:1, key:3, url:'', padre:'WOP', name:'Ranking de Tiendas'},
         {id:1, key:4, url:'', padre:'WOP', name:'Panel de Canedas'},
@@ -86,7 +87,7 @@ class Home extends React.Component {
 	render() {
 		return(
             <Container className='containerBox'>
-                {this.state.withdScreen > 1080 ? <HeaderDesktop/> : <HeaderMovile/>}
+                {this.state.withdScreen > 1080 ? <HeaderDesktop props={this.props.logOut}/> : <HeaderMovile/>}
                 <Modal
                     className='Modal'
                     open={this.state.openModal}
