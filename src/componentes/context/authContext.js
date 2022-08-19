@@ -8,18 +8,28 @@ export const AuthContext = createContext({
 });
 
 export function AuthContextProvider({children}){
-    const [isAuthenticated, setAuthenticated] = useState(false);
+    const [isAuthenticated, setAuthenticated] = useState(sessionStorage.getItem('success'));
+    const IdUser = 2;
     console.log(isAuthenticated)
     const login = useCallback(function () {
         setAuthenticated(true)
     },[])
-    const logOut = useCallback(function () {
+    const logout = useCallback(function () {
         setAuthenticated(false)
         sessionStorage.removeItem('token')
         sessionStorage.removeItem('success')
+        sessionStorage.removeItem('user')
     },[])
-
-    return <AuthContext.Provider value={{isAuthenticated: isAuthenticated, login: login, logout: logOut}}>{children}</AuthContext.Provider>
+    const value = useMemo(
+        ()=>({
+            login,
+            logout,
+            isAuthenticated,
+            IdUser
+        }),
+        [login, logout, isAuthenticated,IdUser]
+    )
+    return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
 }
 export function useAuthContext(){
     return useContext(AuthContext)

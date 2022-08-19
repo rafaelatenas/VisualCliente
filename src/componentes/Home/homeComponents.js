@@ -65,9 +65,7 @@ export function HeaderDesktop(props){
     const styles = useStyles();
     const actions = [
         { icon: <ExitToApp className={styles.IconsSpeedDial} onClick={()=>logout()}/>, name: 'Salir', admin:0 },
-        { icon: <NavLink className={styles.LinkIcons} to={'/retailservices/home/CambiarC/CambiarC'} ><Settings className={styles.IconsSpeedDial}/></NavLink>, name: 'Configuraciones', admin:0 },
-        { icon: <NavLink className={styles.LinkIcons} to={'/retailservices/management/panel'} ><AdminPanelSettings className={styles.IconsSpeedDial}/></NavLink>, name: 'Panel Administrativo', admin:1 },
-
+        { icon: <NavLink className={styles.LinkIcons} to={`/retailservices/home/changepassword/${sessionStorage.getItem('user')}`} ><Settings className={styles.IconsSpeedDial}/></NavLink>, name: 'Configuraciones', admin:0 },
     ];
     const [openSpeedDial, setOpenSpeedDial] = React.useState(false);
     const handleOpenSpeedDial = () => setOpenSpeedDial(true);

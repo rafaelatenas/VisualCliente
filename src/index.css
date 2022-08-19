@@ -12,18 +12,16 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 * {
+  font-family: 'Lucida Sans Demibold Roman', sans-serif;
   padding: 0;
   margin: 0;
   box-sizing: border-box;
   overflow: hidden;
 }
 #root{
+  font-family: 'Lucida Sans Demibold Roman', sans-serif;
   width: 100vw;
   height: 100vh; 
-}
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
 }
 main {
   background: rgb(6, 41, 78);

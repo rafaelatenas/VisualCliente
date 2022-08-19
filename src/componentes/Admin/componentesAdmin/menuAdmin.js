@@ -5,8 +5,9 @@ import '../admin.css';
 import Tooltip from '@material-ui/core/Tooltip';
 import { Person,Group } from "@material-ui/icons";
 import { ExitToApp } from "@material-ui/icons";
-class MenuAdmin extends React.Component{
-    render(){
+import { useAuthContext } from "../../context/authContext";
+export default function MenuAdmin (){
+    const {logout}=useAuthContext();
         return(
             <nav className="sidebar-navigation">
                 <div className="header-logo">
@@ -17,7 +18,7 @@ class MenuAdmin extends React.Component{
                 <ul id="lista" className="lista">
                     <li>
                         <Tooltip title="Gestión de Usuarios" arrow placement="right">
-                            <Link to={'/retailservices/management/panel/createUser'}>
+                            <Link to={'/retailservices/home/management/panel/createUser'}>
                                 <Person style={{fill:'#000000'}}></Person>
                             </Link>
                         </Tooltip>
@@ -39,17 +40,13 @@ class MenuAdmin extends React.Component{
                             <Link to={'/retailservices/data'}><ExitToApp style={{fill:'#000000'}}></ExitToApp></Link>
                         </Tooltip>
                     </li>
-                    <li>
+                    <li onClick={()=>logout()}>
                         <Tooltip title="Salir" arrow placement="right">
-                            <Link to={'/retailservices/'}>
-                                <ExitToApp style={{fill:'#000000'}}></ExitToApp>
-                            </Link>
+                            <ExitToApp style={{fill:'#000000'}} ></ExitToApp>
                         </Tooltip>
                     </li>
                 </ul>
             </nav>
         )
-    }
 }
-export default MenuAdmin;
 

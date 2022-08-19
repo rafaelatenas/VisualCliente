@@ -2,8 +2,8 @@ import {Navigate, Outlet} from 'react-router-dom';
 import { useAuthContext } from './authContext';
 
 export default function Privado(){
-    const {isAuthenticated} = useAuthContext();
-    console.log(isAuthenticated)
+    const {isAuthenticated,IdUser} = useAuthContext();
+    console.log(isAuthenticated,IdUser)
     if(!isAuthenticated){
        return <Navigate to='/retailservices/'/>
     }

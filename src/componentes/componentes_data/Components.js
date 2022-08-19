@@ -5,7 +5,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import {Stack} from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { makeStyles } from "@material-ui/styles";
-import logoatenas from '../../landing/Images/ats_logo-atenas.png'
+import logoatenas from '../../landing/Images/ATSLOGO.png'
 import React from "react";
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -17,6 +17,7 @@ import { useAuthContext } from "../context/authContext";
 let icon;
 
 export function DrawerComponent(open){
+    const {logout}=useAuthContext();
     const styles= useStyles();
     const handleDirectURL=(e)=>{
         console.log(e.target.innerText)
@@ -161,7 +162,7 @@ export function DrawerComponent(open){
                         </Menu>
                         <Button className='buttonPopover' style={{width:'100%', borderRadius:'1.5em', margin:'.3em 0', padding:'0px !important'}}
                             aria-describedby={open.id} variant="contained" 
-                            onClick={()=>{window.location = '/retailservices/'}}>
+                            onClick={()=>logout()}>
                             Salir
                         </Button>
                     </div>

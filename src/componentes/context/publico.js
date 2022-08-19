@@ -2,10 +2,22 @@ import {Navigate, Outlet} from 'react-router-dom';
 import {useAuthContext} from './authContext';
 
 export default function Public(){
-    const {isAuthenticated} = useAuthContext();
-    console.log(isAuthenticated)
+    const {isAuthenticated,IdUser} = useAuthContext();
+    const Home = <Navigate to='/retailservices/home'/>
+    const Panel = <Navigate to='/retailservices/home/management/panel'/>
+    console.log(isAuthenticated,IdUser)
     if(isAuthenticated){
-       return <Navigate to='/retailservices/home'/>
+        switch (IdUser) {
+            case 1:
+               return Home
+                break;
+            case 2:
+                return Panel
+                break;
+            default:
+                break;
+        }
+       
     }
     return (<Outlet/>)
 }
