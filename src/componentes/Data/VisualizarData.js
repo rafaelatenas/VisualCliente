@@ -2,10 +2,10 @@ import React from 'react';
 import { useState } from 'react';
 import { styled } from '@mui/material/styles';
 import { Box,CssBaseline,Button } from '@material-ui/core';
-import { BotonUsuario, DrawerComponentView} from "../componentes_data/Components";
+import { BotonUsuario, DrawerComponentView } from './components/Components';
 import { ArrowBack } from '@material-ui/icons';
 
-export default function VisualizarData(){
+export default function Report(){
         const [open, setOpen] = React.useState(false);
         const handleDrawerOpen = () => {
             setOpen(true);

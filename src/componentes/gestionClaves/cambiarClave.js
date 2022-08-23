@@ -4,7 +4,7 @@ import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
 import './activarUsuario.css';
 import { TextField, FormControl, InputLabel, OutlinedInput, FormLabel, InputAdornment} from '@mui/material';
-import { Visibility, VisibilityOff} from '@material-ui/icons';
+import { ArrowBack, Visibility, VisibilityOff} from '@material-ui/icons';
 import { IconButton, Button} from '@mui/material';
 import { useAuthContext } from '../context/authContext';
 import {useNavigate, useParams} from 'react-router-dom'
@@ -167,15 +167,13 @@ export default function CambiarClave(){
           <img className='logoActivate' src={atenaslogoEliseBlanca} alt='Logo Elise Blanca. Atenas Grupo Consultor' title=''/>
           <FormLabel className='text'>{email}</FormLabel>
           <TextField className='textPassword' label="Clave"  type={showPassword ? 'text' : 'password'} value={password}
-            onChange={(e)=>handleUserPassword(e)}
-            name='Password'
+            onChange={(e)=>handleUserPassword(e)} name='Password'
           />
           <TextField className='textPassword' label="Confirmar Clave"  type={showPassword ? 'text' : 'password'} value={password2}
-            onChange={(e)=>handleUserConfirmPassword(e)}
-            name='ConfirmPassword'
+            onChange={(e)=>handleUserConfirmPassword(e)} name='ConfirmPassword'
             InputProps={{
               endAdornment:(
-                <InputAdornment style={{width:'12%',height:'100%'}} onClick={(e)=>handleClickShowPassword(e)}>
+                <InputAdornment position="end" style={{width:'12%',height:'100%'}} onClick={(e)=>handleClickShowPassword(e)}>
                   {showPassword ? <VisibilityOff/> : <Visibility/>}
                 </InputAdornment>
               )
@@ -184,6 +182,9 @@ export default function CambiarClave(){
           <Button className='buttonConfirm' variant="outlined" disabled={!confirmPasswordValid} onClick={enviarDatos}>Confirmar</Button>
         </FormControl>
       </div>
+      <IconButton className='back' variant="contained" onClick={()=>window.location = '/retailservices/home'}>
+        <ArrowBack style={{fontSize:'2.5em', fill:'#fff'}}></ArrowBack>
+      </IconButton>
     </section>
   )
 };

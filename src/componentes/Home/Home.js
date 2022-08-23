@@ -4,7 +4,7 @@ import { Box, Container, Typography, Modal, IconButton, CardContent, Popover, Ca
 import './home.css';
 import { CardDesktop, CarouselFooter, HeaderDesktop, HeaderMovile } from './homeComponents';
 import { Link, NavLink } from 'react-router-dom';
-const urlProduccion = 'retailservices/';
+
 class Home extends React.Component {
     constructor(props){
         super(props);
@@ -87,7 +87,7 @@ class Home extends React.Component {
 	render() {
 		return(
             <Container className='containerBox'>
-                {this.state.withdScreen > 1080 ? <HeaderDesktop props={this.props.logOut}/> : <HeaderMovile/>}
+                {this.state.withdScreen > 1020 ? <HeaderDesktop props={this.props.logOut}/> : <HeaderMovile/>}
                 <Modal
                     className='Modal'
                     open={this.state.openModal}
@@ -107,7 +107,7 @@ class Home extends React.Component {
                     </Box>
                 </Modal>
                 <Container className='containerCard'>
-                {this.state.withdScreen > 1080 ? 
+                {this.state.withdScreen > 1020 ? 
                     <>
                     <CardDesktop 
                         PropsCardPopoverClose={this.handleClosePopover}
@@ -139,7 +139,7 @@ class Home extends React.Component {
                     </Menu>
                     </>: ''}
                 </Container>
-                {this.state.withdScreen > 1080 ? this.footerDesktop : ''}
+                {this.state.withdScreen > 1020 ? this.footerDesktop : ''}
 
             </Container>
         )

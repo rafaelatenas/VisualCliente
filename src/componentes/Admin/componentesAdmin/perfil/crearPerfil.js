@@ -127,7 +127,7 @@ export default class CrearPerfil extends React.Component{
       id_perfil: this.state.id_perfil,
     }
 
-  var token=localStorage.getItem('token');
+  var token=sessionStorage.getItem('token');
   axios.post(process.env.REACT_APP_API_ENDPOINT+'NuevoUsuarios',datos,{
     headers: {
       'Authorization': `Bearer ${token}`

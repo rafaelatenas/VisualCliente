@@ -64,6 +64,7 @@
 .boxRecovery{
     width: 73%;
     height: 95%;
+    max-height: 490px;
     min-width: 365px;
     max-width: 400px;
     display: flex;
@@ -273,7 +274,7 @@
         height: 85%;
         align-items: center;
         justify-content: space-evenly;
-        max-height: 340px;
+        max-height: 320px;
         min-height: 283px;
     }
 }
@@ -338,13 +339,14 @@
         align-items: center;
         justify-content: space-evenly;
         max-width: 760px;
+        max-height: 590px;
     }
     .email, .password{
         width: 90%;
         height: 10%;
     }
     .email label, .password label{
-        font-size: 1.6em;
+        font-size: 1.3em;
         top: 0px;
     }
     .error{
@@ -352,11 +354,11 @@
         min-height: 67px;
     }
     .iconVisibility{
-        font-size: 1.5em !important;
+        font-size: 1.3em !important;
     }
     .button{
         height: 10%;
         max-height: 70px;
-        font-size: 1.6em !important
+        font-size: 1.3em !important
     }
 }

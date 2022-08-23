@@ -5,14 +5,14 @@ import MenuIcon from '@mui/icons-material/Menu';
 import {Stack} from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { makeStyles } from "@material-ui/styles";
-import logoatenas from '../../landing/Images/ATSLOGO.png'
+import logoatenas from '../../../landing/Images/ATSLOGO.png'
 import React from "react";
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import './componentes.css'
 import Alert from '@mui/material/Alert';
 import Collapse from '@mui/material/Collapse';
-import { useAuthContext } from "../context/authContext";
+import { useAuthContext } from "../../context/authContext";
 
 let icon;
 
@@ -43,10 +43,10 @@ export function DrawerComponent(open){
         >
             <DrawerHeader>
                 <Stack style={{width:'70%', height:'100%', justifyContent:'center'}}>
-                    <Tooltip title={localStorage.getItem('Login')} arrow placement="right" style={{minHeight:36}}>
+                    <Tooltip title={sessionStorage.getItem('Login')} arrow placement="right" style={{minHeight:36}}>
                         <Chip
                             avatar={<Avatar style={{minHeight:30,maxHeight:50,minWidth:30, maxWidth:50}}>R</Avatar>}
-                            label={localStorage.getItem('Login')}
+                            label={sessionStorage.getItem('Login')}
                             variant="outlined"
                         ></Chip>
                     </Tooltip>
@@ -187,7 +187,7 @@ export function BotonUsuario(open){
                 <MenuIcon  style={{fontSize:'35px',fill:'#fff'}}/>
             </IconButton>
             {/* <Stack className={styles.Stack}>
-                <Tooltip title={localStorage.getItem('Login')} arrow placement="right">
+                <Tooltip title={sessionStorage.getItem('Login')} arrow placement="right">
                     <Avatar className={styles.Avatar}></Avatar>
             </Tooltip>
             </Stack> */}
@@ -264,10 +264,10 @@ export function DrawerComponentView(open){
         >
             <DrawerHeader>
                 <Stack style={{width:'70%', height:'100%', justifyContent:'center'}}>
-                    <Tooltip title={localStorage.getItem('Login')} arrow placement="right">
+                    <Tooltip title={sessionStorage.getItem('Login')} arrow placement="right">
                         <Chip
                             avatar={<Avatar>R</Avatar>}
-                            label={localStorage.getItem('Login')}
+                            label={sessionStorage.getItem('Login')}
                             variant="outlined"
                         ></Chip>
                     </Tooltip>

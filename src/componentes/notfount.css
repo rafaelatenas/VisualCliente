@@ -1,0 +1,50 @@
+.ContainerNotFound{
+  max-width: none !important;
+  padding: 0% !important;
+  margin: 0% !important;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  background-image: url(../landing/Images/notfound.png);
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+.boxNotFound{
+  display: flex;
+  width: calc(45% - 100px);
+  position: fixed;
+  height: auto;
+  top: 25%;
+  overflow: visible;
+  max-width: 700px;
+  min-width: 410px;
+  justify-content: space-between;
+}
+.rotate {
+  animation: rotation 4s infinite linear;
+  height: 160px;
+  width: 160px;
+  max-width: 180px;
+  max-height: 180px;
+}
+  
+  @keyframes rotation {
+    from {
+      transform: rotate(0deg);
+      transform-origin: 40% 45%;
+    }
+    to {
+      transform-origin: 40% 45%;
+
+      transform: rotate(359deg);
+    }
+  }
+  .volver{
+    width: auto;
+    padding: 1% 2% !important;
+    height: 5%;
+    margin: 0 !important;
+    border-radius: 1em !important;
+  }

@@ -78,7 +78,7 @@ class Usuario extends React.Component{
             </Stack>
           </article>
           <aside id="boxCrear" className="contenedor contenedor-creacion">
-            <CrearUsuario></CrearUsuario>
+            <CrearUsuario/>
           </aside>
 
           <article id="consulta" className="boton consultar" style={{display:'inline-flex',alignItems:'center'}}>

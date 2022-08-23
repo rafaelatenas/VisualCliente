@@ -5,7 +5,7 @@ import eliseAtenas from '../../landing/Images/ats_logo-elise-blanca.png'
 import logoAtenas from '../../landing/Images/ats_logo-blanco-elises.png'
 import { makeStyles } from "@material-ui/styles";
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 //Imagenes Reportes
 import WOP from '../../landing/Images/ATSLogoWop.png'
 import RScanning from '../../landing/Images/ATSLogoRScanning.png'
@@ -73,7 +73,9 @@ export function HeaderDesktop(props){
     return(
         <Container className={styles.ContainerBox}>
             <Box className={`${styles.BoxPrimary} BoxTainer`}>
-                <img className={styles.eliseAtenas} src={eliseAtenas} alt='Logo Atenas Grupo Consulto. Elise Blanca' title=""/>
+                <Link to={'/retailservices/home'}>
+                    <img className={styles.eliseAtenas} src={eliseAtenas} alt='Logo Atenas Grupo Consulto. Elise Blanca' title=""/>
+                </Link>
                 <Box className={styles.boxSecundary}>
                     <SpeedDial
                         ariaLabel="SpeedDial controlled open example"
@@ -209,7 +211,7 @@ const useStylesCard = makeStyles(()=>({
         justifyContent:'space-around',
     },
     Card:{
-        backgroundColor:'transparent',
+        backgroundColor:'transparent !important',
         width:'15%',
         height:'100%',
         display:'flex',

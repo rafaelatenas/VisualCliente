@@ -75,7 +75,7 @@ const styles= useStyles();
     }))
   }
 /*Petición a la API LISTAR USUARIOS*/
-  var token=localStorage.getItem('token');
+  var token=sessionStorage.getItem('token');
   const MySwal = withReactContent(Swal)
   const toast = MySwal.mixin({
     toast: true,

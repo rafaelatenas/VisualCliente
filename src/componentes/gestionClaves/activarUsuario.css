@@ -55,3 +55,16 @@
     background: #fff !important;
     border-radius: 1.2em !important;
 }
+.back{
+    background: transparent;
+    border: 0.2em solid rgb(255, 255, 255) !important;
+    min-width: 50px;
+    max-width: 70px;
+    border-radius: 50% !important;
+    padding: 0% !important;
+    position: fixed !important;
+    left: 1%;
+    top: 87%;
+    width: 60px;
+    height: 60px;
+}

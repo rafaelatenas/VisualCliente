@@ -24,10 +24,8 @@ function Login (){
   const [formErrors, setFormErrors] = useState({Email: '', Password: '', EmailRecovery:''})
   const [emailValid, setEmailValid] = useState(false)
   const [passwordValid, setPasswordValid] = useState(false)
-  const [formValidValid, setFormValid] = useState(false)
   const [validToken, setValidToken] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
-  const withdScreen = window.innerWidth
   const [open,setOpen] = useState(false)
   const [checked, setChecked] = React.useState(false);
   const [emailRecovery,setEmailRecovery] = useState('')
@@ -63,7 +61,6 @@ function Login (){
     setEmailValid(emailValid)
     setPasswordValid(passwordValid)
     setEmailValidRecovery(EmailValidRecovery)
-    console.log(formErrors)
   }
   const handleUserEmail = (e) => {
     const name = e.target.name;
@@ -115,7 +112,6 @@ function Login (){
       if (result.data.success === true) {
         login();
       }
-      console.log(result)
     }).catch(err => {
         if(err.response) {
           console.log(err.response)
@@ -192,7 +188,7 @@ function Login (){
               <InputLabel  style={{ zIndex:'30',background:'transparent'}} htmlFor="outlined-adornment-password">Clave</InputLabel>
               <OutlinedInput id="outlined-adornment-password" type={showPassword?  'text' : 'password'} name='Password' value={password} onChange={(e)=>handleUserPassword(e)}
                 endAdornment={
-                <IconButton style={{width:'10%',height:'100%', margin:-7}} aria-label="toggle password visibility" onClick={handleClickShowPassword}  edge="end">
+                <IconButton style={{width:'10%',height:'100%', margin:-7}} aria-label="toggle password visibility" onClick={handleClickShowPassword}  position="end">
                   {showPassword ? <VisibilityOff className='iconVisibility'/> : <Visibility className='iconVisibility'/>}
                 </IconButton>
                 }

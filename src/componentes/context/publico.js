@@ -5,7 +5,6 @@ export default function Public(){
     const {isAuthenticated,IdUser} = useAuthContext();
     const Home = <Navigate to='/retailservices/home'/>
     const Panel = <Navigate to='/retailservices/home/management/panel'/>
-    console.log(isAuthenticated,IdUser)
     if(isAuthenticated){
         switch (IdUser) {
             case 1:
@@ -17,7 +16,6 @@ export default function Public(){
             default:
                 break;
         }
-       
     }
     return (<Outlet/>)
 }

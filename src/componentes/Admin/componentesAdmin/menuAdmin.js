@@ -11,7 +11,7 @@ export default function MenuAdmin (){
         return(
             <nav className="sidebar-navigation">
                 <div className="header-logo">
-                    <Tooltip title={localStorage.getItem('nombres')+' '+localStorage.getItem('apellidos')} arrow placement="right">
+                    <Tooltip title={sessionStorage.getItem('nombres')+' '+sessionStorage.getItem('apellidos')} arrow placement="right">
                         <img src={Logoatenas} alt="Logo Atenas"></img> 
                     </Tooltip>
                 </div>
@@ -25,7 +25,7 @@ export default function MenuAdmin (){
                     </li>
                     <li>
                         <Tooltip title="Gestión de Perfiles" arrow placement="right">
-                            <Link to={'/retailservices/management/panel/createPerfil'}>
+                            <Link to={'/retailservices/home/management/panel/createPerfil'}>
                                 <Group style={{fill:'#000000'}}></Group>
                             </Link>
                         </Tooltip>
@@ -42,7 +42,7 @@ export default function MenuAdmin (){
                     </li>
                     <li onClick={()=>logout()}>
                         <Tooltip title="Salir" arrow placement="right">
-                            <ExitToApp style={{fill:'#000000'}} ></ExitToApp>
+                            <ExitToApp style={{fill:'#000000'}}></ExitToApp>
                         </Tooltip>
                     </li>
                 </ul>

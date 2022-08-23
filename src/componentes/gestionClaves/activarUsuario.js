@@ -110,7 +110,7 @@ export default function ActivarUsuario(){
           console.log(err.response.headers);        
         
         }       
-          // toast.fire({
+          //toast.fire({
           //   icon:'error',
           //   title:''+err.response.data.message+'',
           //   confirmButtonText: `Ok`,
@@ -118,46 +118,44 @@ export default function ActivarUsuario(){
     })
   }
   // enviarDatos=(e)=>{
-  //   console.log(password === confirmacionPassword)
-  // const MySwal = withReactContent(Swal)
-  // const toast = MySwal.mixin({
-  //   toast: true,
-  //   position: 'top-end',
-  //   showConfirmButton: false,
-  //   timer: 5000,
-  //   timerProgressBar: true,
-  //   didOpen: (toast) => {
-  //       toast.addEventListener('mouseenter', Swal.stopTimer)
-  //       toast.addEventListener('mouseleave', Swal.resumeTimer)
-  //    }
-  // });
-  // e.preventDefault();
-  // console.log("Fomulario Enviado....")
-  // const {password, Usuario, confirmacionpassword}=state;
-  // var datosEnviar={password:password, usuario:Usuario, confirmacionpassword:confirmacionpassword}
-  // console.log(datosEnviar)
-  // axios.post(process.env.REACT_APP_API_ENDPOINT+"ActivarUsuario",datosEnviar)
-  //   .then((result) => {
-  //     setState({status:true})
-  //     console.log(result)
-  //     console.log(result.data);  
-  //       toast.fire({
-  //         icon: 'success',
-  //         title: ''+result.data.message+'',
-  //         confirmButtonText: `Ok`,
-  //       })
-  //   })
-  //   .catch((error) => {
-  //     console.error(error)
-  //     console.log(error.response.data.message);
-  //     console.log(error.response.status);
-  //     console.log(error.response.headers);        
-  //       toast.fire({
-  //         icon: 'error',
-  //         title: ''+error.response.message+'',
-  //         confirmButtonText: `Ok`,
-  //       })    
-  //   })
+  //   const MySwal = withReactContent(Swal)
+  //   const toast = MySwal.mixin({
+  //     toast: true,
+  //     position: 'top-end',
+  //     showConfirmButton: false,
+  //     timer: 5000,
+  //     timerProgressBar: true,
+  //     didOpen: (toast) => {
+  //         toast.addEventListener('mouseenter', Swal.stopTimer)
+  //         toast.addEventListener('mouseleave', Swal.resumeTimer)
+  //     }
+  //   });
+  //   e.preventDefault();
+  //   const {password, Usuario, confirmacionpassword}=state;
+  //   var datosEnviar={password:password, usuario:Usuario, confirmacionpassword:confirmacionpassword}
+  //   console.log(datosEnviar)
+  //   axios.post(process.env.REACT_APP_API_ENDPOINT+"ActivarUsuario",datosEnviar)
+  //     .then((result) => {
+  //       setState({status:true})
+  //       console.log(result)
+  //       console.log(result.data);  
+  //         toast.fire({
+  //           icon: 'success',
+  //           title: ''+result.data.message+'',
+  //           confirmButtonText: `Ok`,
+  //         })
+  //     })
+  //     .catch((error) => {
+  //       console.error(error)
+  //       console.log(error.response.data.message);
+  //       console.log(error.response.status);
+  //       console.log(error.response.headers);        
+  //         toast.fire({
+  //           icon: 'error',
+  //           title: ''+error.response.message+'',
+  //           confirmButtonText: `Ok`,
+  //         })    
+  //     })
   // }
   
   return(
@@ -175,7 +173,7 @@ export default function ActivarUsuario(){
             name='ConfirmPassword'
             InputProps={{
               endAdornment:(
-                <InputAdornment style={{width:'12%',height:'100%'}} onClick={(e)=>handleClickShowPassword(e)}>
+                <InputAdornment position="end" style={{width:'12%',height:'100%'}} onClick={(e)=>handleClickShowPassword(e)}>
                   {showPassword ? <VisibilityOff/> : <Visibility/>}
                 </InputAdornment>
               )

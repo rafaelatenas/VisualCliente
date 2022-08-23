@@ -61,7 +61,6 @@ export default function RecuperarClave(){
     if (value === password) {
       formErrors.confirmPasswordValid =''
       setConfirmPasswordValid(true)
-      
     }else{
       formErrors.confirmPasswordValid ='Las claves no son iguales'
       setConfirmPasswordValid(false)
@@ -176,7 +175,7 @@ export default function RecuperarClave(){
             name='ConfirmPassword'
             InputProps={{
               endAdornment:(
-                <InputAdornment style={{width:'12%',height:'100%'}} onClick={(e)=>handleClickShowPassword(e)}>
+                <InputAdornment position="end" style={{width:'12%',height:'100%'}} onClick={(e)=>handleClickShowPassword(e)}>
                   {showPassword ? <VisibilityOff/> : <Visibility/>}
                 </InputAdornment>
               )

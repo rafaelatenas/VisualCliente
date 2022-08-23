@@ -10,8 +10,8 @@ import {Modal} from '@material-ui/core';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content'
-import {DrawerComponent, BotonUsuario, CardComponents, HeaderComponent} from '../componentes_data/Components';
-import { SelectCanales, SelectCategorias, SelectFabricantes, SelectMarcas, SelectPeriodos, SelectRegiones } from '../componentes_data/Selects';
+import { DrawerComponent, BotonUsuario, CardComponents, HeaderComponent } from './components/Components';
+import { SelectCanales, SelectCategorias, SelectFabricantes, SelectMarcas, SelectPeriodos, SelectRegiones  } from './components/Selects';
 import Alert from '@mui/material/Alert';
 import { useNavigate } from 'react-router-dom';
 
@@ -30,7 +30,7 @@ const toast = MySwal.mixin({
 export default function DATA(){
 
   const styles= useStyles();
-  var token=localStorage.getItem('token');
+  var token=sessionStorage.getItem('token');
 
   /*Control del ComponetDrawer*/
   const [alert, setAlert] = React.useState(false);
