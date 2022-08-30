@@ -61,7 +61,6 @@ const useStylesMoViles = makeStyles((withdScreen, heightScreen)=>({
 export function HeaderDesktop(props){
     const {logout, isAuthenticated}=useAuthContext();
 
-    console.log(isAuthenticated)
     const styles = useStyles();
     const actions = [
         { icon: <ExitToApp className={styles.IconsSpeedDial} onClick={()=>logout()}/>, name: 'Salir', admin:0 },

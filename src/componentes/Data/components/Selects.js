@@ -93,7 +93,7 @@ export function SelectPeriodos(data){
                         autoFocus={data.focus}
                         InputProps={{
                             startAdornment: (
-                            <InputAdornment position="start">
+                            <InputAdornment position="start" style={{width: '10%',height: '100%'}}>
                                 <Search />
                             </InputAdornment>
                             )

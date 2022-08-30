@@ -18,21 +18,21 @@ export default function MenuAdmin (){
                 <ul id="lista" className="lista">
                     <li>
                         <Tooltip title="Gestión de Usuarios" arrow placement="right">
-                            <Link to={'/retailservices/home/management/panel/createUser'}>
+                            <Link to={'/retailservices/management/panel/user'}>
                                 <Person style={{fill:'#000000'}}></Person>
                             </Link>
                         </Tooltip>
                     </li>
                     <li>
                         <Tooltip title="Gestión de Perfiles" arrow placement="right">
-                            <Link to={'/retailservices/home/management/panel/createPerfil'}>
+                            <Link to={'/retailservices/management/panel/perfil'}>
                                 <Group style={{fill:'#000000'}}></Group>
                             </Link>
                         </Tooltip>
                     </li>
                     <li>
                         <Tooltip title="Salir" arrow placement="right">
-                            <Link to={'/retailservices/management/panel/createUser'}><ExitToApp style={{fill:'#000000'}}></ExitToApp></Link>
+                            <Link to={'/retailservices/management/panel/user'}><ExitToApp style={{fill:'#000000'}}></ExitToApp></Link>
                         </Tooltip>
                     </li>
                     <li>

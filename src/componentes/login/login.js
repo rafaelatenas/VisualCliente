@@ -181,7 +181,7 @@ function Login (){
     <section className="login">
       <Box id='card-login' className="card-login">
         <FormControl className="Form">
-          <img className='logoLogin' src={atenaslogoEliseBlanca} alt="Logo Atenas" title=''/>
+          <img width={'80%'} height={'auto'} className='logoLogin' src={atenaslogoEliseBlanca} alt="Logo Atenas" title=''/>
           <TextField error={formErrors.Email === ''? false: true} helperText={formErrors.Email} className={formErrors.Email === ''? 'email': 'email error'} 
               variant="outlined" label="Correo" type='text' name='Email' value={email} onChange={(e)=>handleUserEmail(e)}/>
             <FormControl error={formErrors.Password === ''? false: true} className={formErrors.Password === ''? 'password': 'password error'} >

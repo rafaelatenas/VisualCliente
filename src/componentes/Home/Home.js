@@ -8,7 +8,6 @@ import { Link, NavLink } from 'react-router-dom';
 class Home extends React.Component {
     constructor(props){
         super(props);
-        console.log(props)
         this.state={
             withdScreen:window.innerWidth,
             openModal:false,

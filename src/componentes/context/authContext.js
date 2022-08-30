@@ -19,9 +19,7 @@ export function AuthContextProvider({children}){
     
     const logout = useCallback(function () {
         setAuthenticated(false)
-        sessionStorage.removeItem('token')
-        sessionStorage.removeItem('success')
-        sessionStorage.removeItem('user')
+        sessionStorage.clear()
     },[])
     const value = useMemo(
         ()=>({

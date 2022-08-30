@@ -7,7 +7,7 @@ import { useAuthContext } from "./context/authContext";
 import './notfount.css'
 export default function NotFound(){
     const {isAuthenticated,login,logout,IdUser}=useAuthContext();
-    const admin = IdUser===2
+    const admin = IdUser===1
     return(
         <Container className="ContainerNotFound">
             <Box className="boxNotFound">
@@ -18,7 +18,7 @@ export default function NotFound(){
                 <img className="rotate" src={elise} alt="ELISE ATENAS" title=""/>
                 
             </Box>
-            <Button className="volver" variant="contained" href={isAuthenticated? admin?'/retailservices/home/management/panel':'/retailservices/home':'/retailservices/'}>Volver</Button>
+            <Button className="volver" variant="contained" href={isAuthenticated? admin?'/retailservices/management/panel':'/retailservices/home':'/retailservices/'}>Volver</Button>
         </Container>   
     );
 }
