@@ -201,6 +201,7 @@ export function footerMovile() {
 const usefooterMovile = makeStyles (()=>({
 
 }))
+
 export function CarouselFooter(props){
     const styles = useStylesCarousel();
     const reports = [
@@ -211,18 +212,26 @@ export function CarouselFooter(props){
         {name:'Ranking Categorías', key:5, icon:RankingCategorias},
         {name:'Omnibus', key:6, icon:Omnibus},
         {name:'Canales y Cadenas', key:7, icon:CanalesCadenas},
-        {name:'NSE', key:8, icon:NSE},
-        {name:"Top Sku's", key:9, icon:TopSkus},
-        {name:'Top Proveedores', key:10, icon:TopProveedores},
-        {name:'Categorías', key:11, icon:Categorias},
-        {name:'Ranking Categorías', key:12, icon:RankingCategorias},
-        {name:'Omnibus', key:13, icon:Omnibus},
-        {name:'Canales y Cadenas', key:14, icon:CanalesCadenas},
     ]
     const [paused, setPaused]=useState(false)
+    const newReports =  reports.concat(reports)
+    console.log(newReports)
+    // console.log(reports.push(reports.shift()))
+    const showContinue=()=>{
+        newReports.concat(reports);
+    }
+    setTimeout(showContinue(), 2000);
+
+    // if (paused!= true ) {
+    //     setTimeout(showContinue(), 2000);
+    // }else{setTimeout(showContinue(), 2000);}
+    
+
+    
+    
     return(
         <Box className="CardsCarousel" style={paused ? {animationPlayState: 'paused'}:{animationPlayState:'running'}} onMouseEnter={()=>setPaused(true)} onMouseLeave={()=>setPaused(false)}>
-            {reports.map((report)=>(
+            {newReports.map((report)=>(
                 <IconButton className="slide" key={report.key}  onClick={(e)=>props.PropsFooterOpenModal(report.key, e)}>
                     <Card className={styles.Card}>
                         <CardContent className={styles.containerCard}>

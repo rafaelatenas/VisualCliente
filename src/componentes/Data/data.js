@@ -559,6 +559,7 @@ export default function DATA(){
             <HeaderComponent/>
                <article className="table-of-data">
                 <SelectPeriodos
+                className='propor'
                   tiempoReporte={tiempoReporte}
                   selectedOptions1={selectedOptions1}
                   isSelected={isSelected}

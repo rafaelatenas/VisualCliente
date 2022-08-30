@@ -34,12 +34,13 @@ export function DrawerComponent(open){
                 width: `${drawerWidth*2}%`,
                 boxSizing: 'border-box',
                 borderTopRightRadius:'.5em',
-                borderButtomRightRadius:'.5em'
+                borderButtomRightRadius:'.5em',
             },
             }}
             variant="persistent"
             anchor="left"
             open={open.open}
+            className='Drawer'
         >
             <DrawerHeader>
                 <Stack style={{width:'70%', height:'100%', justifyContent:'center'}}>
@@ -51,7 +52,7 @@ export function DrawerComponent(open){
                         ></Chip>
                     </Tooltip>
                 </Stack>
-                <IconButton  style={{margin:'0',padding:'0',background:'#F6B232',borderRadius:'.3em', width:'12%',height:'50%', minHeight: 34, minWidth:34}} onClick={open.handleDrawerClose}>
+                <IconButton  style={{margin:'0',padding:'0',background:'#F6B232',borderRadius:'.3em', width:'12%',height:'50%', minHeight: 40, minWidth:40}} onClick={open.handleDrawerClose}>
                     <MenuIcon style={{fontSize:'35px',fill:'#fff',width:'auto',height:'auto',}}/>
                 </IconButton>
             </DrawerHeader>
@@ -62,7 +63,7 @@ export function DrawerComponent(open){
                     aria-controls="panel1a-content"
                     id="panel1a-header"
                 >
-                    <Typography style={{margin:'0 1%', width:'100%'}}>Mis Selecciones</Typography>
+                    <Typography style={{margin:'0 1%', width:'100%', fontSize:'18 !important'}}>Mis Selecciones</Typography>
                 </AccordionSummary>
                 <AccordionDetails style={{overfolwY:'scroll'}}>
                     <Paper sx={{display: 'flex', justifyContent: 'center', flexWrap: 'wrap', listStyle: 'none', p:' 0 0 5%', m: 0}} component="ul">
@@ -91,9 +92,9 @@ export function DrawerComponent(open){
                         <Button className='buttonPopover' style={{width:'100%', borderRadius:'1.5em', margin:'.3em 0', padding:'0px !important'}}
                             aria-describedby={open.id} variant="contained" 
                             onClick={open.handleClick}>
-                            WOP
+                            Opcion de Menu 1
                         </Button>
-                        <Menu
+                        {/* <Menu
                             style={{width:'100%', height:'100%'}}
                             id={open.id}
                             open={open.openo}
@@ -105,13 +106,13 @@ export function DrawerComponent(open){
                             <MenuItem className={styles.MenuItem} onClick={(e)=>{handleDirectURL(e)}}>WOP3</MenuItem>
                             <MenuItem className={styles.MenuItem} onClick={(e)=>{handleDirectURL(e)}}>WOP4</MenuItem>
                             <MenuItem className={styles.MenuItem} onClick={(e)=>{handleDirectURL(e)}}>WOP5</MenuItem>
-                        </Menu>
+                        </Menu> */}
                         <Button className='buttonPopover' style={{width:'100%', borderRadius:'1.5em', margin:'.3em 0', padding:'0px !important'}}
                             aria-describedby={open.id} variant="contained" 
                             onClick={open.handleClick}>
-                            WOP
+                            Opcion de Menu 2
                         </Button>
-                        <Menu
+                        {/* <Menu
                             style={{width:'100%', height:'100%'}}
                             id={open.id}
                             open={open.openo}
@@ -123,13 +124,13 @@ export function DrawerComponent(open){
                             <MenuItem className={styles.MenuItem} onClick={(e)=>{handleDirectURL(e)}}>WOP3</MenuItem>
                             <MenuItem className={styles.MenuItem} onClick={(e)=>{handleDirectURL(e)}}>WOP4</MenuItem>
                             <MenuItem className={styles.MenuItem} onClick={(e)=>{handleDirectURL(e)}}>WOP5</MenuItem>
-                        </Menu>
+                        </Menu> */}
                         <Button className='buttonPopover' style={{width:'100%', borderRadius:'1.5em', margin:'.3em 0', padding:'0px !important'}}
                             aria-describedby={open.id} variant="contained" 
                             onClick={open.handleClick}>
-                            WOP
+                            Opcion de Menu 3
                         </Button>
-                        <Menu
+                        {/* <Menu
                             style={{width:'100%', height:'100%'}}
                             id={open.id}
                             open={open.openo}
@@ -141,13 +142,13 @@ export function DrawerComponent(open){
                             <MenuItem className={styles.MenuItem} onClick={(e)=>{handleDirectURL(e)}}>WOP3</MenuItem>
                             <MenuItem className={styles.MenuItem} onClick={(e)=>{handleDirectURL(e)}}>WOP4</MenuItem>
                             <MenuItem className={styles.MenuItem} onClick={(e)=>{handleDirectURL(e)}}>WOP5</MenuItem>
-                        </Menu>
+                        </Menu> */}
                         <Button className='buttonPopover' style={{width:'100%', borderRadius:'1.5em', margin:'.3em 0', padding:'0px !important'}}
                             aria-describedby={open.id} variant="contained" 
                             onClick={open.handleClick}>
-                            WOP
+                            Opcion de Menu 4
                         </Button>
-                        <Menu
+                        {/* <Menu
                             style={{width:'100%', height:'100%'}}
                             id={open.id}
                             open={open.openo}
@@ -159,7 +160,7 @@ export function DrawerComponent(open){
                             <MenuItem className={styles.MenuItem} onClick={(e)=>{handleDirectURL(e)}}>WOP3</MenuItem>
                             <MenuItem className={styles.MenuItem} onClick={(e)=>{handleDirectURL(e)}}>WOP4</MenuItem>
                             <MenuItem className={styles.MenuItem} onClick={(e)=>{handleDirectURL(e)}}>WOP5</MenuItem>
-                        </Menu>
+                        </Menu> */}
                         <Button className='buttonPopover' style={{width:'100%', borderRadius:'1.5em', margin:'.3em 0', padding:'0px !important'}}
                             aria-describedby={open.id} variant="contained" 
                             onClick={()=>logout()}>
@@ -175,14 +176,13 @@ export function DrawerComponent(open){
 export function BotonUsuario(open){
     const styles= useStyles();
     return(
-        <Toolbar className={styles.Toolbar}>
+        <Toolbar className={`${styles.Toolbar} toolbar`}>
             <IconButton
-                style={{margin:'0',padding:'0',background:'#F6B232', borderRadius:'.3em',width:'auto'}}
                 color="inherit"
                 aria-label="open drawer"
                 onClick={open.handleDrawerOpen}
                 edge="start"
-                sx={{mr: 2, ...(open && { display: 'none' }) }}
+                // sx={{mr: 2, ...(open && { display: 'none' }) }}
             >
                 <MenuIcon  style={{fontSize:'35px',fill:'#fff'}}/>
             </IconButton>
@@ -198,7 +198,7 @@ export function BotonUsuario(open){
 export function CardComponents(peticionSemanas){
     const styles= useStyles();
     return(
-            <Card className={styles.reporte} style={{ borderRadius: '1.5em' }}>
+            <Card className={`${styles.reporte} reporte`} style={{ borderRadius: '1.5em' }}>
                 <CardHeader style={{ padding: '5% 0 3%', color: '#03508f', fontSize: '1em' }} title="REPORTE" />
                 <Divider style={{ width: '70%', background: 'rgb(0 0 0 / 38%)' }} />
                 <CardActions style={{ display: 'flex', padding: '0', flexDirection: 'column', width: '80%', height: '100%', justifyContent: 'space-evenly' }}>
@@ -392,6 +392,7 @@ const useStyles = makeStyles((theme) => ({
     },
     Toolbar:{
         width:'5%',height:'20%',justifyContent:'space-evenly', flexDirection:'column', padding:'0 !important'
+    
     },
     Stack:{
         width:'100%', height:'auto', justifyContent:'center', alignItems:'center'

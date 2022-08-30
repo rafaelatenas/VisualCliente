@@ -20,7 +20,7 @@ export function SelectPeriodos(data){
     );
     
     const OptionPeriodo = data.data.map((option) => (
-        <MenuItem key={option.id} value={(option.id)}>
+        <MenuItem key={option.id} value={(option.id)} className='prueba'>
             <ListItem>
                 <Checkbox checked={(data.selectedOptions1.indexOf(option.id) > -1) || (data.selectedOptions1.indexOf(option) > -1)} />
             </ListItem>
@@ -29,7 +29,6 @@ export function SelectPeriodos(data){
     ))
     
     const OptionPeriodoSearch = displayedOptions.map((option) => (
-        console.dir(data.selectedOptions1.indexOf(option)),
         <MenuItem key={option.id} value={option.id}>
             <ListItem>
                 <Checkbox checked={(data.selectedOptions1.indexOf(option) > -1)} />
@@ -118,6 +117,7 @@ export function SelectPeriodos(data){
                             />
                         </ListItem>
                         <ListItemText primary="Marcar Todo" classes={{ primary: classes.selectAllText }}/>
+                        
                     </MenuItem >
                     {OptionRender}
                 </Select>
