@@ -63,8 +63,8 @@ export function HeaderDesktop(props){
 
     const styles = useStyles();
     const actions = [
-        { icon: <ExitToApp className={styles.IconsSpeedDial} onClick={()=>logout()}/>, name: 'Salir', admin:0 },
-        { icon: <NavLink className={styles.LinkIcons} to={`/retailservices/home/changepassword/${sessionStorage.getItem('user')}`} ><Settings className={styles.IconsSpeedDial}/></NavLink>, name: 'Configuraciones', admin:0 },
+        { icon: <ExitToApp className='IconsSpeedDial' onClick={()=>logout()}/>, name: 'Salir', admin:0 },
+        { icon: <NavLink className='LinkIcons' to={`/retailservices/home/changepassword/${sessionStorage.getItem('user')}`} ><Settings className='IconsSpeedDial'/></NavLink>, name: 'Configuraciones', admin:0 },
     ];
     const [openSpeedDial, setOpenSpeedDial] = React.useState(false);
     const handleOpenSpeedDial = () => setOpenSpeedDial(true);
@@ -73,16 +73,17 @@ export function HeaderDesktop(props){
         <Container className={styles.ContainerBox}>
             <Box className={`${styles.BoxPrimary} BoxTainer`}>
                 <Link to={'/retailservices/home'}>
-                    <img className={styles.eliseAtenas} src={eliseAtenas} alt='Logo Atenas Grupo Consulto. Elise Blanca' title=""/>
+                    <img className='eliseAtenas' src={eliseAtenas} alt='Logo Atenas Grupo Consulto. Elise Blanca' title=""/>
                 </Link>
                 <Box className={styles.boxSecundary}>
                     <SpeedDial
                         ariaLabel="SpeedDial controlled open example"
-                        icon={<ManageAccounts/>}
+                        icon={<ManageAccounts className="IconsSpeedDial" style={{fill:'#fff !important'}}/>}
                         onClose={handleCloseSpeedDial}
                         onOpen={handleOpenSpeedDial}
                         open={openSpeedDial}
                         direction={'left'}
+                        className='speddialCSS'
                     >
                         {actions.map((action) =>{ 
                             //Validación de Tipos de Usuario (Administrador y Cliente)
@@ -105,7 +106,7 @@ export function HeaderDesktop(props){
                     </SpeedDial>
                 </Box>
             </Box>    
-            <Paper className={`${styles.paperUser} boxSecundaryLogo`}></Paper>
+            <Paper className={`paperUser boxSecundaryLogo`}></Paper>
         </Container>
     )
 }
@@ -136,32 +137,6 @@ const useStyles = makeStyles(()=>({
             boxShadow:'none'
         }
     },
-    eliseAtenas:{
-        minWidth:75,
-        minHeight:79,
-        maxHeight:100,
-        maxWidth:95
-    },
-    paperUser:{
-        position:'relative',
-        left:'100%',
-        top:'-90%',
-        width:'20%',
-        height:'65%',
-        borderTopLeftRadius:'1.5em',
-        borderBottomLeftRadius:'1.5em',
-        borderRadius:0,
-    },
-    LinkIcons:{
-        display: 'flex',
-        alignItems: 'flex-start',
-    },
-    IconsSpeedDial:{
-        width:'100%',
-        height:'100%',
-        padding:'10%',
-        fill:'#575756'
-    }
 }))
 
 /* -- Modulos Tarjetas de Reportes -- */
@@ -190,11 +165,11 @@ export function CardDesktop(props){
         <Box className={styles.Boxcards}>
             {reports.map((report)=>(
                 <Card className={styles.Card} key={report.key}>
-                    <CardContent className={styles.CardContent}>
+                    <CardContent className='CardContent'>
                         <img style={report.style} src={report.icon} alt={`Logo Atenas Grupo Consultor. Repote ${report.name}`} title=""/>  
                     </CardContent>
                     <IconButton onClick={(e)=>props.PropsCardPopoverClose(e)} style={{padding:0}}>
-                       <KeyboardArrowDownRoundedIcon style={{fill:'#fff', fontSize:'50px' }} id={report.key}></KeyboardArrowDownRoundedIcon>
+                       <KeyboardArrowDownRoundedIcon onClick={(e)=>props.PropsCardPopoverClose(e)}  className="arrowIcon" id={report.key}></KeyboardArrowDownRoundedIcon>
                     </IconButton>
                 </Card>
             ))}
@@ -218,33 +193,6 @@ const useStylesCard = makeStyles(()=>({
         flexDirection:'column',
         boxShadow:'none'
     },
-    CardContent:{
-        backgroundColor:'#fff',
-        width:'90%',
-        height:'45%',
-        borderRadius:'1em',
-        minWidth:160,
-        maxWidth:250,
-        minHeight:120,
-        padding:'0% !important',
-        display: 'inline-flex',
-        alignItems: 'center',
-        justifyContent:'center'
-    },
-    PaperCards:{
-        width:'100%',
-        height:'auto',
-        backgroundColor:'#fff',
-
-    },
-    Collapse:{
-        width:'100%',
-        height:'100% !important',
-        borderRadius:'1.2em',
-        background:'#04172b73',
-        overflowY:'visible !important'
-    }
-
 }))
 /* -- Modulo Carousel -- */
 export function footerMovile() {

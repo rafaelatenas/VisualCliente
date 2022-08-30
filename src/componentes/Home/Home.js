@@ -114,27 +114,29 @@ class Home extends React.Component {
                         PropsIdPopover={this.state.idPopover}
                     />
                     <Menu
-                    anchorEl={this.state.anchorEl}
-                    open={Boolean(this.state.anchorEl)}
-                    onClose={this.handleClosePopover}
-                    className='menuComponent'
-                    anchorOrigin={{
-                        vertical: 'bottom',
-                        horizontal: 'center',
-                    }}
-                    transformOrigin={{
-                        vertical: 'top',
-                        horizontal: 'center',
-                    }}
+                        anchorEl={this.state.anchorEl}
+                        open={Boolean(this.state.anchorEl)}
+                        onClose={this.handleClosePopover}
+                        className='menuComponent'
+                        anchorOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'center',
+                        }}
+                        transformOrigin={{
+                            vertical: 'top',
+                            horizontal: 'center',
+                        }}
                     >
+                        <MenuList className='listMenu'>
                             {this.reports.map((report)=>{
                                 if (parseInt(this.state.idPopover) === report.id)
                                 return(
                                     <MenuItem className='Item' key={report.key} style={{ justifyContent:'flex-start', marginLeft:'10%', overflow:'visible !important'}}>
-                                        <NavLink className='LinkReport' to={report.url} style={{textDecoration:'none', color:'#fff', fontSize:'.85em'}}>{report.name}</NavLink>
+                                        <NavLink className='LinkReport' to={report.url}>{report.name}</NavLink>
                                     </MenuItem>
                                 )
                             })}
+                        </MenuList>
                     </Menu>
                     </>: ''}
                 </Container>
