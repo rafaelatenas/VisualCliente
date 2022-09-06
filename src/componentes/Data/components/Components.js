@@ -63,7 +63,7 @@ export function DrawerComponent(open){
                     aria-controls="panel1a-content"
                     id="panel1a-header"
                 >
-                    <Typography style={{margin:'0 1%', width:'100%', fontSize:'18 !important'}}>Mis Selecciones</Typography>
+                    <Typography className="misSelect">Mis Selecciones</Typography>
                 </AccordionSummary>
                 <AccordionDetails style={{overfolwY:'scroll'}}>
                     <Paper sx={{display: 'flex', justifyContent: 'center', flexWrap: 'wrap', listStyle: 'none', p:' 0 0 5%', m: 0}} component="ul">

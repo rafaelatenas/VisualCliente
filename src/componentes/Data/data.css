@@ -34,9 +34,7 @@
     height: 100% !important;
     overflow: visible;
 }
-.MuiTypography-body1{
-    font-size: .75em !important;
-}
+
 .MuiFormControl-root.MuiFormControl-fullWidth.MuiTextField-root.css-wb57ya-MuiFormControl-root-MuiTextField-root , .MuiFormControl-root.css-q8hpuo-MuiFormControl-root {
     overflow: visible !important;
     margin-top: 2%;

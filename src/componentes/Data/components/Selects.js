@@ -20,7 +20,7 @@ export function SelectPeriodos(data){
     );
     
     const OptionPeriodo = data.data.map((option) => (
-        <MenuItem key={option.id} value={(option.id)} className='prueba'>
+        <MenuItem key={option.id} value={(option.id)} className='items'>
             <ListItem>
                 <Checkbox checked={(data.selectedOptions1.indexOf(option.id) > -1) || (data.selectedOptions1.indexOf(option) > -1)} />
             </ListItem>
@@ -52,9 +52,9 @@ export function SelectPeriodos(data){
 
     return(
         <Box style={{border:'.1em solid rgb(87 87 86/11%)',background:'#f7f4f4', borderRadius:'1.5em', width:'15%', height:'90%', display:'flex', flexDirection:'column', alignItems:'center'}}>
-            <InputLabel style={{width:'auto', padding:'10% 0 5%'}}>PERÍODOS</InputLabel>
+            <InputLabel style={{width:'auto', padding:'10% 0 5%', fontSize:18}}>PERÍODOS</InputLabel>
             <FormControl sx={{width: '100%'}} className={classes.formControl} error={data.isSelected.selectedOptions1}>
-                <InputLabel style={{background: 'rgb(247, 244, 244)', width:'auto'}} id="mutiple-select-label">{data.tiempoReporte}</InputLabel>
+                <InputLabel className="inputLabel" id="mutiple-select-label">{data.tiempoReporte}</InputLabel>
                 <Select 
                     labelId="mutiple-select-label"
                     multiple
@@ -108,7 +108,7 @@ export function SelectPeriodos(data){
                         />
                         
                     </ListSubheader>
-                    <MenuItem value="all" classes={{root: data.isAllSelectPeriodo ? classes.selectedAll : ""}} style={{ display: data.showMenuItem.periodo ? "flex" : "none" }}>
+                    <MenuItem value="all" className='items' classes={{root: data.isAllSelectPeriodo ? classes.selectedAll : ""}} style={{ display: data.showMenuItem.periodo ? "flex" : "none" }}>
                         <ListItem>
                             <Checkbox
                                 classes={{ indeterminate: classes.indeterminateColor }}
@@ -139,7 +139,7 @@ export function SelectCanales(canal){
         <Box style={{border:'.1em solid rgb(87 87 86/11%)',background:'#f7f4f4', borderRadius:'1.5em', width:'15%', height:'90%', display:'flex', flexDirection:'column', alignItems:'center'}}>
             <InputLabel style={{width:'auto', padding:'10% 0 5%'}}>CANALES</InputLabel>
             <FormControl sx={{width: '100%'}} className={classes.formControl} error={canal.isSelected.selectedOptions2}>
-                <InputLabel style={{background: 'rgb(247, 244, 244)', width:'auto'}} id="mutiple-select-label">Canales</InputLabel>
+                <InputLabel className="inputLabel" id="mutiple-select-label">Canales</InputLabel>
                 <Select 
                     labelId="mutiple-select-label"
                     multiple
@@ -191,7 +191,7 @@ export function SelectRegiones(region){
         <Box style={{border:'.1em solid rgb(87 87 86/11%)',background:'#f7f4f4', borderRadius:'1.5em', width:'15%', height:'90%', display:'flex', flexDirection:'column', alignItems:'center'}}>
             <InputLabel style={{width:'auto', padding:'10% 0 5%'}}>REGIONES</InputLabel>
             <FormControl sx={{width: '100%'}} className={classes.formControl} error={region.isSelected.selectedOptions3}>
-                <InputLabel style={{background: 'rgb(247, 244, 244)', width:'auto'}} id="mutiple-select-label">Regiones</InputLabel>
+                <InputLabel className="inputLabel" id="mutiple-select-label">Regiones</InputLabel>
                 <Select 
                     labelId="mutiple-select-label"
                     multiple
@@ -238,7 +238,7 @@ export function SelectCategorias(categoria){
         <Box style={{border:'.1em solid rgb(87 87 86/11%)',background:'#f7f4f4', borderRadius:'1.5em', width:'15%', height:'90%', display:'flex', flexDirection:'column', alignItems:'center'}}>
             <InputLabel style={{width:'auto', padding:'10% 0 5%'}}>CATEGORÍAS</InputLabel>
             <FormControl sx={{width: '100%'}} className={classes.formControl} error={categoria.isSelected.selectedOptions4}>
-                <InputLabel style={{background: 'rgb(247, 244, 244)', width:'auto'}} id="mutiple-select-label">Categorías</InputLabel>
+                <InputLabel className="inputLabel" id="mutiple-select-label">Categorías</InputLabel>
                 <Select 
                     labelId="mutiple-select-label"
                     multiple
@@ -301,7 +301,7 @@ export function SelectFabricantes(Fabricante){
         <Box style={{border:'.1em solid rgb(87 87 86/11%)',background:'#f7f4f4', borderRadius:'1.5em', width:'15%', height:'90%', display:'flex', flexDirection:'column', alignItems:'center'}}>
             <InputLabel style={{width:'auto', padding:'10% 0 5%'}}>FABRICANTES</InputLabel>
             <FormControl sx={{width: '100%'}} className={classes.formControl} error={Fabricante.isSelected.selectedOptions5}>
-                <InputLabel style={{background: 'rgb(247, 244, 244)', width:'auto'}} id="mutiple-select-label">Fabricantes</InputLabel>
+                <InputLabel className="inputLabel" id="mutiple-select-label">Fabricantes</InputLabel>
                 <Select 
                     labelId="mutiple-select-label"
                     multiple
@@ -354,7 +354,7 @@ export function SelectMarcas(Marcas){
         <Box style={{border:'.1em solid rgb(87 87 86/11%)',background:'#f7f4f4', borderRadius:'1.5em', width:'15%', height:'90%', display:'flex', flexDirection:'column', alignItems:'center'}}>
             <InputLabel style={{width:'auto', padding:'10% 0 5%'}}>MARCAS</InputLabel>
             <FormControl sx={{width: '100%'}} className={classes.formControl} error={Marcas.isSelected.selectedOptions6}>
-                <InputLabel style={{background: 'rgb(247, 244, 244)', width:'auto'}} id="mutiple-select-label">Marcas</InputLabel>
+                <InputLabel className="inputLabel" id="mutiple-select-label">Marcas</InputLabel>
                 <Select 
                     labelId="mutiple-select-label"
                     multiple
