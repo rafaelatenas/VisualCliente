@@ -195,7 +195,7 @@ function Login (){
               />
               <FormHelperText>{formErrors.Password}</FormHelperText>
             </FormControl>
-            <Button className="button" variant="outlined" disabled={!validToken} onClick={enviarDatos}>Confirmar</Button> 
+            <Button className="button" variant="outlined" disabled={false} onClick={enviarDatos}>Confirmar</Button> 
         </FormControl>
           <Button onClick={()=>openModalPassword()}>
             <p style={{color:'#fff'}}>¿Olvido su Clave?</p>
