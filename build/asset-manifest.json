@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/retailservices/static/css/main.eb7a61a2.css",
-    "main.js": "/retailservices/static/js/main.9277685c.js",
+    "main.js": "/retailservices/static/js/main.5477ce9b.js",
     "static/js/787.28cb0dcd.chunk.js": "/retailservices/static/js/787.28cb0dcd.chunk.js",
     "static/media/IconATSOmnibus.png": "/retailservices/static/media/IconATSOmnibus.e0c9f2aa291217698ca1.png",
     "static/media/ATSLOGO.png": "/retailservices/static/media/ATSLOGO.2ef1319e841fd26d843e.png",
@@ -16,11 +16,11 @@
     "static/media/IconATSCategorias.png": "/retailservices/static/media/IconATSCategorias.38fc784fc596b4d125fb.png",
     "index.html": "/retailservices/index.html",
     "main.eb7a61a2.css.map": "/retailservices/static/css/main.eb7a61a2.css.map",
-    "main.9277685c.js.map": "/retailservices/static/js/main.9277685c.js.map",
+    "main.5477ce9b.js.map": "/retailservices/static/js/main.5477ce9b.js.map",
     "787.28cb0dcd.chunk.js.map": "/retailservices/static/js/787.28cb0dcd.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.eb7a61a2.css",
-    "static/js/main.9277685c.js"
+    "static/js/main.5477ce9b.js"
   ]
 }
