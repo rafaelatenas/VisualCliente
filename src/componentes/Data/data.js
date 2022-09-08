@@ -71,9 +71,9 @@ export default function DATA(){
     const id = openo ? 'simple-popover' : undefined;
 
   /*Data Periodo y Tiempo del Reporte*/
-    const [tiempoReporte, settiempoReporte] = React.useState([]);
+    const [tiempoReporte, setTiempoReporte] = React.useState([]);
     const seleccionarPeriodo=(parametro)=>{
-      settiempoReporte(parametro)
+      setTiempoReporte(parametro)
       setAlert(false)
       handleDrawerClose()
     }
@@ -124,6 +124,36 @@ export default function DATA(){
     const peticionMeses=async()=>{
       setBotonreporte({meses:true})
       await axios.get( process.env.REACT_APP_API_ENDPOINT+'ListarPeriodo',{
+        headers: {'Authorization': `Bearer ${token}`},
+      })
+      .then(response=>{
+        setData(response.data.data);
+        console.log(response.data)
+        console.log(response.data.data)
+      }).catch(error=>{
+        console.log(error.response.data.message);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      })
+    }
+    const PeticionTrimestres=async()=>{
+      setBotonreporte({trimestres:true})
+      await axios.get( process.env.REACT_APP_API_ENDPOINT+'ListarTrimestre',{
+        headers: {'Authorization': `Bearer ${token}`},
+      })
+      .then(response=>{
+        setData(response.data.data);
+        console.log(response.data)
+        console.log(response.data.data)
+      }).catch(error=>{
+        console.log(error.response.data.message);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      })
+    }
+    const PeticionSemestres=async()=>{
+      setBotonreporte({semestres:true})
+      await axios.get( process.env.REACT_APP_API_ENDPOINT+'ListarSemestre',{
         headers: {'Authorization': `Bearer ${token}`},
       })
       .then(response=>{
@@ -539,11 +569,13 @@ export default function DATA(){
         handleClose={handleClose}
         handleDelete={handleDelete}
         chipData={chipData}
-        peticionSemanas={peticionSemanas}
         botonreporte={botonreporte}
         seleccionarPeriodo={seleccionarPeriodo}
         DeletePeriodo={DeletePeriodo}
+        peticionSemanas={peticionSemanas}
         peticionMeses={peticionMeses}
+        peticionTrimestres={PeticionTrimestres}
+        peticionSemestres={PeticionSemestres}
       >
         
       </DrawerComponent>

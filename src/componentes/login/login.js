@@ -128,7 +128,6 @@ function Login (){
           // })    
     })
   }
-console.log(validToken)
     /* Validación Google */
   const handleChangeRecovery = value => {
     if (value !== null) {
@@ -198,7 +197,7 @@ console.log(validToken)
               />
               <FormHelperText>{formErrors.Password}</FormHelperText>
             </FormControl>
-            <Button className="button" variant="outlined" disabled={false} onClick={enviarDatos}>Confirmar</Button> 
+            <Button className="button" variant="outlined" onClick={enviarDatos}>Confirmar</Button> 
         </FormControl>
           <Button onClick={()=>openModalPassword()}>
             <p style={{color:'#fff'}}>¿Olvido su Clave?</p>

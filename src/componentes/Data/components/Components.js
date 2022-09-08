@@ -17,6 +17,7 @@ import { useAuthContext } from "../../context/authContext";
 let icon;
 
 export function DrawerComponent(open){
+    console.log(open)
     const {logout}=useAuthContext();
     const styles= useStyles();
     const handleDirectURL=(e)=>{
@@ -84,6 +85,8 @@ export function DrawerComponent(open){
                 seleccionarPeriodo={open.seleccionarPeriodo}
                 DeletePeriodo={open.DeletePeriodo}
                 peticionMeses={open.peticionMeses}
+                peticionTrimestres={open.peticionTrimestres}
+                peticionSemestres={open.peticionSemestres}
             />
             <Divider style={{width:'90%', background: 'rgb(0 0 0 / 38%)'}}/>
             <List className={styles.list}>
@@ -196,6 +199,7 @@ export function BotonUsuario(open){
 }
 
 export function CardComponents(peticionSemanas){
+console.log(peticionSemanas)
     const styles= useStyles();
     return(
             <Card className={`${styles.reporte} reporte`} style={{ borderRadius: '1.5em' }}>
@@ -217,13 +221,13 @@ export function CardComponents(peticionSemanas){
                     <Button className={styles.botonReportes} onClick={() => {
                         var parametro = 'Trimestres';
                         peticionSemanas.seleccionarPeriodo(parametro);
-                        peticionSemanas.peticionMeses();
+                        peticionSemanas.peticionTrimestres();
                         peticionSemanas.DeletePeriodo();
                     } } style={{ background: peticionSemanas.botonreporte.trimestres ? '#F6B232' : '#03508f' }}>TRIMESTRAL</Button>
                     <Button className={styles.botonReportes} onClick={() => {
                         var parametro = 'Semestres';
                         peticionSemanas.seleccionarPeriodo(parametro);
-                        peticionSemanas.peticionMeses();
+                        peticionSemanas.peticionSemestres();
                         peticionSemanas.DeletePeriodo();
                     } } style={{ background: peticionSemanas.botonreporte.semestres ? '#F6B232' : '#03508f' }}>SEMESTRAL</Button>
                 </CardActions>
