@@ -13,6 +13,7 @@ import atenasLogo from '../../landing/Images/ATSLOGO.png'
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from '../context/authContext';
+import { flushSync } from 'react-dom';
 
 const recaptchaRef = React.createRef();
 
@@ -127,6 +128,7 @@ function Login (){
           // })    
     })
   }
+console.log(validToken)
     /* Validación Google */
   const handleChangeRecovery = value => {
     if (value !== null) {
@@ -142,6 +144,7 @@ function Login (){
     var responseKey = {captcha: recaptchaRef.current.getValue()};
     axios.post(process.env.REACT_APP_API_ENDPOINT+"ValidationCaptcha",responseKey)
     .then(result => {
+      console.log(result.data)
     switch (result.data.success) {
       case true:
         setValidToken(true)
@@ -195,7 +198,7 @@ function Login (){
               />
               <FormHelperText>{formErrors.Password}</FormHelperText>
             </FormControl>
-            <Button className="button" variant="outlined" disabled={!validToken} onClick={enviarDatos}>Confirmar</Button> 
+            <Button className="button" variant="outlined" disabled={false} onClick={enviarDatos}>Confirmar</Button> 
         </FormControl>
           <Button onClick={()=>openModalPassword()}>
             <p style={{color:'#fff'}}>¿Olvido su Clave?</p>
