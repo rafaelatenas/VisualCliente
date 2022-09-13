@@ -11,7 +11,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content'
 import { DrawerComponent, BotonUsuario, CardComponents, HeaderComponent } from './components/Components';
-import { SelectCanales, SelectCategorias, SelectFabricantes, SelectMarcas, SelectPeriodos, SelectRegiones  } from './components/Selects';
+import { SelectCanales, SelectCategorias, SelectFabricantes, SelectIndicadores, SelectIndicadoresVacio, SelectMarcas, SelectPeriodos, SelectRegiones, SelectVacio  } from './components/Selects';
 import Alert from '@mui/material/Alert';
 import { useNavigate } from 'react-router-dom';
 
@@ -71,9 +71,9 @@ export default function DATA(){
     const id = openo ? 'simple-popover' : undefined;
 
   /*Data Periodo y Tiempo del Reporte*/
-    const [tiempoReporte, settiempoReporte] = React.useState([]);
+    const [tiempoReporte, setTiempoReporte] = React.useState([]);
     const seleccionarPeriodo=(parametro)=>{
-      settiempoReporte(parametro)
+      setTiempoReporte(parametro)
       setAlert(false)
       handleDrawerClose()
     }
@@ -124,6 +124,36 @@ export default function DATA(){
     const peticionMeses=async()=>{
       setBotonreporte({meses:true})
       await axios.get( process.env.REACT_APP_API_ENDPOINT+'ListarPeriodo',{
+        headers: {'Authorization': `Bearer ${token}`},
+      })
+      .then(response=>{
+        setData(response.data.data);
+        console.log(response.data)
+        console.log(response.data.data)
+      }).catch(error=>{
+        console.log(error.response.data.message);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      })
+    }
+    const PeticionTrimestres=async()=>{
+      setBotonreporte({trimestres:true})
+      await axios.get( process.env.REACT_APP_API_ENDPOINT+'ListarTrimestre',{
+        headers: {'Authorization': `Bearer ${token}`},
+      })
+      .then(response=>{
+        setData(response.data.data);
+        console.log(response.data)
+        console.log(response.data.data)
+      }).catch(error=>{
+        console.log(error.response.data.message);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      })
+    }
+    const PeticionSemestres=async()=>{
+      setBotonreporte({semestres:true})
+      await axios.get( process.env.REACT_APP_API_ENDPOINT+'ListarSemestre',{
         headers: {'Authorization': `Bearer ${token}`},
       })
       .then(response=>{
@@ -539,11 +569,13 @@ export default function DATA(){
         handleClose={handleClose}
         handleDelete={handleDelete}
         chipData={chipData}
-        peticionSemanas={peticionSemanas}
         botonreporte={botonreporte}
         seleccionarPeriodo={seleccionarPeriodo}
         DeletePeriodo={DeletePeriodo}
+        peticionSemanas={peticionSemanas}
         peticionMeses={peticionMeses}
+        peticionTrimestres={PeticionTrimestres}
+        peticionSemestres={PeticionSemestres}
       >
         
       </DrawerComponent>
@@ -559,7 +591,7 @@ export default function DATA(){
             <HeaderComponent/>
                <article className="table-of-data">
                 <SelectPeriodos
-                className='propor'
+                  className='propor'
                   tiempoReporte={tiempoReporte}
                   selectedOptions1={selectedOptions1}
                   isSelected={isSelected}
@@ -607,8 +639,7 @@ export default function DATA(){
                   isAllSelectCategoria={isAllSelectCategoria}
                   showMenuItem={showMenuItem}
                   setIDCategoria={setIDCategoria}
-                />
-                <SelectFabricantes
+                  /**/
                   Fabricante={Fabricante}
                   selectedOptions5={selectedOptions5}
                   openFabricante={openFabricante}
@@ -616,17 +647,29 @@ export default function DATA(){
                   handleCloseFabricante={handleCloseFabricante}
                   handleOpenFabricante={handleOpenFabricante}
                   setIDFabricante={setIDFabricante}
-                  isSelected={isSelected}
-                />
-                <SelectMarcas
+                  /*isSelected={isSelected}*/
+                  // isSelected={isSelected}
                   Marcas={Marcas}
-                  isSelected={isSelected}
                   selectedOptions6={selectedOptions6}
                   openMarcas={openMarcas}
                   handleMarcas={handleMarcas}
                   handleCloseMarcas={handleCloseMarcas}
                   handleOpenMarcas={handleOpenMarcas}
                 />
+
+                <SelectIndicadores
+                  selectedOptions4={selectedOptions4}
+                  isSelected={isSelected}
+                  openCategoria={openCategoria}
+                  handleCategoria={handleCategoria}
+                  handleCloseCategoria={handleCloseCategoria}
+                  handleOpenCategoria={handleOpenCategoria}
+                  categoria={Categoria}
+                  isAllSelectCategoria={isAllSelectCategoria}
+                  showMenuItem={showMenuItem}
+                  setIDCategoria={setIDCategoria}
+                />
+
                </article>
                <Stack direction="row" className={styles.buttons}>
                  <button id='save' style={{width:'35%'}} variant="contained" onClick={abrirCerrarModalSelect}>Guardar</button>
