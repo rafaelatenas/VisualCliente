@@ -17,7 +17,6 @@ import { useAuthContext } from "../../context/authContext";
 let icon;
 
 export function DrawerComponent(open){
-    console.log(open)
     const {logout}=useAuthContext();
     const styles= useStyles();
     const handleDirectURL=(e)=>{
