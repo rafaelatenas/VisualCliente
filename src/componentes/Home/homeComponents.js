@@ -191,7 +191,7 @@ const useStylesCard = makeStyles(()=>({
         display:'flex',
         alignItems:'center',
         flexDirection:'column',
-        boxShadow:'none'
+        boxShadow:'none !important',
     },
     Arrow:{
         width:'15%',
