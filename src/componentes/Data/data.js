@@ -295,7 +295,8 @@ export default function DATA(){
 
     const handleOpenRegiones = () => {
       setOpenRegiones(true);
-      peticionCategorias()
+      //temporal
+      // peticionCategorias()
       if(selectedOptions4.length>=1){
         setSelectedOptions4([]); setSelectedOptions5([]); setSelectedOptions6([])
       }

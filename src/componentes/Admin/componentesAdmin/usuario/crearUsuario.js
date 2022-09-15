@@ -3,7 +3,8 @@ import { $ } from "react-jquery-plugin";
 import Swal from "sweetalert2";
 import axios from "axios";
 import withReactContent from 'sweetalert2-react-content';
-import { Box, Step, Stepper } from "@mui/material";
+import { Box, Button, Paper, Step, StepContent, StepLabel, Stepper, TextField, Typography } from "@mui/material";
+import { PhotoCameraRounded } from "@mui/icons-material";
 
 export default class crearUsuario extends React.Component{
     //Validación de Formulario
@@ -27,6 +28,11 @@ export default class crearUsuario extends React.Component{
       formValid: false,
       nombres:'',
       apellidos:'',
+      cell:'',
+      ciudad:'',
+      genero:'',
+      nRetail:'',
+      cargo:'',
       correo:'',
       password:'',
       usuario:'',
@@ -285,28 +291,100 @@ componentDidMount(){
   handleNext = () => {
     this.setState({activeStep:this.state.activeStep+1});
   };
-
   handleBack = () => {
     this.setState({activeStep:this.state.activeStep-1});
   };
+  handleContinue=()=>{
+    this.setState({activeStep:0})
+  }
+  handleRegister=()=>{
+    this.setState({activeStep:this.state.activeStep+1})
+  }
 
 // const handleStep = (step) => () => {
 //   setActiveStep(step);
 // };
 
 
-  render(){
+  render(){ console.log(this.state.activeStep)
     return(
-      <Box sx={{ width: '100%' }}>
-        <Stepper nonLinear activeStep={this.state.activeStep}>
+      <Box sx={{ width: '85%', height:'90%'}}>
+        <Stepper orientation="vertical" activeStep={this.state.activeStep}>
             <Step>
-                <input type="text" name="nombres" placeholder="Nombres" value={this.state.nombres} onChange={this.handleUserInput}/>
-                <input type="text" name="apellidos" placeholder="Apellidos" value={this.state.apellidos} onChange={this.handleUserInput}/>
-                <input type="number" name="id_perfil" placeholder="Id Perfil" value={this.state.id_perfil} onChange={this.handleUserInput}/>
-                <input type="file" accept=".jpg,.jpeg, .png" name="imagenes[]" id="imagenes" multiple/>    
-                <input type="button" name="next"  disabled={!this.state.formValidNext} className="next action-button" value="Next" />
+              <StepLabel>Datos de Usuario</StepLabel>
+              <StepContent>
+                <Box sx={{height:'75%', display: 'flex', overflow:'visible', flexDirection: 'column', alignContent: 'space-around',width: '100%',justifyContent: 'space-around'}}>
+                  <Box sx={{display:'flex', overflow:'visible', justifyContent:'space-around'}}>
+                    <TextField className='textField' id="outlined-multiline-flexible" label="Nombres"
+                      value={this.state.nombres} name={'nombres'}
+                      onChange={(e)=>this.handleUserInput(e)}
+                    />
+                    <TextField className='textField' id="outlined-multiline-flexible" label="Apellidos"
+                      value={this.state.apellidos} name={'apellidos'}
+                      onChange={(e)=>this.handleUserInput(e)}
+                    />
+                    <TextField className='textField' id="outlined-multiline-flexible" label="Nombre Retail"
+                      value={this.state.nRetail} name={'nRetail'}
+                      onChange={(e)=>this.handleUserInput(e)}
+                    />
+                    <TextField className='textField' id="outlined-multiline-flexible" label="Género"
+                      value={this.state.genero} name={'genero'}
+                      onChange={(e)=>this.handleUserInput(e)}
+                    />
+                  </Box>
+                  <Box sx={{display:'flex', overflow:'visible', justifyContent:'space-around'}}>
+                    <TextField className='textField' id="outlined-multiline-flexible" label="Cargo"
+                      value={this.state.cargo} name={'cargo'}
+                      onChange={(e)=>this.handleUserInput(e)}
+                    />
+                    <TextField className='textField' id="outlined-multiline-flexible" label="Teléfono"
+                      value={this.state.cell} name={'cell'} type='tel'
+                      onChange={(e)=>this.handleUserInput(e)}
+                    />
+                    <TextField className='textField' id="outlined-multiline-flexible" label="Correo Electrónico"
+                      value={this.state.correo} name={'correo'} type='email'
+                      onChange={(e)=>this.handleUserInput(e)}
+                    />
+                    <TextField className='textField' id="outlined-multiline-flexible" label="Ciudad/Estado de Residencia"
+                      value={this.state.ciudad} name={'ciudad'}
+                      onChange={(e)=>this.handleUserInput(e)}
+                    />
+                  </Box>
+                </Box>
+                
+              <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+                <Button onClick={this.handleNext}>Siguiente</Button>
+              </Box>  
+              </StepContent>
+            </Step>
+            <Step sx={{height:'100%'}}>
+              <StepLabel>Crear de Usuario</StepLabel>
+              <StepContent sx={{height:'100%'}}>
+                <Box sx={{height:'75%', display: 'flex', overflow:'visible', flexDirection: 'column', alignContent: 'space-around',width: '100%',justifyContent: 'space-around'}}>
+                  <TextField className='textField' id="outlined-multiline-flexible" label="Usuario"
+                    value={this.state.usuario} name={'usuario'}
+                    onChange={(e)=>this.handleUserInput(e)}
+                  />
+                  <Button aria-label="upload picture" component="label" startIcon={<PhotoCameraRounded/>} style={{minWidth:230, border:'solid 1px rgb(196,196,196)'}}>
+                    <input hidden accept=".jpg,.jpeg, .png" type="file"  value={this.state.avatar} name={'avatar'} onChange={(e)=>this.handleUserInput(e)}/>
+                    <label style={{fontSize:16, color:'#666', textTransform:'none'}}>Imagen</label>
+                  </Button>
+                </Box>
+              <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
+                <Button onClick={this.handleBack}>Regresar</Button>
+                <Button onClick={this.handleRegister}>Enviar</Button>
+              </Box>  
+              </StepContent>
             </Step>
         </Stepper>
+        {this.state.activeStep === 2?(
+          <Paper square elevation={0} sx={{ p: 3 }}>
+            <Typography>Se ha realizado el registro con Exito</Typography>
+            <Button onClick={this.handleContinue} sx={{ mt: 1, mr: 1 }}>
+                Registrar un Nuevo Usuario
+            </Button>
+          </Paper>
+        ):''}
       </Box>
         //     <form id="msform">
         //     <ul id="progressbar">

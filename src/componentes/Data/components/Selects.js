@@ -55,7 +55,7 @@ export function SelectPeriodos(data){
         <Box style={{border:'.1em solid rgb(87 87 86/11%)',background:'#f7f4f4', borderRadius:'1.5em', width:'15%', height:'90%', display:'flex', flexDirection:'column', alignItems:'center'}}>
             <InputLabel style={{width:'auto', padding:'10% 0 5%', fontSize:18}}>PERÍODOS</InputLabel>
             <FormControl sx={{width: '100%'}} className={classes.formControl} error={data.isSelected.selectedOptions1}>
-                <InputLabel className="inputLabel" id="mutiple-select-label">{data.tiempoReporte}</InputLabel>
+                <InputLabel size={'small'} className="inputLabel" id="mutiple-select-label">{data.tiempoReporte}</InputLabel>
                 <Select 
                     labelId="mutiple-select-label"
                     multiple
@@ -66,9 +66,9 @@ export function SelectPeriodos(data){
                     onOpen={data.handleOpenPeriodo}
                     renderValue={(selected) =>{
                         if(selected.length>=3 && selected.length<data.render.length){
-                            return(<ListItemText sx={{fontSize:'15px'}} primary={`${selected.length} Opciones Marcadas`}/>)
+                            return(<ListItemText sx={{'& span':{fontSize:'10px'}}} primary={`${selected.length} Opciones Marcadas`}/>)
                         }else if(selected.length === data.render.length){
-                            return(<ListItemText sx={{fontSize:'15px'}} primary={`Todas Marcadas (${selected.length})`}/>)
+                            return(<ListItemText sx={{'& span':{fontSize:'10px'}}} primary={`Todas Marcadas (${selected.length})`}/>)
                         }else if(selected.length<3){
                             return(
                                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
@@ -76,7 +76,7 @@ export function SelectPeriodos(data){
                                         for (let h = 0; h < data.data.length; h++) {
                                             const element = data.data[h];
                                             if(element.id === value){
-                                                return(<Chip style={{fontSize:'.7em'}} key={value} label={element.nombre}/>)
+                                                return(<Chip sx={{'& span':{fontSize:'10px'}}} key={value} label={element.nombre}/>)
                                             }
                                         }
                                     })}
@@ -131,9 +131,9 @@ export function SelectCanales(canal){
     const classes = useStyles();
     var ID_Cliente = sessionStorage.getItem('Id_Cliente')
     const OptionCanales = canal.canal.map((item) => (
-        <MenuItem key={item.id} value={item.id}>
+        <MenuItem key={item.id} value={item.id} className='items'>
           <Checkbox checked={canal.selectedOptions2.indexOf(item.id) > -1} />
-          <ListItemText sx={{fontSize:'1em'}} primary={item.nombre} />
+          <ListItemText sx={{fontSize:'10px'}} primary={item.nombre} />
         </MenuItem>
       ))
     return(
@@ -155,10 +155,11 @@ export function SelectCanales(canal){
                               for (let h = 0; h < canal.canal.length; h++) {
                               const element = canal.canal[h];
                                 if(element.id === value){
-                                  return(<Chip style={{fontSize:'.7em'}} key={value} label={element.nombre}/>)
-                                }else if(value === parseInt(ID_Cliente)){
-                                  return(<Chip style={{fontSize:'.7em'}} key={value} label="MI CADENA"/>)
+                                  return(<Chip sx={{'& span':{fontSize:'10px'}}} key={value} label={element.nombre}/>)
                                 }
+                                // else if(value === parseInt(ID_Cliente)){
+                                //   return(<Chip sx={{'& span':{fontSize:'10px'}}} key={value} label="MI CADENA"/>)
+                                // }
                               }
                             })}
                           </Box>
@@ -181,7 +182,7 @@ export function SelectCanales(canal){
 export function SelectRegiones(region){
     const classes = useStyles();
     const OptionRegiones = region.region.map((item) => (
-        <MenuItem key={item.id} value={item.id}>
+        <MenuItem key={item.id} value={item.id} className='items'>
           <Checkbox checked={region.selectedOptions3.indexOf(item.id) > -1} />
           <ListItemText sx={{fontSize:'1em'}} primary={item.nombre} />
         </MenuItem>
@@ -189,7 +190,7 @@ export function SelectRegiones(region){
     return(
         <Box style={{border:'.1em solid rgb(87 87 86/11%)',background:'#f7f4f4', borderRadius:'1.5em', width:'15%', height:'90%', display:'flex', flexDirection:'column', alignItems:'center'}}>
             <InputLabel style={{width:'auto', padding:'10% 0 5%'}}>REGIONES</InputLabel>
-            <FormControl variant="standard" sx={{width: '100%'}} className={classes.formControl} error={region.isSelected.selectedOptions3}>
+            <FormControl sx={{width: '100%'}} className={classes.formControl} error={region.isSelected.selectedOptions3}>
                 <InputLabel className="inputLabel" id="mutiple-select-label">Regiones</InputLabel>
                 <Select 
                     labelId="mutiple-select-label"
@@ -245,7 +246,7 @@ export function SelectAtributos(atributos){
             <InputLabel style={{width:'auto', padding:'10% 0 5%'}}>ATRIBUTOS</InputLabel>
             <Box className="boxAtributos">
                 <FormControl sx={{width: '100%'}} className={classes.formControl} error={isSelected.selectedOptions4}>
-                    <InputLabel className="inputLabel" id="mutiple-select-label">Cesta</InputLabel>
+                    <InputLabel className="inputLabel input input" id="mutiple-select-label">Cesta</InputLabel>
                     <Select 
                         labelId="mutiple-select-label"
                         multiple
@@ -334,7 +335,7 @@ export function SelectAtributos(atributos){
 
 
 <FormControl sx={{width: '100%'}} className={classes.formControl} error={isSelected.selectedOptions4}>
-                    <InputLabel className="inputLabel" id="mutiple-select-label">Cesta</InputLabel>
+                    <InputLabel className="inputLabel input" id="mutiple-select-label">Cesta</InputLabel>
                     <Select 
                         labelId="mutiple-select-label"
                         multiple
@@ -436,7 +437,7 @@ export function SelectCategorias(categoria) {
     ))
     return(
         <FormControl sx={{width: '100%'}} className={classes.formControl} error={isSelected.selectedOptions5}>
-            <InputLabel className="inputLabel" id="mutiple-select-label">Categorias</InputLabel>
+            <InputLabel className="inputLabel input" id="mutiple-select-label">Categorias</InputLabel>
             <Select 
                 labelId="mutiple-select-label"
                 multiple
@@ -498,7 +499,7 @@ export function SelectFabricantes(Fabricantes){
     ))
     return(
         <FormControl sx={{width: '100%'}} className={classes.formControl} error={isSelected.selectedOptions5}>
-            <InputLabel className="inputLabel" id="mutiple-select-label">Fabricantes</InputLabel>
+            <InputLabel className="inputLabel input" id="mutiple-select-label">Fabricantes</InputLabel>
             <Select 
                 labelId="mutiple-select-label"
                 multiple
@@ -549,7 +550,7 @@ export function SelectMarcas(Marca){
     ))
     return(
         <FormControl sx={{width: '100%'}} className={classes.formControl} error={isSelected.selectedOptions7}>
-            <InputLabel className="inputLabel" id="mutiple-select-label">Marcas</InputLabel>
+            <InputLabel className="inputLabel input" id="mutiple-select-label">Marcas</InputLabel>
             <Select 
                 labelId="mutiple-select-label"
                 multiple
@@ -600,7 +601,7 @@ export function SelectSegmentos(Marca){
     ))
     return(
         <FormControl sx={{width: '100%'}} className={classes.formControl} error={isSelected.selectedOptions8}>
-            <InputLabel className="inputLabel" id="mutiple-select-label">Segmentos</InputLabel>
+            <InputLabel className="inputLabel input" id="mutiple-select-label">Segmentos</InputLabel>
             <Select 
                 labelId="mutiple-select-label"
                 multiple
@@ -652,7 +653,7 @@ export function SelectIndicadores(Indicador){
         <Box style={{border:'.1em solid rgb(87 87 86/11%)',background:'#f7f4f4', borderRadius:'1.5em', width:'15%', height:'90%', display:'flex', flexDirection:'column', alignItems:'center'}}>
             <InputLabel style={{width:'auto', padding:'10% 0 5%'}}>Indicadores</InputLabel>
             <FormControl sx={{width: '100%'}} className={classes.formControl} error={isSelected.selectedOptions14}>
-                <InputLabel className="inputLabel" id="mutiple-select-label">Indicadores</InputLabel>
+                <InputLabel className="inputLabel input" id="mutiple-select-label">Indicadores</InputLabel>
                 <Select 
                     labelId="mutiple-select-label"
                     multiple
@@ -696,7 +697,7 @@ const MenuProps = {
     PaperProps: {
       style: {
         maxHeight: '60%',
-        width: '20%',
+        width: '16%',
       },
     },
 };

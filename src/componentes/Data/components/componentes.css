@@ -22,8 +22,7 @@
 .inputLabel{
     background:rgb(247, 244, 244) ;
     width: auto;
-    top: -11px !important;
-    font-size: 14px !Important;
+    font-size: 10px !Important;
 }
 .items div span{
     width: 100%;
