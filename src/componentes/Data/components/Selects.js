@@ -3,6 +3,7 @@ import { makeStyles } from "@material-ui/styles";
 import { Search } from "@material-ui/icons";
 import React from "react";
 import { useState, useMemo } from "react";
+import './select.css'
 
 const containsText = (text, searchText) =>text.toString().toLowerCase().indexOf(searchText.toString().toLowerCase()) >-1;
 
@@ -65,9 +66,9 @@ export function SelectPeriodos(data){
                     onOpen={data.handleOpenPeriodo}
                     renderValue={(selected) =>{
                         if(selected.length>=3 && selected.length<data.render.length){
-                            return(<ListItemText sx={{fontSize:'1em'}} primary={`${selected.length} Opciones Marcadas`}/>)
+                            return(<ListItemText sx={{fontSize:'15px'}} primary={`${selected.length} Opciones Marcadas`}/>)
                         }else if(selected.length === data.render.length){
-                            return(<ListItemText sx={{fontSize:'1em'}} primary={`Todas Marcadas (${selected.length})`}/>)
+                            return(<ListItemText sx={{fontSize:'15px'}} primary={`Todas Marcadas (${selected.length})`}/>)
                         }else if(selected.length<3){
                             return(
                                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>

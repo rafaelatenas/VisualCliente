@@ -16,13 +16,15 @@ import { useAuthContext } from "../../context/authContext";
 
 let icon;
 
-export function DrawerComponent(open){
+export function DrawerComponent(abrir){
+    console.log(abrir)
+    const {DeletePeriodo,anchorEl,botonreporte,chipData,handleClick,handleClose,handleDelete,handleDrawerClose,id,label,open,openo,peticionMeses,peticionSemanas,peticionSemestres,peticionTrimestres,seleccionarPeriodo} = abrir
     const {logout}=useAuthContext();
     const styles= useStyles();
     const handleDirectURL=(e)=>{
-        console.log(e.target.innerText)
         window.location = `/home/${e.target.innerText}`
     }
+    console.log(open)
     return(
         <Drawer
             style={{borderTopRightRadius:'.5em',borderButtomRightRadius:'.5em'}}
@@ -39,7 +41,7 @@ export function DrawerComponent(open){
             }}
             variant="persistent"
             anchor="left"
-            open={open.open}
+            open={open}
             className='Drawer'
         >
             <DrawerHeader>
@@ -52,7 +54,7 @@ export function DrawerComponent(open){
                         ></Chip>
                     </Tooltip>
                 </Stack>
-                <IconButton  style={{margin:'0',padding:'0',background:'#F6B232',borderRadius:'.3em', width:'12%',height:'50%', minHeight: 40, minWidth:40}} onClick={open.handleDrawerClose}>
+                <IconButton  style={{margin:'0',padding:'0',background:'#F6B232',borderRadius:'.3em', width:'12%',height:'50%', minHeight: 40, minWidth:40}} onClick={handleDrawerClose}>
                     <MenuIcon style={{fontSize:'35px',fill:'#fff',width:'auto',height:'auto',}}/>
                 </IconButton>
             </DrawerHeader>
@@ -67,11 +69,11 @@ export function DrawerComponent(open){
                 </AccordionSummary>
                 <AccordionDetails style={{overfolwY:'scroll'}}>
                     <Paper sx={{display: 'flex', justifyContent: 'center', flexWrap: 'wrap', listStyle: 'none', p:' 0 0 5%', m: 0}} component="ul">
-                        <ListItem style={{width:'auto',paddingLeft:'1%',paddingRight:'1%'}} key={open.key}>
+                        <ListItem style={{width:'auto',paddingLeft:'1%',paddingRight:'1%'}}>
                             <Chip style={{background:'#F6B232', color:'#fff'}}
                                 icon={icon}
-                                label={open.label}
-                                onDelete={open.handleDelete(open.chipData)}
+                                label={label}
+                                onDelete={handleDelete(chipData)}
                             />
                         </ListItem>
                     </Paper>
@@ -79,19 +81,21 @@ export function DrawerComponent(open){
             </Accordion>
             <Divider style={{width:'100%', background: 'rgb(0 0 0 / 38%)'}}/>
             <CardComponents
-                peticionSemanas={open.peticionSemanas}
-                botonreporte={open.botonreporte}
-                seleccionarPeriodo={open.seleccionarPeriodo}
-                DeletePeriodo={open.DeletePeriodo}
-                peticionMeses={open.peticionMeses}
+                peticionSemanas={peticionSemanas}
+                botonreporte={botonreporte}
+                seleccionarPeriodo={seleccionarPeriodo}
+                DeletePeriodo={DeletePeriodo}
+                peticionMeses={peticionMeses}
+                peticionTrimestres={peticionTrimestres}
+                peticionSemestres={peticionSemestres}
             />
             <Divider style={{width:'90%', background: 'rgb(0 0 0 / 38%)'}}/>
             <List className={styles.list}>
                 <ListItem className={styles.listItem}>
                     <div className={styles.popOver}>
                         <Button className='buttonPopover' style={{width:'100%', borderRadius:'1.5em', margin:'.3em 0', padding:'0px !important'}}
-                            aria-describedby={open.id} variant="contained" 
-                            onClick={open.handleClick}>
+                            aria-describedby={id} variant="contained" 
+                            onClick={handleClick}>
                             Opcion de Menu 1
                         </Button>
                         {/* <Menu
@@ -108,8 +112,8 @@ export function DrawerComponent(open){
                             <MenuItem className={styles.MenuItem} onClick={(e)=>{handleDirectURL(e)}}>WOP5</MenuItem>
                         </Menu> */}
                         <Button className='buttonPopover' style={{width:'100%', borderRadius:'1.5em', margin:'.3em 0', padding:'0px !important'}}
-                            aria-describedby={open.id} variant="contained" 
-                            onClick={open.handleClick}>
+                            aria-describedby={id} variant="contained" 
+                            onClick={handleClick}>
                             Opcion de Menu 2
                         </Button>
                         {/* <Menu
@@ -126,8 +130,8 @@ export function DrawerComponent(open){
                             <MenuItem className={styles.MenuItem} onClick={(e)=>{handleDirectURL(e)}}>WOP5</MenuItem>
                         </Menu> */}
                         <Button className='buttonPopover' style={{width:'100%', borderRadius:'1.5em', margin:'.3em 0', padding:'0px !important'}}
-                            aria-describedby={open.id} variant="contained" 
-                            onClick={open.handleClick}>
+                            aria-describedby={id} variant="contained" 
+                            onClick={handleClick}>
                             Opcion de Menu 3
                         </Button>
                         {/* <Menu
@@ -144,8 +148,8 @@ export function DrawerComponent(open){
                             <MenuItem className={styles.MenuItem} onClick={(e)=>{handleDirectURL(e)}}>WOP5</MenuItem>
                         </Menu> */}
                         <Button className='buttonPopover' style={{width:'100%', borderRadius:'1.5em', margin:'.3em 0', padding:'0px !important'}}
-                            aria-describedby={open.id} variant="contained" 
-                            onClick={open.handleClick}>
+                            aria-describedby={id} variant="contained" 
+                            onClick={handleClick}>
                             Opcion de Menu 4
                         </Button>
                         {/* <Menu
@@ -162,7 +166,7 @@ export function DrawerComponent(open){
                             <MenuItem className={styles.MenuItem} onClick={(e)=>{handleDirectURL(e)}}>WOP5</MenuItem>
                         </Menu> */}
                         <Button className='buttonPopover' style={{width:'100%', borderRadius:'1.5em', margin:'.3em 0', padding:'0px !important'}}
-                            aria-describedby={open.id} variant="contained" 
+                            aria-describedby={id} variant="contained" 
                             onClick={()=>logout()}>
                             Salir
                         </Button>
@@ -195,37 +199,38 @@ export function BotonUsuario(open){
     )
 }
 
-export function CardComponents(peticionSemanas){
+export function CardComponents(peticion){
     const styles= useStyles();
+    const {DeletePeriodo,botonreporte,peticionMeses,peticionSemanas,peticionSemestres,peticionTrimestres,seleccionarPeriodo}=peticion
     return(
             <Card className={`${styles.reporte} reporte`} style={{ borderRadius: '1.5em' }}>
                 <CardHeader style={{ padding: '5% 0 3%', color: '#03508f', fontSize: '1em' }} title="REPORTE" />
                 <Divider style={{ width: '70%', background: 'rgb(0 0 0 / 38%)' }} />
                 <CardActions style={{ display: 'flex', padding: '0', flexDirection: 'column', width: '80%', height: '100%', justifyContent: 'space-evenly' }}>
-                    <Button style={{ background: peticionSemanas.botonreporte.semanas ? '#F6B232' : '#03508f' }} onClick={() => {
+                    <Button style={{ background: botonreporte.semanas ? '#F6B232' : '#03508f' }} onClick={() => {
                         var parametro = 'Semanas';
-                        peticionSemanas.seleccionarPeriodo(parametro);
-                        peticionSemanas.peticionSemanas();
-                        peticionSemanas.DeletePeriodo();
+                        seleccionarPeriodo(parametro);
+                        peticionSemanas();
+                        DeletePeriodo();
                     } } className={styles.botonReportes}>SEMANAL</Button>
                     <Button className={styles.botonReportes} onClick={() => {
                         var parametro = 'Meses';
-                        peticionSemanas.seleccionarPeriodo(parametro);
-                        peticionSemanas.peticionMeses();
-                        peticionSemanas.DeletePeriodo();
-                    } } style={{ background: peticionSemanas.botonreporte.meses ? '#F6B232' : '#03508f' }}>MENSUAL</Button>
+                        seleccionarPeriodo(parametro);
+                        peticionMeses();
+                        DeletePeriodo();
+                    } } style={{ background: botonreporte.meses ? '#F6B232' : '#03508f' }}>MENSUAL</Button>
                     <Button className={styles.botonReportes} onClick={() => {
                         var parametro = 'Trimestres';
-                        peticionSemanas.seleccionarPeriodo(parametro);
-                        peticionSemanas.peticionMeses();
-                        peticionSemanas.DeletePeriodo();
-                    } } style={{ background: peticionSemanas.botonreporte.trimestres ? '#F6B232' : '#03508f' }}>TRIMESTRAL</Button>
+                        seleccionarPeriodo(parametro);
+                        peticionTrimestres();
+                        DeletePeriodo();
+                    } } style={{ background: botonreporte.trimestres ? '#F6B232' : '#03508f' }}>TRIMESTRAL</Button>
                     <Button className={styles.botonReportes} onClick={() => {
                         var parametro = 'Semestres';
-                        peticionSemanas.seleccionarPeriodo(parametro);
-                        peticionSemanas.peticionMeses();
-                        peticionSemanas.DeletePeriodo();
-                    } } style={{ background: peticionSemanas.botonreporte.semestres ? '#F6B232' : '#03508f' }}>SEMESTRAL</Button>
+                        seleccionarPeriodo(parametro);
+                        peticionSemestres();
+                        DeletePeriodo();
+                    } } style={{ background: botonreporte.semestres ? '#F6B232' : '#03508f' }}>SEMESTRAL</Button>
                 </CardActions>
             </Card>
     )

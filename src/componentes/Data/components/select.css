@@ -1,0 +1,4 @@
+#menu- div ul {
+    display: flex;
+    flex-direction: column;
+}

@@ -7,7 +7,7 @@ import { makeStyles } from "@material-ui/styles";
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 import { Link, NavLink } from "react-router-dom";
 //Imagenes Reportes
-import WOP from '../../landing/Images/ATSLogoWop.png'
+import RServices from '../../landing/Images/logo_RetailServices.png'
 import RScanning from '../../landing/Images/ATSLogoRScanning.png'
 import HPantry from '../../landing/Images/ATSLogoHP.png'
 import Excecution from '../../landing/Images/ATSLogoExecution.png'
@@ -23,10 +23,8 @@ import TopSkus from '../../landing/Images/IconATSTopSkus.png'
 import { useAuthContext } from "../context/authContext";
 
 
-const urlProduccion = 'retailservices/';
-
 const reports = [
-    {key: 1 , name:'WOP', icon:WOP, style:{height:'90%'}},
+    {key: 1 , name:'WOP', icon:RServices, style:{height:'90%'}},
     {key: 2 , name:'Retail Scanning', icon:RScanning, style:{height:'80%', width:'80%'}},
     {key: 3 , name:'Home Pantry', icon:HPantry, style:{height:'85%'}},
     {key: 4 , name:'CI', icon:CI, style:{height:'90%', minWidth:100, minHeight:120, padding:'5%'}},

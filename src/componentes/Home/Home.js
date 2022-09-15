@@ -25,10 +25,10 @@ class Home extends React.Component {
     }
     /*Controles Popover */
     reports=[
-        {id:1, key:1, url:'/retailservices/home/data', padre:'WOP', name:'Resumen Táctico'},
-        {id:1, key:2, url:'', padre:'WOP', name:'Eficiencia Operativa'},
+        {id:1, key:1, url:'/retailservices/home/data', padre:'WOP', name:'Manejador Retail'},
+        {id:1, key:2, url:'', padre:'WOP', name:'WOP'},
         {id:1, key:3, url:'', padre:'WOP', name:'Ranking de Tiendas'},
-        {id:1, key:4, url:'', padre:'WOP', name:'Panel de Canedas'},
+        {id:1, key:4, url:'', padre:'WOP', name:'Panel de Cadenas'},
         {id:2, key:5, url:'', padre:'Retail Scanning', name:'Reporte Retail Scanning'},
         {id:2, key:6, url:'', padre:'Retail Scanning', name:'Money Market'},
         {id:2, key:7, url:'', padre:'Retail Scanning', name:'Categories Performance'},

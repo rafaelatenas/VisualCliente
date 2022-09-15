@@ -11,7 +11,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content'
 import { DrawerComponent, BotonUsuario, CardComponents, HeaderComponent } from './components/Components';
-import { SelectCanales, SelectCategorias, SelectFabricantes, SelectIndicadores, SelectIndicadoresVacio, SelectMarcas, SelectPeriodos, SelectRegiones, SelectVacio  } from './components/Selects';
+import { SelectCanales, SelectCategorias, SelectFabricantes, SelectIndicadoresVacio, SelectMarcas, SelectPeriodos, SelectRegiones, SelectVacio  } from './components/Selects';
 import Alert from '@mui/material/Alert';
 import { useNavigate } from 'react-router-dom';
 
@@ -639,15 +639,6 @@ export default function DATA(){
                   isAllSelectCategoria={isAllSelectCategoria}
                   showMenuItem={showMenuItem}
                   setIDCategoria={setIDCategoria}
-                  /**/
-                  Fabricante={Fabricante}
-                  selectedOptions5={selectedOptions5}
-                  openFabricante={openFabricante}
-                  handleFabricante={handleFabricante}
-                  handleCloseFabricante={handleCloseFabricante}
-                  handleOpenFabricante={handleOpenFabricante}
-                  setIDFabricante={setIDFabricante}
-                  /*isSelected={isSelected}*/
                   // isSelected={isSelected}
                   Marcas={Marcas}
                   selectedOptions6={selectedOptions6}
@@ -657,17 +648,15 @@ export default function DATA(){
                   handleOpenMarcas={handleOpenMarcas}
                 />
 
-                <SelectIndicadores
-                  selectedOptions4={selectedOptions4}
+                <SelectFabricantes
+                  Fabricante={Fabricante}
+                  selectedOptions5={selectedOptions5}
+                  openFabricante={openFabricante}
+                  handleFabricante={handleFabricante}
+                  handleCloseFabricante={handleCloseFabricante}
+                  handleOpenFabricante={handleOpenFabricante}
+                  setIDFabricante={setIDFabricante}
                   isSelected={isSelected}
-                  openCategoria={openCategoria}
-                  handleCategoria={handleCategoria}
-                  handleCloseCategoria={handleCloseCategoria}
-                  handleOpenCategoria={handleOpenCategoria}
-                  categoria={Categoria}
-                  isAllSelectCategoria={isAllSelectCategoria}
-                  showMenuItem={showMenuItem}
-                  setIDCategoria={setIDCategoria}
                 />
 
                </article>
