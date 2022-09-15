@@ -11,7 +11,7 @@ import axios from 'axios';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content'
 import { DrawerComponent, BotonUsuario, CardComponents, HeaderComponent } from './components/Components';
-import { SelectCanales, SelectCategorias, SelectFabricantes, SelectIndicadoresVacio, SelectMarcas, SelectPeriodos, SelectRegiones, SelectVacio  } from './components/Selects';
+import { SelectCanales, SelectAtributos, SelectIndicadores, SelectPeriodos, SelectRegiones,  } from './components/Selects';
 import Alert from '@mui/material/Alert';
 import { useNavigate } from 'react-router-dom';
 
@@ -92,18 +92,49 @@ export default function DATA(){
     /*Data SubRegionres*/
       const [selectedSubregiones, setSelectedSubregiones] = useState([]);
 
-  /*Data Categorias*/
-    const [Categoria, setCategoria]=useState([]);
+  /*Data Cestas*/
+    const [Cesta, setCesta]=useState([]);
     const [selectedOptions4, setSelectedOptions4] = useState([]);
 
+  /*Data Categorias*/
+    const [Categorias, setCategorias]=useState([]);
+    const [selectedOptions5, setSelectedOptions5] = useState([]);
   /*Data Fabricantes*/
     const [Fabricante, setFabricante]=useState([]);
-    const [selectedOptions5, setSelectedOptions5] = useState([]);
-
-  /*Data Marcas*/
-    const [Marcas, setMarcas]=useState([]);
     const [selectedOptions6, setSelectedOptions6] = useState([]);
 
+  /*Data Marcas*/
+  const [Marcas, setMarcas]=useState([]);
+  const [selectedOptions7, setSelectedOptions7] = useState([]);
+
+  /*Data Segmentos*/
+    const [Segmentos, setSegmentos]=useState([]);
+    const [selectedOptions8, setSelectedOptions8] = useState([]);
+
+  /*Data Tamaño*/
+  const [tamanno, settamanno]=useState([]);
+  const [selectedOptions9, setSelectedOptions9] = useState([]);
+
+  /*Data Rango de Tamaño*/
+  const [RTamanno, setRTamanno]=useState([]);
+  const [selectedOptions10, setSelectedOptions10] = useState([]);
+
+  /*Data Productos*/
+  const [Productos, setProductos]=useState([]);
+  const [selectedOptions11, setSelectedOptions11] = useState([]);
+
+  /*Data Codigo de Barras*/
+  const [CBarras, setCBarras]=useState([]);
+  const [selectedOptions12, setSelectedOptions12] = useState([]);
+
+  /*Data Nacionalidad*/
+  const [Nacionalidad, setNacionalidad]=useState([]);
+  const [selectedOptions13, setSelectedOptions13] = useState([]);
+
+  /*Data Indicadores*/
+  const [Indicadores, setIndicadores]=useState([]);
+  const [selectedOptions14, setSelectedOptions14] = useState([]);
+  
   /*Funciones de Listar PERÍODOS 😄*/
     const peticionSemanas=async()=>{
       setBotonreporte({semanas:true})
@@ -304,36 +335,36 @@ export default function DATA(){
       ))
 
     
-  /*Funciones de Listar Categoria 😄*/
-    const [openCategoria, setOpenCategoria] = React.useState(false);
-    const handleCategoria = (event) => {
+  /*Funciones de Listar Cestas 😄*/
+    const [openCesta, setOpenCesta] = React.useState(false);
+    const handleCesta = (event) => {
       const value =event.target.value;
       if (value[value.length - 1] === "all") {
-        setSelectedOptions4(selectedOptions4.length === Categoria.length ? [] : Categoria);
+        setSelectedOptions4(selectedOptions4.length === Cesta.length ? [] : Cesta);
         return;
       }else{
         setSelectedOptions4(value);  
       }
     };
     
-    const handleCloseCategoria =()=>{
-      setOpenCategoria(false);
+    const handleCloseCesta =()=>{
+      setOpenCesta(false);
       if(selectedOptions4.length>=1){
         peticionFabricantes();
       }
     }
-    const handleOpenCategoria = () => {
-      setOpenCategoria(true);
+    const handleOpenCesta = () => {
+      setOpenCesta(true);
       if(selectedOptions5.length>=1){
         setSelectedOptions5([]); setSelectedOptions6([])
       }
     };
-    const peticionCategorias=async()=>{
-      await axios.get( process.env.REACT_APP_API_ENDPOINT+'ListarCategoria',{
+    const peticionCestas=async()=>{
+      await axios.get( process.env.REACT_APP_API_ENDPOINT+'ListarCesta',{
         headers: {'Authorization': `Bearer ${token}`},
       })
       .then(response=>{
-        setCategoria(response.data.data);
+        setCesta(response.data.data);
         console.log(response.data)
         console.log(response.data.data)
       }).catch(error=>{
@@ -342,7 +373,44 @@ export default function DATA(){
         console.log(error.response.headers);
       })
     }
-
+  /*Funciones de Listar Categorias 😄*/
+  const [openCategoria, setOpenCategoria] = React.useState(false);
+  const handleCategoria = (event) => {
+    const value =event.target.value;
+    if (value[value.length - 1] === "all") {
+      setSelectedOptions4(selectedOptions4.length === Categorias.length ? [] : Categorias);
+      return;
+    }else{
+      setSelectedOptions4(value);  
+    }
+  };
+  
+  const handleCloseCategoria =()=>{
+    setOpenCategoria(false);
+    if(selectedOptions4.length>=1){
+      peticionFabricantes();
+    }
+  }
+  const handleOpenCategoria = () => {
+    setOpenCategoria(true);
+    if(selectedOptions5.length>=1){
+      setSelectedOptions5([]); setSelectedOptions6([])
+    }
+  };
+  const peticionCategorias=async()=>{
+    await axios.get( process.env.REACT_APP_API_ENDPOINT+'ListarCategoria',{
+      headers: {'Authorization': `Bearer ${token}`},
+    })
+    .then(response=>{
+      setCategorias(response.data.data);
+      console.log(response.data)
+      console.log(response.data.data)
+    }).catch(error=>{
+      console.log(error.response.data.message);
+      console.log(error.response.status);
+      console.log(error.response.headers);
+    })
+  }
   /*Funciones de Listar Fabricantes 😄*/
     const [openFabricante, setOpenFabricante] = React.useState(false);
     const [IDCategoria, setIDCategoria]=React.useState({});
@@ -362,14 +430,14 @@ export default function DATA(){
     }
     const handleCloseFabricante =()=>{
         setOpenFabricante(false);
-        if(selectedOptions5.length>=1){
+        if(selectedOptions6.length>=1){
           peticionMarcas();
         }
     }
     const handleOpenFabricante = () => {
       setOpenFabricante(true);
-      if(selectedOptions6.length>=1){
-        setSelectedOptions6([])
+      if(selectedOptions7.length>=1){
+        setSelectedOptions7([])
       }
     };
     const handleFabricante = (event) => {
@@ -406,8 +474,73 @@ export default function DATA(){
     };
     const handleMarcas = (event) => {
       const value =event.target.value;
-      setSelectedOptions6(value);
+      setSelectedOptions7(value);
     };
+
+  /*Funciones de Listar 
+  Segmentos 😄*/
+  const [openSegmentos, setOpenSegmentos] = React.useState(false);
+  const [IDMarca, setIDMarca]=React.useState({});
+  const peticionSegmentos=async()=>{
+    await axios.get( process.env.REACT_APP_API_ENDPOINT+'ListarMarca/'+IDMarca+'/'+IDFabricante,{
+      headers: {'Authorization': `Bearer ${token}`},
+    })
+    .then(response=>{
+      setMarcas(response.data.data)
+    }).catch(error=>{
+      console.log(error.response.data.message);
+      console.log(error.response.status);
+      console.log(error.response.headers);
+    })
+  }
+  const handleCloseSegmentos =()=>{
+    setOpenSegmentos(false);
+      // if(selectedOptions4.length>=1){
+      //   peticionFabricantes();
+      // }
+  }
+  const handleOpenSegmentos = () => {
+    setOpenSegmentos(true);
+    //  if(selectedOptions4.length>=1){
+    //     setSelectedOptions4([]); setSelectedOptions5([]); setSelectedOptions6([])
+    //   }
+  };
+  const handleSegmentos = (event) => {
+    const value =event.target.value;
+    setSelectedOptions8(value);
+  };
+
+  /*Funciones de Listar Indicadores 😄*/
+  const [openIndicadores, setOpenIndicadores] = React.useState(false);
+  // const [IDMarca, setIDMarca]=React.useState({});
+  const peticionIndicadores=async()=>{
+    await axios.get( process.env.REACT_APP_API_ENDPOINT+'ListarMarca/'+IDMarca+'/'+IDFabricante,{
+      headers: {'Authorization': `Bearer ${token}`},
+    })
+    .then(response=>{
+      setMarcas(response.data.data)
+    }).catch(error=>{
+      console.log(error.response.data.message);
+      console.log(error.response.status);
+      console.log(error.response.headers);
+    })
+  }
+  const handleCloseIndicadores =()=>{
+    setOpenIndicadores(false);
+      // if(selectedOptions4.length>=1){
+      //   peticionFabricantes();
+      // }
+  }
+  const handleOpenIndicadores = () => {
+    setOpenIndicadores(true);
+    //  if(selectedOptions4.length>=1){
+    //     setSelectedOptions4([]); setSelectedOptions5([]); setSelectedOptions6([])
+    //   }
+  };
+  const handleIndicadores = (event) => {
+    const value =event.target.value;
+    setSelectedOptions8(value);
+  };
 
   /*Mis Selecciones*/
     const [chipData, setChipData] = React.useState({
@@ -546,8 +679,7 @@ export default function DATA(){
       }
     }
     const isAllSelectPeriodo = data.length > 0 && selectedOptions1.length === render.length;
-    console.log(isAllSelectPeriodo)
-    const isAllSelectCategoria = Categoria.length > 0 && selectedOptions4.length === Categoria.length;
+    const isAllSelectCategoria = Categorias.length > 0 && selectedOptions4.length === Categorias.length;
   console.log(chipData)
   return (
     <Box sx={{ display: 'flex' }}>
@@ -579,86 +711,107 @@ export default function DATA(){
       >
         
       </DrawerComponent>
-       <Modal
-         open={modalSelect}
-         onClose={abrirCerrarModalSelect}
-         >{bodyMySelect}
-       </Modal>
-       <Main open={open}>
-        {alerta}
-         <div className="Contenedordata">
-           <section className="container-of-table">
-            <HeaderComponent/>
-               <article className="table-of-data">
-                <SelectPeriodos
-                  className='propor'
-                  tiempoReporte={tiempoReporte}
-                  selectedOptions1={selectedOptions1}
-                  isSelected={isSelected}
-                  openPeriodo={openPeriodo}
-                  handlePeriodos={handlePeriodos}
-                  handleClosePeriodo={handleClosePeriodo}
-                  handleOpenPeriodo={handleOpenPeriodo}
-                  data={data}
-                  isAllSelectPeriodo={isAllSelectPeriodo}
-                  showMenuItem={showMenuItem}
-                  handleChangeSearch={handleChangeSearch}
-                  focus={focus}
-                  searchText={searchText.periodo}
-                  setRender={setRender}
-                  setSearchText={setSearchText}
-                  setFocus={setFocus}
-                  render={render}
-                />
-                <SelectCanales
-                  selectedOptions2={selectedOptions2}
-                  isSelected={isSelected}
-                  openCanales={openCanales}
-                  handleCanales={handleCanales}
-                  handleCloseCanal={handleCloseCanal}
-                  handleOpenCanal={handleOpenCanales}
-                  canal={canal}
-                />
-                <SelectRegiones
-                  selectedOptions3={selectedOptions3}
-                  isSelected={isSelected}
-                  openRegiones={openRegiones}
-                  handleRegiones={handleRegiones}
-                  handleCloseRegion={handleCloseRegion}
-                  handleOpenRegiones={handleOpenRegiones}
-                  region={region}
-                />
-                <SelectCategorias
-                  selectedOptions4={selectedOptions4}
-                  isSelected={isSelected}
-                  openCategoria={openCategoria}
-                  handleCategoria={handleCategoria}
-                  handleCloseCategoria={handleCloseCategoria}
-                  handleOpenCategoria={handleOpenCategoria}
-                  categoria={Categoria}
-                  isAllSelectCategoria={isAllSelectCategoria}
-                  showMenuItem={showMenuItem}
-                  setIDCategoria={setIDCategoria}
-                  // isSelected={isSelected}
-                  Marcas={Marcas}
-                  selectedOptions6={selectedOptions6}
-                  openMarcas={openMarcas}
-                  handleMarcas={handleMarcas}
-                  handleCloseMarcas={handleCloseMarcas}
-                  handleOpenMarcas={handleOpenMarcas}
-                />
-
-                <SelectFabricantes
-                  Fabricante={Fabricante}
-                  selectedOptions5={selectedOptions5}
-                  openFabricante={openFabricante}
-                  handleFabricante={handleFabricante}
-                  handleCloseFabricante={handleCloseFabricante}
-                  handleOpenFabricante={handleOpenFabricante}
-                  setIDFabricante={setIDFabricante}
-                  isSelected={isSelected}
-                />
-
+        <Modal
+          open={modalSelect}
+          onClose={abrirCerrarModalSelect}
+        >{bodyMySelect}
+        </Modal>
+        <Main open={open}>
+          {alerta}
+          <div className="Contenedordata">
+            <section className="container-of-table">
+              <HeaderComponent/>
+                <article className="table-of-data">
+                  <SelectPeriodos
+                    className='propor'
+                    tiempoReporte={tiempoReporte}
+                    selectedOptions1={selectedOptions1}
+                    isSelected={isSelected}
+                    openPeriodo={openPeriodo}
+                    handlePeriodos={handlePeriodos}
+                    handleClosePeriodo={handleClosePeriodo}
+                    handleOpenPeriodo={handleOpenPeriodo}
+                    data={data}
+                    isAllSelectPeriodo={isAllSelectPeriodo}
+                    showMenuItem={showMenuItem}
+                    handleChangeSearch={handleChangeSearch}
+                    focus={focus}
+                    searchText={searchText.periodo}
+                    setRender={setRender}
+                    setSearchText={setSearchText}
+                    setFocus={setFocus}
+                    render={render}
+                  />
+                  <SelectCanales
+                    selectedOptions2={selectedOptions2}
+                    isSelected={isSelected}
+                    openCanales={openCanales}
+                    handleCanales={handleCanales}
+                    handleCloseCanal={handleCloseCanal}
+                    handleOpenCanal={handleOpenCanales}
+                    canal={canal}
+                  />
+                  <SelectRegiones
+                    selectedOptions3={selectedOptions3}
+                    isSelected={isSelected}
+                    openRegiones={openRegiones}
+                    handleRegiones={handleRegiones}
+                    handleCloseRegion={handleCloseRegion}
+                    handleOpenRegiones={handleOpenRegiones}
+                    region={region}
+                  />
+                  <SelectAtributos
+                    selectedOptions4={selectedOptions4}
+                    isSelected={isSelected}
+                    openCesta={openCesta}
+                    handleCesta={handleCesta}
+                    handleCloseCesta={handleCloseCesta}
+                    handleOpenCesta={handleOpenCesta}
+                    Cesta={Cesta}
+                    // isAllSelectCesta={isAllSelectCesta}
+                    showMenuItem={showMenuItem}
+                    //Categorias
+                    Categorias={Categorias}
+                    selectedOptions5={selectedOptions5}
+                    openCategoria={openCategoria}
+                    handleCategoria={handleCategoria}
+                    isAllSelectCategoria={isAllSelectCategoria}
+                    handleCloseCategoria={handleCloseCategoria}
+                    handleOpenCategoria={handleOpenCategoria}
+                    setIDCategoria={setIDCategoria}
+                    //Fabricantes
+                    Fabricante={Fabricante}
+                    selectedOptions6={selectedOptions6}
+                    openFabricante={openFabricante}
+                    handleFabricante={handleFabricante}
+                    handleCloseFabricante={handleCloseFabricante}
+                    handleOpenFabricante={handleOpenFabricante}
+                    setIDFabricante={setIDFabricante}
+                    //Marcas
+                    Marcas={Marcas}
+                    selectedOptions7={selectedOptions7}
+                    openMarcas={openMarcas}
+                    handleMarcas={handleMarcas}
+                    handleCloseMarcas={handleCloseMarcas}
+                    handleOpenMarcas={handleOpenMarcas}
+                    //Segmentos
+                    Segmentos={Segmentos}
+                    selectedOptions8={selectedOptions8}
+                    openSegmentos={openSegmentos}
+                    handleSegmentos={handleSegmentos}
+                    handleCloseSegmentos={handleCloseSegmentos}
+                    handleOpenSegmentos={handleOpenMarcas}
+                  />
+                  <SelectIndicadores
+                    Indicadores={Indicadores}
+                    selectedOptions14={selectedOptions14}
+                    openIndicadores={openIndicadores}
+                    handleIndicadores={handleIndicadores}
+                    handleCloseIndicadores={handleCloseIndicadores}
+                    handleOpenIndicadores={handleOpenIndicadores}
+                    setIDIndicadores={setIDFabricante}
+                    isSelected={isSelected}
+                  />
                </article>
                <Stack direction="row" className={styles.buttons}>
                  <button id='save' style={{width:'35%'}} variant="contained" onClick={abrirCerrarModalSelect}>Guardar</button>

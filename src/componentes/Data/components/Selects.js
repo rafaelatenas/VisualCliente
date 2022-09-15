@@ -165,14 +165,12 @@ export function SelectCanales(canal){
                       )}
                     MenuProps={MenuProps}
                 >
-                    
-                    <MenuItem value={parseInt(ID_Cliente)}>
-                        
+                    {/* <MenuItem value={parseInt(ID_Cliente)}>
                         <ListItem>
                             <Checkbox style={{display:'block', padding:'0'}} checked={canal.selectedOptions2.indexOf(parseInt(ID_Cliente)) > -1}/>
                         </ListItem>
                         <ListItemText sx={{fontSize:'1em'}} primary={'MI CADENA'} />
-                    </MenuItem>
+                    </MenuItem> */}
                     {OptionCanales}
                 </Select>
             </FormControl>
@@ -191,7 +189,7 @@ export function SelectRegiones(region){
     return(
         <Box style={{border:'.1em solid rgb(87 87 86/11%)',background:'#f7f4f4', borderRadius:'1.5em', width:'15%', height:'90%', display:'flex', flexDirection:'column', alignItems:'center'}}>
             <InputLabel style={{width:'auto', padding:'10% 0 5%'}}>REGIONES</InputLabel>
-            <FormControl sx={{width: '100%'}} className={classes.formControl} error={region.isSelected.selectedOptions3}>
+            <FormControl variant="standard" sx={{width: '100%'}} className={classes.formControl} error={region.isSelected.selectedOptions3}>
                 <InputLabel className="inputLabel" id="mutiple-select-label">Regiones</InputLabel>
                 <Select 
                     labelId="mutiple-select-label"
@@ -223,171 +221,471 @@ export function SelectRegiones(region){
         </Box>
     )
 }
-/*SubRegiones*/
+/*Atributos*/
 
-export function SelectCategorias(categoria){
+export function SelectAtributos(atributos){
+    const {selectedOptions4,isSelected,openCesta,handleCesta,handleCloseCesta,handleOpenCesta,Cesta,isAllSelectCesta,showMenuItem,setIDCesta}=atributos
+    const {selectedOptions5,openCategoria,handleCategoria,handleCloseCategoria,handleOpenCategoria,Categorias,isAllSelectCategoria,setIDCategoria}=atributos
+    const {Fabricante,selectedOptions6,openFabricante,handleFabricante,handleCloseFabricante,handleOpenFabricante,setIDFabricante}=atributos
+    const {Marcas,handleCloseMarcas,handleMarcas,handleOpenMarcas,openMarcas,selectedOptions7}=atributos
+    const {Segmentos,handleCloseSegmentos,handleSegmentos,handleOpenSegmentos,openSegmentos,selectedOptions8}=atributos
+
+
     const classes = useStyles();
-    const OptionCategoria = categoria.categoria.map((option) => (
+    const OptionCesta = Cesta.map((option) => (
         <MenuItem key={option.id} value={(option.id)}>
             <ListItem>
-                <Checkbox checked={(categoria.selectedOptions4.indexOf(option.id) > -1) || (categoria.selectedOptions4.indexOf(option) > -1)} />
+                <Checkbox checked={(selectedOptions4.indexOf(option.id) > -1) || (selectedOptions4.indexOf(option) > -1)} />
             </ListItem>
             <ListItemText primary={option.nombre}/>
         </MenuItem>
     ))
     return(
+        <Box style={{border:'.1em solid rgb(87 87 86/11%)',background:'#f7f4f4', borderRadius:'1.5em', width:'15%', height:'90%', display:'flex', flexDirection:'column', alignItems:'center',justifyContent:'space-evenly'}}>
+            <InputLabel style={{width:'auto', padding:'10% 0 5%'}}>ATRIBUTOS</InputLabel>
+            <Box className="boxAtributos">
+                <FormControl sx={{width: '100%'}} className={classes.formControl} error={isSelected.selectedOptions4}>
+                    <InputLabel className="inputLabel" id="mutiple-select-label">Cesta</InputLabel>
+                    <Select 
+                        labelId="mutiple-select-label"
+                        multiple
+                        value={selectedOptions4}
+                        open={openCesta}
+                        onChange={handleCesta}
+                        onClose={handleCloseCesta}
+                        onOpen={handleOpenCesta}
+                        renderValue={(selected) =>{
+                            setIDCesta(selected)
+                            if(selected.length>=3 && selected.length<Cesta.length){
+                            return(<ListItemText sx={{fontSize:'1em'}} primary={`${selected.length} Opciones Marcadas`}/>)
+                            }else if(selected.length === Cesta.length){
+                            return(<ListItemText sx={{fontSize:'1em'}} primary={`Todas Marcadas (${selected.length})`}/>)
+                            }else if(selected.length<3){
+                            return(
+                            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                                {selected.map((value) =>{
+                                for (let h = 0; h < Cesta.length; h++) {
+                                const element = Cesta[h];
+                                    if(element.id === value){
+                                    return(<Chip style={{fontSize:'.7em'}} key={value} label={element.nombre}/>)
+                                    }
+                                }
+                                })}
+                            </Box>
+                            )
+                            }
+                        }}
+                        MenuProps={MenuProps}
+                    >
+                        <MenuItem value="all" classes={{root: isAllSelectCesta ? classes.selectedAll : ""}} style={{ display: showMenuItem.Cesta ? "flex" : "none" }}>
+                            <ListItem>
+                                <Checkbox
+                                    classes={{ indeterminate: classes.indeterminateColor }}
+                                    checked={isAllSelectCesta}
+                                    indeterminate={ selectedOptions4.length > 0 && selectedOptions4.length < Cesta.length}
+                                />
+                            </ListItem>
+                            <ListItemText primary="Marcar Todo" classes={{ primary: classes.selectAllText }}/>
+                        </MenuItem >
+                        {OptionCesta}
+                    </Select>
+                </FormControl>
+            
+                <SelectCategorias
+                    selectedOptions5={selectedOptions5}
+                    openCategoria={openCategoria}
+                    handleCategoria={handleCategoria}
+                    handleCloseCategoria={handleCloseCategoria}
+                    handleOpenCategoria={handleOpenCategoria}
+                    Categorias={Categorias}
+                    isAllSelectCategoria={isAllSelectCategoria}
+                    setIDCategoria={setIDCategoria}
+                    isSelected={isSelected}
+                />
+                <SelectFabricantes
+                    Fabricante={Fabricante}
+                    selectedOptions6={selectedOptions6}
+                    openFabricante={openFabricante}
+                    handleFabricante={handleFabricante}
+                    handleCloseFabricante={handleCloseFabricante}
+                    handleOpenFabricante={handleOpenFabricante}
+                    setIDFabricante={setIDFabricante}
+                    isSelected={isSelected}
+                />
+                <SelectMarcas
+                    Marcas={Marcas}
+                    handleCloseMarcas={handleCloseMarcas}
+                    handleMarcas={handleMarcas}
+                    handleOpenMarcas={handleOpenMarcas}
+                    openMarcas={openMarcas}
+                    selectedOptions7={selectedOptions7}
+                    isSelected={isSelected}
+                />
+                <SelectSegmentos
+                    Segmentos={Segmentos}
+                    handleCloseSegmentos={handleCloseSegmentos}
+                    handleSegmentos={handleSegmentos}
+                    handleOpenSegmentos={handleOpenSegmentos}
+                    openSegmentos={openSegmentos}
+                    selectedOptions8={selectedOptions8}
+                    isSelected={isSelected}
+                />
+
+
+
+<FormControl sx={{width: '100%'}} className={classes.formControl} error={isSelected.selectedOptions4}>
+                    <InputLabel className="inputLabel" id="mutiple-select-label">Cesta</InputLabel>
+                    <Select 
+                        labelId="mutiple-select-label"
+                        multiple
+                        value={selectedOptions4}
+                        open={openCesta}
+                        onChange={handleCesta}
+                        onClose={handleCloseCesta}
+                        onOpen={handleOpenCesta}
+                        renderValue={(selected) =>{
+                            setIDCesta(selected)
+                            if(selected.length>=3 && selected.length<Cesta.length){
+                            return(<ListItemText sx={{fontSize:'1em'}} primary={`${selected.length} Opciones Marcadas`}/>)
+                            }else if(selected.length === Cesta.length){
+                            return(<ListItemText sx={{fontSize:'1em'}} primary={`Todas Marcadas (${selected.length})`}/>)
+                            }else if(selected.length<3){
+                            return(
+                            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                                {selected.map((value) =>{
+                                for (let h = 0; h < Cesta.length; h++) {
+                                const element = Cesta[h];
+                                    if(element.id === value){
+                                    return(<Chip style={{fontSize:'.7em'}} key={value} label={element.nombre}/>)
+                                    }
+                                }
+                                })}
+                            </Box>
+                            )
+                            }
+                        }}
+                        MenuProps={MenuProps}
+                    >
+                        <MenuItem value="all" classes={{root: isAllSelectCesta ? classes.selectedAll : ""}} style={{ display: showMenuItem.Cesta ? "flex" : "none" }}>
+                            <ListItem>
+                                <Checkbox
+                                    classes={{ indeterminate: classes.indeterminateColor }}
+                                    checked={isAllSelectCesta}
+                                    indeterminate={ selectedOptions4.length > 0 && selectedOptions4.length < Cesta.length}
+                                />
+                            </ListItem>
+                            <ListItemText primary="Marcar Todo" classes={{ primary: classes.selectAllText }}/>
+                        </MenuItem >
+                        {OptionCesta}
+                    </Select>
+                </FormControl>
+            
+                <SelectCategorias
+                    selectedOptions5={selectedOptions5}
+                    openCategoria={openCategoria}
+                    handleCategoria={handleCategoria}
+                    handleCloseCategoria={handleCloseCategoria}
+                    handleOpenCategoria={handleOpenCategoria}
+                    Categorias={Categorias}
+                    isAllSelectCategoria={isAllSelectCategoria}
+                    setIDCategoria={setIDCategoria}
+                    isSelected={isSelected}
+                />
+                <SelectFabricantes
+                    Fabricante={Fabricante}
+                    selectedOptions6={selectedOptions6}
+                    openFabricante={openFabricante}
+                    handleFabricante={handleFabricante}
+                    handleCloseFabricante={handleCloseFabricante}
+                    handleOpenFabricante={handleOpenFabricante}
+                    setIDFabricante={setIDFabricante}
+                    isSelected={isSelected}
+                />
+                <SelectMarcas
+                    Marcas={Marcas}
+                    handleCloseMarcas={handleCloseMarcas}
+                    handleMarcas={handleMarcas}
+                    handleOpenMarcas={handleOpenMarcas}
+                    openMarcas={openMarcas}
+                    selectedOptions7={selectedOptions7}
+                    isSelected={isSelected}
+                />
+                <SelectSegmentos
+                    Segmentos={Segmentos}
+                    handleCloseSegmentos={handleCloseSegmentos}
+                    handleSegmentos={handleSegmentos}
+                    handleOpenSegmentos={handleOpenSegmentos}
+                    openSegmentos={openSegmentos}
+                    selectedOptions8={selectedOptions8}
+                    isSelected={isSelected}
+                />
+            </Box>
+        </Box>
+    )
+}
+export function SelectCategorias(categoria) {
+    const {selectedOptions5,isSelected,openCategoria,handleCategoria,handleCloseCategoria,handleOpenCategoria,Categorias,isAllSelectCategoria,setIDCategoria}=categoria
+    const classes = useStyles();
+    const OptionCategoria = Categorias.map((option) => (
+        <MenuItem key={option.id} value={(option.id)}>
+            <ListItem>
+                <Checkbox checked={(selectedOptions5.indexOf(option.id) > -1) || (selectedOptions5.indexOf(option) > -1)} />
+            </ListItem>
+            <ListItemText primary={option.nombre}/>
+        </MenuItem>
+    ))
+    return(
+        <FormControl sx={{width: '100%'}} className={classes.formControl} error={isSelected.selectedOptions5}>
+            <InputLabel className="inputLabel" id="mutiple-select-label">Categorias</InputLabel>
+            <Select 
+                labelId="mutiple-select-label"
+                multiple
+                value={selectedOptions5}
+                open={openCategoria}
+                onChange={handleCategoria}
+                onClose={handleCloseCategoria}
+                onOpen={handleOpenCategoria}
+                renderValue={(selected) =>{
+                    setIDCategoria(selected)
+                    if(selected.length>=3 && selected.length<Categorias.length){
+                        return(<ListItemText sx={{fontSize:'15px'}} primary={`${selected.length} Opciones Marcadas`}/>)
+                    }else if(selected.length === Categorias.length){
+                        return(<ListItemText sx={{fontSize:'15px'}} primary={`Todas Marcadas (${selected.length})`}/>)
+                    }else if(selected.length<3){
+                        return(
+                            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                                {selected.map((value) =>{
+                                    for (let h = 0; h < Categorias.length; h++) {
+                                        const element = Categorias[h];
+                                        if(element.id === value){
+                                        return(<Chip style={{fontSize:'.7em'}} key={value} label={element.nombre}/>)
+                                        }
+                                    }
+                                })}
+                            </Box>
+                        )
+                    }
+                }}
+                MenuProps={MenuProps}
+            >
+                {/* style={{ display: showMenuItem.Cesta ? "flex" : "none" }} */}
+                <MenuItem value="all" classes={{root: isAllSelectCategoria? classes.selectedAll : ""}}>
+                    <ListItem>
+                        <Checkbox
+                            classes={{ indeterminate: classes.indeterminateColor }}
+                            checked={isAllSelectCategoria}
+                            indeterminate={ selectedOptions5.length > 0 && selectedOptions5.length < Categorias.length}
+                        />
+                    </ListItem>
+                    <ListItemText primary="Marcar Todo" classes={{ primary: classes.selectAllText }}/>
+                </MenuItem >
+                {OptionCategoria}
+            </Select>
+        </FormControl>
+    )
+}
+
+export function SelectFabricantes(Fabricantes){
+    const {Fabricante,isSelected,selectedOptions5,openFabricante,handleFabricante,handleCloseFabricante,handleOpenFabricante,setIDFabricante}=Fabricantes
+    const classes = useStyles();
+    const OptionFabricante = Fabricante.map((option) => (
+        <MenuItem key={option.id} value={(option.id)}>
+            <ListItem>
+                <Checkbox checked={(selectedOptions5.indexOf(option.id) > -1) || (selectedOptions5.indexOf(option) > -1)} />
+            </ListItem>
+            <ListItemText primary={option.nombre}/>
+        </MenuItem>
+    ))
+    return(
+        <FormControl sx={{width: '100%'}} className={classes.formControl} error={isSelected.selectedOptions5}>
+            <InputLabel className="inputLabel" id="mutiple-select-label">Fabricantes</InputLabel>
+            <Select 
+                labelId="mutiple-select-label"
+                multiple
+                value={selectedOptions5}
+                open={openFabricante}
+                onChange={handleFabricante}
+                onClose={handleCloseFabricante}
+                onOpen={handleOpenFabricante}
+                renderValue={(selected) =>{
+                    setIDFabricante(selected)
+                    if(selected.length>=3 && selected.length<Fabricante.length){
+                        return(<ListItemText sx={{fontSize:'1em'}} primary={`${selected.length} Opciones Marcadas`}/>)
+                    }else if(selected.length === Fabricante.length){
+                        return(<ListItemText sx={{fontSize:'1em'}} primary={`Todas Marcadas (${selected.length})`}/>)
+                    }else if(selected.length<3){
+                        return(
+                            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                                {selected.map((value) =>{
+                                    for (let h = 0; h < Fabricante.length; h++) {
+                                        const element = Fabricante[h];
+                                        if(element.id === value){
+                                            return(<Chip style={{fontSize:'.7em'}} key={value} label={element.nombre}/>)
+                                        }
+                                    }
+                                })}
+                            </Box>
+                        )
+                    }
+                }}
+                MenuProps={MenuProps}
+            >
+                {OptionFabricante}
+            </Select>
+        </FormControl>
+    )
+}
+
+export function SelectMarcas(Marca){
+    const {Marcas,handleCloseMarcas,handleMarcas,handleOpenMarcas,openMarcas,selectedOptions7,isSelected}=Marca
+    const classes = useStyles();
+    const OptionMarcas = Marcas.map((option) => (
+        <MenuItem key={option.id} value={(option.id)}>
+            <ListItem>
+                <Checkbox checked={(selectedOptions7.indexOf(option.id) > -1) || (selectedOptions7.indexOf(option) > -1)} />
+            </ListItem>
+            <ListItemText primary={option.nombre}/>
+        </MenuItem>
+    ))
+    return(
+        <FormControl sx={{width: '100%'}} className={classes.formControl} error={isSelected.selectedOptions7}>
+            <InputLabel className="inputLabel" id="mutiple-select-label">Marcas</InputLabel>
+            <Select 
+                labelId="mutiple-select-label"
+                multiple
+                value={selectedOptions7}
+                open={openMarcas}
+                onChange={handleMarcas}
+                onClose={handleCloseMarcas}
+                onOpen={handleOpenMarcas}
+                renderValue={(selected) =>{
+                    // setIDFabricante(selected)
+                    if(selected.length>=3 && selected.length<Marcas.length){
+                        return(<ListItemText sx={{fontSize:'1em'}} primary={`${selected.length} Opciones Marcadas`}/>)
+                    }else if(selected.length === Marcas.length){
+                        return(<ListItemText sx={{fontSize:'1em'}} primary={`Todas Marcadas (${selected.length})`}/>)
+                    }else if(selected.length<3){
+                        return(
+                            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                                {selected.map((value) =>{
+                                    for (let h = 0; h <Marcas.length; h++) {
+                                        const element =Marcas[h];
+                                        if(element.id === value){
+                                            return(<Chip style={{fontSize:'.7em'}} key={value} label={element.nombre}/>)
+                                        }
+                                    }
+                                })}
+                            </Box>
+                           )
+                    }
+                }}
+                MenuProps={MenuProps}
+            >
+                {OptionMarcas}
+            </Select>
+        </FormControl>
+    )
+}
+
+export function SelectSegmentos(Marca){
+    const {Segmentos,handleCloseSegmentos,handleSegmentos,handleOpenSegmentos,openSegmentos,selectedOptions8,isSelected}=Marca
+    const classes = useStyles();
+    const OptionSegmentos = Segmentos.map((option) => (
+        <MenuItem key={option.id} value={(option.id)}>
+            <ListItem>
+                <Checkbox checked={(selectedOptions8.indexOf(option.id) > -1) || (selectedOptions8.indexOf(option) > -1)} />
+            </ListItem>
+            <ListItemText primary={option.nombre}/>
+        </MenuItem>
+    ))
+    return(
+        <FormControl sx={{width: '100%'}} className={classes.formControl} error={isSelected.selectedOptions8}>
+            <InputLabel className="inputLabel" id="mutiple-select-label">Segmentos</InputLabel>
+            <Select 
+                labelId="mutiple-select-label"
+                multiple
+                value={selectedOptions8}
+                open={openSegmentos}
+                onChange={handleSegmentos}
+                onClose={handleCloseSegmentos}
+                onOpen={handleOpenSegmentos}
+                renderValue={(selected) =>{
+                    // setIDFabricante(selected)
+                    if(selected.length>=3 && selected.length<Segmentos.length){
+                        return(<ListItemText sx={{fontSize:'15px'}} primary={`${selected.length} Opciones Marcadas`}/>)
+                    }else if(selected.length === Segmentos.length){
+                        return(<ListItemText sx={{fontSize:'15px'}} primary={`Todas Marcadas (${selected.length})`}/>)
+                    }else if(selected.length<3){
+                        return(
+                            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                                {selected.map((value) =>{
+                                    for (let h = 0; h <Segmentos.length; h++) {
+                                        const element =Segmentos[h];
+                                        if(element.id === value){
+                                            return(<Chip style={{fontSize:'.7em'}} key={value} label={element.nombre}/>)
+                                        }
+                                    }
+                                })}
+                            </Box>
+                           )
+                    }
+                }}
+                MenuProps={MenuProps}
+            >
+                {OptionSegmentos}
+            </Select>
+        </FormControl>
+    )
+}
+
+export function SelectIndicadores(Indicador){
+    const {Indicadores,handleCloseIndicadores,handleIndicadores,handleOpenIndicadores,isSelected,openIndicadores,selectedOptions14,setIDIndicadores,}=Indicador
+    const classes = useStyles();
+    var ID_Cliente = sessionStorage.getItem('Id_Cliente')
+    const OptionIndicadores = Indicadores.map((item) => (
+        <MenuItem key={item.id} value={item.id}>
+          <Checkbox checked={selectedOptions14.indexOf(item.id) > -1} />
+          <ListItemText sx={{fontSize:'1em'}} primary={item.nombre} />
+        </MenuItem>
+      ))
+    return(
         <Box style={{border:'.1em solid rgb(87 87 86/11%)',background:'#f7f4f4', borderRadius:'1.5em', width:'15%', height:'90%', display:'flex', flexDirection:'column', alignItems:'center'}}>
-            <InputLabel style={{width:'auto', padding:'10% 0 5%'}}>CATEGORÍAS</InputLabel>
-            <FormControl sx={{width: '100%'}} className={classes.formControl} error={categoria.isSelected.selectedOptions4}>
-                <InputLabel className="inputLabel" id="mutiple-select-label">Categorías</InputLabel>
+            <InputLabel style={{width:'auto', padding:'10% 0 5%'}}>Indicadores</InputLabel>
+            <FormControl sx={{width: '100%'}} className={classes.formControl} error={isSelected.selectedOptions14}>
+                <InputLabel className="inputLabel" id="mutiple-select-label">Indicadores</InputLabel>
                 <Select 
                     labelId="mutiple-select-label"
                     multiple
-                    value={categoria.selectedOptions4}
-                    open={categoria.openCategoria}
-                    onChange={categoria.handleCategoria}
-                    onClose={categoria.handleCloseCategoria}
-                    onOpen={categoria.handleOpenCategoria}
-                    renderValue={(selected) =>{
-                        categoria.setIDCategoria(selected)
-                        if(selected.length>=3 && selected.length<categoria.categoria.length){
-                          return(<ListItemText sx={{fontSize:'1em'}} primary={`${selected.length} Opciones Marcadas`}/>)
-                        }else if(selected.length === categoria.categoria.length){
-                          return(<ListItemText sx={{fontSize:'1em'}} primary={`Todas Marcadas (${selected.length})`}/>)
-                        }else if(selected.length<3){
-                          return(
-                          <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                    value={selectedOptions14}
+                    open={openIndicadores}
+                    onChange={handleIndicadores}
+                    onClose={handleCloseIndicadores}
+                    onOpen={handleOpenIndicadores}
+                    renderValue={(selected) => (
+                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
                             {selected.map((value) =>{
-                              for (let h = 0; h < categoria.categoria.length; h++) {
-                              const element = categoria.categoria[h];
+                              for (let h = 0; h < Indicadores.length; h++) {
+                              const element = Indicadores[h];
                                 if(element.id === value){
                                   return(<Chip style={{fontSize:'.7em'}} key={value} label={element.nombre}/>)
+                                }else if(value === parseInt(ID_Cliente)){
+                                  return(<Chip style={{fontSize:'.7em'}} key={value} label="MI CADENA"/>)
                                 }
                               }
                             })}
                           </Box>
-                          )
-                        }
-                      }}
+                      )}
                     MenuProps={MenuProps}
                 >
-                    <MenuItem value="all" classes={{root: categoria.isAllSelectCategoria ? classes.selectedAll : ""}} style={{ display: categoria.showMenuItem.categoria ? "flex" : "none" }}>
+                    
+                    {/* <MenuItem value={parseInt(ID_Cliente)}>
+                        
                         <ListItem>
-                            <Checkbox
-                                classes={{ indeterminate: classes.indeterminateColor }}
-                                checked={categoria.isAllSelectCategoria}
-                                indeterminate={ categoria.selectedOptions4.length > 0 && categoria.selectedOptions4.length < categoria.categoria.length}
-                            />
+                            <Checkbox style={{display:'block', padding:'0'}} checked={selectedOptions14.indexOf(parseInt(ID_Cliente)) > -1}/>
                         </ListItem>
-                        <ListItemText primary="Marcar Todo" classes={{ primary: classes.selectAllText }}/>
-                    </MenuItem >
-                    {OptionCategoria}
-                </Select>
-            </FormControl>
-        </Box>
-    )
-}
-
-export function SelectFabricantes(Fabricante){
-    const classes = useStyles();
-    const OptionFabricante = Fabricante.Fabricante.map((option) => (
-        <MenuItem key={option.id} value={(option.id)}>
-            <ListItem>
-                <Checkbox checked={(Fabricante.selectedOptions5.indexOf(option.id) > -1) || (Fabricante.selectedOptions5.indexOf(option) > -1)} />
-            </ListItem>
-            <ListItemText primary={option.nombre}/>
-        </MenuItem>
-    ))
-    return(
-        <Box style={{border:'.1em solid rgb(87 87 86/11%)',background:'#f7f4f4', borderRadius:'1.5em', width:'15%', height:'90%', display:'flex', flexDirection:'column', alignItems:'center'}}>
-            <InputLabel style={{width:'auto', padding:'10% 0 5%'}}>FABRICANTES</InputLabel>
-            <FormControl sx={{width: '100%'}} className={classes.formControl} error={Fabricante.isSelected.selectedOptions5}>
-                <InputLabel className="inputLabel" id="mutiple-select-label">Fabricantes</InputLabel>
-                <Select 
-                    labelId="mutiple-select-label"
-                    multiple
-                    value={Fabricante.selectedOptions5}
-                    open={Fabricante.openFabricante}
-                    onChange={Fabricante.handleFabricante}
-                    onClose={Fabricante.handleCloseFabricante}
-                    onOpen={Fabricante.handleOpenFabricante}
-                    renderValue={(selected) =>{
-                        Fabricante.setIDFabricante(selected)
-                        if(selected.length>=3 && selected.length<Fabricante.Fabricante.length){
-                            return(<ListItemText sx={{fontSize:'1em'}} primary={`${selected.length} Opciones Marcadas`}/>)
-                        }else if(selected.length === Fabricante.Fabricante.length){
-                            return(<ListItemText sx={{fontSize:'1em'}} primary={`Todas Marcadas (${selected.length})`}/>)
-                        }else if(selected.length<3){
-                            return(
-                            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                {selected.map((value) =>{
-                                    for (let h = 0; h < Fabricante.Fabricante.length; h++) {
-                                        const element = Fabricante.Fabricante[h];
-                                        if(element.id === value){
-                                            return(<Chip style={{fontSize:'.7em'}} key={value} label={element.nombre}/>)
-                                        }
-                                    }
-                                })}
-                            </Box>
-                           )
-                         }
-                    }}
-                    MenuProps={MenuProps}
-                >
-                    {OptionFabricante}
-                </Select>
-            </FormControl>
-        </Box>
-    )
-}
-
-export function SelectMarcas(Marcas){
-    const classes = useStyles();
-    const OptionMarcas = Marcas.Marcas.map((option) => (
-        <MenuItem key={option.id} value={(option.id)}>
-            <ListItem>
-                <Checkbox checked={(Marcas.selectedOptions6.indexOf(option.id) > -1) || (Marcas.selectedOptions6.indexOf(option) > -1)} />
-            </ListItem>
-            <ListItemText primary={option.nombre}/>
-        </MenuItem>
-    ))
-    return(
-        <Box style={{border:'.1em solid rgb(87 87 86/11%)',background:'#f7f4f4', borderRadius:'1.5em', width:'15%', height:'90%', display:'flex', flexDirection:'column', alignItems:'center'}}>
-            <InputLabel style={{width:'auto', padding:'10% 0 5%'}}>MARCAS</InputLabel>
-            <FormControl sx={{width: '100%'}} className={classes.formControl} error={Marcas.isSelected.selectedOptions6}>
-                <InputLabel className="inputLabel" id="mutiple-select-label">Marcas</InputLabel>
-                <Select 
-                    labelId="mutiple-select-label"
-                    multiple
-                    value={Marcas.selectedOptions6}
-                    open={Marcas.openMarcas}
-                    onChange={Marcas.handleMarcas}
-                    onClose={Marcas.handleCloseMarcas}
-                    onOpen={Marcas.handleOpenMarcas}
-                    renderValue={(selected) =>{
-                        // Marcas.setIDFabricante(selected)
-                        if(selected.length>=3 && selected.length<Marcas.Marcas.length){
-                            return(<ListItemText sx={{fontSize:'1em'}} primary={`${selected.length} Opciones Marcadas`}/>)
-                        }else if(selected.length === Marcas.Marcas.length){
-                            return(<ListItemText sx={{fontSize:'1em'}} primary={`Todas Marcadas (${selected.length})`}/>)
-                        }else if(selected.length<3){
-                            return(
-                            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                {selected.map((value) =>{
-                                    for (let h = 0; h < Marcas.Marcas.length; h++) {
-                                        const element = Marcas.Marcas[h];
-                                        if(element.id === value){
-                                            return(<Chip style={{fontSize:'.7em'}} key={value} label={element.nombre}/>)
-                                        }
-                                    }
-                                })}
-                            </Box>
-                           )
-                         }
-                    }}
-                    MenuProps={MenuProps}
-                >
-                    {OptionMarcas}
+                        <ListItemText sx={{fontSize:'1em'}} primary={'MI CADENA'} />
+                    </MenuItem> */}
+                    {OptionIndicadores}
                 </Select>
             </FormControl>
         </Box>

@@ -3,6 +3,7 @@ import { $ } from "react-jquery-plugin";
 import Swal from "sweetalert2";
 import axios from "axios";
 import withReactContent from 'sweetalert2-react-content';
+import { Box, Step, Stepper } from "@mui/material";
 
 export default class crearUsuario extends React.Component{
     //Validación de Formulario
@@ -31,6 +32,7 @@ export default class crearUsuario extends React.Component{
       usuario:'',
       Id_Cliente:'',
       id_perfil:'',
+      activeStep:0,
     }    
   } 
   validateField(fieldName, value) {
@@ -280,34 +282,53 @@ componentDidMount(){
       }
   }              
 }
+  handleNext = () => {
+    this.setState({activeStep:this.state.activeStep+1});
+  };
+
+  handleBack = () => {
+    this.setState({activeStep:this.state.activeStep-1});
+  };
+
+// const handleStep = (step) => () => {
+//   setActiveStep(step);
+// };
+
 
   render(){
-        return(
-            <form id="msform">
-            <ul id="progressbar">
-                <li className="active"></li>
-                <li></li>
-            </ul>
-            
-            <fieldset>
-                <h2 className="fs-title">Datos del Usuario</h2>
+    return(
+      <Box sx={{ width: '100%' }}>
+        <Stepper nonLinear activeStep={this.state.activeStep}>
+            <Step>
                 <input type="text" name="nombres" placeholder="Nombres" value={this.state.nombres} onChange={this.handleUserInput}/>
                 <input type="text" name="apellidos" placeholder="Apellidos" value={this.state.apellidos} onChange={this.handleUserInput}/>
                 <input type="number" name="id_perfil" placeholder="Id Perfil" value={this.state.id_perfil} onChange={this.handleUserInput}/>
                 <input type="file" accept=".jpg,.jpeg, .png" name="imagenes[]" id="imagenes" multiple/>    
                 <input type="button" name="next"  disabled={!this.state.formValidNext} className="next action-button" value="Next" />
-            </fieldset>
-            <fieldset>
-                <h2 className="fs-title">Crear Usuario</h2>
-                <input type="number" name="Id_Cliente" placeholder="Id Cliente" value={this.state.Id_Cliente} onChange={this.handleUserInput}/>
-                <input  type="email" name="correo" placeholder="Correo" value={this.state.correo} onChange={this.handleUserInput}/>
-                <input  type="text" name="usuario" placeholder="Usuario" value={this.state.usuario} onChange={this.handleUserInput}/>
+            </Step>
+        </Stepper>
+      </Box>
+        //     <form id="msform">
+        //     <ul id="progressbar">
+        //         <li className="active"></li>
+        //         <li></li>
+        //     </ul>
+            
+        //     <fieldset>
+        //         <h2 className="fs-title">Datos del Usuario</h2>
+                
+        //     </fieldset>
+        //     <fieldset>
+        //         <h2 className="fs-title">Crear Usuario</h2>
+        //         <input type="number" name="Id_Cliente" placeholder="Id Cliente" value={this.state.Id_Cliente} onChange={this.handleUserInput}/>
+        //         <input  type="email" name="correo" placeholder="Correo" value={this.state.correo} onChange={this.handleUserInput}/>
+        //         <input  type="text" name="usuario" placeholder="Usuario" value={this.state.usuario} onChange={this.handleUserInput}/>
 
-                <input className={`${this.errorClass(this.state.formErrors.password)}`} type="password" name="password" placeholder="Contraseña" value={this.state.password} onChange={this.handleUserInput}/>
-                <input type="button" name="previous" className="previous action-button" value="Previous" />
-                <input type="submit" disabled={!this.state.formValid} name="submit" className="submit action-button" onClick={this.enviarDatos}  value="Submit" />
-            </fieldset>
-        </form> 
+        //         <input className={`${this.errorClass(this.state.formErrors.password)}`} type="password" name="password" placeholder="Contraseña" value={this.state.password} onChange={this.handleUserInput}/>
+        //         <input type="button" name="previous" className="previous action-button" value="Previous" />
+        //         <input type="submit" disabled={!this.state.formValid} name="submit" className="submit action-button" onClick={this.enviarDatos}  value="Submit" />
+        //     </fieldset>
+        // </form> 
         )
   }
 }

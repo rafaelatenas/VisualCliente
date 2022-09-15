@@ -351,16 +351,19 @@ main {
         width: 50%;
         height: 60%;
         position: absolute;
-        background: #fff;
         left: 25%;
         top: 25%;
-        border-radius: 1.2em;
-        max-width: 700px;
-        min-width: 450px;
+        min-width: 400px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
     .cardModal{
-        width: 100%;
+        background: #fff;
+        width:980%;
         height: 100%;
+        max-width: 650px;
+        border-radius: 1.2em !important;
     }
 @media screen and (min-width: 1400px) {
     @keyframes scroll {

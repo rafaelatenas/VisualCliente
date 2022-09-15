@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { ManageAccounts, ExitToApp, Settings, AdminPanelSettings } from "@mui/icons-material";
-import { Box, Card, CardContent, Container, IconButton, Paper, Popover, SpeedDial, SpeedDialAction, Typography} from "@mui/material";
+import { Box, Button, Card, CardContent, Container, IconButton, Paper, Popover, SpeedDial, SpeedDialAction, Typography} from "@mui/material";
 import eliseAtenas from '../../landing/Images/ats_logo-elise-blanca.png'
 import logoAtenas from '../../landing/Images/ats_logo-blanco-elises.png'
 import { makeStyles } from "@material-ui/styles";
-import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
+import KeyboardArrowDown from '../../landing/favicon/angle-down.svg';
 import { Link, NavLink } from "react-router-dom";
 //Imagenes Reportes
 import RServices from '../../landing/Images/logo_RetailServices.png'
@@ -21,6 +21,7 @@ import RankingCategorias from '../../landing/Images/IconATSRankingCategorias.png
 import TopProveedores from '../../landing/Images/IconATSTopProveedores.jpg'
 import TopSkus from '../../landing/Images/IconATSTopSkus.png'
 import { useAuthContext } from "../context/authContext";
+import { KeyboardArrowDownRounded } from "@material-ui/icons";
 
 
 const reports = [
@@ -157,8 +158,8 @@ const useStylesCardMovile = makeStyles(()=>({
 }))
 
 export function CardDesktop(props){
+    const{PropsCardPopover,PropsCardPopoverClose,PropsIdPopover}=props
     const styles = useStylesCard();
-
     return(
         <Box className={styles.Boxcards}>
             {reports.map((report)=>(
@@ -166,8 +167,9 @@ export function CardDesktop(props){
                     <CardContent className='CardContent'>
                         <img style={report.style} src={report.icon} alt={`Logo Atenas Grupo Consultor. Repote ${report.name}`} title=""/>  
                     </CardContent>
-                    <IconButton onClick={(e)=>props.PropsCardPopoverClose(e)} style={{padding:0}}>
-                       <KeyboardArrowDownRoundedIcon onClick={(e)=>props.PropsCardPopoverClose(e)}  className="arrowIcon" id={report.key}></KeyboardArrowDownRoundedIcon>
+                    
+                    <IconButton className={styles.Arrow} onClick={(e)=>PropsCardPopoverClose(e)} style={{padding:0}}>
+                        <img id={report.key} src={KeyboardArrowDown} alt="Desplegar Menú" title=""/>
                     </IconButton>
                 </Card>
             ))}
@@ -191,6 +193,11 @@ const useStylesCard = makeStyles(()=>({
         flexDirection:'column',
         boxShadow:'none'
     },
+    Arrow:{
+        width:'15%',
+        height:'auto',
+        maxWidth:50
+    }
 }))
 /* -- Modulo Carousel -- */
 export function footerMovile() {

@@ -17,7 +17,6 @@ import { useAuthContext } from "../../context/authContext";
 let icon;
 
 export function DrawerComponent(abrir){
-    console.log(abrir)
     const {DeletePeriodo,anchorEl,botonreporte,chipData,handleClick,handleClose,handleDelete,handleDrawerClose,id,label,open,openo,peticionMeses,peticionSemanas,peticionSemestres,peticionTrimestres,seleccionarPeriodo} = abrir
     const {logout}=useAuthContext();
     const styles= useStyles();
