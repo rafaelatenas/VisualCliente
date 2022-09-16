@@ -112,7 +112,7 @@ export default function DATA(){
     const [selectedOptions8, setSelectedOptions8] = useState([]);
 
   /*Data Tamaño*/
-  const [tamanno, settamanno]=useState([]);
+  const [Tamanno, setTamanno]=useState([]);
   const [selectedOptions9, setSelectedOptions9] = useState([]);
 
   /*Data Rango de Tamaño*/
@@ -478,8 +478,7 @@ export default function DATA(){
       setSelectedOptions7(value);
     };
 
-  /*Funciones de Listar 
-  Segmentos 😄*/
+  /*Funciones de Listar Segmentos 😄*/
   const [openSegmentos, setOpenSegmentos] = React.useState(false);
   const [IDMarca, setIDMarca]=React.useState({});
   const peticionSegmentos=async()=>{
@@ -487,7 +486,7 @@ export default function DATA(){
       headers: {'Authorization': `Bearer ${token}`},
     })
     .then(response=>{
-      setMarcas(response.data.data)
+      setSegmentos(response.data.data)
     }).catch(error=>{
       console.log(error.response.data.message);
       console.log(error.response.status);
@@ -510,6 +509,166 @@ export default function DATA(){
     const value =event.target.value;
     setSelectedOptions8(value);
   };
+
+  /*Funciones de Listar Tamanno 😄*/
+  const [openTamanno, setOpenTamanno] = React.useState(false);
+  // const [IDMarca, setIDMarca]=React.useState({});
+  const peticionTamanno=async()=>{
+    await axios.get( process.env.REACT_APP_API_ENDPOINT+'ListarMarca/'+IDMarca+'/'+IDFabricante,{
+      headers: {'Authorization': `Bearer ${token}`},
+    })
+    .then(response=>{
+      setTamanno(response.data.data)
+    }).catch(error=>{
+      console.log(error.response.data.message);
+      console.log(error.response.status);
+      console.log(error.response.headers);
+    })
+  }
+  const handleCloseTamanno =()=>{
+    setOpenTamanno(false);
+      // if(selectedOptions4.length>=1){
+      //   peticionFabricantes();
+      // }
+  }
+  const handleOpenTamanno = () => {
+    setOpenTamanno(true);
+    //  if(selectedOptions4.length>=1){
+    //     setSelectedOptions4([]); setSelectedOptions5([]); setSelectedOptions6([])
+    //   }
+  };
+  const handleTamanno = (event) => {
+    const value =event.target.value;
+    setSelectedOptions8(value);
+  }; 
+
+  /*Funciones de Listar RTamanno 😄*/
+  const [openRTamanno, setOpenRTamanno] = React.useState(false);
+  // const [IDMarca, setIDMarca]=React.useState({});
+  const peticionRTamanno=async()=>{
+    await axios.get( process.env.REACT_APP_API_ENDPOINT+'ListarMarca/'+IDMarca+'/'+IDFabricante,{
+      headers: {'Authorization': `Bearer ${token}`},
+    })
+    .then(response=>{
+      setRTamanno(response.data.data)
+    }).catch(error=>{
+      console.log(error.response.data.message);
+      console.log(error.response.status);
+      console.log(error.response.headers);
+    })
+  }
+  const handleCloseRTamanno =()=>{
+    setOpenRTamanno(false);
+      // if(selectedOptions4.length>=1){
+      //   peticionFabricantes();
+      // }
+  }
+  const handleOpenRTamanno = () => {
+    setOpenRTamanno(true);
+    //  if(selectedOptions4.length>=1){
+    //     setSelectedOptions4([]); setSelectedOptions5([]); setSelectedOptions6([])
+    //   }
+  };
+  const handleRTamanno = (event) => {
+    const value =event.target.value;
+    setSelectedOptions8(value);
+  }; 
+
+  /*Funciones de Listar Producto 😄*/
+  const [openProducto, setOpenProducto] = React.useState(false);
+  // const [IDMarca, setIDMarca]=React.useState({});
+  const peticionProducto=async()=>{
+    await axios.get( process.env.REACT_APP_API_ENDPOINT+'ListarMarca/'+IDMarca+'/'+IDFabricante,{
+      headers: {'Authorization': `Bearer ${token}`},
+    })
+    .then(response=>{
+      setProductos(response.data.data)
+    }).catch(error=>{
+      console.log(error.response.data.message);
+      console.log(error.response.status);
+      console.log(error.response.headers);
+    })
+  }
+  const handleCloseProducto =()=>{
+    setOpenProducto(false);
+      // if(selectedOptions4.length>=1){
+      //   peticionFabricantes();
+      // }
+  }
+  const handleOpenProducto = () => {
+    setOpenProducto(true);
+    //  if(selectedOptions4.length>=1){
+    //     setSelectedOptions4([]); setSelectedOptions5([]); setSelectedOptions6([])
+    //   }
+  };
+  const handleProducto = (event) => {
+    const value =event.target.value;
+    setSelectedOptions8(value);
+  }; 
+
+  /*Funciones de Listar CBarra 😄*/
+  const [openCBarra, setOpenCBarra] = React.useState(false);
+  // const [IDMarca, setIDMarca]=React.useState({});
+  const peticionCBarra=async()=>{
+    await axios.get( process.env.REACT_APP_API_ENDPOINT+'ListarMarca/'+IDMarca+'/'+IDFabricante,{
+      headers: {'Authorization': `Bearer ${token}`},
+    })
+    .then(response=>{
+      setCBarras(response.data.data)
+    }).catch(error=>{
+      console.log(error.response.data.message);
+      console.log(error.response.status);
+      console.log(error.response.headers);
+    })
+  }
+  const handleCloseCBarra =()=>{
+    setOpenCBarra(false);
+      // if(selectedOptions4.length>=1){
+      //   peticionFabricantes();
+      // }
+  }
+  const handleOpenCBarra = () => {
+    setOpenCBarra(true);
+    //  if(selectedOptions4.length>=1){
+    //     setSelectedOptions4([]); setSelectedOptions5([]); setSelectedOptions6([])
+    //   }
+  };
+  const handleCBarra = (event) => {
+    const value =event.target.value;
+    setSelectedOptions8(value);
+  }; 
+
+  /*Funciones de Listar Nacionalidad 😄*/
+  const [openNacionalidad, setOpenNacionalidad] = React.useState(false);
+  // const [IDMarca, setIDMarca]=React.useState({});
+  const peticionNacionalidad=async()=>{
+    await axios.get( process.env.REACT_APP_API_ENDPOINT+'ListarMarca/'+IDMarca+'/'+IDFabricante,{
+      headers: {'Authorization': `Bearer ${token}`},
+    })
+    .then(response=>{
+      setNacionalidad(response.data.data)
+    }).catch(error=>{
+      console.log(error.response.data.message);
+      console.log(error.response.status);
+      console.log(error.response.headers);
+    })
+  }
+  const handleCloseNacionalidad =()=>{
+    setOpenNacionalidad(false);
+      // if(selectedOptions4.length>=1){
+      //   peticionFabricantes();
+      // }
+  }
+  const handleOpenNacionalidad = () => {
+    setOpenNacionalidad(true);
+    //  if(selectedOptions4.length>=1){
+    //     setSelectedOptions4([]); setSelectedOptions5([]); setSelectedOptions6([])
+    //   }
+  };
+  const handleNacionalidad = (event) => {
+    const value =event.target.value;
+    setSelectedOptions8(value);
+  }; 
 
   /*Funciones de Listar Indicadores 😄*/
   const [openIndicadores, setOpenIndicadores] = React.useState(false);
@@ -801,7 +960,42 @@ export default function DATA(){
                     openSegmentos={openSegmentos}
                     handleSegmentos={handleSegmentos}
                     handleCloseSegmentos={handleCloseSegmentos}
-                    handleOpenSegmentos={handleOpenMarcas}
+                    handleOpenSegmentos={handleOpenSegmentos}
+                    //Tamaño
+                    Tamanno={Tamanno}
+                    selectedOptions9={selectedOptions9}
+                    openTamanno={openTamanno}
+                    handleTamanno={handleTamanno}
+                    handleCloseTamanno={handleCloseTamanno}
+                    handleOpenTamanno={handleOpenTamanno} 
+                    //Rango Tamaño
+                    RTamanno={RTamanno}
+                    selectedOptions10={selectedOptions10}
+                    openRTamanno={openRTamanno}
+                    handleRTamanno={handleRTamanno}
+                    handleCloseRTamanno={handleCloseRTamanno}
+                    handleOpenRTamanno={handleOpenRTamanno}  
+                    //Producto
+                    Productos={Productos}
+                    selectedOptions11={selectedOptions11}
+                    openProductos={openProducto}
+                    handleProductos={handleProducto}
+                    handleCloseProductos={handleCloseProducto}
+                    handleOpenProductos={handleOpenProducto} 
+                    //Codigo de Barras
+                    CBarra={CBarras}
+                    selectedOptions12={selectedOptions12}
+                    openCBarras={openCBarra}
+                    handleCBarras={handleCBarra}
+                    handleCloseCBarras={handleCloseCBarra}
+                    handleOpenCBarras={handleOpenCBarra}  
+                    //Nacionalidad
+                    Nacionalidad={Nacionalidad}
+                    selectedOptions13={selectedOptions13}
+                    openNacionalidad={openNacionalidad}
+                    handleNacionalidad={handleNacionalidad}
+                    handleCloseNacionalidad={handleCloseNacionalidad}
+                    handleOpenNacionalidad={handleOpenNacionalidad}                
                   />
                   <SelectIndicadores
                     Indicadores={Indicadores}

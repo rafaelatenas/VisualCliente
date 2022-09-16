@@ -30,7 +30,7 @@ export function SelectPeriodos(data){
     ))
     
     const OptionPeriodoSearch = displayedOptions.map((option) => (
-        <MenuItem key={option.id} value={option.id}>
+        <MenuItem key={option.id} value={option.id} className='items'>
             <ListItem>
                 <Checkbox checked={(data.selectedOptions1.indexOf(option) > -1)} />
             </ListItem>
@@ -71,7 +71,7 @@ export function SelectPeriodos(data){
                             return(<ListItemText sx={{'& span':{fontSize:'10px'}}} primary={`Todas Marcadas (${selected.length})`}/>)
                         }else if(selected.length<3){
                             return(
-                                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                                <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: 0.5 }}>
                                     {selected.map((value) =>{
                                         for (let h = 0; h < data.data.length; h++) {
                                             const element = data.data[h];
@@ -93,7 +93,7 @@ export function SelectPeriodos(data){
                         autoFocus={data.focus}
                         InputProps={{
                             startAdornment: (
-                            <InputAdornment position="start" style={{width: '10%',height: '100%'}}>
+                            <InputAdornment position="start" style={{width: 'auto',height: '100%'}}>
                                 <Search />
                             </InputAdornment>
                             )
@@ -230,6 +230,12 @@ export function SelectAtributos(atributos){
     const {Fabricante,selectedOptions6,openFabricante,handleFabricante,handleCloseFabricante,handleOpenFabricante,setIDFabricante}=atributos
     const {Marcas,handleCloseMarcas,handleMarcas,handleOpenMarcas,openMarcas,selectedOptions7}=atributos
     const {Segmentos,handleCloseSegmentos,handleSegmentos,handleOpenSegmentos,openSegmentos,selectedOptions8}=atributos
+    const {Tamanno,handleCloseTamanno,handleTamanno,handleOpenTamanno,openTamanno,selectedOptions9}=atributos
+    const {RTamanno,handleCloseRTamanno,handleRTamanno,handleOpenRTamanno,openRTamanno,selectedOptions10}=atributos
+    const {Productos,handleCloseProducto,handleProducto,handleOpenProducto,openProducto,selectedOptions11}=atributos
+    const {CBarra,handleCloseCBarra,handleCBarra,handleOpenCBarra,openCBarra,selectedOptions12}=atributos
+    const {Nacionalidad,handleCloseNacionalidad,handleNacionalidad,handleOpenNacionalidad,openNacionalidad,selectedOptions13}=atributos
+
 
 
     const classes = useStyles();
@@ -331,93 +337,49 @@ export function SelectAtributos(atributos){
                     selectedOptions8={selectedOptions8}
                     isSelected={isSelected}
                 />
-
-
-
-<FormControl sx={{width: '100%'}} className={classes.formControl} error={isSelected.selectedOptions4}>
-                    <InputLabel className="inputLabel input" id="mutiple-select-label">Cesta</InputLabel>
-                    <Select 
-                        labelId="mutiple-select-label"
-                        multiple
-                        value={selectedOptions4}
-                        open={openCesta}
-                        onChange={handleCesta}
-                        onClose={handleCloseCesta}
-                        onOpen={handleOpenCesta}
-                        renderValue={(selected) =>{
-                            setIDCesta(selected)
-                            if(selected.length>=3 && selected.length<Cesta.length){
-                            return(<ListItemText sx={{fontSize:'1em'}} primary={`${selected.length} Opciones Marcadas`}/>)
-                            }else if(selected.length === Cesta.length){
-                            return(<ListItemText sx={{fontSize:'1em'}} primary={`Todas Marcadas (${selected.length})`}/>)
-                            }else if(selected.length<3){
-                            return(
-                            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                                {selected.map((value) =>{
-                                for (let h = 0; h < Cesta.length; h++) {
-                                const element = Cesta[h];
-                                    if(element.id === value){
-                                    return(<Chip style={{fontSize:'.7em'}} key={value} label={element.nombre}/>)
-                                    }
-                                }
-                                })}
-                            </Box>
-                            )
-                            }
-                        }}
-                        MenuProps={MenuProps}
-                    >
-                        <MenuItem value="all" classes={{root: isAllSelectCesta ? classes.selectedAll : ""}} style={{ display: showMenuItem.Cesta ? "flex" : "none" }}>
-                            <ListItem>
-                                <Checkbox
-                                    classes={{ indeterminate: classes.indeterminateColor }}
-                                    checked={isAllSelectCesta}
-                                    indeterminate={ selectedOptions4.length > 0 && selectedOptions4.length < Cesta.length}
-                                />
-                            </ListItem>
-                            <ListItemText primary="Marcar Todo" classes={{ primary: classes.selectAllText }}/>
-                        </MenuItem >
-                        {OptionCesta}
-                    </Select>
-                </FormControl>
-            
-                <SelectCategorias
-                    selectedOptions5={selectedOptions5}
-                    openCategoria={openCategoria}
-                    handleCategoria={handleCategoria}
-                    handleCloseCategoria={handleCloseCategoria}
-                    handleOpenCategoria={handleOpenCategoria}
-                    Categorias={Categorias}
-                    isAllSelectCategoria={isAllSelectCategoria}
-                    setIDCategoria={setIDCategoria}
+                <SelectTamanno
+                    Tamanno={Tamanno}
+                    handleCloseTamanno={handleCloseTamanno}
+                    handleTamanno={handleTamanno}
+                    handleOpenTamanno={handleOpenTamanno}
+                    openTamanno={openTamanno}
+                    selectedOptions9={selectedOptions9}
                     isSelected={isSelected}
                 />
-                <SelectFabricantes
-                    Fabricante={Fabricante}
-                    selectedOptions6={selectedOptions6}
-                    openFabricante={openFabricante}
-                    handleFabricante={handleFabricante}
-                    handleCloseFabricante={handleCloseFabricante}
-                    handleOpenFabricante={handleOpenFabricante}
-                    setIDFabricante={setIDFabricante}
+                <SelectRTamanno
+                    RTamanno={RTamanno}
+                    handleCloseRTamanno={handleCloseRTamanno}
+                    handleRTamanno={handleRTamanno}
+                    handleOpenRTamanno={handleOpenRTamanno}
+                    openRTamanno={openRTamanno}
+                    selectedOptions10={selectedOptions10}
                     isSelected={isSelected}
                 />
-                <SelectMarcas
-                    Marcas={Marcas}
-                    handleCloseMarcas={handleCloseMarcas}
-                    handleMarcas={handleMarcas}
-                    handleOpenMarcas={handleOpenMarcas}
-                    openMarcas={openMarcas}
-                    selectedOptions7={selectedOptions7}
+                <SelectProducto
+                    Productos={Productos}
+                    handleCloseProducto={handleCloseProducto}
+                    handleProducto={handleProducto}
+                    handleOpenProducto={handleOpenProducto}
+                    openProducto={openProducto}
+                    selectedOptions11={selectedOptions11}
                     isSelected={isSelected}
                 />
-                <SelectSegmentos
-                    Segmentos={Segmentos}
-                    handleCloseSegmentos={handleCloseSegmentos}
-                    handleSegmentos={handleSegmentos}
-                    handleOpenSegmentos={handleOpenSegmentos}
-                    openSegmentos={openSegmentos}
-                    selectedOptions8={selectedOptions8}
+                <SelectCBarra
+                    CBarra={CBarra}
+                    handleCloseCBarra={handleCloseCBarra}
+                    handleCBarra={handleCBarra}
+                    handleOpenCBarra={handleOpenCBarra}
+                    openCBarra={openCBarra}
+                    selectedOptions12={selectedOptions12}
+                    isSelected={isSelected}
+                />
+                <SelectNacionalidad
+                    Nacionalidad={Nacionalidad}
+                    handleCloseNacionalidad={handleCloseNacionalidad}
+                    handleNacionalidad={handleNacionalidad}
+                    handleOpenNacionalidad={handleOpenNacionalidad}
+                    openNacionalidad={openNacionalidad}
+                    selectedOptions13={selectedOptions13}
                     isSelected={isSelected}
                 />
             </Box>
@@ -634,6 +596,261 @@ export function SelectSegmentos(Marca){
                 MenuProps={MenuProps}
             >
                 {OptionSegmentos}
+            </Select>
+        </FormControl>
+    )
+}
+
+export function SelectTamanno(Tamannos){
+    const {Tamanno,handleCloseTamanno,handleTamanno,handleOpenTamanno,openTamanno,selectedOptions9,isSelected}=Tamannos
+    const classes = useStyles();
+    const OptionTamanno = Tamanno.map((option) => (
+        <MenuItem key={option.id} value={(option.id)}>
+            <ListItem>
+                <Checkbox checked={(selectedOptions9.indexOf(option.id) > -1) || (selectedOptions9.indexOf(option) > -1)} />
+            </ListItem>
+            <ListItemText primary={option.nombre}/>
+        </MenuItem>
+    ))
+    return(
+        <FormControl sx={{width: '100%'}} className={classes.formControl} error={isSelected.selectedOptions9}>
+            <InputLabel className="inputLabel input" id="mutiple-select-label">Tamaño</InputLabel>
+            <Select 
+                labelId="mutiple-select-label"
+                multiple
+                value={selectedOptions9}
+                open={openTamanno}
+                onChange={handleTamanno}
+                onClose={handleCloseTamanno}
+                onOpen={handleOpenTamanno}
+                renderValue={(selected) =>{
+                    // setIDFabricante(selected)
+                    if(selected.length>=3 && selected.length<Tamanno.length){
+                        return(<ListItemText sx={{fontSize:'15px'}} primary={`${selected.length} Opciones Marcadas`}/>)
+                    }else if(selected.length === Tamanno.length){
+                        return(<ListItemText sx={{fontSize:'15px'}} primary={`Todas Marcadas (${selected.length})`}/>)
+                    }else if(selected.length<3){
+                        return(
+                            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                                {selected.map((value) =>{
+                                    for (let h = 0; h <Tamanno.length; h++) {
+                                        const element =Tamanno[h];
+                                        if(element.id === value){
+                                            return(<Chip style={{fontSize:'.7em'}} key={value} label={element.nombre}/>)
+                                        }
+                                    }
+                                })}
+                            </Box>
+                           )
+                    }
+                }}
+                MenuProps={MenuProps}
+            >
+                {OptionTamanno}
+            </Select>
+        </FormControl>
+    )
+}
+
+export function SelectRTamanno(rTamannos){
+    const {RTamanno,handleCloseRTamanno,handleRTamanno,handleOpenRTamanno,openRTamanno,selectedOptions10,isSelected}=rTamannos
+    const classes = useStyles();
+    const OptionRTamanno = RTamanno.map((option) => (
+        <MenuItem key={option.id} value={(option.id)}>
+            <ListItem>
+                <Checkbox checked={(selectedOptions10.indexOf(option.id) > -1) || (selectedOptions10.indexOf(option) > -1)} />
+            </ListItem>
+            <ListItemText primary={option.nombre}/>
+        </MenuItem>
+    ))
+    return(
+        <FormControl sx={{width: '100%'}} className={classes.formControl} error={isSelected.selectedOptions10}>
+            <InputLabel className="inputLabel input" id="mutiple-select-label">Rango Tamaño</InputLabel>
+            <Select 
+                labelId="mutiple-select-label"
+                multiple
+                value={selectedOptions10}
+                open={openRTamanno}
+                onChange={handleRTamanno}
+                onClose={handleCloseRTamanno}
+                onOpen={handleOpenRTamanno}
+                renderValue={(selected) =>{
+                    // setIDFabricante(selected)
+                    if(selected.length>=3 && selected.length<RTamanno.length){
+                        return(<ListItemText sx={{fontSize:'15px'}} primary={`${selected.length} Opciones Marcadas`}/>)
+                    }else if(selected.length === RTamanno.length){
+                        return(<ListItemText sx={{fontSize:'15px'}} primary={`Todas Marcadas (${selected.length})`}/>)
+                    }else if(selected.length<3){
+                        return(
+                            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                                {selected.map((value) =>{
+                                    for (let h = 0; h <RTamanno.length; h++) {
+                                        const element =RTamanno[h];
+                                        if(element.id === value){
+                                            return(<Chip style={{fontSize:'.7em'}} key={value} label={element.nombre}/>)
+                                        }
+                                    }
+                                })}
+                            </Box>
+                           )
+                    }
+                }}
+                MenuProps={MenuProps}
+            >
+                {OptionRTamanno}
+            </Select>
+        </FormControl>
+    )
+}
+
+export function SelectProducto(Product){
+    const {Productos,handleCloseProducto,handleProducto,handleOpenProducto,openProducto,selectedOptions11,isSelected}=Product
+    const classes = useStyles();
+    const OptionProducto = Productos.map((option) => (
+        <MenuItem key={option.id} value={(option.id)}>
+            <ListItem>
+                <Checkbox checked={(selectedOptions11.indexOf(option.id) > -1) || (selectedOptions11.indexOf(option) > -1)} />
+            </ListItem>
+            <ListItemText primary={option.nombre}/>
+        </MenuItem>
+    ))
+    return(
+        <FormControl sx={{width: '100%'}} className={classes.formControl} error={isSelected.selectedOptions11}>
+            <InputLabel className="inputLabel input" id="mutiple-select-label">Producto</InputLabel>
+            <Select 
+                labelId="mutiple-select-label"
+                multiple
+                value={selectedOptions11}
+                open={openProducto}
+                onChange={handleProducto}
+                onClose={handleCloseProducto}
+                onOpen={handleOpenProducto}
+                renderValue={(selected) =>{
+                    // setIDFabricante(selected)
+                    if(selected.length>=3 && selected.length<Productos.length){
+                        return(<ListItemText sx={{fontSize:'15px'}} primary={`${selected.length} Opciones Marcadas`}/>)
+                    }else if(selected.length === Productos.length){
+                        return(<ListItemText sx={{fontSize:'15px'}} primary={`Todas Marcadas (${selected.length})`}/>)
+                    }else if(selected.length<3){
+                        return(
+                            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                                {selected.map((value) =>{
+                                    for (let h = 0; h <Productos.length; h++) {
+                                        const element =Productos[h];
+                                        if(element.id === value){
+                                            return(<Chip style={{fontSize:'.7em'}} key={value} label={element.nombre}/>)
+                                        }
+                                    }
+                                })}
+                            </Box>
+                           )
+                    }
+                }}
+                MenuProps={MenuProps}
+            >
+                {OptionProducto}
+            </Select>
+        </FormControl>
+    )
+}
+
+export function SelectCBarra(Marca){
+    const {CBarra,handleCloseCBarra,handleCBarra,handleOpenCBarra,openCBarra,selectedOptions12,isSelected}=Marca
+    const classes = useStyles();
+    const OptionCBarra = CBarra.map((option) => (
+        <MenuItem key={option.id} value={(option.id)}>
+            <ListItem>
+                <Checkbox checked={(selectedOptions12.indexOf(option.id) > -1) || (selectedOptions12.indexOf(option) > -1)} />
+            </ListItem>
+            <ListItemText primary={option.nombre}/>
+        </MenuItem>
+    ))
+    return(
+        <FormControl sx={{width: '100%'}} className={classes.formControl} error={isSelected.selectedOptions12}>
+            <InputLabel className="inputLabel input" id="mutiple-select-label">Código de Barra</InputLabel>
+            <Select 
+                labelId="mutiple-select-label"
+                multiple
+                value={selectedOptions12}
+                open={openCBarra}
+                onChange={handleCBarra}
+                onClose={handleCloseCBarra}
+                onOpen={handleOpenCBarra}
+                renderValue={(selected) =>{
+                    // setIDFabricante(selected)
+                    if(selected.length>=3 && selected.length<CBarra.length){
+                        return(<ListItemText sx={{fontSize:'15px'}} primary={`${selected.length} Opciones Marcadas`}/>)
+                    }else if(selected.length === CBarra.length){
+                        return(<ListItemText sx={{fontSize:'15px'}} primary={`Todas Marcadas (${selected.length})`}/>)
+                    }else if(selected.length<3){
+                        return(
+                            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                                {selected.map((value) =>{
+                                    for (let h = 0; h <CBarra.length; h++) {
+                                        const element =CBarra[h];
+                                        if(element.id === value){
+                                            return(<Chip style={{fontSize:'.7em'}} key={value} label={element.nombre}/>)
+                                        }
+                                    }
+                                })}
+                            </Box>
+                           )
+                    }
+                }}
+                MenuProps={MenuProps}
+            >
+                {OptionCBarra}
+            </Select>
+        </FormControl>
+    )
+}
+
+export function SelectNacionalidad(Marca){
+    const {Nacionalidad,handleCloseNacionalidad,handleNacionalidad,handleOpenNacionalidad,openNacionalidad,selectedOptions13,isSelected}=Marca
+    const classes = useStyles();
+    const OptionNacionalidad = Nacionalidad.map((option) => (
+        <MenuItem key={option.id} value={(option.id)}>
+            <ListItem>
+                <Checkbox checked={(selectedOptions13.indexOf(option.id) > -1) || (selectedOptions13.indexOf(option) > -1)} />
+            </ListItem>
+            <ListItemText primary={option.nombre}/>
+        </MenuItem>
+    ))
+    return(
+        <FormControl sx={{width: '100%'}} className={classes.formControl} error={isSelected.selectedOptions13}>
+            <InputLabel className="inputLabel input" id="mutiple-select-label">Nacionalidad</InputLabel>
+            <Select 
+                labelId="mutiple-select-label"
+                multiple
+                value={selectedOptions13}
+                open={openNacionalidad}
+                onChange={handleNacionalidad}
+                onClose={handleCloseNacionalidad}
+                onOpen={handleOpenNacionalidad}
+                renderValue={(selected) =>{
+                    // setIDFabricante(selected)
+                    if(selected.length>=3 && selected.length<Nacionalidad.length){
+                        return(<ListItemText sx={{fontSize:'15px'}} primary={`${selected.length} Opciones Marcadas`}/>)
+                    }else if(selected.length === Nacionalidad.length){
+                        return(<ListItemText sx={{fontSize:'15px'}} primary={`Todas Marcadas (${selected.length})`}/>)
+                    }else if(selected.length<3){
+                        return(
+                            <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                                {selected.map((value) =>{
+                                    for (let h = 0; h <Nacionalidad.length; h++) {
+                                        const element =Nacionalidad[h];
+                                        if(element.id === value){
+                                            return(<Chip style={{fontSize:'.7em'}} key={value} label={element.nombre}/>)
+                                        }
+                                    }
+                                })}
+                            </Box>
+                           )
+                    }
+                }}
+                MenuProps={MenuProps}
+            >
+                {OptionNacionalidad}
             </Select>
         </FormControl>
     )
