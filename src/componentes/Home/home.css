@@ -70,12 +70,29 @@ main {
             max-Width:95px;
         }
         .paperUser{
-            position:relative;
-            left:100%;
-            top:-90%;
-            width:20%;
-            height:65%;
-            border-radius:1.5em 0 0 1.5em !important;
+            position: relative;
+            left: 97%;
+            top: -90%;
+            width: 20%;
+            height: 65%;
+            border-radius: 1.5em 0 0 1.5em !important;
+            align-items: center;
+            display: flex;
+            max-width: 200px;
+            justify-content: space-around;
+        }
+        .paperUser div{
+            width: 90%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+        }
+        .paperUser div img{
+            width: auto;
+            height: 80%;
+        }
+        .paperUser div p{
+            font-size: 14px;
         }
         .speddialCSS div button{
             min-width: 50px;
@@ -185,8 +202,9 @@ main {
             top:-90%;
             width:20%;
             height:65%;
-            border-radius:1.5em 0 0 1.5em !important;
+            border-radius:2.1em 0 0 2.1em !important;
             max-height: 95px;
+            max-width: 310px;
         }
         .speddialCSS button, .speddialCSS div button{
             min-width: 70px;

@@ -816,7 +816,6 @@ export default function DATA(){
       setSearchText({[name]:value})
       setFocus(true)
     }
-    console.log(render)
   /*Controles de Select All*/
     const [showMenuItem, setShowMenuItem] = React.useState({
       periodo:false,
@@ -840,7 +839,6 @@ export default function DATA(){
     }
     const isAllSelectPeriodo = data.length > 0 && selectedOptions1.length === render.length;
     const isAllSelectCategoria = Categorias.length > 0 && selectedOptions4.length === Categorias.length;
-  console.log(chipData)
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />

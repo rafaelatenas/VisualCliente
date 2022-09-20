@@ -35,13 +35,6 @@
     overflow: visible;
 }
 
-.MuiFormControl-root.MuiFormControl-fullWidth.MuiTextField-root.css-wb57ya-MuiFormControl-root-MuiTextField-root , .MuiFormControl-root.css-q8hpuo-MuiFormControl-root {
-    overflow: visible !important;
-    margin-top: 2%;
-    height: 8%;
-    min-height: 27px;
-}
-
 .MuiAccordionDetails-root.css-15v22id-MuiAccordionDetails-root {
     padding: 0 !important;
 }
@@ -106,7 +99,7 @@ li.MuiListItem-root.MuiListItem-gutters {
         border-top-left-radius: 1.5em;
         border-bottom-left-radius: 1.5em;
         display: grid;
-        grid-template-columns: 1fr 25%;
+        grid-template-columns: 1fr 20%;
         grid-template-rows: 15% 70% 15%;
         -webkit-box-shadow: -4px 6px 20px 0px rgba(0, 0, 0, 0.49);
         box-shadow: -4px 6px 20px 0px rgba(0, 0, 0, 0.49);

@@ -134,14 +134,17 @@ function Login (){
     }
   }
   const handleChangeLogin = value => {
+    console.log(value)
     if (value !== null) {
       isHuman()
     }
   }
   const isHuman=async()=>{
     var responseKey = {captcha: recaptchaRef.current.getValue()};
-    axios.post(process.env.REACT_APP_API_ENDPOINT+"ValidationCaptcha",responseKey)
+    // axios.post(process.env.REACT_APP_API_ENDPOINT+"ValidationCaptcha",responseKey)
+    axios.post("localhost:3005/VisorCliente_Api/ValidationCaptcha",responseKey)
     .then(result => {
+      console.log(result)
     switch (result.data.success) {
       case true:
         setValidToken(true)

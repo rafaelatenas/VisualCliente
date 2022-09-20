@@ -23,7 +23,6 @@ export function DrawerComponent(abrir){
     const handleDirectURL=(e)=>{
         window.location = `/home/${e.target.innerText}`
     }
-    console.log(open)
     return(
         <Drawer
             style={{borderTopRightRadius:'.5em',borderButtomRightRadius:'.5em'}}

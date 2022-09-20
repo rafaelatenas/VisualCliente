@@ -21,8 +21,8 @@ import RankingCategorias from '../../landing/Images/IconATSRankingCategorias.png
 import TopProveedores from '../../landing/Images/IconATSTopProveedores.jpg'
 import TopSkus from '../../landing/Images/IconATSTopSkus.png'
 import { useAuthContext } from "../context/authContext";
-import { KeyboardArrowDownRounded } from "@material-ui/icons";
 
+import temporal from "../../landing/Images/provisional.png"
 
 const reports = [
     {key: 1 , name:'WOP', icon:RServices, style:{height:'90%'}},
@@ -105,7 +105,12 @@ export function HeaderDesktop(props){
                     </SpeedDial>
                 </Box>
             </Box>    
-            <Paper className={`paperUser boxSecundaryLogo`}></Paper>
+            <Paper className={`paperUser boxSecundaryLogo`}>
+                <div>
+                    <img src={temporal} alt="Logo de Usuario" title=""/>
+                    <Typography>Nombre de Usuario</Typography>
+                </div>
+            </Paper>
         </Container>
     )
 }
@@ -220,7 +225,6 @@ export function CarouselFooter(props){
     ]
     const [paused, setPaused]=useState(false)
     const newReports =  reports.concat(reports)
-    console.log(newReports)
     // console.log(reports.push(reports.shift()))
     const showContinue=()=>{
         newReports.concat(reports);

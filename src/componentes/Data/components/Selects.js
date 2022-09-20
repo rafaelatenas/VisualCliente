@@ -240,7 +240,7 @@ export function SelectAtributos(atributos){
 
     const classes = useStyles();
     const OptionCesta = Cesta.map((option) => (
-        <MenuItem key={option.id} value={(option.id)}>
+        <MenuItem key={option.id} value={(option.id)} className='items'>
             <ListItem>
                 <Checkbox checked={(selectedOptions4.indexOf(option.id) > -1) || (selectedOptions4.indexOf(option) > -1)} />
             </ListItem>
@@ -390,7 +390,7 @@ export function SelectCategorias(categoria) {
     const {selectedOptions5,isSelected,openCategoria,handleCategoria,handleCloseCategoria,handleOpenCategoria,Categorias,isAllSelectCategoria,setIDCategoria}=categoria
     const classes = useStyles();
     const OptionCategoria = Categorias.map((option) => (
-        <MenuItem key={option.id} value={(option.id)}>
+        <MenuItem key={option.id} value={(option.id)} className='items'>
             <ListItem>
                 <Checkbox checked={(selectedOptions5.indexOf(option.id) > -1) || (selectedOptions5.indexOf(option) > -1)} />
             </ListItem>
@@ -432,7 +432,7 @@ export function SelectCategorias(categoria) {
                 MenuProps={MenuProps}
             >
                 {/* style={{ display: showMenuItem.Cesta ? "flex" : "none" }} */}
-                <MenuItem value="all" classes={{root: isAllSelectCategoria? classes.selectedAll : ""}}>
+                <MenuItem value="all" classes={{root: isAllSelectCategoria? classes.selectedAll : ""}} className='items'>
                     <ListItem>
                         <Checkbox
                             classes={{ indeterminate: classes.indeterminateColor }}
@@ -452,7 +452,7 @@ export function SelectFabricantes(Fabricantes){
     const {Fabricante,isSelected,selectedOptions5,openFabricante,handleFabricante,handleCloseFabricante,handleOpenFabricante,setIDFabricante}=Fabricantes
     const classes = useStyles();
     const OptionFabricante = Fabricante.map((option) => (
-        <MenuItem key={option.id} value={(option.id)}>
+        <MenuItem key={option.id} value={(option.id)} className='items'>
             <ListItem>
                 <Checkbox checked={(selectedOptions5.indexOf(option.id) > -1) || (selectedOptions5.indexOf(option) > -1)} />
             </ListItem>
@@ -503,7 +503,7 @@ export function SelectMarcas(Marca){
     const {Marcas,handleCloseMarcas,handleMarcas,handleOpenMarcas,openMarcas,selectedOptions7,isSelected}=Marca
     const classes = useStyles();
     const OptionMarcas = Marcas.map((option) => (
-        <MenuItem key={option.id} value={(option.id)}>
+        <MenuItem key={option.id} value={(option.id)} className='items'>
             <ListItem>
                 <Checkbox checked={(selectedOptions7.indexOf(option.id) > -1) || (selectedOptions7.indexOf(option) > -1)} />
             </ListItem>
@@ -554,7 +554,7 @@ export function SelectSegmentos(Marca){
     const {Segmentos,handleCloseSegmentos,handleSegmentos,handleOpenSegmentos,openSegmentos,selectedOptions8,isSelected}=Marca
     const classes = useStyles();
     const OptionSegmentos = Segmentos.map((option) => (
-        <MenuItem key={option.id} value={(option.id)}>
+        <MenuItem key={option.id} value={(option.id)} className='items'>
             <ListItem>
                 <Checkbox checked={(selectedOptions8.indexOf(option.id) > -1) || (selectedOptions8.indexOf(option) > -1)} />
             </ListItem>
@@ -605,7 +605,7 @@ export function SelectTamanno(Tamannos){
     const {Tamanno,handleCloseTamanno,handleTamanno,handleOpenTamanno,openTamanno,selectedOptions9,isSelected}=Tamannos
     const classes = useStyles();
     const OptionTamanno = Tamanno.map((option) => (
-        <MenuItem key={option.id} value={(option.id)}>
+        <MenuItem key={option.id} value={(option.id)} className='items'>
             <ListItem>
                 <Checkbox checked={(selectedOptions9.indexOf(option.id) > -1) || (selectedOptions9.indexOf(option) > -1)} />
             </ListItem>
@@ -656,7 +656,7 @@ export function SelectRTamanno(rTamannos){
     const {RTamanno,handleCloseRTamanno,handleRTamanno,handleOpenRTamanno,openRTamanno,selectedOptions10,isSelected}=rTamannos
     const classes = useStyles();
     const OptionRTamanno = RTamanno.map((option) => (
-        <MenuItem key={option.id} value={(option.id)}>
+        <MenuItem key={option.id} value={(option.id)} className='items'>
             <ListItem>
                 <Checkbox checked={(selectedOptions10.indexOf(option.id) > -1) || (selectedOptions10.indexOf(option) > -1)} />
             </ListItem>
@@ -707,7 +707,7 @@ export function SelectProducto(Product){
     const {Productos,handleCloseProducto,handleProducto,handleOpenProducto,openProducto,selectedOptions11,isSelected}=Product
     const classes = useStyles();
     const OptionProducto = Productos.map((option) => (
-        <MenuItem key={option.id} value={(option.id)}>
+        <MenuItem key={option.id} value={(option.id)} className='items'>
             <ListItem>
                 <Checkbox checked={(selectedOptions11.indexOf(option.id) > -1) || (selectedOptions11.indexOf(option) > -1)} />
             </ListItem>
@@ -758,7 +758,7 @@ export function SelectCBarra(Marca){
     const {CBarra,handleCloseCBarra,handleCBarra,handleOpenCBarra,openCBarra,selectedOptions12,isSelected}=Marca
     const classes = useStyles();
     const OptionCBarra = CBarra.map((option) => (
-        <MenuItem key={option.id} value={(option.id)}>
+        <MenuItem key={option.id} value={(option.id)} className='items'>
             <ListItem>
                 <Checkbox checked={(selectedOptions12.indexOf(option.id) > -1) || (selectedOptions12.indexOf(option) > -1)} />
             </ListItem>
@@ -809,7 +809,7 @@ export function SelectNacionalidad(Marca){
     const {Nacionalidad,handleCloseNacionalidad,handleNacionalidad,handleOpenNacionalidad,openNacionalidad,selectedOptions13,isSelected}=Marca
     const classes = useStyles();
     const OptionNacionalidad = Nacionalidad.map((option) => (
-        <MenuItem key={option.id} value={(option.id)}>
+        <MenuItem key={option.id} value={(option.id)} className='items'>
             <ListItem>
                 <Checkbox checked={(selectedOptions13.indexOf(option.id) > -1) || (selectedOptions13.indexOf(option) > -1)} />
             </ListItem>
@@ -964,5 +964,12 @@ const useStyles = makeStyles((theme) => ({
     },
     botonReportes:{
         color:'#fff !important', borderRadius:'1.5em !important', width:'90% !important', margin:'4% 0 2% !important', padding:'10% !important'
+    },
+    formControl:{
+        overflow:' visible !important',
+        marginTop: '2%',
+        height: '8%',
+        minHeight: 27,
+        maxHeight:35
     }
 }))
