@@ -306,7 +306,7 @@ componentDidMount(){
 // };
 
 
-  render(){ console.log(this.state.activeStep)
+  render(){
     return(
       <Box sx={{ width: '85%', height:'90%'}}>
         <Stepper orientation="vertical" activeStep={this.state.activeStep}>
@@ -386,27 +386,6 @@ componentDidMount(){
           </Paper>
         ):''}
       </Box>
-        //     <form id="msform">
-        //     <ul id="progressbar">
-        //         <li className="active"></li>
-        //         <li></li>
-        //     </ul>
-            
-        //     <fieldset>
-        //         <h2 className="fs-title">Datos del Usuario</h2>
-                
-        //     </fieldset>
-        //     <fieldset>
-        //         <h2 className="fs-title">Crear Usuario</h2>
-        //         <input type="number" name="Id_Cliente" placeholder="Id Cliente" value={this.state.Id_Cliente} onChange={this.handleUserInput}/>
-        //         <input  type="email" name="correo" placeholder="Correo" value={this.state.correo} onChange={this.handleUserInput}/>
-        //         <input  type="text" name="usuario" placeholder="Usuario" value={this.state.usuario} onChange={this.handleUserInput}/>
-
-        //         <input className={`${this.errorClass(this.state.formErrors.password)}`} type="password" name="password" placeholder="Contraseña" value={this.state.password} onChange={this.handleUserInput}/>
-        //         <input type="button" name="previous" className="previous action-button" value="Previous" />
-        //         <input type="submit" disabled={!this.state.formValid} name="submit" className="submit action-button" onClick={this.enviarDatos}  value="Submit" />
-        //     </fieldset>
-        // </form> 
         )
   }
 }

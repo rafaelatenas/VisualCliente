@@ -10,6 +10,7 @@ import { Edit , Delete, Check, Close, ErrorOutline} from '@material-ui/icons';
 import { DataGrid, GridToolbarDensitySelector,GridToolbarFilterButton,GridToolbarContainer, GridToolbarExportContainer, GridToolbarExport} from '@mui/x-data-grid';
 import { writeXLSX, writeFile } from 'xlsx';
 import * as XLSX from 'xlsx/xlsx.mjs';
+import { PanoramaVerticalSelect } from '@mui/icons-material';
 
 
 //* Componentes de Estilos *//
@@ -294,6 +295,25 @@ const styles= useStyles();
       headerName: 'Fecha  de Creación',
       headerAlign:'center',
       align: 'center',
+      renderCell:(params) => {
+        const {value}=params
+        console.log(value)
+        const [year, month, day] = value.split("T")[0].split('-');
+        const [hour, min] = value.split("T")[1].split(':')
+        const date = [day, month, year].join('/');
+        if (hour>12) {
+          const time = [hour-12,min].join(':')+' '+'PM';
+          return(
+            <p>{date+' '+time}</p>
+          )
+        }else{
+          const time = [hour,min].join(':')+' '+'AM';
+          return(
+            <p>{date+' '+time}</p>
+          )
+        }
+        
+      }
     },
     { field: 'Ind_Us_Activo',
       headerName: 'Usuario Confirmado',
@@ -378,6 +398,7 @@ const styles= useStyles();
             rows={data}
             getRowId={(row) => row.id_usuario}
             components={{Toolbar: CustomToolbar,}}
+            className='Grilla'
           ></DataGrid>
         </div>
       </div>

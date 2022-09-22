@@ -868,7 +868,7 @@ export function SelectIndicadores(Indicador){
       ))
     return(
         <Box style={{border:'.1em solid rgb(87 87 86/11%)',background:'#f7f4f4', borderRadius:'1.5em', width:'15%', height:'90%', display:'flex', flexDirection:'column', alignItems:'center'}}>
-            <InputLabel style={{width:'auto', padding:'10% 0 5%'}}>Indicadores</InputLabel>
+            <InputLabel style={{width:'auto', padding:'10% 0 5%'}}>INDICADORES</InputLabel>
             <FormControl sx={{width: '100%'}} className={classes.formControl} error={isSelected.selectedOptions14}>
                 <InputLabel className="inputLabel input" id="mutiple-select-label">Indicadores</InputLabel>
                 <Select 

@@ -14,7 +14,6 @@ import { DrawerComponent, BotonUsuario, CardComponents, HeaderComponent } from '
 import { SelectCanales, SelectAtributos, SelectIndicadores, SelectPeriodos, SelectRegiones,  } from './components/Selects';
 import Alert from '@mui/material/Alert';
 import { useNavigate } from 'react-router-dom';
-
 const MySwal = withReactContent(Swal)
 const toast = MySwal.mixin({
   toast: true,

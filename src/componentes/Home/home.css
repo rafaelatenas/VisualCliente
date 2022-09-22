@@ -242,7 +242,7 @@ main {
                 transform: translateX(0);
            }
             100% {
-                transform: translateX(calc(-310px*7));
+                transform: translateX(calc(-310px*8));
            }
        }
        .BoxCarousel .slide {
@@ -314,7 +314,7 @@ main {
             transform: translateX(0);
        }
         100% {
-            transform: translateX(calc(-200px * 14));
+            transform: translateX(calc(-200px * 16));
        }
    }
     .BoxCarousel {
@@ -389,7 +389,7 @@ main {
             transform: translateX(0);
        }
         100% {
-            transform: translateX(calc(-180px*14));
+            transform: translateX(calc(-180px*16));
        }
    }
 }

@@ -111,6 +111,7 @@ function Login (){
       })
       if (result.data.success === true) {
         login();
+        console.log(result.data)
       }
     }).catch(err => {
         if(err.response) {
@@ -120,11 +121,11 @@ function Login (){
           console.log(err.response.headers);        
         
         }       
-          // toast.fire({
-          //   icon:'error',
-          //   title:''+err.response.data.message+'',
-          //   confirmButtonText: `Ok`,
-          // })    
+          toast.fire({
+            icon:'error',
+            title:''+err.response.data.message+'',
+            confirmButtonText: `Ok`,
+          })    
     })
   }
     /* Validación Google */

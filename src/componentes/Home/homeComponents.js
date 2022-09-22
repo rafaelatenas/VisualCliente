@@ -20,6 +20,9 @@ import Omnibus from '../../landing/Images/IconATSOmnibus.png'
 import RankingCategorias from '../../landing/Images/IconATSRankingCategorias.png'
 import TopProveedores from '../../landing/Images/IconATSTopProveedores.jpg'
 import TopSkus from '../../landing/Images/IconATSTopSkus.png'
+//------//
+import WOP from '../../landing/Images/ATSLogoWop.png'
+import MoneyMarket from '../../landing/Images/ATSLogoMoneyMarket.png'
 import { useAuthContext } from "../context/authContext";
 
 import temporal from "../../landing/Images/provisional.png"
@@ -214,14 +217,24 @@ const usefooterMovile = makeStyles (()=>({
 
 export function CarouselFooter(props){
     const styles = useStylesCarousel();
+    // const reports = [
+    //     {name:'NSE', key:1, icon:NSE},
+    //     {name:"Top Sku's", key:2, icon:TopSkus},
+    //     {name:'Top Proveedores', key:3, icon:TopProveedores},
+    //     {name:'Categorías', key:4, icon:Categorias},
+    //     {name:'Ranking Categorías', key:5, icon:RankingCategorias},
+    //     {name:'Omnibus', key:6, icon:Omnibus},
+    //     {name:'Canales y Cadenas', key:7, icon:CanalesCadenas},
+    // ]
     const reports = [
-        {name:'NSE', key:1, icon:NSE},
-        {name:"Top Sku's", key:2, icon:TopSkus},
-        {name:'Top Proveedores', key:3, icon:TopProveedores},
-        {name:'Categorías', key:4, icon:Categorias},
-        {name:'Ranking Categorías', key:5, icon:RankingCategorias},
-        {name:'Omnibus', key:6, icon:Omnibus},
-        {name:'Canales y Cadenas', key:7, icon:CanalesCadenas},
+        {name:'Home Pantry', key:1, icon:HPantry, style:{height:'85%', width:'auto'}},
+        {name:"Scanning", key:2, icon:RScanning, style:{height:'80%', width:'auto'}},
+        {name:'Money Market', key:3, icon:MoneyMarket, style:{height:'90%', minWidth:100, minHeight:120, padding:'5%'}},
+        {name:'Medicinas', key:4, icon:Categorias, style:{height:'90%', width:'auto'}},
+        {name:'WOP', key:5, icon:WOP, style:{height:'90%'}},
+        {name:'CI', key:6, icon:CI, style:{height:'90%', minWidth:100, minHeight:120, padding:'5%'}},
+        {name:'Omnibus', key:7, icon:Omnibus, style:{height:'85%', width:'auto'}},
+        {name:'CENSO', key:8, icon:CanalesCadenas, style:{height:'85%', width:'auto'}},
     ]
     const [paused, setPaused]=useState(false)
     const newReports =  reports.concat(reports)
@@ -244,7 +257,7 @@ export function CarouselFooter(props){
                 <IconButton className="slide" key={report.key}  onClick={(e)=>props.PropsFooterOpenModal(report.key, e)}>
                     <Card className={styles.Card}>
                         <CardContent className={styles.containerCard}>
-                            <img style={{width:'auto', height:'100%'}} src={report.icon} alt={`Icono Atenas Grupo Consultor. Reporte ${report.name}`} title=""/>    
+                            <img style={report.style} src={report.icon} alt={`Icono Atenas Grupo Consultor. Reporte ${report.name}`} title=""/>    
                         </CardContent>
                     </Card>
                 </IconButton>
@@ -261,6 +274,9 @@ const useStylesCarousel = makeStyles (()=>({
     containerCard:{
         width:'100%',
         height:'100%',
-        padding:'0% !important'
+        padding:'0% !important',
+        display:'flex',
+        alignItems:'center',
+        justifyContent:'center'
     }
 }))

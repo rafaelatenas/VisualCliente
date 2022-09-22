@@ -97,7 +97,7 @@ const styles= useStyles();
     })
     .then(response=>{
       setData(response.data.data);
-      console.log(response.data.data)
+      console.log(response.data)
     }).catch(error=>{
       console.log(error.response.data.message);
       console.log(error.response.status);
