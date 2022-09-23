@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
 import './App.css';
-import DataReport from './componentes/Data/data';
+import DataReport from './componentes/manegadorRetail/data';
 import Home from './componentes/Home/Home'
 import Login from './componentes/login/login'
 import ActivarUsuario from './componentes/gestionClaves/activarUsuario';
@@ -13,9 +13,10 @@ import CambiarClave from './componentes/gestionClaves/cambiarClave';
 import NotFound from './componentes/notfount';
 import Admin from './componentes/Admin/admin';
 import Usuario from './componentes/Admin/componentesAdmin/usuario/Usuario';
-import Report from './componentes/Data/VisualizarData';
+import Report from './componentes/manegadorRetail/VisualizarData';
 import Perfiles from './componentes/Admin/componentesAdmin/perfil/Perfiles';
 import Administrator from './componentes/context/administrator';
+import MoneyMarket from './componentes/moneyMarket/MoneyMarket';
 
 function App() {
   const {IdUser} = useAuthContext();
@@ -36,6 +37,7 @@ function App() {
               <Route index element={<Home/>} />
               <Route path='/retailservices/home/data/'  element={<DataReport/>} />
               <Route exact path='/retailservices/home/report' element={<Report/>}/>
+              <Route exact path='/retailservices/home/MoneyMarket' element={<MoneyMarket/>}/>
               <Route exact path="/retailservices/home/changepassword/:email" element={<CambiarClave/>}/>
               
               {/* 

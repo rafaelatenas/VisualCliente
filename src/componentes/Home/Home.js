@@ -15,7 +15,6 @@ class Home extends React.Component {
             textModal:'',
             idPopover:'',
             anchorEl:null,
-            
         }
     }
     LinkWopUser='reportId=d16796f7-2f73-430a-bfdd-5652f2900811&autoAuth=true&ctid=60d43e61-27f8-4543-b6ff-2b0d08f50018&config=eyJjbHVzdGVyVXJsIjoiaHR0cHM6Ly93YWJpLXBhYXMtMS1zY3VzLXJlZGlyZWN0LmFuYWx5c2lzLndpbmRvd3MubmV0LyJ9';
@@ -50,7 +49,7 @@ class Home extends React.Component {
         {id:1, key:1, target:'_black', url:`//app.powerbi.com/reportEmbed?${this.LinkWopUser}`, padre:'WOP', name:'Resumen Táctico'},
         // {id:1, key:2, target:'_black', url:`//app.powerbi.com/reportEmbed?${this.LinkWopUser}`, padre:'WOP', name:'WOP'},
         {id:2, key:2, target:'', url:'/retailservices/home/data', padre:'Retail Scanning', name:'Reporte Retail Scanning'},
-        {id:2, key:3, target:'', url:'', padre:'Retail Scanning', name:'Money Market'},
+        {id:2, key:3, target:'', url:'/retailservices/home/MoneyMarket', padre:'Retail Scanning', name:'Money Market'},
         {id:3, key:4, target:'', url:'', padre:'Home Pantry', name:'Canales y Cadenas'},
         {id:3, key:5, target:'', url:'', padre:'Home Pantry', name:'Medicinas'},
         {id:4, key:6, target:'', url:'', padre:'CI', name:'Imagen Retail'},

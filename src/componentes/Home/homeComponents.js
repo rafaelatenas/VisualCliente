@@ -232,7 +232,7 @@ export function CarouselFooter(props){
         {name:'Money Market', key:3, icon:MoneyMarket, style:{height:'90%', minWidth:100, minHeight:120, padding:'5%'}},
         {name:'Medicinas', key:4, icon:Categorias, style:{height:'90%', width:'auto'}},
         {name:'WOP', key:5, icon:WOP, style:{height:'90%'}},
-        {name:'CI', key:6, icon:CI, style:{height:'90%', minWidth:100, minHeight:120, padding:'5%'}},
+        {name:'CI', key:6, icon:CI, style:{height:'85%', width:'auto'}},
         {name:'Omnibus', key:7, icon:Omnibus, style:{height:'85%', width:'auto'}},
         {name:'CENSO', key:8, icon:CanalesCadenas, style:{height:'85%', width:'auto'}},
     ]
