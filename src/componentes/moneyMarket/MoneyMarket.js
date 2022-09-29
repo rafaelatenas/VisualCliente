@@ -304,36 +304,6 @@ export default function DATA(){
       setOpenRegiones(false);
       setShowMenuItem({categoria:true})
     };
-
-       /*Funcion onChange del combo SubRegiones */
-      const [SubRegion, setSubRegion]= React.useState([])
-      const peticionSubRegiones=async(value)=>{
-      await axios.get( process.env.REACT_APP_API_ENDPOINT+'ListarSubRegion/'+value,{
-        headers: {
-          'Authorization': `Bearer ${token}`
-        },
-      })
-      .then(response=>{
-        setSubRegion(response.data.data);
-        console.log(response.data)
-        console.log(response.data.data)
-      }).catch(error=>{
-        console.log(error.response.data.message);
-        console.log(error.response.status);
-        console.log(error.response.headers);
-      })
-      }
-      const handleSubRegiones = (event) => {
-      const value =event.target.value;
-      setSelectedSubregiones(value);
-      };
-      const OptionSubRegion = SubRegion.map((item)=>(
-      <MenuItem key={item.id} value={item.id}>
-        <Checkbox checked={selectedOptions2.indexOf(item.id) > -1} />
-        <ListItemText sx={{fontSize:'1em'}} primary={item.nombre} />
-      </MenuItem>
-      ))
-
     
   /*Funciones de Listar Cestas 😄*/
     const [openCesta, setOpenCesta] = React.useState(false);
@@ -874,7 +844,6 @@ export default function DATA(){
         >{bodyMySelect}
         </Modal>
         <Main open={open}>
-          {alerta}
           <div className="Contenedordata">
             <section className="container-of-table">
               <HeaderComponent/>
@@ -882,8 +851,8 @@ export default function DATA(){
                  <button id='save' style={{width:'35%'}} variant="contained" onClick={abrirCerrarModalSelect}>Guardar</button>
                  <button id='process' style={{width:'35%'}} variant="contained" onClick={comprobarCombos}>Procesar</button>
                </Stack>
-           </section>
-         </div>
+            </section>
+          </div>
        </Main>
        <Button className='atras'
          style={{background: 'transparent',position:'fixed',border:'0.2em solid #fff',minWidth:'50px', borderRadius:'50%'}}

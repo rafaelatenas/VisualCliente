@@ -189,7 +189,7 @@ export function SelectRegiones(region){
       ))
     return(
         <Box style={{border:'.1em solid rgb(87 87 86/11%)',background:'#f7f4f4', borderRadius:'1.5em', width:'15%', height:'90%', display:'flex', flexDirection:'column', alignItems:'center'}}>
-            <InputLabel style={{width:'auto', padding:'10% 0 5%'}}>REGIONES</InputLabel>
+            <InputLabel style={{width:'auto', padding:'10% 0 5%'}}>ÁREAS</InputLabel>
             <FormControl sx={{width: '100%'}} className={classes.formControl} error={region.isSelected.selectedOptions3}>
                 <InputLabel className="inputLabel" id="mutiple-select-label">Regiones</InputLabel>
                 <Select 
@@ -249,7 +249,7 @@ export function SelectAtributos(atributos){
     ))
     return(
         <Box style={{border:'.1em solid rgb(87 87 86/11%)',background:'#f7f4f4', borderRadius:'1.5em', width:'15%', height:'90%', display:'flex', flexDirection:'column', alignItems:'center',justifyContent:'space-evenly'}}>
-            <InputLabel style={{width:'auto', padding:'10% 0 5%'}}>ATRIBUTOS</InputLabel>
+            <InputLabel style={{width:'auto', padding:'10% 0 5%'}}>PRODUCTOS</InputLabel>
             <Box className="boxAtributos">
                 <FormControl sx={{width: '100%'}} className={classes.formControl} error={isSelected.selectedOptions4}>
                     <InputLabel className="inputLabel input input" id="mutiple-select-label">Cesta</InputLabel>
