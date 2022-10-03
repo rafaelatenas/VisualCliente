@@ -28,7 +28,7 @@ import { useAuthContext } from "../context/authContext";
 import temporal from "../../landing/Images/provisional.png"
 
 const reports = [
-    {key: 1 , name:'WOP', icon:RServices, style:{height:'90%'}},
+    {key: 1 , name:'WOP', icon:WOP, style:{height:'90%'}},
     {key: 2 , name:'Retail Scanning', icon:RScanning, style:{height:'80%', width:'80%'}},
     {key: 3 , name:'Home Pantry', icon:HPantry, style:{height:'85%'}},
     {key: 4 , name:'CI', icon:CI, style:{height:'90%', minWidth:100, minHeight:120, padding:'5%'}},
@@ -141,7 +141,12 @@ const useStyles = makeStyles(()=>({
         height:'60%',
         overflow:'visible',
         '& div button':{
-            boxShadow:'none'
+            boxShadow:'none',
+            backgroundColor:'#1976d2',
+            borderRadius:'50%'
+        },
+        '& div button svg':{
+            fill:'#fff'
         }
     },
 }))

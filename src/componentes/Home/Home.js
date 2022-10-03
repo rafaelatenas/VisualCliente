@@ -28,7 +28,7 @@ class Home extends React.Component {
     /*Controles Popover */
     reports=[
         {id:1, key:1, target:'', url:'/retailservices/home/data', padre:'WOP', name:'Manejador Retail'},
-        {id:1, key:2, target:'', url:'', padre:'WOP', name:'WOP'},
+        {id:1, key:2, target:'_black', url:`//app.powerbi.com/reportEmbed?${this.LinkWopUser}`, padre:'WOP', name:'WOP'},
         {id:1, key:3, target:'', url:'', padre:'WOP', name:'Ranking de Tiendas'},
         {id:1, key:4, target:'', url:'', padre:'WOP', name:'Panel de Cadenas'},
         {id:2, key:5, target:'', url:'', padre:'Retail Scanning', name:'Reporte Retail Scanning'},
