@@ -1,9 +1,10 @@
 import * as React from 'react';
 import '../manegadorRetail/data.css'
+import './moneyMarket.css'
 import { styled } from '@mui/material/styles';
-import { Box,CssBaseline, ListItemText, IconButton} from '@material-ui/core';
-import {ArrowBack} from '@material-ui/icons';
-import { MenuItem, Stack, Button, TextField,  Checkbox } from '@mui/material';
+import { Box,CssBaseline, ListItemText, IconButton, AccordionSummary, InputLabel} from '@material-ui/core';
+import {Add, ArrowBack, ExpandMore, Minimize} from '@material-ui/icons';
+import { MenuItem, Stack, Button, TextField,  Checkbox, Accordion, AccordionDetails, Typography, AccordionActions, FormControl, Select } from '@mui/material';
 import { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import {Modal} from '@material-ui/core';
@@ -808,6 +809,13 @@ export default function DATA(){
     }
     const isAllSelectPeriodo = data.length > 0 && selectedOptions1.length === render.length;
     const isAllSelectCategoria = Categorias.length > 0 && selectedOptions4.length === Categorias.length;
+
+    const [expanded, setExpanded] = React.useState('panel1');
+
+    const handleChange = (panel) => (event, isExpanded) => {
+      setExpanded(panel);
+      console.log(panel)
+    };
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -847,10 +855,63 @@ export default function DATA(){
           <div className="Contenedordata">
             <section className="container-of-table">
               <HeaderComponent/>
-               <Stack direction="row" className={styles.buttons}>
-                 <button id='save' style={{width:'35%'}} variant="contained" onClick={abrirCerrarModalSelect}>Guardar</button>
-                 <button id='process' style={{width:'35%'}} variant="contained" onClick={comprobarCombos}>Procesar</button>
+              <Box className='boxAccordion'>
+                <Accordion expanded={expanded === 'panel1'} onClick={handleChange('panel1')} sx={{borderRadius:'unset', width:'95%','& .MuiCollapse-root.MuiCollapse-vertical.MuiCollapse-entered.css-pwcg7p-MuiCollapse-root':{overflowY:'auto !important'}}}>
+                  <AccordionSummary aria-controls="panel1bh-content" id="panel1bh-header">
+                    <Typography>Money Market</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails >
+                    <Box className='boxDetails'>
+                      {[{id:0,nombre:'Semana'},{id:1,nombre:'Retail'},{id:2,nombre:'Estado'},{id:3,nombre:'Tienda'},{id:4,nombre:'Categoría'},{id:5,nombre:'Fabricante'},{id:6,nombre:'Marca'},{id:7,nombre:'Código de Barras'},{id:8,nombre:'Moneda'}].map((item)=>(
+                        <Box key={item.id} className='element'>
+                          <FormControl className='formControl'>
+                            <InputLabel size={'small'} className="inputLabel" id="mutiple-select-label">{item.nombre}</InputLabel>
+                            <Select
+                              labelId="mutiple-select-label"
+                            >
+                              {[0,1,2,3,4,5,6,7,8].map((item1)=>(
+                                <MenuItem key={item1}>
+                                  <ListItemText>{item1}</ListItemText>
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          </FormControl>
+                        </Box>
+                      ))}
+                    </Box>
+                  </AccordionDetails>
+                  <AccordionActions>
+                    <Stack direction="row" className={styles.buttons}>
+                 <button id='save' style={{width:'35%', padding:8}} variant="contained" onClick={abrirCerrarModalSelect}>Guardar</button>
+                 <button id='process' style={{width:'35%', padding:8}} variant="contained" onClick={comprobarCombos}>Procesar</button>
                </Stack>
+                  </AccordionActions>
+                </Accordion>
+                
+                <Accordion expanded={expanded === 'panel2'} onClick={handleChange('panel2')} sx={{borderRadius:'unset', width:'95%','& .MuiCollapse-root.MuiCollapse-vertical.MuiCollapse-entered.css-pwcg7p-MuiCollapse-root':{overflowY:'auto !important'}}}>
+                  <AccordionSummary aria-controls="panel2d-content" id="panel2d-header">
+                    <Typography>Collapsible Group Item #2</Typography>
+                  </AccordionSummary>
+                  <AccordionDetails>
+                    <Typography>
+                      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse
+                      malesuada lacus ex, sit amet blandit leo lobortis eget. Lorem ipsum dolor
+                      sit amet, consectetur adipiscing elit. Suspendisse malesuada lacus ex,
+                      sit amet blandit leo lobortis eget.
+                      abrirCerrarModalSelecta
+                      autoAutha
+                      a
+                      a
+                      abrirCerrarModalSelecta
+                      abrirCerrarModalSelecta
+                      a
+                      a
+
+                    </Typography>
+                  </AccordionDetails>
+                </Accordion>
+              </Box>
+               
             </section>
           </div>
        </Main>
@@ -905,7 +966,7 @@ const useStyles = makeStyles((theme) => ({
     width:'90%', borderRadius:'1.5em', background:'transparent'
   },
   buttons:{
-    position: 'absolute', top: '90%', right: '3%', width: '30%', justifyContent:'space-around',height:'5%'
+    width: '30%', justifyContent:'space-around',height:'100%'
   },
   botonReportes:{
     color:'#fff !important', borderRadius:'1.5em !important', width:'90% !important', margin:'4% 0 2% !important', padding:'10% !important'

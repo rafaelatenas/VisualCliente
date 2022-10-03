@@ -1,0 +1,10 @@
+.accordion{
+    width: 85%;
+}
+.stackButtons{
+    width: 25%;
+    max-width: 300px;
+    display: inline-flex !important;
+    flex-direction: row !important;
+    justify-content: space-around;
+}

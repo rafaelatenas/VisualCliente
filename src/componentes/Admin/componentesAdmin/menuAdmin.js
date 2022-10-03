@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import Logoatenas from "../../../landing/Images/ats_logo.png";
 import '../admin.css';
 import Tooltip from '@material-ui/core/Tooltip';
-import { Person,Group } from "@material-ui/icons";
+import { Person,Group, ViewCarousel, ViewCarouselRounded } from "@material-ui/icons";
 import { ExitToApp } from "@material-ui/icons";
 import { useAuthContext } from "../../context/authContext";
 export default function MenuAdmin (){
@@ -31,8 +31,8 @@ export default function MenuAdmin (){
                         </Tooltip>
                     </li>
                     <li>
-                        <Tooltip title="Salir" arrow placement="right">
-                            <Link to={'/retailservices/management/panel/user'}><ExitToApp style={{fill:'#000000'}}></ExitToApp></Link>
+                        <Tooltip title="Carrusel" arrow placement="right">
+                            <Link to={'/retailservices/management/panel/carousel'}><ViewCarouselRounded style={{fill:'#000000'}}></ViewCarouselRounded></Link>
                         </Tooltip>
                     </li>
                     <li>

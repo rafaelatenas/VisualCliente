@@ -32,7 +32,7 @@ class Home extends React.Component {
         {id:1, key:3, target:'', url:'', padre:'WOP', name:'Ranking de Tiendas'},
         {id:1, key:4, target:'', url:'', padre:'WOP', name:'Panel de Cadenas'},
         {id:2, key:5, target:'', url:'', padre:'Retail Scanning', name:'Reporte Retail Scanning'},
-        {id:2, key:6, target:'', url:'', padre:'Retail Scanning', name:'Money Market'},
+        {id:2, key:6, target:'', url:'/retailservices/home/MoneyMarket', padre:'Retail Scanning', name:'Money Market'},
         {id:2, key:7, target:'', url:'', padre:'Retail Scanning', name:'Categories Performance'},
         {id:2, key:8, target:'', url:'', padre:'Retail Scanning', name:'Suppliers Performance'},
         {id:2, key:9, target:'', url:'', padre:'Retail Scanning', name:'Skus Performance'},

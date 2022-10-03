@@ -17,6 +17,7 @@ import Report from './componentes/manegadorRetail/VisualizarData';
 import Perfiles from './componentes/Admin/componentesAdmin/perfil/Perfiles';
 import Administrator from './componentes/context/administrator';
 import MoneyMarket from './componentes/moneyMarket/MoneyMarket';
+import ItemCarousel from './componentes/Admin/componentesAdmin/carousel/crearItem';
 
 function App() {
   const {IdUser} = useAuthContext();
@@ -51,6 +52,8 @@ function App() {
               <Route index element={<Admin/>}/>
               <Route exact path='/retailservices/management/panel/user' element={<Usuario/>}/>
               <Route exact path='/retailservices/management/panel/perfil' element={<Perfiles/>}/>
+              <Route exact path='/retailservices/management/panel/carousel' element={<ItemCarousel/>}/>
+
             </Route>
 
             {/*Ruta No Encontrada*/}

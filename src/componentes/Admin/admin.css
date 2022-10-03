@@ -1,7 +1,4 @@
-/* .BOX{
-    width: 100%;
-    height: 100%;
-} */
+
 .cuerpo-modificable{
     width: 95%;
     height: 100%;
@@ -19,6 +16,7 @@
     min-height: 100vh;
     width: 5%;
     background-color: #fff;
+    z-index: 100;
 }
 .sidebar-navigation ul {
     text-align: center;

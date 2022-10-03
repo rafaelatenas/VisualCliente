@@ -259,7 +259,7 @@ export function CarouselFooter(props){
     return(
         <Box className="CardsCarousel" style={paused ? {animationPlayState: 'paused'}:{animationPlayState:'running'}} onMouseEnter={()=>setPaused(true)} onMouseLeave={()=>setPaused(false)}>
             {newReports.map((report)=>(
-                <IconButton className="slide" key={report.key}  onClick={(e)=>props.PropsFooterOpenModal(report.key, e)}>
+                <IconButton className="slide" key={report.key}  onClick={(e)=>props.PropsFooterOpenModal(e.target.currentSrc)}>
                     <Card className={styles.Card}>
                         <CardContent className={styles.containerCard}>
                             <img style={report.style} src={report.icon} alt={`Icono Atenas Grupo Consultor. Reporte ${report.name}`} title=""/>    
