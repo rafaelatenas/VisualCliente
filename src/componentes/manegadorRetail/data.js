@@ -233,8 +233,6 @@ export default function DATA(){
       })
       .then(response=>{
         setCanal(response.data.data);
-        console.log(response.data)
-        console.log(response.data.data)
       }).catch(error=>{
         console.log(error.response.data.message);
         console.log(error.response.status);
@@ -279,8 +277,6 @@ export default function DATA(){
       })
       .then(response=>{
         setRegion(response.data.data);
-        console.log(response.data)
-        console.log(response.data.data)
       }).catch(error=>{
         console.log(error.response.data.message);
         console.log(error.response.status);

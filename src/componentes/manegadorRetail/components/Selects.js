@@ -9,7 +9,6 @@ const containsText = (text, searchText) =>text.toString().toLowerCase().indexOf(
 
 export function SelectPeriodos(data){
     const {datos,focus,handleChangeSearch,handleClosePeriodo,handleOpenPeriodo,handlePeriodos,isAllSelectPeriodo,isSelected,openPeriodo,render,searchText,selectedOptions1,setFocus,setRender,setSearchText,showMenuItem,tiempoReporte}=data
-    console.log(data)
     const classes = useStyles();
 
     const displayedOptions = useMemo(
@@ -125,8 +124,6 @@ export function SelectPeriodos(data){
 
 export function SelectCanales(canal){
     const classes = useStyles();
-    console.log(canal)
-
 
     var ID_Cliente = sessionStorage.getItem('Id_Cliente')
     const OptionCanales = canal.canal.map((item) => (
