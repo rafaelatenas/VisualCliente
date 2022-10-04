@@ -271,7 +271,7 @@ export function SelectAtributos(atributos){
         </MenuItem>
     ))
     return(
-        <Box style={{border:'.1em solid rgb(87 87 86/11%)',background:'#f7f4f4', borderRadius:'1.5em', width:'15%', height:'90%', display:'flex', flexDirection:'column', alignItems:'center',justifyContent:'space-evenly'}}>
+        <Box style={{border:'.1em solid rgb(87 87 86/11%)',background:'#f7f4f4', borderRadius:'1.5em', width:'15%', height:'90%', display:'flex', flexDirection:'column', alignItems:'center',justifyContent:'space-between'}}>
             <InputLabel style={{width:'auto', padding:'10% 0 5%'}}>PRODUCTOS</InputLabel>
             <Box className="boxAtributos">
                 <FormControl sx={{width: '100%'}} className={classes.formControl} error={isSelected.selectedOptions4}>
