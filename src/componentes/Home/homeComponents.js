@@ -221,7 +221,7 @@ const usefooterMovile = makeStyles (()=>({
 }))
 
 export function CarouselFooter(props){
-    const styles = useStylesCarousel();
+    
     // const reports = [
     //     {name:'NSE', key:1, icon:NSE},
     //     {name:"Top Sku's", key:2, icon:TopSkus},
@@ -232,15 +232,24 @@ export function CarouselFooter(props){
     //     {name:'Canales y Cadenas', key:7, icon:CanalesCadenas},
     // ]
     const reports = [
-        {name:'Home Pantry', key:1, icon:HPantry, style:{height:'85%', width:'auto'}},
+       {name:'Home Pantry', key:1, icon:HPantry, style:{height:'85%', width:'auto'}},
         {name:"Scanning", key:2, icon:RScanning, style:{height:'80%', width:'auto'}},
         {name:'Money Market', key:3, icon:MoneyMarket, style:{height:'90%', minWidth:100, minHeight:120, padding:'5%'}},
         {name:'Medicinas', key:4, icon:Categorias, style:{height:'90%', width:'auto'}},
         {name:'WOP', key:5, icon:WOP, style:{height:'90%'}},
         {name:'CI', key:6, icon:CI, style:{height:'85%', width:'auto'}},
         {name:'Omnibus', key:7, icon:Omnibus, style:{height:'85%', width:'auto'}},
-        {name:'CENSO', key:8, icon:CanalesCadenas, style:{height:'85%', width:'auto'}},
+        {name:'CENSO', key:8, icon:CanalesCadenas, style:{height:'85%', width:'auto'}}, 
+        // {name:'Home Pantry', key:1, icon:HPantry, style:{height:'85%', width:'auto'}},
+        // {name:"Scanning", key:2, icon:RScanning, style:{height:'80%', width:'auto'}},
+        // {name:'Money Market', key:3, icon:MoneyMarket, style:{height:'90%', minWidth:100, minHeight:120, padding:'5%'}},
+        // {name:'Medicinas', key:4, icon:Categorias, style:{height:'90%', width:'auto'}},
+        // {name:'WOP', key:5, icon:WOP, style:{height:'90%'}},
+        // {name:'CI', key:6, icon:CI, style:{height:'85%', width:'auto'}},
+        // {name:'Omnibus', key:7, icon:Omnibus, style:{height:'85%', width:'auto'}},
+        // {name:'CENSO', key:8, icon:CanalesCadenas, style:{height:'85%', width:'auto'}},
     ]
+    const styles = useStylesCarousel(reports.length)()
     const [paused, setPaused]=useState(false)
     const newReports =  reports.concat(reports)
     // console.log(reports.push(reports.shift()))
@@ -253,13 +262,10 @@ export function CarouselFooter(props){
     //     setTimeout(showContinue(), 2000);
     // }else{setTimeout(showContinue(), 2000);}
     
-
-    
-    
     return(
-        <Box className="CardsCarousel" style={paused ? {animationPlayState: 'paused'}:{animationPlayState:'running'}} onMouseEnter={()=>setPaused(true)} onMouseLeave={()=>setPaused(false)}>
+        <Box className={`CardsCarousel ${styles.CardsCarousel}`} style={paused ? {animationPlayState: 'paused'}:{animationPlayState:'running'}} onMouseEnter={()=>setPaused(true)} onMouseLeave={()=>setPaused(false)}>
             {newReports.map((report)=>(
-                <IconButton className="slide" key={report.key}  onClick={(e)=>props.PropsFooterOpenModal(e.target.currentSrc)}>
+                <IconButton className="slide" key={report.key}  onClick={()=>props.PropsFooterOpenModal(report.icon)}>
                     <Card className={styles.Card}>
                         <CardContent className={styles.containerCard}>
                             <img style={report.style} src={report.icon} alt={`Icono Atenas Grupo Consultor. Reporte ${report.name}`} title=""/>    
@@ -270,8 +276,7 @@ export function CarouselFooter(props){
         </Box>
     )
 }
-
-const useStylesCarousel = makeStyles (()=>({
+const useStylesCarousel = (newReports)=> makeStyles( theme => ({ 
     Card:{
         width:'100%',
         height:'100%',
@@ -283,5 +288,13 @@ const useStylesCarousel = makeStyles (()=>({
         display:'flex',
         alignItems:'center',
         justifyContent:'center'
+    },
+    '@keyframes scroll': {
+        from: { transform: 'translateX(0)' },
+        to: { transform: `translateX(calc(-180px*${newReports*2.125}))` },
+      },
+    CardsCarousel:{
+        animation: `$scroll ${newReports*2.25}s linear infinite`,
+        animationPlayState:'running'
     }
-}))
+ })); 

@@ -343,12 +343,10 @@ main {
         top: 0;
    }
     .BoxCarousel .CardsCarousel {
-        animation: scroll 40s linear infinite;
         display: flex;
         width: 100%;
         height: 100%;
         overflow: visible;
-        animation-play-state: running;
    }
     .BoxCarousel .slide {
         height: 100%;

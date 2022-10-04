@@ -8,22 +8,69 @@ import './items.css'
 
 export default function ItemCarousel(){
 
+    const handleChange =(e)=>{
+        const boton = e.currentTarget 
+        const container = e.target.nextElementSibling
+        const HeightCreacion = container.clientHeight === 0
+        switch (HeightCreacion) {
+            case true:
+                setTimeout(() => {
+                    boton.style.borderBottomRightRadius= '0em';
+                    boton.style.borderBottomLeftRadius= '0em';
+                }, 100);
+                container.style.borderTopRightRadius= '0em'
+                container.style.borderTopLeftRadius= '0em'
+                container.style.borderBottomRightRadius= '0.3em'
+                container.style.borderBottomLeftRadius= '0.3em'
+                container.animate([
+                    {height:'75%'},
+                    ],{fill:'forwards',duration: 1400});
+                break;
+            case false:
+                setTimeout(() => {
+                    boton.style.borderBottomRightRadius= '0.3em';
+                    boton.style.borderBottomLeftRadius= '0.3em';
+                }, 1400);
+                container.animate([
+                {height:'0%'},
+                ],{fill:'forwards',duration: 1400});
+                break;
+            default:
+                break;
+        }
+        const contenedorConsulta = document.querySelector('.contenedor-consultas')
+        const botonConsulta = document.querySelector('.consultar')
+        const contenedorCreacion = document.querySelector('.contenedor-creacion')
+        const botonCreacion = document.querySelector('.crear')
+        if (contenedorCreacion.clientHeight > 0) {
+            setTimeout(() => {
+                botonCreacion.style.borderBottomRightRadius= '0.3em';
+                botonCreacion.style.borderBottomLeftRadius= '0.3em';
+            }, 1400);
+            contenedorCreacion.animate([
+                {height:'0%'},
+                ],{fill:'forwards',duration: 1400});
+            }
+        if (contenedorConsulta.clientHeight > 0) {
+            setTimeout(() => {
+                botonConsulta.style.borderBottomRightRadius= '0.3em';
+                botonConsulta.style.borderBottomLeftRadius= '0.3em';
+            }, 1400);
+            contenedorConsulta.animate([
+                {height:'0%'},
+            ],{fill:'forwards',duration: 1400});
+        }
+    }
+
     const [nombre, setNombre]=useState('')
     const [descripcion, setDescripcion]=useState('')
     const [imagen, setImagen]=useState('')
     const [fondo, setFondo]=useState('')
     const [openModal, setOpenModal]=useState(false)
-    const [textModal, setTextModal]=useState('')
-
-
-
-    const [expanded, setExpanded] = React.useState('panel1');
-
-    const handleChange = (panel) => (event, isExpanded) => {
-      setExpanded(isExpanded ? panel : false);
-    };
+    const [textModal, setTextModal]=useState()
 
     const handleOpenModal=(datos)=>{
+        console.log(datos)
         setTextModal(datos)
         setOpenModal(true)
     }
@@ -64,72 +111,41 @@ export default function ItemCarousel(){
         setImagen('')
         setNombre('')
         setDescripcion('')
-        setExpanded(false)
     }
     return(
         <div className="Contenedorcompleto">
             <aside style={{display:"none"} } id="BoxActualizar"></aside>
             <MenuAdmin/>
-            <section id="pantalla" className="contenedor-opciones">
-                <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}
-                        className="accordion" sx={{'& .MuiCollapse-root.MuiCollapse-vertical.MuiCollapse-entered.css-pwcg7p-MuiCollapse-root':{overflowY:'auto !important'},
-                        '& .css-smkl36-MuiCollapse-wrapper':{
-                            height: 210
-                        }, '& .MuiAccordion-region':{height:'100%', display:'flex', justifyContent:'center'}}}
-                    >
-                        <AccordionSummary
-                        expandIcon={<ExpandMoreRounded/>}
-                        aria-controls="panel1bh-content"
-                        id="panel1bh-header"
-                        >
-                        <Typography sx={{ width: '33%', flexShrink: 0 }}>
-                            Nuevo Elemento del Carrusel
-                        </Typography>
-                        </AccordionSummary>
-                        <AccordionDetails sx={{display: 'flex',justifyContent:'space-evenly', flexWrap: 'wrap', aligItems:'flex-start'}}>
-                            <Tooltip title='Agregar Imagen al Carrusel'>
-                                <Button variant="contained" component="label" sx={{height:'25%'}}>
-                                    <AddPhotoAlternateRounded/>
-                                    <input type="file" accept='image/png, image/jpeg' name='imagen' hidden onChange={(e)=>handlePhoto(e)}/>
-                                </Button>
-                            </Tooltip>
-                            <Tooltip title='Agregar Imagen de Fondo'>
-                                <Button variant="contained" component="label" sx={{height:'25%'}}>
-                                    <WallpaperRounded/>
-                                    <input type="file" accept='image/png, image/jpeg' name='fondo' hidden onChange={(e)=>handlePhoto(e)}/>
-                                </Button>
-                            </Tooltip>
-                            <TextField id="outlined-required" label="Nombre" type='text' name='nombre' value={nombre} onChange={(e)=>handleText(e)}/>
-                            <TextField id="outlined-required" label="Descripción" type='text' name='descripcion'
-                                multiline maxRows={4} value={descripcion} onChange={(e)=>handleText(e)} sx={{'& div textarea':{minHeight:128,minWidth:217}}}/>
-                            <Stack className="stackButtons">
-                                <Button variant="outlined" color="error" onClick={handleCancel}>Cancelar</Button>
-                                <Button variant="contained" color="success">Crear</Button>
-                            </Stack>
-                        </AccordionDetails>
-                </Accordion>
-                <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}
-                        className="accordion" sx={{'& .MuiCollapse-root.MuiCollapse-vertical.MuiCollapse-entered.css-pwcg7p-MuiCollapse-root':{overflowY:'auto !important'},
-                        '& .css-smkl36-MuiCollapse-wrapper':{
-                            height: 210
-                        }, '& .MuiAccordion-region':{height:'100%', display:'flex', justifyContent:'center'}}}
-                    >
-                        <AccordionSummary
-                            expandIcon={<ExpandMoreRounded/>}
-                            aria-controls="panel2bh-content"
-                            id="panel2bh-header"
-                        >
-                            <Typography sx={{ width: '33%', flexShrink: 0 }}>Listar elementos del Carrusel</Typography>
-                        </AccordionSummary>
-                        <AccordionDetails>
-                            <Typography>
-                                Donec placerat, lectus sed mattis semper, neque lectus feugiat lectus,
-                                varius pulvinar diam eros in elit. Pellentesque convallis laoreet
-                                laoreet.
-                            </Typography>
-                        </AccordionDetails>
-                </Accordion>
-
+            <section id="pantalla" className="contenedor-opciones" style={{height:'70%'}}>
+                <Box className="accordion">
+                    <Box className="boton crear" onClick={(e)=>handleChange(e)} sx={{width:'80%', height:'13%'}}></Box>
+                    <Box id="boxCrear" className="contenedor boxContentItem contenedor-creacion" sx={{width:'80%'}}>
+                        <Tooltip title='Agregar Imagen al Carrusel'>
+                            <Button variant="contained" component="label" sx={{height:'25%'}}>
+                                <AddPhotoAlternateRounded/>
+                                <input type="file" accept='image/png, image/jpeg' name='imagen' hidden onChange={(e)=>handlePhoto(e)}/>
+                            </Button>
+                        </Tooltip>
+                        <Tooltip title='Agregar Imagen de Fondo'>
+                            <Button variant="contained" component="label" sx={{height:'25%'}}>
+                                <WallpaperRounded/>
+                                <input type="file" accept='image/png, image/jpeg' name='fondo' hidden onChange={(e)=>handlePhoto(e)}/>
+                            </Button>
+                        </Tooltip>
+                        <TextField id="outlined-required" label="Nombre" type='text' name='nombre' value={nombre} onChange={(e)=>handleText(e)}/>
+                        <TextField id="outlined-required" label="Descripción" type='text' name='descripcion'
+                            multiline maxRows={4} value={descripcion} onChange={(e)=>handleText(e)} sx={{'& div textarea':{minHeight:128,minWidth:217}}}/>
+                        <Stack className="stackButtons" >
+                            <Button variant="outlined" color="error" onClick={handleCancel}>Cancelar</Button>
+                            <Button variant="contained" color="success">Crear</Button>
+                        </Stack>
+                    </Box>
+                    <Box id="consulta" className="boton consultar" onClick={(e)=>handleChange(e)} sx={{width:'80%', height:'13%'}}></Box>
+                    <Box className="contenedor boxContentItem contenedor-consultas" sx={{width:'80%'}}>
+                        <Box className="ListarElementos"></Box>
+                        <Box className="EditarCarousel"></Box>
+                    </Box>
+                </Box>
                 <Container class='BoxCarousel containerCarousel' style={{position:'absolute', top:'82%', left:0}}>
                     <CarouselFooter PropsFooterOpenModal={handleOpenModal}/>
                 </Container>
