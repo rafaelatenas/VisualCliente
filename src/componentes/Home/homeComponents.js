@@ -221,50 +221,25 @@ const usefooterMovile = makeStyles (()=>({
 }))
 
 export function CarouselFooter(props){
-    
-    // const reports = [
-    //     {name:'NSE', key:1, icon:NSE},
-    //     {name:"Top Sku's", key:2, icon:TopSkus},
-    //     {name:'Top Proveedores', key:3, icon:TopProveedores},
-    //     {name:'Categorías', key:4, icon:Categorias},
-    //     {name:'Ranking Categorías', key:5, icon:RankingCategorias},
-    //     {name:'Omnibus', key:6, icon:Omnibus},
-    //     {name:'Canales y Cadenas', key:7, icon:CanalesCadenas},
-    // ]
-    const reports = [
-       {name:'Home Pantry', key:1, icon:HPantry, style:{height:'85%', width:'auto'}},
-        {name:"Scanning", key:2, icon:RScanning, style:{height:'80%', width:'auto'}},
-        {name:'Money Market', key:3, icon:MoneyMarket, style:{height:'90%', minWidth:100, minHeight:120, padding:'5%'}},
-        {name:'Medicinas', key:4, icon:Categorias, style:{height:'90%', width:'auto'}},
-        {name:'WOP', key:5, icon:WOP, style:{height:'90%'}},
-        {name:'CI', key:6, icon:CI, style:{height:'85%', width:'auto'}},
-        {name:'Omnibus', key:7, icon:Omnibus, style:{height:'85%', width:'auto'}},
-        {name:'CENSO', key:8, icon:CanalesCadenas, style:{height:'85%', width:'auto'}}, 
-        // {name:'Home Pantry', key:1, icon:HPantry, style:{height:'85%', width:'auto'}},
-        // {name:"Scanning", key:2, icon:RScanning, style:{height:'80%', width:'auto'}},
-        // {name:'Money Market', key:3, icon:MoneyMarket, style:{height:'90%', minWidth:100, minHeight:120, padding:'5%'}},
-        // {name:'Medicinas', key:4, icon:Categorias, style:{height:'90%', width:'auto'}},
-        // {name:'WOP', key:5, icon:WOP, style:{height:'90%'}},
-        // {name:'CI', key:6, icon:CI, style:{height:'85%', width:'auto'}},
-        // {name:'Omnibus', key:7, icon:Omnibus, style:{height:'85%', width:'auto'}},
-        // {name:'CENSO', key:8, icon:CanalesCadenas, style:{height:'85%', width:'auto'}},
-    ]
-    const styles = useStylesCarousel(reports.length)()
-    const [paused, setPaused]=useState(false)
-    const newReports =  reports.concat(reports)
-    // console.log(reports.push(reports.shift()))
-    const showContinue=()=>{
-        newReports.concat(reports);
-    }
-    setTimeout(showContinue(), 2000);
+    const {PropsFooterdata}= props
 
-    // if (paused!= true ) {
-    //     setTimeout(showContinue(), 2000);
-    // }else{setTimeout(showContinue(), 2000);}
-    
+    const reports = [
+        {name:'Home Pantry', descripcion:'', fondo:'', key:1, icon:HPantry, style:{height:'85%', width:'auto'}},
+        {name:"Scanning", descripcion:'', fondo:'', key:2, icon:RScanning, style:{height:'80%', width:'auto'}},
+        {name:'Money Market', descripcion:'', fondo:'', key:3, icon:MoneyMarket, style:{height:'90%', minWidth:100, minHeight:120, padding:'5%'}},
+        {name:'Medicinas', descripcion:'', fondo:'', key:4, icon:Categorias, style:{height:'90%', width:'auto'}},
+        {name:'WOP', descripcion:'', fondo:'', key:5, icon:WOP, style:{height:'90%'}},
+        {name:'CI', descripcion:'', fondo:'', key:6, icon:CI, style:{height:'85%', width:'auto'}},
+        {name:'Omnibus', descripcion:'', fondo:'', key:7, icon:Omnibus, style:{height:'85%', width:'auto'}},
+        {name:'CENSO', descripcion:'', fondo:'', key:8, icon:CanalesCadenas, style:{height:'85%', width:'auto'}},
+    ]
+    const valor = reports.length
+    const styles = useStylesCarousel({valor}) 
+    const [paused, setPaused]=useState(false)
+ 
     return(
         <Box className={`CardsCarousel ${styles.CardsCarousel}`} style={paused ? {animationPlayState: 'paused'}:{animationPlayState:'running'}} onMouseEnter={()=>setPaused(true)} onMouseLeave={()=>setPaused(false)}>
-            {newReports.map((report)=>(
+            {reports.map((report)=>(
                 <IconButton className="slide" key={report.key}  onClick={()=>props.PropsFooterOpenModal(report.icon)}>
                     <Card className={styles.Card}>
                         <CardContent className={styles.containerCard}>
@@ -276,7 +251,8 @@ export function CarouselFooter(props){
         </Box>
     )
 }
-const useStylesCarousel = (newReports)=> makeStyles( theme => ({ 
+
+const useStylesCarousel = makeStyles({
     Card:{
         width:'100%',
         height:'100%',
@@ -291,10 +267,17 @@ const useStylesCarousel = (newReports)=> makeStyles( theme => ({
     },
     '@keyframes scroll': {
         from: { transform: 'translateX(0)' },
-        to: { transform: `translateX(calc(-180px*${newReports*2.125}))` },
+        to: { transform: ({ valor }) => `translateX(calc(-180px*${valor*1.063}))` },
       },
-    CardsCarousel:{
-        animation: `$scroll ${newReports*2.25}s linear infinite`,
-        animationPlayState:'running'
-    }
- })); 
+      '@media(maxWidth: 1500px)' : {
+        CardsCarousel: {
+            animation:({ valor }) =>`$scroll ${valor*2.25}s linear infinite`,
+        },
+    },
+    // CardsCarousel: {
+    //     animation:({ valor }) =>`$scroll ${valor*2.25}s linear infinite`,
+    // },
+        CardsCarousel: {
+            animation:({ valor }) =>`$scroll ${valor*1.15}s linear infinite`,
+        },
+ }); 

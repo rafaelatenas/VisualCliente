@@ -68,9 +68,9 @@ export default function ItemCarousel(){
     const [fondo, setFondo]=useState('')
     const [openModal, setOpenModal]=useState(false)
     const [textModal, setTextModal]=useState()
+    const [data, setData]=useState([])
 
     const handleOpenModal=(datos)=>{
-        console.log(datos)
         setTextModal(datos)
         setOpenModal(true)
     }
@@ -106,7 +106,11 @@ export default function ItemCarousel(){
                 break;
         }
     }
-    const handleCancel=()=>{
+    const hadleEnviar=()=>{
+        setData({nombre, descripcion, imagen, fondo})
+    }
+    const handleCancel=(e)=>{
+        handleChange(e)
         setFondo('')
         setImagen('')
         setNombre('')
@@ -136,8 +140,8 @@ export default function ItemCarousel(){
                         <TextField id="outlined-required" label="Descripción" type='text' name='descripcion'
                             multiline maxRows={4} value={descripcion} onChange={(e)=>handleText(e)} sx={{'& div textarea':{minHeight:128,minWidth:217}}}/>
                         <Stack className="stackButtons" >
-                            <Button variant="outlined" color="error" onClick={handleCancel}>Cancelar</Button>
-                            <Button variant="contained" color="success">Crear</Button>
+                            <Button variant="outlined" color="error" onClick={(e)=>handleCancel(e)}>Cancelar</Button>
+                            <Button variant="contained" color="success" onClick={hadleEnviar}>Crear</Button>
                         </Stack>
                     </Box>
                     <Box id="consulta" className="boton consultar" onClick={(e)=>handleChange(e)} sx={{width:'80%', height:'13%'}}></Box>
@@ -147,7 +151,10 @@ export default function ItemCarousel(){
                     </Box>
                 </Box>
                 <Container class='BoxCarousel containerCarousel' style={{position:'absolute', top:'82%', left:0}}>
-                    <CarouselFooter PropsFooterOpenModal={handleOpenModal}/>
+                    <CarouselFooter 
+                        PropsFooterOpenModal={handleOpenModal}
+                        PropsFooterdata={data}
+                    />
                 </Container>
             </section>
             <Modal
