@@ -810,8 +810,7 @@ export default function DATA(){
       periodo:''
     })
     const handleChangeSearch=(e)=>{
-      const name= e.target.name
-      const value= e.target.value
+      const {name, value}=e.target
       setSearchText({[name]:value})
       setFocus(true)
     }
@@ -888,7 +887,7 @@ export default function DATA(){
                     handlePeriodos={handlePeriodos}
                     handleClosePeriodo={handleClosePeriodo}
                     handleOpenPeriodo={handleOpenPeriodo}
-                    data={data}
+                    datos={data}
                     isAllSelectPeriodo={isAllSelectPeriodo}
                     showMenuItem={showMenuItem}
                     handleChangeSearch={handleChangeSearch}

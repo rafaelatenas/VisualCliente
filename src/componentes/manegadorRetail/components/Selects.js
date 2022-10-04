@@ -8,22 +8,19 @@ import './select.css'
 const containsText = (text, searchText) =>text.toString().toLowerCase().indexOf(searchText.toString().toLowerCase()) >-1;
 
 export function SelectPeriodos(data){
+    const {datos,focus,handleChangeSearch,handleClosePeriodo,handleOpenPeriodo,handlePeriodos,isAllSelectPeriodo,isSelected,openPeriodo,render,searchText,selectedOptions1,setFocus,setRender,setSearchText,showMenuItem,tiempoReporte}=data
+    console.log(data)
     const classes = useStyles();
-    const handleChangeSearch=(e)=>{
-        data.setFocus(true)
-        const name= e.target.name
-        const value= e.target.value
-        data.setSearchText({[name]:value})
-    }
+
     const displayedOptions = useMemo(
-        () => data.data.filter((option) => containsText(option.nombre, data.searchText)),
-        [data.searchText]
+        () => datos.filter((option) => containsText(option.nombre, searchText)),
+        [searchText]
     );
     
-    const OptionPeriodo = data.data.map((option) => (
+    const OptionPeriodo = datos.map((option) => (
         <MenuItem key={option.id} value={(option.id)} className='items'>
             <ListItem>
-                <Checkbox checked={(data.selectedOptions1.indexOf(option.id) > -1) || (data.selectedOptions1.indexOf(option) > -1)} />
+                <Checkbox checked={(selectedOptions1.indexOf(option.id) > -1) || (selectedOptions1.indexOf(option) > -1)} />
             </ListItem>
             <ListItemText primary={option.nombre}/>
         </MenuItem>
@@ -32,7 +29,7 @@ export function SelectPeriodos(data){
     const OptionPeriodoSearch = displayedOptions.map((option) => (
         <MenuItem key={option.id} value={option.id} className='items'>
             <ListItem>
-                <Checkbox checked={(data.selectedOptions1.indexOf(option) > -1)} />
+                <Checkbox checked={(selectedOptions1.indexOf(option) > -1)} />
             </ListItem>
             <ListItemText primary={option.nombre}/>
         </MenuItem>
@@ -40,11 +37,11 @@ export function SelectPeriodos(data){
     
     const OptionRender = useMemo(
         ()=>{
-            if(data.focus === true){
-                data.setRender(displayedOptions)
+            if(focus === true){
+                setRender(displayedOptions)
                 return OptionPeriodoSearch;
             }else{
-                data.setRender(data.data)
+                setRender(datos)
                 return OptionPeriodo
             }
         }
@@ -59,22 +56,22 @@ export function SelectPeriodos(data){
                 <Select 
                     labelId="mutiple-select-label"
                     multiple
-                    value={data.selectedOptions1}
-                    open={data.openPeriodo}
-                    onChange={data.handlePeriodos}
-                    onClose={data.handleClosePeriodo}
-                    onOpen={data.handleOpenPeriodo}
+                    value={selectedOptions1}
+                    open={openPeriodo}
+                    onChange={handlePeriodos}
+                    onClose={handleClosePeriodo}
+                    onOpen={handleOpenPeriodo}
                     renderValue={(selected) =>{
-                        if(selected.length>=3 && selected.length<data.render.length){
+                        if(selected.length>=3 && selected.length<render.length){
                             return(<ListItemText sx={{'& span':{fontSize:'10px'}}} primary={`${selected.length} Opciones Marcadas`}/>)
-                        }else if(selected.length === data.render.length){
+                        }else if(selected.length === render.length){
                             return(<ListItemText sx={{'& span':{fontSize:'10px'}}} primary={`Todas Marcadas (${selected.length})`}/>)
                         }else if(selected.length<3){
                             return(
                                 <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: 0.5 }}>
                                     {selected.map((value) =>{
-                                        for (let h = 0; h < data.data.length; h++) {
-                                            const element = data.data[h];
+                                        for (let h = 0; h < datos.length; h++) {
+                                            const element = datos[h];
                                             if(element.id === value){
                                                 return(<Chip sx={{'& span':{fontSize:'10px'}}} key={value} label={element.nombre}/>)
                                             }
@@ -90,7 +87,7 @@ export function SelectPeriodos(data){
                         <TextField
                         name="periodo"
                         size="small"
-                        autoFocus={data.focus}
+                        autoFocus={focus}
                         InputProps={{
                             startAdornment: (
                             <InputAdornment position="start" style={{width: 'auto',height: '100%'}}>
@@ -109,16 +106,15 @@ export function SelectPeriodos(data){
                         />
                         
                     </ListSubheader>
-                    <MenuItem value="all" className='items' classes={{root: data.isAllSelectPeriodo ? classes.selectedAll : ""}} style={{ display: data.showMenuItem.periodo ? "flex" : "none" }}>
+                    <MenuItem value="all" className='items' classes={{root: isAllSelectPeriodo ? classes.selectedAll : ""}} style={{ display: showMenuItem.periodo ? "flex" : "none" }}>
                         <ListItem>
                             <Checkbox
                                 classes={{ indeterminate: classes.indeterminateColor }}
-                                checked={data.isAllSelectPeriodo}
-                                indeterminate={ data.selectedOptions1.length > 0 && data.selectedOptions1.length < OptionRender.length }
+                                checked={isAllSelectPeriodo}
+                                indeterminate={ selectedOptions1.length > 0 && selectedOptions1.length < OptionRender.length }
                             />
                         </ListItem>
                         <ListItemText primary="Marcar Todo" classes={{ primary: classes.selectAllText }}/>
-                        
                     </MenuItem >
                     {OptionRender}
                 </Select>
@@ -129,6 +125,9 @@ export function SelectPeriodos(data){
 
 export function SelectCanales(canal){
     const classes = useStyles();
+    console.log(canal)
+
+
     var ID_Cliente = sessionStorage.getItem('Id_Cliente')
     const OptionCanales = canal.canal.map((item) => (
         <MenuItem key={item.id} value={item.id} className='items'>
@@ -149,21 +148,26 @@ export function SelectCanales(canal){
                     onChange={canal.handleCanales}
                     onClose={canal.handleCloseCanal}
                     onOpen={canal.handleOpenCanal}
-                    renderValue={(selected) => (
-                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                            {selected.map((value) =>{
-                              for (let h = 0; h < canal.canal.length; h++) {
-                              const element = canal.canal[h];
-                                if(element.id === value){
-                                  return(<Chip sx={{'& span':{fontSize:'10px'}}} key={value} label={element.nombre}/>)
-                                }
-                                // else if(value === parseInt(ID_Cliente)){
-                                //   return(<Chip sx={{'& span':{fontSize:'10px'}}} key={value} label="MI CADENA"/>)
-                                // }
-                              }
-                            })}
-                          </Box>
-                      )}
+                    renderValue={(selected) => {
+                        if(selected.length>1 && selected.length < canal.canal.length){
+                            return(<ListItemText sx={{'& span':{fontSize:'10px'}}} primary={`${selected.length} Opciones Marcadas`}/>)
+                        }else if(selected.length === canal.canal.length){
+                            return(<ListItemText sx={{'& span':{fontSize:'10px'}}} primary={`Todas Marcadas (${selected.length})`}/>)
+                        }else if(selected.length){
+                            return(
+                                <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: 0.5 }}>
+                                    {selected.map((value) =>{
+                                        for (let h = 0; h < canal.canal.length; h++) {
+                                            const element = canal.canal[h];
+                                            if(element.id === value){
+                                                return(<Chip sx={{'& span':{fontSize:'10px'}}} key={value} label={element.nombre}/>)
+                                            }
+                                        }
+                                    })}
+                                </Box>
+                            )
+                        }
+                    }}
                     MenuProps={MenuProps}
                 >
                     {/* <MenuItem value={parseInt(ID_Cliente)}>
@@ -200,20 +204,42 @@ export function SelectRegiones(region){
                     onChange={region.handleRegiones}
                     onClose={region.handleCloseRegion}
                     onOpen={region.handleOpenRegiones}
-                    renderValue={(selected) => (
-                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                            {selected.map((value) =>{
-                              for (let h = 0; h < region.region.length; h++) {
-                              const element = region.region[h];
-                                if(element.id === value && value !== 0){
-                                  return(<Chip style={{fontSize:'.7em'}} key={value} label={element.nombre}/>)
-                                }else if (value === 0) {
-                                return(<Chip style={{fontSize:'.7em'}} key={value} label={element.nombre}/>)
-                                }
-                              }
-                            })}
-                        </Box>
-                    )}
+                    renderValue={(selected) => {
+                        if(selected.length>1 && selected.length < region.region.length){
+                            return(<ListItemText sx={{'& span':{fontSize:'10px'}}} primary={`${selected.length} Opciones Marcadas`}/>)
+                        }else if(selected.length === region.region.length){
+                            return(<ListItemText sx={{'& span':{fontSize:'10px'}}} primary={`Todas Marcadas (${selected.length})`}/>)
+                        }else if(selected.length){
+                            return(
+                                <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: 0.5 }}>
+                                    {selected.map((value) =>{
+                                        for (let h = 0; h < region.region.length; h++) {
+                                            const element = region.region[h];
+                                            if(element.id === value){
+                                                return(<Chip sx={{'& span':{fontSize:'10px'}}} key={value} label={element.nombre}/>)
+                                            }
+                                        }
+                                    })}
+                                </Box>
+                            )
+                        }
+                    }}
+                        
+                        
+                    //     (
+                    //     <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                    //         {selected.map((value) =>{
+                    //           for (let h = 0; h < region.region.length; h++) {
+                    //           const element = region.region[h];
+                    //             if(element.id === value && value !== 0){
+                    //               return(<Chip style={{fontSize:'.7em'}} key={value} label={element.nombre}/>)
+                    //             }else if (value === 0) {
+                    //             return(<Chip style={{fontSize:'.7em'}} key={value} label={element.nombre}/>)
+                    //             }
+                    //           }
+                    //         })}
+                    //     </Box>
+                    // )}
                     MenuProps={MenuProps}
                 >
                     {OptionRegiones}
