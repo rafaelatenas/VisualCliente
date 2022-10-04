@@ -50,8 +50,8 @@ export function SelectPeriodos(data){
     return(
         <Box style={{border:'.1em solid rgb(87 87 86/11%)',background:'#f7f4f4', borderRadius:'1.5em', width:'15%', height:'90%', display:'flex', flexDirection:'column', alignItems:'center'}}>
             <InputLabel style={{width:'auto', padding:'10% 0 5%', fontSize:18}}>PERÍODOS</InputLabel>
-            <FormControl sx={{width: '100%'}} className={classes.formControl} error={data.isSelected.selectedOptions1}>
-                <InputLabel size={'small'} className="inputLabel" id="mutiple-select-label">{data.tiempoReporte}</InputLabel>
+            <FormControl sx={{width: '100%'}} className={classes.formControl} error={isSelected.selectedOptions1}>
+                <InputLabel size={'small'} className="inputLabel" id="mutiple-select-label">{tiempoReporte}</InputLabel>
                 <Select 
                     labelId="mutiple-select-label"
                     multiple
