@@ -26,6 +26,9 @@ import MoneyMarket from '../../landing/Images/ATSLogoMoneyMarket.png'
 import { useAuthContext } from "../context/authContext";
 
 import temporal from "../../landing/Images/provisional.png"
+import SwipeableViews from "react-swipeable-views";
+import {virtualize} from "react-swipeable-views-utils"
+import {mod} from "react-swipeable-views-core"
 
 const reports = [
     {key: 1 , name:'WOP', icon:WOP, style:{height:'90%'}},
@@ -153,15 +156,64 @@ const useStyles = makeStyles(()=>({
 
 /* -- Modulos Tarjetas de Reportes -- */
 export function CardMovile(){
-      
+    const VirtualizeSwipeableViews = virtualize(SwipeableViews)
+    const styles = {
+        slide: {
+          padding: 15,
+          minHeight: 100,
+          color: '#fff',
+        },
+        slide1: {
+          backgroundColor: '#FEA900',
+        },
+        slide2: {
+          backgroundColor: '#B3DC4A',
+        },
+        slide3: {
+          backgroundColor: '#6AC0FF',
+        },
+      };
+    const slideRenderer =(params)=>{
+        const { index, key } = params;
+        console.log(mod(index, 3))
+        switch (mod(index, 3)) {
+            case 0:
+              return (
+                <Box key={key} style={Object.assign({}, styles.slide, styles.slide1)}>
+                  slide n°1
+                </Box>
+              );
+        
+            case 1:
+              return (
+                <Box key={key} style={Object.assign({}, styles.slide, styles.slide2)}>
+                  slide n°2
+                </Box>
+              );
+        
+            case 2:
+              return (
+                <Box key={key} style={Object.assign({}, styles.slide, styles.slide3)}>
+                  slide n°3
+                </Box>
+              );
+        
+            default:
+              return null;
+          }
+        }
+
+    
+
     return(
-        <Container className="añgo">
-            <Box>
-                {reports.map((report)=>{
+        <Container className="algo" style={{width:'100%',height:'100%'}}>
+            <Box className="algo" style={{width:'100%',height:'100%'}}>
+                <VirtualizeSwipeableViews slideRenderer={slideRenderer} style={{width:'100%',height:'100%', 'div':{width:'100%',height:'100%',}}}/>
+                {/* {reports.map((report)=>{
                     <Card>
                         <CardContent>{report.name}</CardContent>
                     </Card>
-                })}
+                })} */}
             </Box>
         </Container>
     )
