@@ -50,14 +50,14 @@ export function HeaderMovile(){
 const useStylesMoViles = makeStyles((withdScreen, heightScreen)=>({
     Box:{
         width:'100%',
-        height:'25%',
+        height:'15%',
         display:'inline-flex',
         justifyContent:'center',
         alignItems:'flex-end'
     },
     ImgLogo:{
         width:'auto',
-        height:'90%',
+        height:'100%',
     }
 }))
 export function HeaderDesktop(props){
@@ -154,12 +154,45 @@ const useStyles = makeStyles(()=>({
 /* -- Modulos Tarjetas de Reportes -- */
 export function CardMovile(){
     const styles = useStylesCardMovile()
+
+    function slideRenderer(params) {
+        const { index, key } = params;
+        console.log((mod(index, reports.length)))
+      
+        switch (mod(index, reports.length)) {
+          case 0:
+            return (
+              <div key={key}>
+                slide n°1
+              </div>
+            );
+      
+          case 1:
+            return (
+              <div key={key}>
+                slide n°2
+              </div>
+            );
+      
+          case 2:
+            return (
+              <div key={key}>
+                slide n°3
+              </div>
+            );
+      
+          default:
+            return null;
+        }
+      }
+      
     return(
-        <Container>
+        <Container className="añgo">
             <Box>
+                <VirtualizeSwipeableViews slideRenderer={slideRenderer} />
                 {reports.map((report)=>{
                     <Card>
-                        <CardContent></CardContent>
+                        <CardContent>{report.name}</CardContent>
                     </Card>
                 })}
             </Box>

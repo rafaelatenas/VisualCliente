@@ -1,8 +1,8 @@
 import { CloseRounded} from '@material-ui/icons';
 import React from 'react';
-import { Box, Container, Typography, Modal, IconButton, CardContent, Popover, Card, List, ListItem, ListItemText, Paper, MenuList, Menu, MenuItem } from '@mui/material';
+import { Box, Container, Typography, Modal, IconButton, CardContent, Popover, Card, List, ListItem, ListItemText, Paper, MenuList, Menu, MenuItem, CardMedia } from '@mui/material';
 import './home.css';
-import { CardDesktop, CarouselFooter, HeaderDesktop, HeaderMovile } from './homeComponents';
+import { CardDesktop, CardMovile, CarouselFooter, HeaderDesktop, HeaderMovile } from './homeComponents';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 
 class Home extends React.Component {
@@ -133,7 +133,7 @@ class Home extends React.Component {
                             })}
                         </MenuList>
                     </Menu>
-                    </>: ''}
+                    </>: <CardMovile/>}
                 </Container>
                 {this.state.withdScreen >= 1020 ? this.footerDesktop : ''}
 
