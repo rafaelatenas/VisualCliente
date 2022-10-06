@@ -27,7 +27,7 @@ class Home extends React.Component {
     }
     /*Controles Popover */
     reports=[
-        {id:1, key:1, target:'', url:'/retailservices/home/data', padre:'WOP', name:'Manejador Retail'},
+        {id:1, key:1, target:'', url:'/retailservices/home/data', padre:'WOP', name:'Resumen Táctico'},
         {id:1, key:2, target:'_black', url:`//app.powerbi.com/reportEmbed?${this.LinkWopUser}`, padre:'WOP', name:'WOP'},
         {id:1, key:3, target:'', url:'', padre:'WOP', name:'Ranking de Tiendas'},
         {id:1, key:4, target:'', url:'', padre:'WOP', name:'Panel de Cadenas'},
@@ -81,7 +81,7 @@ class Home extends React.Component {
 	render() {
 		return(
             <Container className='containerBox'>
-                {this.state.withdScreen > 1020 ? <HeaderDesktop props={this.props.logOut}/> : <HeaderMovile/>}
+                {this.state.withdScreen >= 1020 ? <HeaderDesktop props={this.props.logOut}/> : <HeaderMovile/>}
                 <Modal
                     className='Modal'
                     open={this.state.openModal}
@@ -101,7 +101,7 @@ class Home extends React.Component {
                     </Box>
                 </Modal>
                 <Container className='containerCard'>
-                {this.state.withdScreen > 1020 ? 
+                {this.state.withdScreen >= 1020 ? 
                     <>
                     <CardDesktop 
                         PropsCardPopoverClose={this.handleClosePopover}
@@ -135,7 +135,7 @@ class Home extends React.Component {
                     </Menu>
                     </>: ''}
                 </Container>
-                {this.state.withdScreen > 1020 ? this.footerDesktop : ''}
+                {this.state.withdScreen >= 1020 ? this.footerDesktop : ''}
 
             </Container>
         )

@@ -181,37 +181,65 @@ export function SelectCanales(canal){
 }
 
 export function SelectRegiones(region){
+    const {regiones, selectedOptions3, isSelected,openRegiones,handleOpenRegiones,handleCloseRegion,handleRegiones}= region
+    
     const classes = useStyles();
-    const OptionRegiones = region.region.map((item) => (
+    const OptionRegiones = regiones.map((item) => (
         <MenuItem key={item.id} value={item.id} className='items'>
-          <Checkbox checked={region.selectedOptions3.indexOf(item.id) > -1} />
-          <ListItemText sx={{fontSize:'1em'}} primary={item.nombre} />
+          <Checkbox checked={selectedOptions3.indexOf(item.id) > -1} />
+          {/* <ListItemText  primary={item.nombre} /> */}
+          <FormControl sx={{ m: 1, minWidth: 120 }} size="small" variant="standard">
+          <InputLabel sx={{fontSize:10}} id="demo-select-small">{item.nombre}</InputLabel>
+          <Select
+            sx={{fontSize:'1em'}}
+            labelId="demo-select-small"
+            label={item.nombre}
+            value={selectedOptions3}
+            multiple
+            renderValue={(selected) => {
+                return selected.join(', ');
+            }}
+          >
+            <MenuItem key={item.id} value={item.id} className='items'>
+                <Checkbox checked={selectedOptions3.indexOf(item.id) > -1} />
+                <ListItemText  primary={item.nombre} />
+            </MenuItem>
+            <MenuItem key={item.id} value={item.id} className='items'>
+                <Checkbox checked={selectedOptions3.indexOf(item.id) > -1} />
+                <ListItemText  primary={'item.nombre'} />
+            </MenuItem>
+            <MenuItem key={item.id} value={item.id} className='items'>
+                <Checkbox checked={selectedOptions3.indexOf(item.id) > -1} />
+                <ListItemText  primary={'item.nombre'} />
+            </MenuItem>
+          </Select>
+          </FormControl>
         </MenuItem>
       ))
     return(
         <Box style={{border:'.1em solid rgb(87 87 86/11%)',background:'#f7f4f4', borderRadius:'1.5em', width:'15%', height:'90%', display:'flex', flexDirection:'column', alignItems:'center'}}>
             <InputLabel style={{width:'auto', padding:'10% 0 5%'}}>ÁREAS</InputLabel>
-            <FormControl sx={{width: '100%'}} className={classes.formControl} error={region.isSelected.selectedOptions3}>
+            <FormControl sx={{width: '100%'}} className={classes.formControl} error={isSelected.selectedOptions3}>
                 <InputLabel className="inputLabel" id="mutiple-select-label">Regiones</InputLabel>
                 <Select 
                     labelId="mutiple-select-label"
                     multiple
-                    value={region.selectedOptions3}
-                    open={region.openRegiones}
-                    onChange={region.handleRegiones}
-                    onClose={region.handleCloseRegion}
-                    onOpen={region.handleOpenRegiones}
+                    value={selectedOptions3}
+                    open={openRegiones}
+                    onChange={handleRegiones}
+                    onClose={handleCloseRegion}
+                    onOpen={handleOpenRegiones}
                     renderValue={(selected) => {
-                        if(selected.length>1 && selected.length < region.region.length){
+                        if(selected.length>1 && selected.length < regiones.length){
                             return(<ListItemText sx={{'& span':{fontSize:'10px'}}} primary={`${selected.length} Opciones Marcadas`}/>)
-                        }else if(selected.length === region.region.length){
+                        }else if(selected.length === regiones.length){
                             return(<ListItemText sx={{'& span':{fontSize:'10px'}}} primary={`Todas Marcadas (${selected.length})`}/>)
                         }else if(selected.length){
                             return(
                                 <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: 0.5 }}>
                                     {selected.map((value) =>{
-                                        for (let h = 0; h < region.region.length; h++) {
-                                            const element = region.region[h];
+                                        for (let h = 0; h < regiones.length; h++) {
+                                            const element = regiones[h];
                                             if(element.id === value){
                                                 return(<Chip sx={{'& span':{fontSize:'10px'}}} key={value} label={element.nombre}/>)
                                             }

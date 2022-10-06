@@ -910,7 +910,7 @@ export default function DATA(){
                     handleRegiones={handleRegiones}
                     handleCloseRegion={handleCloseRegion}
                     handleOpenRegiones={handleOpenRegiones}
-                    region={region}
+                    regiones={region}
                   />
                   <SelectAtributos
                     selectedOptions4={selectedOptions4}
