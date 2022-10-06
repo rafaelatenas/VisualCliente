@@ -18,16 +18,22 @@ main {
 
 .containerBox{
     width: 100%;
-    height: 100%; 
+    height: 100%;
+    padding: 0% !important
 }
 
+@media screen and (orientation:portrait){
+    .containerCard{
+        height: 45%;
+        padding: 0 !important;
+    } 
+}
 
 @media screen and (orientation:landscape) {
     .containerBox{
         padding: 0 !important;
         margin: 0!important;
         max-width:none !important;
-        
         display: flex !important;
         align-items: center;
         flex-direction: column;
@@ -311,8 +317,6 @@ main {
         margin-left: 5%;
     }
 }
-
-
 
 /*--- Estilos de Footer y Animación de Scroll ---*/
     @keyframes scroll {
