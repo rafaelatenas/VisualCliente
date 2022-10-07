@@ -101,7 +101,7 @@ class Home extends React.Component {
                     </Box>
                 </Modal>
                 <Container className='containerCard'>
-                {this.state.withdScreen >= 1020 ? 
+                {this.state.withdScreen >= 1025 ? 
                     <>
                     <CardDesktop 
                         PropsCardPopoverClose={this.handleClosePopover}
