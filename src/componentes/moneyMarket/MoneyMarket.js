@@ -852,20 +852,20 @@ export default function DATA(){
         >{bodyMySelect}
         </Modal>
         <Main open={open}>
-          <div className="Contenedordata">
-            <section className="container-of-table">
+          <div className={styles.Contenedordata}>
+            <section className={styles.containerOfTable}>
               <HeaderComponent/>
-              <Box className='boxAccordion'>
+              <Box className={styles.boxAccordion}>
                 <Accordion expanded={expanded === 'panel1'} onClick={handleChange('panel1')} sx={{borderRadius:'unset', width:'95%','& .MuiCollapse-root.MuiCollapse-vertical.MuiCollapse-entered.css-pwcg7p-MuiCollapse-root':{overflowY:'auto !important'}}}>
                   <AccordionSummary aria-controls="panel1bh-content" id="panel1bh-header">
                     <Typography>Money Market</Typography>
                   </AccordionSummary>
                   <AccordionDetails >
-                    <Box className='boxDetails'>
+                    <Box className={styles.boxDetails}>
                       {[{id:0,nombre:'Semana'},{id:1,nombre:'Retail'},{id:2,nombre:'Estado'},{id:3,nombre:'Tienda'},{id:4,nombre:'Categoría'},{id:5,nombre:'Fabricante'},{id:6,nombre:'Marca'},{id:7,nombre:'Código de Barras'},{id:8,nombre:'Moneda'}].map((item)=>(
-                        <Box key={item.id} className='element'>
-                          <FormControl className='formControl'>
-                            <InputLabel size={'small'} className="inputLabel" id="mutiple-select-label">{item.nombre}</InputLabel>
+                        <Box key={item.id} className={styles.element}>
+                          <FormControl className={styles.formControl}>
+                            <InputLabel size={'small'} className={styles.inputLabel} id="mutiple-select-label">{item.nombre}</InputLabel>
                             <Select
                               labelId="mutiple-select-label"
                             >
@@ -925,6 +925,58 @@ export default function DATA(){
 }
 
 const useStyles = makeStyles((theme) => ({
+  Contenedordata:{
+    display: 'flex',
+    flexDirection: 'row-reverse',
+    width: '100%',
+    height: '100%',
+  },
+  boxAccordion:{
+    width: '100%',
+    height: '100%',
+    gridArea: '2 / 1 / 4 / 3',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  boxDetails:{
+    width: '100%',
+    height: '100%',
+    display: 'grid',
+    justifyItems: 'center',
+    alignItems: 'stretch',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(90px, 20%))',
+  },
+  element:{
+    width: '95%',
+    height: '90%',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+  },
+  formControl:{
+    width: '90%',
+  },
+  inputLabel:{
+    background: 'rgb(247, 244, 244)',
+    width: 'auto',
+    fontSize: '10px !Important',
+  },
+  '@media screen and (min-width: 992px)':{
+    containerOfTable:{
+        background: '#fff',
+        width: '100%',
+        height: '100%',
+        alignItems: 'center',
+        justifyItems: 'center',
+        borderTopLeftRadius: '1.5em',
+        borderBottomLeftRadius: '1.5em',
+        display: 'grid',
+        gridTemplateColumns: '1fr 20%',
+        gridTemplateRows: '15% 70% 15%',
+        boxShadow:'-4px 6px 20px 0px rgb(0 0 0 / 49%)',
+    },
+  },
   modal: {
     position: 'absolute',
     width: '30%',

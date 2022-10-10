@@ -182,13 +182,20 @@ export function SelectCanales(canal){
 
 export function SelectRegiones(region){
     const {regiones, selectedOptions3, isSelected,openRegiones,handleOpenRegiones,handleCloseRegion,handleRegiones}= region
-    
+    /*Sub Regiones*/
+    const {idRegiones,selectedOptions33}=region
+
     const classes = useStyles();
+    
     const OptionRegiones = regiones.map((item) => (
         <MenuItem key={item.id} value={item.id} className='items'>
           <Checkbox checked={selectedOptions3.indexOf(item.id) > -1} />
           {/* <ListItemText  primary={item.nombre} /> */}
-          <FormControl sx={{ m: 1, minWidth: 120 }} size="small" variant="standard">
+          <SubRegiones
+            idRegiones={idRegiones}
+            selectedOptions33={selectedOptions33}
+          />
+          {/* <FormControl sx={{ m: 1, minWidth: 120 }} size="small" variant="standard">
           <InputLabel sx={{fontSize:10}} id="demo-select-small">{item.nombre}</InputLabel>
           <Select
             sx={{fontSize:'1em'}}
@@ -213,7 +220,7 @@ export function SelectRegiones(region){
                 <ListItemText  primary={'item.nombre'} />
             </MenuItem>
           </Select>
-          </FormControl>
+          </FormControl> */}
         </MenuItem>
       ))
     return(
@@ -271,6 +278,40 @@ export function SelectRegiones(region){
                 </Select>
             </FormControl>
         </Box>
+    )
+}
+/* SubRegiones */
+
+function SubRegiones(props) {
+    const {idRegiones}=props
+    return(
+        <p>hla</p>
+        // <FormControl sx={{ m: 1, minWidth: 120 }} size="small" variant="standard">
+        //   <InputLabel sx={{fontSize:10}} id="demo-select-small">{item.nombre}</InputLabel>
+        //   <Select
+        //     sx={{fontSize:'1em'}}
+        //     labelId="demo-select-small"
+        //     label={item.nombre}
+        //     value={selectedOptions3}
+        //     multiple
+        //     renderValue={(selected) => {
+        //         return selected.join(', ');
+        //     }}
+        //   >
+        //     <MenuItem key={item.id} value={item.id} className='items'>
+        //         <Checkbox checked={selectedOptions3.indexOf(item.id) > -1} />
+        //         <ListItemText  primary={item.nombre} />
+        //     </MenuItem>
+        //     <MenuItem key={item.id} value={item.id} className='items'>
+        //         <Checkbox checked={selectedOptions3.indexOf(item.id) > -1} />
+        //         <ListItemText  primary={'item.nombre'} />
+        //     </MenuItem>
+        //     <MenuItem key={item.id} value={item.id} className='items'>
+        //         <Checkbox checked={selectedOptions3.indexOf(item.id) > -1} />
+        //         <ListItemText  primary={'item.nombre'} />
+        //     </MenuItem>
+        //   </Select>
+        //   </FormControl>
     )
 }
 /*Atributos*/

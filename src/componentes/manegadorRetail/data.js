@@ -90,6 +90,8 @@ export default function DATA(){
 
     /*Data SubRegionres*/
       const [selectedSubregiones, setSelectedSubregiones] = useState([]);
+      const [selectedOptions33, setSelectedOptions33] = useState([]);
+
 
   /*Data Cestas*/
     const [Cesta, setCesta]=useState([]);
@@ -142,8 +144,6 @@ export default function DATA(){
       })
       .then(response=>{
         setData(response.data.data);
-        console.log(response.data)
-        console.log(response.data.data)
       }).catch(error=>{
         console.log(error.response.data.message);
         console.log(error.response.status);
@@ -158,8 +158,6 @@ export default function DATA(){
       })
       .then(response=>{
         setData(response.data.data);
-        console.log(response.data)
-        console.log(response.data.data)
       }).catch(error=>{
         console.log(error.response.data.message);
         console.log(error.response.status);
@@ -173,8 +171,6 @@ export default function DATA(){
       })
       .then(response=>{
         setData(response.data.data);
-        console.log(response.data)
-        console.log(response.data.data)
       }).catch(error=>{
         console.log(error.response.data.message);
         console.log(error.response.status);
@@ -188,8 +184,6 @@ export default function DATA(){
       })
       .then(response=>{
         setData(response.data.data);
-        console.log(response.data)
-        console.log(response.data.data)
       }).catch(error=>{
         console.log(error.response.data.message);
         console.log(error.response.status);
@@ -271,12 +265,25 @@ export default function DATA(){
 
    /*Funciones de Listar REGIONES 😄*/
     const [openRegiones, setOpenRegiones] = React.useState(false);
+    const [idRegiones, setIdRegiones] = useState();
+    
     const peticionRegiones=async()=>{
       await axios.get( process.env.REACT_APP_API_ENDPOINT+'ListarRegion',{
         headers: {'Authorization': `Bearer ${token}`},
       })
       .then(response=>{
         setRegion(response.data.data);
+      }).catch(error=>{
+        console.log(error.response.data.message);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      })
+
+      await axios.get(process.env.REACT_APP_API_ENDPOINT+'ListarIDSubRegion',{
+        headers: {'Authorization': `Bearer ${token}`},
+      })
+      .then(response=>{
+        setIdRegiones(response.data.data)
       }).catch(error=>{
         console.log(error.response.data.message);
         console.log(error.response.status);
@@ -292,6 +299,7 @@ export default function DATA(){
       setOpenRegiones(true);
       //temporal
       // peticionCategorias()
+      peticionSubRegiones()
       if(selectedOptions4.length>=1){
         setSelectedOptions4([]); setSelectedOptions5([]); setSelectedOptions6([])
       }
@@ -302,8 +310,9 @@ export default function DATA(){
     };
 
        /*Funcion onChange del combo SubRegiones */
-      const [SubRegion, setSubRegion]= React.useState([])
+      const [SubRegion, setSubRegion]=useState([])
       const peticionSubRegiones=async(value)=>{
+        // http://localhost:3005/VisorCliente_Api/ListarIDSubRegion
       await axios.get( process.env.REACT_APP_API_ENDPOINT+'ListarSubRegion/'+value,{
         headers: {
           'Authorization': `Bearer ${token}`
@@ -311,8 +320,6 @@ export default function DATA(){
       })
       .then(response=>{
         setSubRegion(response.data.data);
-        console.log(response.data)
-        console.log(response.data.data)
       }).catch(error=>{
         console.log(error.response.data.message);
         console.log(error.response.status);
@@ -361,8 +368,6 @@ export default function DATA(){
       })
       .then(response=>{
         setCesta(response.data.data);
-        console.log(response.data)
-        console.log(response.data.data)
       }).catch(error=>{
         console.log(error.response.data.message);
         console.log(error.response.status);
@@ -416,8 +421,6 @@ export default function DATA(){
       })
       .then(response=>{
         setFabricante(response.data.data)
-        console.log(response.data)
-        console.log(response.data.data)
       }).catch(error=>{
         console.log(error.response.data.message);
         console.log(error.response.status);
@@ -911,6 +914,10 @@ export default function DATA(){
                     handleCloseRegion={handleCloseRegion}
                     handleOpenRegiones={handleOpenRegiones}
                     regiones={region}
+                    /* SubRegiones */
+                    idRegiones={idRegiones}
+                    selectedOptions33={selectedOptions33}
+
                   />
                   <SelectAtributos
                     selectedOptions4={selectedOptions4}

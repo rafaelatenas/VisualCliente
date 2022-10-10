@@ -24,7 +24,7 @@ main {
 
 @media screen and (orientation:portrait){
     .containerCard{
-        height: 45%;
+        height: 70%;
         padding: 0 !important;
     } 
 }
