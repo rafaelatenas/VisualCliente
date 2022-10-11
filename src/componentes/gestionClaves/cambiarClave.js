@@ -9,8 +9,12 @@ import { IconButton, Button} from '@mui/material';
 import { useAuthContext } from '../context/authContext';
 import {useNavigate, useParams} from 'react-router-dom'
 import atenaslogoEliseBlanca from '../../landing/Images/ATSElise.png'
+import { makeStyles } from '@material-ui/styles';
+import logoCuadro from '../../landing/Images/logo-cauadro.png'
+import { FooterMovile } from '../Home/homeComponents';
 
 export default function CambiarClave(){
+  const style = styles()
   const Navigate = useNavigate();
   let { email,token } = useParams()
   const {logout}=useAuthContext();
@@ -161,15 +165,15 @@ export default function CambiarClave(){
   // }
   
   return(
-    <section className='contenedorActivacion'>
-      <div className='activarUs'>
-        <FormControl className='formActivate'>
-          <img className='logoActivate' src={atenaslogoEliseBlanca} alt='Logo Elise Blanca. Atenas Grupo Consultor' title=''/>
-          <FormLabel className='text'>{email}</FormLabel>
-          <TextField className='textPassword' label="Clave"  type={showPassword ? 'text' : 'password'} value={password}
+    <section className={style.contenedorActivacion}>
+      <div className={style.changePassword}>
+        <FormControl className={style.formChange}>
+          <img className={style.logoActivate} src={atenaslogoEliseBlanca} alt='Logo Elise Blanca. Atenas Grupo Consultor' title=''/>
+          <FormLabel className={style.text}>{email}</FormLabel>
+          <TextField className={style.textPassword} label="Clave"  type={showPassword ? 'text' : 'password'} value={password}
             onChange={(e)=>handleUserPassword(e)} name='Password'
           />
-          <TextField className='textPassword' label="Confirmar Clave"  type={showPassword ? 'text' : 'password'} value={password2}
+          <TextField className={style.textPassword} label="Confirmar Clave"  type={showPassword ? 'text' : 'password'} value={password2}
             onChange={(e)=>handleUserConfirmPassword(e)} name='ConfirmPassword'
             InputProps={{
               endAdornment:(
@@ -179,12 +183,108 @@ export default function CambiarClave(){
               )
             }}
           />
-          <Button className='buttonConfirm' variant="outlined" disabled={!confirmPasswordValid} onClick={enviarDatos}>Confirmar</Button>
+          <Button className={style.buttonConfirm} variant="outlined" disabled={!confirmPasswordValid} onClick={enviarDatos}>Confirmar</Button>
         </FormControl>
       </div>
-      <IconButton className='back' variant="contained" onClick={()=>window.location = '/retailservices/home'}>
+      <FooterMovile/>
+      <IconButton className={style.back} variant="contained" onClick={()=>window.location = '/retailservices/home'}>
         <ArrowBack style={{fontSize:'2.5em', fill:'#fff'}}></ArrowBack>
       </IconButton>
     </section>
   )
 };
+
+const styles = makeStyles(()=>({
+  contenedorActivacion:{
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
+  },
+  changePassword:{
+    width: '100%',
+    height: '65%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'column',
+    background: `url(${logoCuadro})`,
+    backgroundPosition: 'center',
+    backgroundRepeat: 'no-repeat',
+    backgroundSize: '95% 85%',
+  },
+  formChange:{
+    width: '80%',
+    height: '80%',
+    alignItems: 'center',
+    justifyContent: 'space-around',
+    overflow: 'visible',
+  },
+  logoActivate:{
+    width: '60%',
+    height: 'auto',
+  },
+  text:{
+    width: '80%',
+    height: '10%',
+    background: '#fff',
+    borderRadius: '2em',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent:'center'
+  },
+  textPassword: {
+    width: '80%',
+    height: '10%',
+    overflow: 'visible',
+    '& div':{
+      width: '100%',
+      height: '100%',
+      borderRadius: '2em',
+      backgroundColor: '#fff',
+      display: 'flex',
+      alignItems: 'center',
+    },
+  },
+  buttonConfirm:{
+    background: '#fff !important',
+    borderRadius: '1.2em !important',
+  },
+  back:{
+    display:'none !important'
+  },
+  '@media screen and (min-width:500px)':{
+    changePassword:{
+      backgroundSize:'85% 90%'
+    },
+    formChange:{
+      width:'75%'
+    }
+  },
+  '@media screen and (min-width:768px)':{
+    changePassword:{
+      backgroundSize:'75% 90%'
+    },
+    formChange:{
+      width:'70%'
+    }
+  },
+  '@media screen and (min-width:1024px)':{
+    back:{
+      display:'block !important',
+      background: 'transparent',
+      border: '0.2em solid rgb(255, 255, 255) !important',
+      minWidth: 50,
+      maxWidth: 70,
+      borderRadius: '50% !important',
+      padding: '0% !important',
+      position: 'fixed !important',
+      left: '1%',
+      top: '87%',
+      width: 60,
+      height: 60,
+    }
+  }
+}))

@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { ManageAccounts, ExitToApp, Settings, AdminPanelSettings, ExitToAppRounded, HomeRounded, PersonRounded } from "@mui/icons-material";
-import { Avatar, BottomNavigation, BottomNavigationAction, Box, Button, Card, CardContent, Container, CssBaseline, IconButton, Paper, Popover, Skeleton, SpeedDial, SpeedDialAction, SwipeableDrawer, Typography } from "@mui/material";
+import { Avatar, BottomNavigation, BottomNavigationAction, Box, Button, Card, CardContent, CardMedia, Container, CssBaseline, IconButton, Paper, Popover, Skeleton, SpeedDial, SpeedDialAction, SwipeableDrawer, Typography } from "@mui/material";
 import eliseAtenas from '../../landing/Images/ats_logo-elise-blanca.png'
 import logoAtenas from '../../landing/Images/ats_logo-blanco-elises.png'
 import { makeStyles } from "@material-ui/styles";
@@ -33,7 +33,7 @@ import { Global } from "@emotion/react";
 
 
 const reports = [
-    { key: 1, name: 'WOP', icon: WOP, style: { height: '90%' } },
+    { key: 1, name: 'WOP', icon: RServices, style: { height: '90%' } },
     { key: 2, name: 'Retail Scanning', icon: RScanning, style: { height: '80%', width: '80%' } },
     { key: 3, name: 'Home Pantry', icon: HPantry, style: { height: '85%' } },
     { key: 4, name: 'CI', icon: CI, style: { height: '90%', minWidth: 100, minHeight: 120, padding: '5%' } },
@@ -172,9 +172,15 @@ export function CardMovile() {
                     index={activeStep+1}
                     className={styles.carousel} onTouchMove={handleStepChange}
                 >
-                    {[1,2,3].map((value)=>(
-                        <Card key={value} >
-                            <CardContent>{value}</CardContent>
+                    {[{id:1,icon:RServices},{id:2,icon:HPantry},{id:3,icon:RScanning}].map((value)=>(
+                        <Card key={value.id} >
+                            <CardContent sx={{display:'flex', alignItems:'center'}} >
+                                <CardMedia
+                                    component="img"
+                                    image={value.icon}
+                                    alt="Paella dish"
+                                />
+                            </CardContent>
                         </Card>
                     ))}
                 </SwipeableViews>
@@ -272,7 +278,7 @@ export function FooterMovile(props) {
                         overflow: "visible",
                         width: '100%',
                         borderRadius:0,
-                        maxHeight:60,
+                        maxHeight:80,
                         background:'#ffa312'
                     }
                 }}
@@ -284,7 +290,7 @@ export function FooterMovile(props) {
                 open={open}
                 onClose={toggleDrawer(false)}
                 onOpen={toggleDrawer(true)}
-                swipeAreaWidth={56}
+                swipeAreaWidth={80}
                 disableSwipeToOpen={false}
                 ModalProps={{
                     keepMounted: true
@@ -292,7 +298,7 @@ export function FooterMovile(props) {
             >
                 <Box className={styles.boxSwipeale}>
                     <Box className={styles.contentSwipeable}>
-                        <div>
+                        <div className={styles.contentUser}>
                             <Avatar className={styles.avatar} src={temporal} alt='temporal' />
                             <Typography sx={{ p: 2, color: 'text.secondary' }}>UserName</Typography>
                         </div>
@@ -308,8 +314,8 @@ export function FooterMovile(props) {
                         }}
                     >
                         <BottomNavigationAction className={styles.iconNavigation} onClick={()=>logout()} value="salir" icon={<ExitToAppRounded/>}/>
-                        <BottomNavigationAction className={styles.iconNavigation} href={'/retailservices/home/'} value="inicio" icon={<HomeRounded/>}/>
-                        <BottomNavigationAction className={styles.iconNavigation} href={`/retailservices/home/changepassword/${sessionStorage.getItem('user')}`} value="configuracion" icon={<PersonRounded/>}/>
+                        <BottomNavigationAction className={styles.iconNavigation} value="inicio" icon={<HomeRounded/>}/>
+                        <BottomNavigationAction className={styles.iconNavigation} value="configuracion" icon={<PersonRounded/>}/>
                     </BottomNavigation>
                 </Box>
 
@@ -319,9 +325,8 @@ export function FooterMovile(props) {
     )
 }
 const usefooterMovile = makeStyles(() => ({
-    
     box: {
-        height: '100%'
+        height: 'auto'
     },
     boxSwipeale: {
         position: 'absolute',
@@ -338,18 +343,17 @@ const usefooterMovile = makeStyles(() => ({
         overflow: 'auto',
         display: 'inline-flex',
         justifyContent: 'center',
-        
         alignItems:'center',
-        "& div":{
-            padding:2,
-            borderRadius: '1.5em 1.5em 0 0',
-            backgroundColor:'#fff',
-            height:'100%',
-            width:'auto',
-            display: 'inline-flex',
-            justifyContent: 'center',
-            alignItems:'center',
-        }
+    },
+    contentUser:{
+        padding:4,
+        borderRadius: '1.5em 1.5em 0 0',
+        backgroundColor:'#fff',
+        height:'100%',
+        width:'auto',
+        display: 'inline-flex',
+        justifyContent: 'center',
+        alignItems:'center',
     },
     avatar:{
         height:'auto !important',
@@ -385,6 +389,33 @@ const usefooterMovile = makeStyles(() => ({
         minHeight: 25,
         color:'#e88100'
     },
+    '@media screen and (min-width:568px)':{
+        boxSwipeale:{
+            top:-70
+        },
+        contentSwipeable:{
+            top:-65,
+        },
+        contentUser:{
+            minWidth:250,
+            maxWidth:290,
+        },
+
+        navigation:{
+            "& svg": {
+                fontSize:'4em'
+            },
+        }
+        
+    },
+    '@media screen and (min-width:1024px)':{
+        boxSwipeale: {
+            display:'none'
+        },
+        content: {
+            display:'none'
+        },
+    }
 }))
 
 export function CarouselFooter(props) {
