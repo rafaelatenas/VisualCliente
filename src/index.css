@@ -4,6 +4,7 @@
   src: url(./landing/fonts/lucida\ sans\ demibold\ roman.ttf) format('TRUETYPE');
   font-style: normal;
   font-weight: 600;
+  font-display: swap;
 }
 body {
   margin: 0;

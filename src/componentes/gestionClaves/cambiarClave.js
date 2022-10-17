@@ -12,6 +12,7 @@ import atenaslogoEliseBlanca from '../../landing/Images/ATSElise.png'
 import { makeStyles } from '@material-ui/styles';
 import logoCuadro from '../../landing/Images/logo-cauadro.png'
 import { FooterMovile } from '../Home/homeComponents';
+import { ArrowCircleDownRounded } from '@mui/icons-material';
 
 export default function CambiarClave(){
   const style = styles()
@@ -186,9 +187,9 @@ export default function CambiarClave(){
           <Button className={style.buttonConfirm} variant="outlined" disabled={!confirmPasswordValid} onClick={enviarDatos}>Confirmar</Button>
         </FormControl>
       </div>
-      <FooterMovile/>
-      <IconButton className={style.back} variant="contained" onClick={()=>window.location = '/retailservices/home'}>
-        <ArrowBack style={{fontSize:'2.5em', fill:'#fff'}}></ArrowBack>
+      <FooterMovile item={'configuracion'}/>
+      <IconButton className={style.back} variant="contained" href='/retailservices/home'>
+        <ArrowCircleDownRounded style={{fontSize:'2.5em', fill:'#fff', transform:'rotate(90deg)'}}/>
       </IconButton>
     </section>
   )
@@ -272,17 +273,22 @@ const styles = makeStyles(()=>({
     }
   },
   '@media screen and (min-width:1024px)':{
+    changePassword:{
+      backgroundSize:'30% 90%'
+    },
+    formChange:{
+      width:'25%'
+    },
     back:{
       display:'block !important',
       background: 'transparent',
-      border: '0.2em solid rgb(255, 255, 255) !important',
+      // border: '0.2em solid rgb(255, 255, 255) !important',
       minWidth: 50,
       maxWidth: 70,
-      borderRadius: '50% !important',
       padding: '0% !important',
-      position: 'fixed !important',
-      left: '1%',
-      top: '87%',
+      position: 'relative !important',
+      left: '-47%',
+      top: '0%',
       width: 60,
       height: 60,
     }

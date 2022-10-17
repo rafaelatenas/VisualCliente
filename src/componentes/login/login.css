@@ -11,7 +11,7 @@
     align-items: center;
     justify-content: flex-end;
     flex-direction: column;
-    background-image: url(../../landing/Images/logo-cauadro.png);
+    background-image: url(../../landing/Images/logo-cauadro.webp);
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
@@ -48,7 +48,7 @@
     justify-content: center;
 }
 .containerRecovery{
-    background-image: url(../../landing/Images/CuadroFondoBlanco.png);
+    background-image: url(../../landing/Images/CuadroFondoBlanco.webp);
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
@@ -91,7 +91,7 @@
     }
     .Form{
         width: 85%;
-        height: 75%;
+        height: 65%;
         align-items: center;
         justify-content: space-evenly;
     }

@@ -865,9 +865,9 @@ export default function DATA(){
                       {[{id:0,nombre:'Semana'},{id:1,nombre:'Retail'},{id:2,nombre:'Estado'},{id:3,nombre:'Tienda'},{id:4,nombre:'Categoría'},{id:5,nombre:'Fabricante'},{id:6,nombre:'Marca'},{id:7,nombre:'Código de Barras'},{id:8,nombre:'Moneda'}].map((item)=>(
                         <Box key={item.id} className={styles.element}>
                           <FormControl className={styles.formControl}>
-                            <InputLabel size={'small'} className={styles.inputLabel} id="mutiple-select-label">{item.nombre}</InputLabel>
+                            <InputLabel size={'small'} className={styles.inputLabel} id={`multiple-select-label${item.id}`}>{item.nombre}</InputLabel>
                             <Select
-                              labelId="mutiple-select-label"
+                              labelId={`multiple-select-label${item.id}`}
                             >
                               {[0,1,2,3,4,5,6,7,8].map((item1)=>(
                                 <MenuItem key={item1}>

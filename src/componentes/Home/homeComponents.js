@@ -1,6 +1,6 @@
 import React, { useMemo, useState } from "react";
 import { ManageAccounts, ExitToApp, Settings, AdminPanelSettings, ExitToAppRounded, HomeRounded, PersonRounded } from "@mui/icons-material";
-import { Avatar, BottomNavigation, BottomNavigationAction, Box, Button, Card, CardContent, CardMedia, Container, CssBaseline, IconButton, Paper, Popover, Skeleton, SpeedDial, SpeedDialAction, SwipeableDrawer, Typography } from "@mui/material";
+import { Avatar, BottomNavigation, BottomNavigationAction, Box, Button, Card, CardActionArea, CardContent, CardMedia, Container, CssBaseline, IconButton, Paper, Popover, Skeleton, SpeedDial, SpeedDialAction, SwipeableDrawer, Typography } from "@mui/material";
 import eliseAtenas from '../../landing/Images/ats_logo-elise-blanca.png'
 import logoAtenas from '../../landing/Images/ats_logo-blanco-elises.png'
 import { makeStyles } from "@material-ui/styles";
@@ -27,8 +27,6 @@ import { useAuthContext } from "../context/authContext";
 
 import temporal from "../../landing/Images/provisional.png"
 import SwipeableViews from "react-swipeable-views";
-import { virtualize } from "react-swipeable-views-utils"
-import { mod } from "react-swipeable-views-core"
 import { Global } from "@emotion/react";
 
 
@@ -162,9 +160,7 @@ export function CardMovile() {
     const [activeStep, setActiveStep] = useState(0);
     const handleStepChange = (step) => {
         setActiveStep(step);
-        console.log(step)
     };
-    console.log(activeStep)
     return (
         <Container className={styles.BoxContainer}>
             <Box className={styles.BoxContent}>
@@ -174,13 +170,16 @@ export function CardMovile() {
                 >
                     {[{id:1,icon:RServices},{id:2,icon:HPantry},{id:3,icon:RScanning}].map((value)=>(
                         <Card key={value.id} >
-                            <CardContent sx={{display:'flex', alignItems:'center'}} >
-                                <CardMedia
-                                    component="img"
-                                    image={value.icon}
-                                    alt="Paella dish"
-                                />
-                            </CardContent>
+                                <CardActionArea className={styles.action} sx={{display:'flex', alignItems:'center'}} href={`/retailservices/home/changepassword/${sessionStorage.getItem('user')}`}>
+                                    <CardContent sx={{display:'flex', alignItems:'center'}} className={styles.content}>
+                                        <CardMedia
+                                        className={styles.media}
+                                        component="img"
+                                        image={value.icon}
+                                        alt="Paella dish"
+                                    />
+                                    </CardContent>
+                                </CardActionArea>
                         </Card>
                     ))}
                 </SwipeableViews>
@@ -211,6 +210,34 @@ const useStylesCardMovile = makeStyles(() => ({
             alignItems: 'center',
             height: '100%',
             justifyContent: 'center',
+            background:'transparent',
+            display:'flex',
+            width:'85%',
+            boxShadow:'unset'
+        }
+    },
+    action:{
+        height:'85%',
+        width:'100%'
+    },
+    content:{
+        width: '80%',
+        background: '#fff !important',
+        borderRadius: '1.5em',
+    },
+    media:{
+        width:'auto !important',
+        height:'65%'
+    },
+    '@media screen and (min-width:568px)':{
+        carousel:{
+            '& .react-swipeable-view-container div':{
+                width:'75%',
+                height:'95%'
+            }
+        },
+        media:{
+            height:'80%'
         }
     }
 }))
@@ -261,9 +288,9 @@ const useStylesCard = makeStyles(() => ({
 export function FooterMovile(props) {
     const styles = usefooterMovile();
     const { logout } = useAuthContext();
-    const { window } = props;
+    const { window, item } = props;
     const [open, setOpen] = useState(false);
-    const [value, setValue] = useState('inicio');
+    const [value] = useState(item);
     const container = window !== undefined ? () => window().document.body : undefined;
     const toggleDrawer = (newOpen) => () => {
         setOpen(newOpen);
@@ -307,15 +334,13 @@ export function FooterMovile(props) {
                 </Box>
                 <Box className={styles.content}>
                     <BottomNavigation
-                        showLabels={false}  className={styles.navigation}
+                        showLabels={false}
+                        className={styles.navigation}
                         value={value}
-                        onChange={(event, newValue) => {
-                            setValue(newValue);
-                        }}
                     >
                         <BottomNavigationAction className={styles.iconNavigation} onClick={()=>logout()} value="salir" icon={<ExitToAppRounded/>}/>
-                        <BottomNavigationAction className={styles.iconNavigation} value="inicio" icon={<HomeRounded/>}/>
-                        <BottomNavigationAction className={styles.iconNavigation} value="configuracion" icon={<PersonRounded/>}/>
+                        <BottomNavigationAction className={styles.iconNavigation} value="inicio" href={'/retailservices/home/'} icon={<HomeRounded/>}/>
+                        <BottomNavigationAction className={styles.iconNavigation} href={`/retailservices/home/changepassword/${sessionStorage.getItem('user')}`} value="configuracion" icon={<PersonRounded/>}/>
                     </BottomNavigation>
                 </Box>
 
@@ -387,7 +412,7 @@ const usefooterMovile = makeStyles(() => ({
         height: '80%',
         minWidth: 25,
         minHeight: 25,
-        color:'#e88100'
+        color:'#b96905 !important'
     },
     '@media screen and (min-width:568px)':{
         boxSwipeale:{

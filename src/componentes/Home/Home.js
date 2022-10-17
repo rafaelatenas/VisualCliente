@@ -3,7 +3,7 @@ import React from 'react';
 import { Box, Container, Typography, Modal, IconButton, CardContent, Popover, Card, List, ListItem, ListItemText, Paper, MenuList, Menu, MenuItem, CardMedia } from '@mui/material';
 import './home.css';
 import { CardDesktop, CardMovile, CarouselFooter, FooterMovile, HeaderDesktop, HeaderMovile } from './homeComponents';
-import { Link, NavLink, useLocation } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 class Home extends React.Component {
     
@@ -45,19 +45,7 @@ class Home extends React.Component {
         {id:5, key:16, target:'', url:'', padre:'Execution', name:'Censo Caracas'},
         {id:5, key:17, target:'', url:'', padre:'Execution', name:'Censo Maracaibo'},
     ]
-    // reports=[
-    //     {id:1, key:1, target:'_black', url:`//app.powerbi.com/reportEmbed?${this.LinkWopUser}`, padre:'WOP', name:'Resumen Táctico'},
-    //     // {id:1, key:2, target:'_black', url:`//app.powerbi.com/reportEmbed?${this.LinkWopUser}`, padre:'WOP', name:'WOP'},
-    //     {id:2, key:2, target:'', url:'/retailservices/home/data', padre:'Retail Scanning', name:'Reporte Retail Scanning'},
-    //     {id:2, key:3, target:'', url:'/retailservices/home/MoneyMarket', padre:'Retail Scanning', name:'Money Market'},
-    //     {id:3, key:4, target:'', url:'', padre:'Home Pantry', name:'Canales y Cadenas'},
-    //     {id:3, key:5, target:'', url:'', padre:'Home Pantry', name:'Medicinas'},
-    //     {id:4, key:6, target:'', url:'', padre:'CI', name:'Imagen Retail'},
-    //     {id:4, key:7, target:'', url:'', padre:'CI', name:'Omnibus'},
-    //     {id:4, key:8, target:'', url:'', padre:'CI', name:'CI a la Medida'},
-    //     {id:5, key:9, target:'', url:'', padre:'Execution', name:'Censo Caracas'},
-    //     {id:5, key:10, target:'', url:'', padre:'Execution', name:'Censo Maracaibo'}
-    // ]
+    
     handleClosePopover=(e)=>{
         this.state.anchorEl === null? this.setState({anchorEl:e.currentTarget}):this.setState({anchorEl:null})
         this.setState({idPopover:e.target.id})
@@ -135,7 +123,7 @@ class Home extends React.Component {
                     </Menu>
                     </>: <CardMovile/>}
                 </Container>
-                {this.state.withdScreen >= 1020 ? this.footerDesktop : <FooterMovile props={this.props.logOut}/>}
+                {this.state.withdScreen >= 1020 ? this.footerDesktop : <FooterMovile props={this.props.logOut} item={'inicio'}/>}
 
             </Container>
         )
