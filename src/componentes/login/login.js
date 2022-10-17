@@ -131,14 +131,21 @@ function Login (){
           })    
     })
   }
+  const onSubmitWithReCAPTCHA = async () => {
+      const token = await recaptchaRef.current.executeAsync();
+    console.log(token)
+      // apply to form data
+    }
     /* Validación Google */
   const handleChangeRecovery = value => {
+    
+    const tokenss = recaptchaRef.current.getValue()
+    console.log(recaptchaRef.current.getValue())
     if (value !== null) {
       isHuman()
     }
   }
   const handleChangeLogin = value => {
-    console.log(value)
     if (value !== null) {
       isHuman()
     }
@@ -230,13 +237,15 @@ function Login (){
                 ),
               }}
             />
+    
+            <Button onClick={onSubmitWithReCAPTCHA}> hi
             <ReCAPTCHA 
-            className="recaptcha"
-            onChange={handleChangeRecovery}
-            sitekey={process.env.REACT_APP_PUBLIC_KEY}
-            badge='bottomleft'
-            ref={recaptchaRef}
-            />
+              className="recaptcha"
+              
+              sitekey={'6LdsoIsiAAAAAP1SzyqpijyrXt19obk0qXFydZbj'}
+              size="invisible"
+              ref={recaptchaRef}
+            /></Button>
             <Button variant="contained" disabled={!validToken} onClick={()=>PasswordRecovery()}>Confirmar</Button>
          </Box>
         </Container>
@@ -407,7 +416,8 @@ const styles = makeStyles(()=>({
       },
       /*Styles Recaptcha*/
       '#rc-imageselect':{
-        display: 'inline'
+        display: 'inline',
+        maxWidth: '100%',
       },
       'g-recaptcha':{
         display: 'inline',
@@ -419,9 +429,6 @@ const styles = makeStyles(()=>({
           textAlign: 'center',
           position: 'relative',
         },
-      },
-      '#rc-imageselect':{
-          maxWidth: '100%',
       },
       recovery:{
         '& p':{
@@ -584,7 +591,7 @@ const styles = makeStyles(()=>({
         height: '10%',
         '& label':{
           fontSize: '1.6em',
-          top: 0,
+          top: -12,
         }
       },
       password:{
@@ -592,7 +599,7 @@ const styles = makeStyles(()=>({
           height: '10%',
           '& label':{
             fontSize: '1.6em',
-            top: 0,
+            top: -12,
         }
       },
       error:{
@@ -615,104 +622,94 @@ const styles = makeStyles(()=>({
   },
   '@media screen and (orientation: landscape)':{
     '@media screen and (min-width:993px) and (max-width:1450px)':{
-    cardLogin:{
-        height: '80%',
-        justifyContent: 'center',
-        width: '40%',
-        backgroundSize: '80%',
-    },
-    logoLogin:{
-        width: '70%',
-        height: 'auto',
-        maxWidth: 380,
-    },
-    form:{
-        width: '65%',
-        height: '85%',
-        alignItems: 'center',
-        justifyContent: 'space-evenly',
-    },
-    email:{
-      width: '90%',
-      height: '10%',
-    },
-    password:{
-        width: '90%',
-        height: '10%',
-    },
-    error:{
-        height: '10%',
-        minHeight: 67,
-        '& p':{
-          fontSize: '1em',
-          height: '50%',
-        }
-    },
-    button:{
-        height: '10%',
-        maxHeight: 70
-    },
-    '@media screen and (orientation: landscape)':{
+      cardLogin:{
+          height: '80%',
+          justifyContent: 'center',
+          width: '35%',
+          backgroundSize: '80%',
+          minHeight:250
+      },
+      logoLogin:{
+          width: '70%',
+          height: 'auto',
+          maxWidth: 380,
+      },
       form:{
-          width: '65%',
-          height: '85%',
+          width: '60%',
+          height: '65%',
           alignItems: 'center',
           justifyContent: 'space-evenly',
-          maxHeight: 320,
-          minHeight: 283,
-      }
+          maxHeight:310,
+          minHeight:250
+      },
+      email:{
+        width: '90%',
+        height: '10%',
+      },
+      password:{
+          width: '90%',
+          height: '10%',
+      },
+      error:{
+          height: '10%',
+          minHeight: 67,
+          '& p':{
+            fontSize: '1em',
+            height: '50%',
+          }
+      },
+      button:{
+          height: '10%',
+          maxHeight: 70
+      },
     },
-  },
-  
-  '@media screen and (min-width:1451px)':{
-    cardLogin:{
+    '@media screen and (min-width:1451px)':{
+      cardLogin:{
         width: '40%',
         height: '80%',
         justifyContent: 'center',
         maxWidth: 690,
-    },
-    logoLogin:{
+        maxHeight:490,
+      },
+      logoLogin:{
         width: '80%',
         height: 'auto',
         maxWidth: 460,
-    },
-    form:{
+      },
+      form:{
         width: '65%',
         height: '85%',
         alignItems: 'center',
         justifyContent: 'space-evenly',
         maxWidth: 760,
         maxHeight: 590,
-    },
-    email:{
-      width: '90%',
-      height: '10%',
-      '& label':{
-        fontSize: '1.3em',
-        top: 0,
-      }
-    },
-    password:{
+      },
+      email:{
         width: '90%',
         height: '10%',
         '& label':{
           fontSize: '1.3em',
-          top: 0,
-      }
-    },
-    error:{
-      height: '10%',
-      minHeight: 67,
-    },
-    iconVisibility:{
+        }
+      },
+      password:{
+        width: '90%',
+        height: '10%',
+        '& label':{
+          fontSize: '1.3em',
+        }
+      },
+      error:{
+        height: '10%',
+        minHeight: 67,
+      },
+      iconVisibility:{
         fontSize: '1.3em !important'
-    },
-    button:{
+      },
+      button:{
         height: '10%',
         maxHeight: 70,
         fontSize: '1.3em !important'
+      },
     },
-  }
   },
-  
 }))
