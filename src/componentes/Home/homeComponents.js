@@ -129,7 +129,7 @@ const useStyles = makeStyles(() => ({
         //display:'flex',
         alignItems: 'center',
         padding: '0 !important',
-        maxWidth: 'none'
+        maxWidth: 'none !important'
     },
     BoxPrimary: {
         width: '100%',

@@ -2,8 +2,6 @@ import React, { createContext, useCallback, useContext, useMemo, useState } from
 import PropTypes  from "prop-types";
 
 export const AuthContext = createContext({
-    isAuthenticated: sessionStorage.getItem('success'),
-    // IdUser: sessionStorage.getItem('ID_Perfil'),
     login: () => {},
     logout: () => {}
 });
@@ -14,8 +12,9 @@ export function AuthContextProvider({children}){
     // const IdUser = sessionStorage.getItem('ID_Perfil')
     const IdUser=2
     
-    const login = useCallback(function () {
-        setAuthenticated(true)
+    const login = useCallback(function (dato) {
+        console.log(dato)
+        setAuthenticated(dato)
     },[])
     
     const logout = useCallback(function () {

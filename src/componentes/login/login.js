@@ -112,8 +112,8 @@ function Login (){
           title: ''+result.data.message+' '+nombre+' '+apellidos+'',
           confirmButtonText: `Ok`,
       })
-      if (result.data.success === true) {
-        login();
+      if (result.data.success) {
+        login(sessionStorage.getItem('success'));
         console.log(result.data)
       }
     }).catch(err => {
@@ -131,29 +131,26 @@ function Login (){
           })    
     })
   }
-  const onSubmitWithReCAPTCHA = async () => {
-      const token = await recaptchaRef.current.executeAsync();
-    console.log(token)
-      // apply to form data
-    }
+  
     /* Validación Google */
-  const handleChangeRecovery = value => {
-    
-    const tokenss = recaptchaRef.current.getValue()
-    console.log(recaptchaRef.current.getValue())
-    if (value !== null) {
-      isHuman()
-    }
+  const onSubmitWithReCAPTCHA = async () => {
+    const recaptcha = recaptchaRef.current;
+      var responseCaptcha =  {captcha: await recaptcha.executeAsync(), size:recaptcha.props.size};
+      const value = responseCaptcha.captcha
+      if (value !== null) {
+        isHuman(responseCaptcha)
+      }
   }
   const handleChangeLogin = value => {
+    const responseCaptcha = {captcha: recaptchaRef.current.getValue(), size:recaptchaRef.current.props.size};
     if (value !== null) {
-      isHuman()
+      isHuman(responseCaptcha)
     }
   }
-  const isHuman=async()=>{
-    var responseKey = {captcha: recaptchaRef.current.getValue()};
-    // axios.post(process.env.REACT_APP_API_ENDPOINT+"ValidationCaptcha",responseKey)
-    axios.post("localhost:3005/VisorCliente_Api/ValidationCaptcha",responseKey)
+  const isHuman=(valueResponse)=>{
+    console.log(valueResponse)
+    axios.post(process.env.REACT_APP_API_ENDPOINT+"ValidationCaptcha",valueResponse)
+    // axios.post("http://localhost:3005/VisorCliente_Api/ValidationCaptcha",valueResponse)
     .then(result => {
       console.log(result)
     switch (result.data.success) {
@@ -174,7 +171,11 @@ function Login (){
     setOpen(!open)
   }
   const handleChecked = (event) => {
+    const {checked}=event.target
     setChecked(event.target.checked);
+    if (checked) {
+      onSubmitWithReCAPTCHA()
+    }
   };
   const handleUserEmailRecovery = (e) => {
     const name = e.target.name;
@@ -185,12 +186,7 @@ function Login (){
   const PasswordRecovery=()=>{
     console.log(0)
   }
-  const CheckboxModal = 
-    <Checkbox
-      checked={checked}
-      onChange={handleChecked}
-      inputProps={{ 'aria-label': 'controlled' }}
-    />;
+
   return (
     <section className={style.login}>
       <Box id='card-login' className={style.cardLogin}>
@@ -209,13 +205,21 @@ function Login (){
               />
               <FormHelperText>{formErrors.Password}</FormHelperText>
             </FormControl>
-            <Button className={style.button} variant="outlined" disabled={false} onClick={enviarDatos}>Confirmar</Button> 
+            <Button className={style.button} variant="outlined" disabled={!validToken} onClick={enviarDatos}>Confirmar</Button> 
         </FormControl>
           <Button className={style.recovery} onClick={()=>openModalPassword()}>
             <p>¿Olvido su Clave?</p>
           </Button>
           
       </Box>
+      <ReCAPTCHA 
+        className="recaptcha"
+        onChange={handleChangeLogin}
+        sitekey={process.env.REACT_APP_PUBLIC_KEY_NORMAL}
+        badge='bottomleft'
+        ref={recaptchaRef}
+      />
+      {/* Modal de Recuperación de clave */}
       <Modal
         className={style.ModalRecovery}
         open={open}
@@ -225,39 +229,27 @@ function Login (){
       >
         <Container className={style.containerRecovery}>
           <Box className={style.boxRecovery}>
-            <img className={style.logoLogin} src={atenasLogo} alt="Logo Atenas" title=''/>
+            <img className={style.logoRecovery} src={atenasLogo} alt="Logo Atenas" title=''/>
             <TextField error={formErrors.EmailRecovery === ''? false: true} 
-              helperText={formErrors.EmailRecovery} className={formErrors.EmailRecovery === ''? 'email': 'email error'} 
+              helperText={formErrors.EmailRecovery} className={formErrors.EmailRecovery === ''? style.emailRecovery: `${style.emailRecovery} ${style.error}`} 
               variant="outlined" label="Correo" type='text' name='EmailRecovery' value={emailRecovery} onChange={(e)=>handleUserEmailRecovery(e)}
-              InputProps={{
-                startAdornment: (
-                  <InputAdornment style={{width:'10%'}} position="start">
-                    <EmailOutlined/>
-                  </InputAdornment>
-                ),
-              }}
             />
-    
-            <Button onClick={onSubmitWithReCAPTCHA}> hi
+            <FormGroup className={style.gruopConfirm}>
+              <Typography className={style.dudeConfirm}>¿Esta seguro de realizar esta acción?</Typography>
+              <FormControlLabel control={<Checkbox checked={checked} onChange={handleChecked} className={style.confirmRecovery}/>} label="Si" />
+            </FormGroup>
             <ReCAPTCHA 
               className="recaptcha"
-              
-              sitekey={'6LdsoIsiAAAAAP1SzyqpijyrXt19obk0qXFydZbj'}
+              sitekey={'6Lew_48iAAAAAFbTFcQf7WgN8AEfIXw9dZfndnKu'}
               size="invisible"
               ref={recaptchaRef}
-            /></Button>
+            />
             <Button variant="contained" disabled={!validToken} onClick={()=>PasswordRecovery()}>Confirmar</Button>
          </Box>
         </Container>
         
       </Modal>
-      <ReCAPTCHA 
-        className="recaptcha"
-        onChange={handleChangeLogin}
-        sitekey={process.env.REACT_APP_PUBLIC_KEY}
-        badge='bottomleft'
-        ref={recaptchaRef}
-      />
+      
     </section>
     )
 };
@@ -338,8 +330,8 @@ const styles = makeStyles(()=>({
       backgroundSize: 'contain',
       backgroundPosition: 'center',
       width: '50%',
-      height: '60%',
-      minWidth: 400,
+      height: '45%',
+      minWidth: 360,
       maxWidth: '500px !important',
       display: 'flex !important',
       alignItems: 'center',
@@ -356,6 +348,11 @@ const styles = makeStyles(()=>({
       alignItems: 'center',
       justifyContent: 'space-around',
       flexDirection: 'column',
+  },
+  logoRecovery:{
+    width: '45%',
+    height: 'auto',
+    maxWidth: 250,
   },
   '@media screen and (orientation: portrait)':{
     cardLogin:{
@@ -430,11 +427,38 @@ const styles = makeStyles(()=>({
           position: 'relative',
         },
       },
+      containerRecovery:{
+        height:'55%'
+      },
+      boxRecovery:{
+        height:'90%'
+      },
       recovery:{
         '& p':{
           fontSize:12,
           color:'#fff'
         }
+      },
+      gruopConfirm:{
+        width: '65%',
+        height: 'auto',
+        maxWidth: 260,
+        minHeight:60,
+        '& p':{
+          fontSize:12
+        },
+        '& label':{
+          width: '65%',
+          height: 'auto',
+          maxWidth: 260,
+          margin: 0,
+          '& span':{
+            fontSize:12
+          },
+        },
+      },
+      confirmRecovery:{
+
       },
       '@media screen and (max-height:600px)':{
         cardLogin:{
@@ -464,7 +488,7 @@ const styles = makeStyles(()=>({
             top:0
           },
         }
-      }
+      },
     },
     '@media screen and (min-width: 577px )and (max-width:768px)':{
       cardLogin:{
@@ -662,6 +686,22 @@ const styles = makeStyles(()=>({
           height: '10%',
           maxHeight: 70
       },
+      emailRecovery:{
+        width: '70%',
+        height: '15%',
+        maxWidth: 270,
+        maxHeight: 60,
+        overflow:'visible',
+        '& div':{
+          width: '100%',
+          height: '100%',
+          borderRadius: '2em',
+          backgroundColor: '#fff',
+        },
+      },
+      gruopConfirm:{
+
+      }
     },
     '@media screen and (min-width:1451px)':{
       cardLogin:{
