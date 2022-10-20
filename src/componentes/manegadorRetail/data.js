@@ -79,7 +79,8 @@ export default function DATA(){
 
     const [data, setData]=useState([]);
     const [selectedOptions1, setSelectedOptions1] = useState([]);
-console.log(selectedOptions1)
+
+
   /*Data Canales*/
     const [canal, setCanal]=useState([]);
     const [selectedOptions2, setSelectedOptions2] = useState([]);
@@ -154,10 +155,11 @@ console.log(selectedOptions1)
 
     const peticionMeses=async()=>{
       setBotonreporte({meses:true,periodo:true})
-      await axios.get( process.env.REACT_APP_API_ENDPOINT+'ListarPeriodo',{
+      await axios.get('http://localhost:3005/VisorCliente_Api/listarPeriodo',{
         headers: {'Authorization': `Bearer ${token}`},
       })
       .then(response=>{
+        console.log(response.data)
         setData(response.data.data);
       }).catch(error=>{
         console.log(error.response.data.message);
@@ -222,23 +224,21 @@ console.log(selectedOptions1)
       }
       setSelectedOptions1(value);
     };
-
    /*Funciones de Listar CANALES 😄*/
     const peticionCanales=async()=>{
       const {periodo} = botonreporte
       let url;
       switch (periodo) {
         case true:
-          url = process.env.REACT_APP_API_ENDPOINT+'ListarCanalPeriodo';
+          url = `http://localhost:3005/VisorCliente_Api/ListarCanalPeriodo/${selectedOptions1}`;
           break;
       
         default:
-          url=process.env.REACT_APP_API_ENDPOINT+'ListarCanalSemanal';
+          url=`http://localhost:3005/VisorCliente_Api/ListarCanalSemanal/${selectedOptions1}`;
           break;
       }
       await axios.get(url,{
         headers: {'Authorization': `Bearer ${token}`},
-        selectedOptions1
       })
       .then(response=>{
         setCanal(response.data.data);
@@ -283,27 +283,28 @@ console.log(selectedOptions1)
     const [idRegiones, setIdRegiones] = useState();
     
     const peticionRegiones=async()=>{
-      await axios.get( process.env.REACT_APP_API_ENDPOINT+'ListarRegion',{
+      const {periodo} = botonreporte
+      let url;
+      switch (periodo) {
+        case true:
+          url = `http://localhost:3005/VisorCliente_Api/ListarRegionPeriodo/1/${selectedOptions1}`;
+          break;
+      
+        default:
+          url=`http://localhost:3005/VisorCliente_Api/ListarRegionSemanal/1/${selectedOptions1}`;
+          break;
+      }
+      await axios.get(url,{
         headers: {'Authorization': `Bearer ${token}`},
       })
       .then(response=>{
+        console.log(response.data.data)
         setRegion(response.data.data);
       }).catch(error=>{
-        console.log(error.response.data.message);
-        console.log(error.response.status);
-        console.log(error.response.headers);
+        console.log(error);
+        console.log(error);
       })
 
-      await axios.get(process.env.REACT_APP_API_ENDPOINT+'ListarIDSubRegion',{
-        headers: {'Authorization': `Bearer ${token}`},
-      })
-      .then(response=>{
-        setIdRegiones(response.data.data)
-      }).catch(error=>{
-        console.log(error.response.data.message);
-        console.log(error.response.status);
-        console.log(error.response.headers);
-      })
     }
     const handleRegiones = (event) => {
       const value =event.target.value;
@@ -327,12 +328,24 @@ console.log(selectedOptions1)
        /*Funcion onChange del combo SubRegiones */
       const [SubRegion, setSubRegion]=useState([])
       const peticionSubRegiones=async(value)=>{
-      await axios.get( process.env.REACT_APP_API_ENDPOINT+'ListarSubRegion/'+value,{
+        const {periodo} = botonreporte
+        let url;
+        switch (periodo) {
+          case true:
+            url = `http://localhost:3005/VisorCliente_Api/ListarSubRegionPeriodo/1/${selectedOptions1}/3`;
+            break;
+        
+          default:
+            url=`http://localhost:3005/VisorCliente_Api/ListarSubRegionSemanal/1/${selectedOptions1}/3`;
+            break;
+        }
+      await axios.get( url,{
         headers: {
           'Authorization': `Bearer ${token}`
         },
       })
       .then(response=>{
+        console.log(response)
         setSubRegion(response.data.data);
       }).catch(error=>{
         console.log(error.response.data.message);

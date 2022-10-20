@@ -190,11 +190,11 @@ export function SelectRegiones(region){
     const OptionRegiones = regiones.map((item) => (
         <MenuItem key={item.id} value={item.id} className='items'>
           <Checkbox checked={selectedOptions3.indexOf(item.id) > -1} />
-          {/* <ListItemText  primary={item.nombre} /> */}
-          <SubRegiones
+          <ListItemText  primary={item.nombre} />
+          {/* <SubRegiones
             idRegiones={idRegiones}
             selectedOptions33={selectedOptions33}
-          />
+          /> */}
           {/* <FormControl sx={{ m: 1, minWidth: 120 }} size="small" variant="standard">
           <InputLabel sx={{fontSize:10}} id="demo-select-small">{item.nombre}</InputLabel>
           <Select
@@ -256,22 +256,6 @@ export function SelectRegiones(region){
                             )
                         }
                     }}
-                        
-                        
-                    //     (
-                    //     <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                    //         {selected.map((value) =>{
-                    //           for (let h = 0; h < region.region.length; h++) {
-                    //           const element = region.region[h];
-                    //             if(element.id === value && value !== 0){
-                    //               return(<Chip style={{fontSize:'.7em'}} key={value} label={element.nombre}/>)
-                    //             }else if (value === 0) {
-                    //             return(<Chip style={{fontSize:'.7em'}} key={value} label={element.nombre}/>)
-                    //             }
-                    //           }
-                    //         })}
-                    //     </Box>
-                    // )}
                     MenuProps={MenuProps}
                 >
                     {OptionRegiones}
@@ -285,7 +269,7 @@ export function SelectRegiones(region){
 function SubRegiones(props) {
     const {idRegiones}=props
     return(
-        <p>hla</p>
+        <p>hola</p>
         // <FormControl sx={{ m: 1, minWidth: 120 }} size="small" variant="standard">
         //   <InputLabel sx={{fontSize:10}} id="demo-select-small">{item.nombre}</InputLabel>
         //   <Select
