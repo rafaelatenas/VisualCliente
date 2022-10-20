@@ -13,7 +13,7 @@ import withReactContent from 'sweetalert2-react-content'
 import { DrawerComponent, BotonUsuario, CardComponents, HeaderComponent } from './components/Components';
 import { SelectCanales, SelectAtributos, SelectIndicadores, SelectPeriodos, SelectRegiones,  } from './components/Selects';
 import Alert from '@mui/material/Alert';
-import { useNavigate } from 'react-router-dom';
+
 const MySwal = withReactContent(Swal)
 const toast = MySwal.mixin({
   toast: true,
@@ -79,7 +79,7 @@ export default function DATA(){
 
     const [data, setData]=useState([]);
     const [selectedOptions1, setSelectedOptions1] = useState([]);
-
+console.log(selectedOptions1)
   /*Data Canales*/
     const [canal, setCanal]=useState([]);
     const [selectedOptions2, setSelectedOptions2] = useState([]);
@@ -143,6 +143,7 @@ export default function DATA(){
         headers: {'Authorization': `Bearer ${token}`},
       })
       .then(response=>{
+        console.log(response.data.data)
         setData(response.data.data);
       }).catch(error=>{
         console.log(error.response.data.message);
@@ -152,7 +153,7 @@ export default function DATA(){
     }
 
     const peticionMeses=async()=>{
-      setBotonreporte({meses:true})
+      setBotonreporte({meses:true,periodo:true})
       await axios.get( process.env.REACT_APP_API_ENDPOINT+'ListarPeriodo',{
         headers: {'Authorization': `Bearer ${token}`},
       })
@@ -165,11 +166,12 @@ export default function DATA(){
       })
     }
     const PeticionTrimestres=async()=>{
-      setBotonreporte({trimestres:true})
+      setBotonreporte({trimestres:true,periodo:true})
       await axios.get( process.env.REACT_APP_API_ENDPOINT+'ListarTrimestre',{
         headers: {'Authorization': `Bearer ${token}`},
       })
       .then(response=>{
+        console.log(response.data.data)
         setData(response.data.data);
       }).catch(error=>{
         console.log(error.response.data.message);
@@ -178,11 +180,12 @@ export default function DATA(){
       })
     }
     const PeticionSemestres=async()=>{
-      setBotonreporte({semestres:true})
+      setBotonreporte({semestres:true,periodo:true})
       await axios.get( process.env.REACT_APP_API_ENDPOINT+'ListarSemestre',{
         headers: {'Authorization': `Bearer ${token}`},
       })
       .then(response=>{
+        console.log(response.data.data)
         setData(response.data.data);
       }).catch(error=>{
         console.log(error.response.data.message);
@@ -222,8 +225,20 @@ export default function DATA(){
 
    /*Funciones de Listar CANALES 😄*/
     const peticionCanales=async()=>{
-      await axios.get( process.env.REACT_APP_API_ENDPOINT+'ListarCanal',{
+      const {periodo} = botonreporte
+      let url;
+      switch (periodo) {
+        case true:
+          url = process.env.REACT_APP_API_ENDPOINT+'ListarCanalPeriodo';
+          break;
+      
+        default:
+          url=process.env.REACT_APP_API_ENDPOINT+'ListarCanalSemanal';
+          break;
+      }
+      await axios.get(url,{
         headers: {'Authorization': `Bearer ${token}`},
+        selectedOptions1
       })
       .then(response=>{
         setCanal(response.data.data);
@@ -312,7 +327,6 @@ export default function DATA(){
        /*Funcion onChange del combo SubRegiones */
       const [SubRegion, setSubRegion]=useState([])
       const peticionSubRegiones=async(value)=>{
-        // http://localhost:3005/VisorCliente_Api/ListarIDSubRegion
       await axios.get( process.env.REACT_APP_API_ENDPOINT+'ListarSubRegion/'+value,{
         headers: {
           'Authorization': `Bearer ${token}`
@@ -800,7 +814,9 @@ export default function DATA(){
       semanas:false,
       meses:false,
       trimestres:false,
-      semestres:false
+      semestres:false,
+      /* Indicador Perido usado en la llamada de canal periodo */
+      periodo:false,
     })
   /*Controles de Search*/
     const [focus, setFocus] = React.useState(false);
