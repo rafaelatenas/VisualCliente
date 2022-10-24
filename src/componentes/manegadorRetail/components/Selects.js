@@ -183,8 +183,7 @@ export function SelectCanales(canal){
 export function SelectRegiones(region){
     const {regiones, selectedOptions3, isSelected,openRegiones,handleOpenRegiones,handleCloseRegion,handleRegiones}= region
     /*Sub Regiones*/
-    const {idRegiones,selectedOptions33}=region
-
+    const {idRegiones,selectedOptions33,handleSubRegiones}=region
     const classes = useStyles();
     
     const OptionRegiones = regiones.map((item) => (
@@ -194,6 +193,7 @@ export function SelectRegiones(region){
           {/* <SubRegiones
             idRegiones={idRegiones}
             selectedOptions33={selectedOptions33}
+            handleSubRegiones={handleSubRegiones}
           /> */}
           {/* <FormControl sx={{ m: 1, minWidth: 120 }} size="small" variant="standard">
           <InputLabel sx={{fontSize:10}} id="demo-select-small">{item.nombre}</InputLabel>
@@ -267,35 +267,34 @@ export function SelectRegiones(region){
 /* SubRegiones */
 
 function SubRegiones(props) {
-    const {idRegiones}=props
+    console.log(props)
+    const {idRegiones,selectedOptions33}=props
     return(
-        <p>hola</p>
-        // <FormControl sx={{ m: 1, minWidth: 120 }} size="small" variant="standard">
-        //   <InputLabel sx={{fontSize:10}} id="demo-select-small">{item.nombre}</InputLabel>
-        //   <Select
-        //     sx={{fontSize:'1em'}}
-        //     labelId="demo-select-small"
-        //     label={item.nombre}
-        //     value={selectedOptions3}
-        //     multiple
-        //     renderValue={(selected) => {
-        //         return selected.join(', ');
-        //     }}
-        //   >
-        //     <MenuItem key={item.id} value={item.id} className='items'>
-        //         <Checkbox checked={selectedOptions3.indexOf(item.id) > -1} />
-        //         <ListItemText  primary={item.nombre} />
-        //     </MenuItem>
-        //     <MenuItem key={item.id} value={item.id} className='items'>
-        //         <Checkbox checked={selectedOptions3.indexOf(item.id) > -1} />
-        //         <ListItemText  primary={'item.nombre'} />
-        //     </MenuItem>
-        //     <MenuItem key={item.id} value={item.id} className='items'>
-        //         <Checkbox checked={selectedOptions3.indexOf(item.id) > -1} />
-        //         <ListItemText  primary={'item.nombre'} />
-        //     </MenuItem>
-        //   </Select>
-        //   </FormControl>
+        <FormControl sx={{ m: 1, minWidth: 120 }} size="small" variant="standard">
+          {/* <Select
+            sx={{fontSize:'1em'}}
+            labelId="demo-select-small"
+            label={item.nombre}
+            value={selectedOptions33}
+            multiple
+            renderValue={(selected) => {
+                return selected.join(', ');
+            }}
+          >
+            <MenuItem key={item.id} value={item.id} className='items'>
+                <Checkbox checked={selectedOptions33.indexOf(item.id) > -1} />
+                <ListItemText  primary={item.nombre} />
+            </MenuItem>
+            <MenuItem key={item.id} value={item.id} className='items'>
+                <Checkbox checked={selectedOptions33.indexOf(item.id) > -1} />
+                <ListItemText  primary={'item.nombre'} />
+            </MenuItem>
+            <MenuItem key={item.id} value={item.id} className='items'>
+                <Checkbox checked={selectedOptions33.indexOf(item.id) > -1} />
+                <ListItemText  primary={'item.nombre'} />
+            </MenuItem>
+          </Select> */}
+        </FormControl>
     )
 }
 /*Atributos*/

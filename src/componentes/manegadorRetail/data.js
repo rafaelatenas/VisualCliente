@@ -155,7 +155,7 @@ export default function DATA(){
 
     const peticionMeses=async()=>{
       setBotonreporte({meses:true,periodo:true})
-      await axios.get('http://localhost:3005/VisorCliente_Api/listarPeriodo',{
+      await axios.get('http://localhost:3005/VisorCliente_Api/listarPeriodo/',{
         headers: {'Authorization': `Bearer ${token}`},
       })
       .then(response=>{
@@ -227,20 +227,25 @@ export default function DATA(){
    /*Funciones de Listar CANALES 😄*/
     const peticionCanales=async()=>{
       const {periodo} = botonreporte
-      let url;
+      let Tipo;
+      /* Valores condicionales necesarios para variable Semana o Periodo*/
       switch (periodo) {
         case true:
-          url = `http://localhost:3005/VisorCliente_Api/ListarCanalPeriodo/${selectedOptions1}`;
+          // Periodo
+          Tipo=[1];
           break;
-      
+          // Semana
         default:
-          url=`http://localhost:3005/VisorCliente_Api/ListarCanalSemanal/${selectedOptions1}`;
+          Tipo=[0];
           break;
       }
-      await axios.get(url,{
+      await axios.post('http://localhost:3005/VisorCliente_Api/ListarCanal/',{
         headers: {'Authorization': `Bearer ${token}`},
+        IdValor:selectedOptions1,
+        IdTipo:Tipo
       })
       .then(response=>{
+        console.log(response.data)
         setCanal(response.data.data);
       }).catch(error=>{
         console.log(error.response.data.message);
@@ -284,21 +289,24 @@ export default function DATA(){
     
     const peticionRegiones=async()=>{
       const {periodo} = botonreporte
-      let url;
+      let IdValor;
       switch (periodo) {
         case true:
-          url = `http://localhost:3005/VisorCliente_Api/ListarRegionPeriodo/1/${selectedOptions1}`;
+          IdValor=[1];
           break;
       
         default:
-          url=`http://localhost:3005/VisorCliente_Api/ListarRegionSemanal/1/${selectedOptions1}`;
+          IdValor=[0];
           break;
       }
-      await axios.get(url,{
+      await axios.post('http://localhost:3005/VisorCliente_Api/ListarRegion/',{
         headers: {'Authorization': `Bearer ${token}`},
+        IdValor:selectedOptions1,
+        IdCanal:selectedOptions2,
+        IdTipo:IdValor
       })
       .then(response=>{
-        console.log(response.data.data)
+        console.log(response.data)
         setRegion(response.data.data);
       }).catch(error=>{
         console.log(error);
@@ -309,13 +317,14 @@ export default function DATA(){
     const handleRegiones = (event) => {
       const value =event.target.value;
       setSelectedOptions3(value);
+      console.log(value)
+      if (value.length >=1) {
+        // peticionSubRegiones(value)
+      }
     };
 
     const handleOpenRegiones = () => {
       setOpenRegiones(true);
-      //temporal
-      // peticionCategorias()
-      peticionSubRegiones()
       if(selectedOptions4.length>=1){
         setSelectedOptions4([]); setSelectedOptions5([]); setSelectedOptions6([])
       }
@@ -323,47 +332,48 @@ export default function DATA(){
     const handleCloseRegion = () => {
       setOpenRegiones(false);
       setShowMenuItem({categoria:true})
+      peticionCestas()
     };
 
        /*Funcion onChange del combo SubRegiones */
-      const [SubRegion, setSubRegion]=useState([])
-      const peticionSubRegiones=async(value)=>{
-        const {periodo} = botonreporte
-        let url;
-        switch (periodo) {
-          case true:
-            url = `http://localhost:3005/VisorCliente_Api/ListarSubRegionPeriodo/1/${selectedOptions1}/3`;
-            break;
-        
-          default:
-            url=`http://localhost:3005/VisorCliente_Api/ListarSubRegionSemanal/1/${selectedOptions1}/3`;
-            break;
-        }
-      await axios.get( url,{
+    const [SubRegion, setSubRegion]=useState([])
+    const peticionSubRegiones=async(value)=>{
+      const {periodo} = botonreporte
+      let url;
+      switch (periodo) {
+        case true:
+          url = `http://localhost:3005/VisorCliente_Api/ListarSubRegionPeriodo/`;
+          break;
+        default:
+          url=`http://localhost:3005/VisorCliente_Api/ListarSubRegionSemanal/`;
+          break;
+      }
+      await axios.post( url,{
         headers: {
-          'Authorization': `Bearer ${token}`
-        },
+          'Authorization': `Bearer ${token}`,},
+          IdOption:selectedOptions1,
+          IdCanal:selectedOptions2,
+          IdRegion:value
       })
       .then(response=>{
         console.log(response)
-        setSubRegion(response.data.data);
+        // setSubRegion(response.data.data);
       }).catch(error=>{
         console.log(error.response.data.message);
         console.log(error.response.status);
         console.log(error.response.headers);
       })
-      }
-      const handleSubRegiones = (event) => {
+    }
+    const handleSubRegiones = (event) => {
       const value =event.target.value;
       setSelectedSubregiones(value);
-      };
-      const OptionSubRegion = SubRegion.map((item)=>(
+    };
+    const OptionSubRegion = SubRegion.map((item)=>(
       <MenuItem key={item.id} value={item.id}>
         <Checkbox checked={selectedOptions2.indexOf(item.id) > -1} />
         <ListItemText sx={{fontSize:'1em'}} primary={item.nombre} />
       </MenuItem>
-      ))
-
+    ))
     
   /*Funciones de Listar Cestas 😄*/
     const [openCesta, setOpenCesta] = React.useState(false);
@@ -390,7 +400,17 @@ export default function DATA(){
       }
     };
     const peticionCestas=async()=>{
-      await axios.get( process.env.REACT_APP_API_ENDPOINT+'ListarCesta',{
+      const {periodo} = botonreporte
+      let url;
+      switch (periodo) {
+        case true:
+          url = `http://localhost:3005/VisorCliente_Api/ListarCestaSemana/`;
+          break;
+        default:
+          url=`http://localhost:3005/VisorCliente_Api/ListarCestaPeriodo/`;
+          break;
+      }
+      await axios.post( url,{
         headers: {'Authorization': `Bearer ${token}`},
       })
       .then(response=>{
@@ -945,7 +965,9 @@ export default function DATA(){
                     regiones={region}
                     /* SubRegiones */
                     idRegiones={idRegiones}
+                    SubRegion={SubRegion}
                     selectedOptions33={selectedOptions33}
+                    handleSubRegiones={handleSubRegiones}
 
                   />
                   <SelectAtributos
