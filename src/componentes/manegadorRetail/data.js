@@ -140,7 +140,9 @@ export default function DATA(){
   /*Funciones de Listar PERÍODOS 😄*/
     const peticionSemanas=async()=>{
       setBotonreporte({semanas:true})
-      await axios.get( process.env.REACT_APP_API_ENDPOINT+'ListarSemana',{
+      await axios.get( 'http://localhost:3005/VisorCliente_Api/ListarSemana',{
+      // await axios.get( process.env.REACT_APP_API_ENDPOINT+'ListarSemana',{
+
         headers: {'Authorization': `Bearer ${token}`},
       })
       .then(response=>{
@@ -377,6 +379,8 @@ export default function DATA(){
     
   /*Funciones de Listar Cestas 😄*/
     const [openCesta, setOpenCesta] = React.useState(false);
+    const [IDCesta, setIDCesta]=React.useState({});
+
     const handleCesta = (event) => {
       const value =event.target.value;
       if (value[value.length - 1] === "all") {
@@ -390,7 +394,7 @@ export default function DATA(){
     const handleCloseCesta =()=>{
       setOpenCesta(false);
       if(selectedOptions4.length>=1){
-        peticionFabricantes();
+        peticionCategorias();
       }
     }
     const handleOpenCesta = () => {
@@ -401,17 +405,38 @@ export default function DATA(){
     };
     const peticionCestas=async()=>{
       const {periodo} = botonreporte
-      let url;
+      let Tipo;
+      let ValorSubRegion;
+      /* Valor SubRegion establece un condicional para no enviar información de la Zona */
+      /* Valores condicionales necesarios para variable Semana o Periodo*/
       switch (periodo) {
         case true:
-          url = `http://localhost:3005/VisorCliente_Api/ListarCestaSemana/`;
+          // Periodo
+          Tipo=[1];
           break;
+          // Semana
         default:
-          url=`http://localhost:3005/VisorCliente_Api/ListarCestaPeriodo/`;
+          Tipo=[0];
           break;
       }
-      await axios.post( url,{
+      console.log(selectedOptions33)
+      switch (selectedOptions33.length !==0) {
+        case true:
+          // Periodo
+          ValorSubRegion=selectedOptions33;
+          break;
+          // Semana
+        default:
+          ValorSubRegion = 0
+          break;
+      }
+      await axios.post( `http://localhost:3005/VisorCliente_Api/ListarCesta/`,{
         headers: {'Authorization': `Bearer ${token}`},
+        IdValor:selectedOptions1,
+        IdCanal:selectedOptions2,
+        IdRegion:selectedOptions3,
+        IdZona:ValorSubRegion,
+        IdTipo:Tipo
       })
       .then(response=>{
         setCesta(response.data.data);
@@ -426,10 +451,10 @@ export default function DATA(){
   const handleCategoria = (event) => {
     const value =event.target.value;
     if (value[value.length - 1] === "all") {
-      setSelectedOptions4(selectedOptions4.length === Categorias.length ? [] : Categorias);
+      setSelectedOptions5(selectedOptions5.length === Categorias.length ? [] : Categorias);
       return;
     }else{
-      setSelectedOptions4(value);  
+      setSelectedOptions5(value);  
     }
   };
   
@@ -446,13 +471,29 @@ export default function DATA(){
     }
   };
   const peticionCategorias=async()=>{
-    await axios.get( process.env.REACT_APP_API_ENDPOINT+'ListarCategoria',{
+    const {periodo} = botonreporte
+    let Tipo;
+      /* Valores condicionales necesarios para variable Semana o Periodo*/
+      switch (periodo) {
+        case true:
+          // Periodo
+          Tipo=[1];
+          break;
+          // Semana
+        default:
+          Tipo=[0];
+          break;
+      }
+    await axios.post('http://localhost:3005/VisorCliente_Api/ListarCategoria/',{
       headers: {'Authorization': `Bearer ${token}`},
+      IdValor:selectedOptions1,
+      IdCanal:selectedOptions2,
+      IdRegion:selectedOptions3,
+      IdCesta:selectedOptions4,
+      IdTipo:Tipo
     })
     .then(response=>{
       setCategorias(response.data.data);
-      console.log(response.data)
-      console.log(response.data.data)
     }).catch(error=>{
       console.log(error.response.data.message);
       console.log(error.response.status);
@@ -463,10 +504,30 @@ export default function DATA(){
     const [openFabricante, setOpenFabricante] = React.useState(false);
     const [IDCategoria, setIDCategoria]=React.useState({});
     const peticionFabricantes=async()=>{
-      await axios.get( process.env.REACT_APP_API_ENDPOINT+'ListarFabricante/'+IDCategoria,{
+      const {periodo} = botonreporte
+      let Tipo;
+      /* Valores condicionales necesarios para variable Semana o Periodo*/
+      switch (periodo) {
+        case true:
+          // Periodo
+          Tipo=[1];
+          break;
+          // Semana
+        default:
+          Tipo=[0];
+          break;
+      }
+      await axios.post('http://localhost:3005/VisorCliente_Api/ListarFabricante/',{
         headers: {'Authorization': `Bearer ${token}`},
+        IdValor:selectedOptions1,
+        IdCanal:selectedOptions2,
+        IdRegion:selectedOptions3,
+        IdCesta:selectedOptions4,
+        IdCategoria:selectedOptions5,
+        IdTipo:Tipo
       })
       .then(response=>{
+        console.log(response.data.data)
         setFabricante(response.data.data)
       }).catch(error=>{
         console.log(error.response.data.message);
@@ -476,7 +537,7 @@ export default function DATA(){
     }
     const handleCloseFabricante =()=>{
         setOpenFabricante(false);
-        if(selectedOptions6.length>=1){
+        if(selectedOptions5.length>=1){
           peticionMarcas();
         }
     }
@@ -488,7 +549,7 @@ export default function DATA(){
     };
     const handleFabricante = (event) => {
       const value =event.target.value;
-      setSelectedOptions5(value);
+      setSelectedOptions6(value);
     };
 
   /*Funciones de Listar Marcas 😄*/
@@ -978,6 +1039,8 @@ export default function DATA(){
                     handleCloseCesta={handleCloseCesta}
                     handleOpenCesta={handleOpenCesta}
                     Cesta={Cesta}
+                    setIDCesta={setIDCesta}
+                    IDCesta={IDCesta}
                     // isAllSelectCesta={isAllSelectCesta}
                     showMenuItem={showMenuItem}
                     //Categorias

@@ -17,7 +17,7 @@ import { useAuthContext } from "../../context/authContext";
 let icon;
 
 export function DrawerComponent(abrir){
-    const {DeletePeriodo,anchorEl,botonreporte,chipData,handleClick,handleClose,handleDelete,handleDrawerClose,id,label,open,openo,peticionMeses,peticionSemanas,peticionSemestres,peticionTrimestres,seleccionarPeriodo} = abrir
+    const {DeletePeriodo,anchorEl,botonreporte,chipData,handleClick,setData,handleClose,handleDelete,handleDrawerClose,id,label,open,openo,peticionMeses,peticionSemanas,peticionSemestres,peticionTrimestres,seleccionarPeriodo} = abrir
     const {logout}=useAuthContext();
     const styles= useStyles();
     const handleDirectURL=(e)=>{
@@ -86,6 +86,7 @@ export function DrawerComponent(abrir){
                 peticionMeses={peticionMeses}
                 peticionTrimestres={peticionTrimestres}
                 peticionSemestres={peticionSemestres}
+                setData={setData}
             />
             <Divider style={{width:'90%', background: 'rgb(0 0 0 / 38%)'}}/>
             <List className={styles.list}>
@@ -199,7 +200,7 @@ export function BotonUsuario(open){
 
 export function CardComponents(peticion){
     const styles= useStyles();
-    const {DeletePeriodo,botonreporte,peticionMeses,peticionSemanas,peticionSemestres,peticionTrimestres,seleccionarPeriodo}=peticion
+    const {DeletePeriodo,botonreporte, setData,peticionMeses,peticionSemanas,peticionSemestres,peticionTrimestres,seleccionarPeriodo}=peticion
     return(
             <Card className={`${styles.reporte} reporte`} style={{ borderRadius: '1.5em' }}>
                 <CardHeader style={{ padding: '5% 0 3%', color: '#03508f', fontSize: '1em' }} title="REPORTE" />
@@ -210,24 +211,28 @@ export function CardComponents(peticion){
                         seleccionarPeriodo(parametro);
                         peticionSemanas();
                         DeletePeriodo();
+                        setData([])
                     } } className={styles.botonReportes}>SEMANAL</Button>
                     <Button className={styles.botonReportes} onClick={() => {
                         var parametro = 'Meses';
                         seleccionarPeriodo(parametro);
                         peticionMeses();
                         DeletePeriodo();
+                        setData([])
                     } } style={{ background: botonreporte.meses ? '#F6B232' : '#03508f' }}>MENSUAL</Button>
                     <Button className={styles.botonReportes} onClick={() => {
                         var parametro = 'Trimestres';
                         seleccionarPeriodo(parametro);
                         peticionTrimestres();
                         DeletePeriodo();
+                        setData([])
                     } } style={{ background: botonreporte.trimestres ? '#F6B232' : '#03508f' }}>TRIMESTRAL</Button>
                     <Button className={styles.botonReportes} onClick={() => {
                         var parametro = 'Semestres';
                         seleccionarPeriodo(parametro);
                         peticionSemestres();
                         DeletePeriodo();
+                        setData([])
                     } } style={{ background: botonreporte.semestres ? '#F6B232' : '#03508f' }}>SEMESTRAL</Button>
                 </CardActions>
             </Card>

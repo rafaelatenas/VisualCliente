@@ -61,7 +61,7 @@ export function SelectPeriodos(data){
                     onClose={handleClosePeriodo}
                     onOpen={handleOpenPeriodo}
                     renderValue={(selected) =>{
-                        if(selected.length>=3 && selected.length<render.length){
+                        if(selected.length>=2 && selected.length<render.length){
                             return(<ListItemText sx={{'& span':{fontSize:'10px'}}} primary={`${selected.length} Opciones Marcadas`}/>)
                         }else if(selected.length === render.length){
                             return(<ListItemText sx={{'& span':{fontSize:'10px'}}} primary={`Todas Marcadas (${selected.length})`}/>)
@@ -171,7 +171,7 @@ export function SelectCanales(canal){
                         <ListItem>
                             <Checkbox style={{display:'block', padding:'0'}} checked={canal.selectedOptions2.indexOf(parseInt(ID_Cliente)) > -1}/>
                         </ListItem>
-                        <ListItemText sx={{fontSize:'1em'}} primary={'MI CADENA'} />
+                        <ListItemText sx={{'& span':{fontSize:'10px'}}} primary={'MI CADENA'} />
                     </MenuItem> */}
                     {OptionCanales}
                 </Select>
@@ -312,6 +312,7 @@ export function SelectAtributos(atributos){
     const {Nacionalidad,handleCloseNacionalidad,handleNacionalidad,handleOpenNacionalidad,openNacionalidad,selectedOptions13}=atributos
 
 
+    console.log(selectedOptions5, selectedOptions4)
 
     const classes = useStyles();
     const OptionCesta = Cesta.map((option) => (
@@ -338,10 +339,10 @@ export function SelectAtributos(atributos){
                         onOpen={handleOpenCesta}
                         renderValue={(selected) =>{
                             setIDCesta(selected)
-                            if(selected.length>=3 && selected.length<Cesta.length){
-                            return(<ListItemText sx={{fontSize:'1em'}} primary={`${selected.length} Opciones Marcadas`}/>)
+                            if(selected.length>=2 && selected.length<Cesta.length){
+                            return(<ListItemText sx={{'& span':{fontSize:'10px'}}} primary={`${selected.length} Opciones Marcadas`}/>)
                             }else if(selected.length === Cesta.length){
-                            return(<ListItemText sx={{fontSize:'1em'}} primary={`Todas Marcadas (${selected.length})`}/>)
+                            return(<ListItemText sx={{'& span':{fontSize:'10px'}}} primary={`Todas Marcadas (${selected.length})`}/>)
                             }else if(selected.length<3){
                             return(
                             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
@@ -483,12 +484,12 @@ export function SelectCategorias(categoria) {
                 onChange={handleCategoria}
                 onClose={handleCloseCategoria}
                 onOpen={handleOpenCategoria}
-                renderValue={(selected) =>{
+                renderValue={(selected) =>{ console.log(selected)
                     setIDCategoria(selected)
-                    if(selected.length>=3 && selected.length<Categorias.length){
-                        return(<ListItemText sx={{fontSize:'15px'}} primary={`${selected.length} Opciones Marcadas`}/>)
+                    if(selected.length>=2 && selected.length<Categorias.length){
+                        return(<ListItemText sx={{'& span':{fontSize:'10px'}}} primary={`${selected.length} Opciones Marcadas`}/>)
                     }else if(selected.length === Categorias.length){
-                        return(<ListItemText sx={{fontSize:'15px'}} primary={`Todas Marcadas (${selected.length})`}/>)
+                        return(<ListItemText sx={{'& span':{fontSize:'10px'}}} primary={`Todas Marcadas (${selected.length})`}/>)
                     }else if(selected.length<3){
                         return(
                             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
@@ -506,7 +507,6 @@ export function SelectCategorias(categoria) {
                 }}
                 MenuProps={MenuProps}
             >
-                {/* style={{ display: showMenuItem.Cesta ? "flex" : "none" }} */}
                 <MenuItem value="all" classes={{root: isAllSelectCategoria? classes.selectedAll : ""}} className='items'>
                     <ListItem>
                         <Checkbox
@@ -524,33 +524,33 @@ export function SelectCategorias(categoria) {
 }
 
 export function SelectFabricantes(Fabricantes){
-    const {Fabricante,isSelected,selectedOptions5,openFabricante,handleFabricante,handleCloseFabricante,handleOpenFabricante,setIDFabricante}=Fabricantes
+    const {Fabricante,isSelected,selectedOptions6,openFabricante,handleFabricante,handleCloseFabricante,handleOpenFabricante,setIDFabricante}=Fabricantes
     const classes = useStyles();
     const OptionFabricante = Fabricante.map((option) => (
         <MenuItem key={option.id} value={(option.id)} className='items'>
             <ListItem>
-                <Checkbox checked={(selectedOptions5.indexOf(option.id) > -1) || (selectedOptions5.indexOf(option) > -1)} />
+                <Checkbox checked={(selectedOptions6.indexOf(option.id) > -1) || (selectedOptions6.indexOf(option) > -1)} />
             </ListItem>
             <ListItemText primary={option.nombre}/>
         </MenuItem>
     ))
     return(
-        <FormControl sx={{width: '100%'}} className={classes.formControl} error={isSelected.selectedOptions5}>
+        <FormControl sx={{width: '100%'}} className={classes.formControl} error={isSelected.selectedOptions6}>
             <InputLabel className="inputLabel input" id="mutiple-select-label">Fabricantes</InputLabel>
             <Select 
                 labelId="mutiple-select-label"
                 multiple
-                value={selectedOptions5}
+                value={selectedOptions6}
                 open={openFabricante}
                 onChange={handleFabricante}
                 onClose={handleCloseFabricante}
                 onOpen={handleOpenFabricante}
                 renderValue={(selected) =>{
                     setIDFabricante(selected)
-                    if(selected.length>=3 && selected.length<Fabricante.length){
-                        return(<ListItemText sx={{fontSize:'1em'}} primary={`${selected.length} Opciones Marcadas`}/>)
+                    if(selected.length>=2 && selected.length<Fabricante.length){
+                        return(<ListItemText sx={{'& span':{fontSize:'10px'}}} primary={`${selected.length} Opciones Marcadas`}/>)
                     }else if(selected.length === Fabricante.length){
-                        return(<ListItemText sx={{fontSize:'1em'}} primary={`Todas Marcadas (${selected.length})`}/>)
+                        return(<ListItemText sx={{'& span':{fontSize:'10px'}}} primary={`Todas Marcadas (${selected.length})`}/>)
                     }else if(selected.length<3){
                         return(
                             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
@@ -558,7 +558,7 @@ export function SelectFabricantes(Fabricantes){
                                     for (let h = 0; h < Fabricante.length; h++) {
                                         const element = Fabricante[h];
                                         if(element.id === value){
-                                            return(<Chip style={{fontSize:'.7em'}} key={value} label={element.nombre}/>)
+                                            return(<Chip style={{fontSize:'10px'}} key={value} label={element.nombre}/>)
                                         }
                                     }
                                 })}
@@ -598,10 +598,10 @@ export function SelectMarcas(Marca){
                 onOpen={handleOpenMarcas}
                 renderValue={(selected) =>{
                     // setIDFabricante(selected)
-                    if(selected.length>=3 && selected.length<Marcas.length){
-                        return(<ListItemText sx={{fontSize:'1em'}} primary={`${selected.length} Opciones Marcadas`}/>)
+                    if(selected.length>=2 && selected.length<Marcas.length){
+                        return(<ListItemText sx={{'& span':{fontSize:'10px'}}} primary={`${selected.length} Opciones Marcadas`}/>)
                     }else if(selected.length === Marcas.length){
-                        return(<ListItemText sx={{fontSize:'1em'}} primary={`Todas Marcadas (${selected.length})`}/>)
+                        return(<ListItemText sx={{'& span':{fontSize:'10px'}}} primary={`Todas Marcadas (${selected.length})`}/>)
                     }else if(selected.length<3){
                         return(
                             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
@@ -649,10 +649,10 @@ export function SelectSegmentos(Marca){
                 onOpen={handleOpenSegmentos}
                 renderValue={(selected) =>{
                     // setIDFabricante(selected)
-                    if(selected.length>=3 && selected.length<Segmentos.length){
-                        return(<ListItemText sx={{fontSize:'15px'}} primary={`${selected.length} Opciones Marcadas`}/>)
+                    if(selected.length>=2 && selected.length<Segmentos.length){
+                        return(<ListItemText sx={{'& span':{fontSize:'10px'}}} primary={`${selected.length} Opciones Marcadas`}/>)
                     }else if(selected.length === Segmentos.length){
-                        return(<ListItemText sx={{fontSize:'15px'}} primary={`Todas Marcadas (${selected.length})`}/>)
+                        return(<ListItemText sx={{'& span':{fontSize:'10px'}}} primary={`Todas Marcadas (${selected.length})`}/>)
                     }else if(selected.length<3){
                         return(
                             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
@@ -700,7 +700,7 @@ export function SelectTamanno(Tamannos){
                 onOpen={handleOpenTamanno}
                 renderValue={(selected) =>{
                     // setIDFabricante(selected)
-                    if(selected.length>=3 && selected.length<Tamanno.length){
+                    if(selected.length>=2 && selected.length<Tamanno.length){
                         return(<ListItemText sx={{fontSize:'15px'}} primary={`${selected.length} Opciones Marcadas`}/>)
                     }else if(selected.length === Tamanno.length){
                         return(<ListItemText sx={{fontSize:'15px'}} primary={`Todas Marcadas (${selected.length})`}/>)
@@ -751,7 +751,7 @@ export function SelectRTamanno(rTamannos){
                 onOpen={handleOpenRTamanno}
                 renderValue={(selected) =>{
                     // setIDFabricante(selected)
-                    if(selected.length>=3 && selected.length<RTamanno.length){
+                    if(selected.length>=2 && selected.length<RTamanno.length){
                         return(<ListItemText sx={{fontSize:'15px'}} primary={`${selected.length} Opciones Marcadas`}/>)
                     }else if(selected.length === RTamanno.length){
                         return(<ListItemText sx={{fontSize:'15px'}} primary={`Todas Marcadas (${selected.length})`}/>)
@@ -802,7 +802,7 @@ export function SelectProducto(Product){
                 onOpen={handleOpenProducto}
                 renderValue={(selected) =>{
                     // setIDFabricante(selected)
-                    if(selected.length>=3 && selected.length<Productos.length){
+                    if(selected.length>=2 && selected.length<Productos.length){
                         return(<ListItemText sx={{fontSize:'15px'}} primary={`${selected.length} Opciones Marcadas`}/>)
                     }else if(selected.length === Productos.length){
                         return(<ListItemText sx={{fontSize:'15px'}} primary={`Todas Marcadas (${selected.length})`}/>)
@@ -853,7 +853,7 @@ export function SelectCBarra(Marca){
                 onOpen={handleOpenCBarra}
                 renderValue={(selected) =>{
                     // setIDFabricante(selected)
-                    if(selected.length>=3 && selected.length<CBarra.length){
+                    if(selected.length>=2 && selected.length<CBarra.length){
                         return(<ListItemText sx={{fontSize:'15px'}} primary={`${selected.length} Opciones Marcadas`}/>)
                     }else if(selected.length === CBarra.length){
                         return(<ListItemText sx={{fontSize:'15px'}} primary={`Todas Marcadas (${selected.length})`}/>)
@@ -904,7 +904,7 @@ export function SelectNacionalidad(Marca){
                 onOpen={handleOpenNacionalidad}
                 renderValue={(selected) =>{
                     // setIDFabricante(selected)
-                    if(selected.length>=3 && selected.length<Nacionalidad.length){
+                    if(selected.length>=2 && selected.length<Nacionalidad.length){
                         return(<ListItemText sx={{fontSize:'15px'}} primary={`${selected.length} Opciones Marcadas`}/>)
                     }else if(selected.length === Nacionalidad.length){
                         return(<ListItemText sx={{fontSize:'15px'}} primary={`Todas Marcadas (${selected.length})`}/>)
@@ -938,7 +938,7 @@ export function SelectIndicadores(Indicador){
     const OptionIndicadores = Indicadores.map((item) => (
         <MenuItem key={item.id} value={item.id}>
           <Checkbox checked={selectedOptions14.indexOf(item.id) > -1} />
-          <ListItemText sx={{fontSize:'1em'}} primary={item.nombre} />
+          <ListItemText sx={{'& span':{fontSize:'10px'}}} primary={item.nombre} />
         </MenuItem>
       ))
     return(
@@ -976,7 +976,7 @@ export function SelectIndicadores(Indicador){
                         <ListItem>
                             <Checkbox style={{display:'block', padding:'0'}} checked={selectedOptions14.indexOf(parseInt(ID_Cliente)) > -1}/>
                         </ListItem>
-                        <ListItemText sx={{fontSize:'1em'}} primary={'MI CADENA'} />
+                        <ListItemText sx={{'& span':{fontSize:'10px'}}} primary={'MI CADENA'} />
                     </MenuItem> */}
                     {OptionIndicadores}
                 </Select>
