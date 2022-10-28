@@ -136,7 +136,48 @@ export default function DATA(){
   /*Data Indicadores*/
   const [Indicadores, setIndicadores]=useState([]);
   const [selectedOptions14, setSelectedOptions14] = useState([]);
-  
+  /* Funcion Onchange Agrupada de todos los combos */
+  const handleChangeSelect = (event) => {
+    const {name, value} = event.target;
+    console.log(name)
+    switch (name) {
+      case "Periodo":
+        const ValorID = render.map(
+          function({ id }) {
+            return id
+          }
+        );
+        if (value[value.length - 1] === "all") {
+          setSelectedOptions1(selectedOptions1.length === data.length ? [] : ValorID);
+          return;
+        }
+        setSelectedOptions1(value);
+        break;
+      case "Canales":
+        setSelectedOptions2(value);
+        break;
+      case "Areas":
+        setSelectedOptions3(value);
+        break;
+      case "Zonas":
+          setSelectedOptions33(value);
+        break;  
+      case "Cesta":
+          setSelectedOptions4(value);
+        break;
+      case "Categorias":
+          setSelectedOptions6(value);
+        break; 
+      case "Fabricantes":
+          setSelectedOptions6(value);
+        break; 
+      case "Marcas":
+          setSelectedOptions7(value);
+        break;   
+      default:
+        break;
+    }
+  };
   /*Funciones de Listar PERÍODOS 😄*/
     const peticionSemanas=async()=>{
       setBotonreporte({semanas:true})
@@ -206,9 +247,13 @@ export default function DATA(){
     };
     const handleOpenPeriodo = () => {
       controladorAll();
+      setCanal([])
+      setTimeout(console.log(canal),20000)
+      
       if(selectedOptions2.length>=1){
         setSelectedOptions2([]); setSelectedOptions3([]); setSelectedOptions4([]); setSelectedOptions5([]); setSelectedOptions6([])
       }
+      
       if(tiempoReporte.length === 0 ){
         setOpen(true);
         setOpenPeriodo(false);
@@ -218,14 +263,7 @@ export default function DATA(){
         setAlert(false)
       }
     };
-    const handlePeriodos = (event) => {
-      const value = event.target.value;
-      if (value[value.length - 1] === "all") {
-        setSelectedOptions1(selectedOptions1.length === data.length ? [] : render);
-        return;
-      }
-      setSelectedOptions1(value);
-    };
+    
    /*Funciones de Listar CANALES 😄*/
     const peticionCanales=async()=>{
       const {periodo} = botonreporte
@@ -269,21 +307,11 @@ export default function DATA(){
     }
     const handleOpenCanales = () => {
       setOpenCanales(true);
-      controladorMiCadena()
       if(selectedOptions3.length>=1){
         setSelectedOptions3([]); setSelectedOptions4([]); setSelectedOptions5([]); setSelectedOptions6([])
       }
     };
-    const controladorMiCadena =()=>{
-      switch (true) {
-        case canal.length === 0:
-            setShowMenuItem({canal:false})
-          break;
-        default:
-          setShowMenuItem({canal:true})
-          break;
-       }
-    }
+    
 
    /*Funciones de Listar REGIONES 😄*/
     const [openRegiones, setOpenRegiones] = React.useState(false);
@@ -301,7 +329,7 @@ export default function DATA(){
           IdValor=[0];
           break;
       }
-      await axios.post('http://localhost:3005/VisorCliente_Api/ListarRegion/',{
+      await axios.post('http://localhost:3005/VisorCliente_Api/ListarArea/',{
         headers: {'Authorization': `Bearer ${token}`},
         IdValor:selectedOptions1,
         IdCanal:selectedOptions2,
@@ -316,14 +344,14 @@ export default function DATA(){
       })
 
     }
-    const handleRegiones = (event) => {
-      const value =event.target.value;
-      setSelectedOptions3(value);
-      console.log(value)
-      if (value.length >=1) {
-        // peticionSubRegiones(value)
-      }
-    };
+    // const handleRegiones = (event) => {
+    //   const value =event.target.value;
+    //   setSelectedOptions3(value);
+    //   console.log(value)
+    //   if (value.length >=1) {
+    //     // peticionSubRegiones(value)
+    //   }
+    // };
 
     const handleOpenRegiones = () => {
       setOpenRegiones(true);
@@ -355,7 +383,7 @@ export default function DATA(){
           'Authorization': `Bearer ${token}`,},
           IdOption:selectedOptions1,
           IdCanal:selectedOptions2,
-          IdRegion:value
+          IdArea:value
       })
       .then(response=>{
         console.log(response)
@@ -391,12 +419,12 @@ export default function DATA(){
       }
     };
     
-    const handleCloseCesta =()=>{
-      setOpenCesta(false);
-      if(selectedOptions4.length>=1){
-        peticionCategorias();
-      }
+  const handleCloseCesta =()=>{
+    setOpenCesta(false);
+    if(selectedOptions4.length>=1){
+      peticionCategorias();
     }
+  }
     const handleOpenCesta = () => {
       setOpenCesta(true);
       if(selectedOptions5.length>=1){
@@ -434,12 +462,19 @@ export default function DATA(){
         headers: {'Authorization': `Bearer ${token}`},
         IdValor:selectedOptions1,
         IdCanal:selectedOptions2,
-        IdRegion:selectedOptions3,
+        IdArea:selectedOptions3,
         IdZona:ValorSubRegion,
         IdTipo:Tipo
       })
       .then(response=>{
-        setCesta(response.data.data);
+        if (response.data.message) {
+          toast.fire({
+            icon: 'warning',
+            title: ''+response.data.message,
+        })
+        }else{
+          setCesta(response.data.data);
+        }
       }).catch(error=>{
         console.log(error.response.data.message);
         console.log(error.response.status);
@@ -472,7 +507,9 @@ export default function DATA(){
   };
   const peticionCategorias=async()=>{
     const {periodo} = botonreporte
-    let Tipo;
+      let Tipo;
+      let ValorSubRegion;
+      /* Valor SubRegion establece un condicional para no enviar información de la Zona */
       /* Valores condicionales necesarios para variable Semana o Periodo*/
       switch (periodo) {
         case true:
@@ -484,12 +521,23 @@ export default function DATA(){
           Tipo=[0];
           break;
       }
+      switch (selectedOptions33.length !==0) {
+        case true:
+          // Periodo
+          ValorSubRegion=selectedOptions33;
+          break;
+          // Semana
+        default:
+          ValorSubRegion = 0
+          break;
+      }
     await axios.post('http://localhost:3005/VisorCliente_Api/ListarCategoria/',{
       headers: {'Authorization': `Bearer ${token}`},
       IdValor:selectedOptions1,
       IdCanal:selectedOptions2,
-      IdRegion:selectedOptions3,
+      IdArea:selectedOptions3,
       IdCesta:selectedOptions4,
+      IdZona:ValorSubRegion,
       IdTipo:Tipo
     })
     .then(response=>{
@@ -506,6 +554,8 @@ export default function DATA(){
     const peticionFabricantes=async()=>{
       const {periodo} = botonreporte
       let Tipo;
+      let ValorSubRegion;
+      /* Valor SubRegion establece un condicional para no enviar información de la Zona */
       /* Valores condicionales necesarios para variable Semana o Periodo*/
       switch (periodo) {
         case true:
@@ -517,11 +567,22 @@ export default function DATA(){
           Tipo=[0];
           break;
       }
+      switch (selectedOptions33.length !==0) {
+        case true:
+          // Periodo
+          ValorSubRegion=selectedOptions33;
+          break;
+          // Semana
+        default:
+          ValorSubRegion = 0
+          break;
+      }
       await axios.post('http://localhost:3005/VisorCliente_Api/ListarFabricante/',{
         headers: {'Authorization': `Bearer ${token}`},
         IdValor:selectedOptions1,
         IdCanal:selectedOptions2,
-        IdRegion:selectedOptions3,
+        IdArea:selectedOptions3,
+        IdZona:ValorSubRegion,
         IdCesta:selectedOptions4,
         IdCategoria:selectedOptions5,
         IdTipo:Tipo
@@ -556,11 +617,45 @@ export default function DATA(){
     const [openMarcas, setOpenMarcas] = React.useState(false);
     const [IDFabricante, setIDFabricante]=React.useState({});
     const peticionMarcas=async()=>{
-      await axios.get( process.env.REACT_APP_API_ENDPOINT+'ListarMarca/'+IDCategoria+'/'+IDFabricante,{
+      const {periodo} = botonreporte
+      let Tipo;
+      let ValorSubRegion;
+      /* Valor SubRegion establece un condicional para no enviar información de la Zona */
+      /* Valores condicionales necesarios para variable Semana o Periodo*/
+      switch (periodo) {
+        case true:
+          // Periodo
+          Tipo=[1];
+          break;
+          // Semana
+        default:
+          Tipo=[0];
+          break;
+      }
+      switch (selectedOptions33.length !==0) {
+        case true:
+          // Periodo
+          ValorSubRegion=selectedOptions33;
+          break;
+          // Semana
+        default:
+          ValorSubRegion = 0
+          break;
+      }
+      await axios.post('http://localhost:3005/VisorCliente_Api/ListarMarca/',{
         headers: {'Authorization': `Bearer ${token}`},
+        IdValor:selectedOptions1,
+        IdCanal:selectedOptions2,
+        IdArea:selectedOptions3,
+        IdZona:ValorSubRegion,
+        IdCesta:selectedOptions4,
+        IdCategoria:selectedOptions5,
+        IdTipo:Tipo,
+        IdFabricante:selectedOptions6
       })
       .then(response=>{
-        setMarcas(response.data.data)
+        console.log(response.data)
+        // setMarcas(response.data.data)
       }).catch(error=>{
         console.log(error.response.data.message);
         console.log(error.response.status);
@@ -588,8 +683,42 @@ export default function DATA(){
   const [openSegmentos, setOpenSegmentos] = React.useState(false);
   const [IDMarca, setIDMarca]=React.useState({});
   const peticionSegmentos=async()=>{
-    await axios.get( process.env.REACT_APP_API_ENDPOINT+'ListarMarca/'+IDMarca+'/'+IDFabricante,{
+    const {periodo} = botonreporte
+      let Tipo;
+      let ValorSubRegion;
+      /* Valor SubRegion establece un condicional para no enviar información de la Zona */
+      /* Valores condicionales necesarios para variable Semana o Periodo*/
+      switch (periodo) {
+        case true:
+          // Periodo
+          Tipo=[1];
+          break;
+          // Semana
+        default:
+          Tipo=[0];
+          break;
+      }
+      switch (selectedOptions33.length !==0) {
+        case true:
+          // Periodo
+          ValorSubRegion=selectedOptions33;
+          break;
+          // Semana
+        default:
+          ValorSubRegion = 0
+          break;
+      }
+    await axios.post('http://localhost:3005/VisorCliente_Api/ListarSegmento/',{
       headers: {'Authorization': `Bearer ${token}`},
+        IdValor:selectedOptions1,
+        IdCanal:selectedOptions2,
+        IdArea:selectedOptions3,
+        IdZona:ValorSubRegion,
+        IdCesta:selectedOptions4,
+        IdCategoria:selectedOptions5,
+        IdTipo:Tipo,
+        IdFabricante:selectedOptions6,
+        IdMarcas:selectedOptions6
     })
     .then(response=>{
       setSegmentos(response.data.data)
@@ -620,7 +749,7 @@ export default function DATA(){
   const [openTamanno, setOpenTamanno] = React.useState(false);
   // const [IDMarca, setIDMarca]=React.useState({});
   const peticionTamanno=async()=>{
-    await axios.get( process.env.REACT_APP_API_ENDPOINT+'ListarMarca/'+IDMarca+'/'+IDFabricante,{
+    await axios.post('http://localhost:3005/VisorCliente_Api/ListarSegmento/',{
       headers: {'Authorization': `Bearer ${token}`},
     })
     .then(response=>{
@@ -916,7 +1045,12 @@ export default function DATA(){
     const [focus, setFocus] = React.useState(false);
     const [render, setRender] = React.useState(false);
     const [searchText, setSearchText] = React.useState({
-      periodo:''
+      periodo:'',
+      cesta:'',
+      categoria:'',
+      fabricante:'',
+      marca:'',
+      segmento:''
     })
     const handleChangeSearch=(e)=>{
       const {name, value}=e.target
@@ -926,7 +1060,11 @@ export default function DATA(){
   /*Controles de Select All*/
     const [showMenuItem, setShowMenuItem] = React.useState({
       periodo:false,
-      categoria:false,
+      cesta:'',
+      categoria:'',
+      fabricante:'',
+      marca:'',
+      segmento:''
     });
     const controladorAll = ()=>{
       switch (true) {
@@ -945,7 +1083,9 @@ export default function DATA(){
       }
     }
     const isAllSelectPeriodo = data.length > 0 && selectedOptions1.length === render.length;
-    const isAllSelectCategoria = Categorias.length > 0 && selectedOptions4.length === Categorias.length;
+    const isAllSelectCesta = Cesta.length > 0 && selectedOptions4.length === Cesta.length;
+    const isAllSelectCategoria = Categorias.length > 0 && selectedOptions5.length === Categorias.length;
+console.log(render)
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -973,6 +1113,7 @@ export default function DATA(){
         peticionMeses={peticionMeses}
         peticionTrimestres={PeticionTrimestres}
         peticionSemestres={PeticionSemestres}
+        setData={setData}
       >
         
       </DrawerComponent>
@@ -993,7 +1134,7 @@ export default function DATA(){
                     selectedOptions1={selectedOptions1}
                     isSelected={isSelected}
                     openPeriodo={openPeriodo}
-                    handlePeriodos={handlePeriodos}
+                    handlePeriodos={handleChangeSelect}
                     handleClosePeriodo={handleClosePeriodo}
                     handleOpenPeriodo={handleOpenPeriodo}
                     datos={data}
@@ -1011,7 +1152,7 @@ export default function DATA(){
                     selectedOptions2={selectedOptions2}
                     isSelected={isSelected}
                     openCanales={openCanales}
-                    handleCanales={handleCanales}
+                    handleCanales={handleChangeSelect}
                     handleCloseCanal={handleCloseCanal}
                     handleOpenCanal={handleOpenCanales}
                     canal={canal}
@@ -1020,7 +1161,7 @@ export default function DATA(){
                     selectedOptions3={selectedOptions3}
                     isSelected={isSelected}
                     openRegiones={openRegiones}
-                    handleRegiones={handleRegiones}
+                    handleRegiones={handleChangeSelect}
                     handleCloseRegion={handleCloseRegion}
                     handleOpenRegiones={handleOpenRegiones}
                     regiones={region}
@@ -1028,35 +1169,41 @@ export default function DATA(){
                     idRegiones={idRegiones}
                     SubRegion={SubRegion}
                     selectedOptions33={selectedOptions33}
-                    handleSubRegiones={handleSubRegiones}
+                    handleSubRegiones={handleChangeSelect}
 
                   />
                   <SelectAtributos
                     selectedOptions4={selectedOptions4}
                     isSelected={isSelected}
                     openCesta={openCesta}
-                    handleCesta={handleCesta}
+                    handleCesta={handleChangeSelect}
                     handleCloseCesta={handleCloseCesta}
                     handleOpenCesta={handleOpenCesta}
                     Cesta={Cesta}
                     setIDCesta={setIDCesta}
                     IDCesta={IDCesta}
-                    // isAllSelectCesta={isAllSelectCesta}
+                    searchText={searchText.cesta}
+                    setRender={setRender}
+                    setSearchText={setSearchText}
+                    isAllSelectCesta={isAllSelectCesta}
                     showMenuItem={showMenuItem}
+                    handleChangeSearch={handleChangeSearch}
                     //Categorias
                     Categorias={Categorias}
                     selectedOptions5={selectedOptions5}
                     openCategoria={openCategoria}
-                    handleCategoria={handleCategoria}
+                    handleCategoria={handleChangeSelect}
                     isAllSelectCategoria={isAllSelectCategoria}
                     handleCloseCategoria={handleCloseCategoria}
                     handleOpenCategoria={handleOpenCategoria}
                     setIDCategoria={setIDCategoria}
+                    focus={focus}
+
                     //Fabricantes
                     Fabricante={Fabricante}
                     selectedOptions6={selectedOptions6}
                     openFabricante={openFabricante}
-                    handleFabricante={handleFabricante}
+                    handleFabricante={handleChangeSelect}
                     handleCloseFabricante={handleCloseFabricante}
                     handleOpenFabricante={handleOpenFabricante}
                     setIDFabricante={setIDFabricante}
@@ -1064,7 +1211,7 @@ export default function DATA(){
                     Marcas={Marcas}
                     selectedOptions7={selectedOptions7}
                     openMarcas={openMarcas}
-                    handleMarcas={handleMarcas}
+                    handleMarcas={handleChangeSelect}
                     handleCloseMarcas={handleCloseMarcas}
                     handleOpenMarcas={handleOpenMarcas}
                     //Segmentos

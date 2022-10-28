@@ -6,6 +6,7 @@ import { useState, useMemo } from "react";
 import './select.css'
 
 const containsText = (text, searchText) =>text.toString().toLowerCase().indexOf(searchText.toString().toLowerCase()) >-1;
+const containsTexto = (text, searchText) =>text.toString().toLowerCase().indexOf(searchText.toString().toLowerCase()) >-1;
 
 export function SelectPeriodos(data){
     const {datos,focus,handleChangeSearch,handleClosePeriodo,handleOpenPeriodo,handlePeriodos,isAllSelectPeriodo,isSelected,openPeriodo,render,searchText,selectedOptions1,setFocus,setRender,setSearchText,showMenuItem,tiempoReporte}=data
@@ -24,11 +25,11 @@ export function SelectPeriodos(data){
             <ListItemText primary={option.nombre}/>
         </MenuItem>
     ))
-    
-    const OptionPeriodoSearch = displayedOptions.map((option) => (
+    console.log(selectedOptions1)
+    const OptionPeriodoSearch = displayedOptions.map((option) => (console.log(selectedOptions1.indexOf(option.id), option),
         <MenuItem key={option.id} value={option.id} className='items'>
             <ListItem>
-                <Checkbox checked={(selectedOptions1.indexOf(option) > -1)} />
+                <Checkbox checked={(selectedOptions1.indexOf(option.id)> -1)} />
             </ListItem>
             <ListItemText primary={option.nombre}/>
         </MenuItem>
@@ -45,7 +46,6 @@ export function SelectPeriodos(data){
             }
         }
     )
-    
 
     return(
         <Box style={{border:'.1em solid rgb(87 87 86/11%)',background:'#f7f4f4', borderRadius:'1.5em', width:'15%', height:'90%', display:'flex', flexDirection:'column', alignItems:'center'}}>
@@ -55,17 +55,18 @@ export function SelectPeriodos(data){
                 <Select 
                     labelId="mutiple-select-label"
                     multiple
+                    name="Periodo"
                     value={selectedOptions1}
                     open={openPeriodo}
                     onChange={handlePeriodos}
                     onClose={handleClosePeriodo}
                     onOpen={handleOpenPeriodo}
-                    renderValue={(selected) =>{
+                    renderValue={(selected) =>{ console.log(selected, render)
                         if(selected.length>=2 && selected.length<render.length){
                             return(<ListItemText sx={{'& span':{fontSize:'10px'}}} primary={`${selected.length} Opciones Marcadas`}/>)
                         }else if(selected.length === render.length){
                             return(<ListItemText sx={{'& span':{fontSize:'10px'}}} primary={`Todas Marcadas (${selected.length})`}/>)
-                        }else if(selected.length<3){
+                        }else if(selected.length<2){
                             return(
                                 <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: 0.5 }}>
                                     {selected.map((value) =>{
@@ -89,7 +90,7 @@ export function SelectPeriodos(data){
                         autoFocus={focus}
                         InputProps={{
                             startAdornment: (
-                            <InputAdornment position="start" style={{width: 'auto',height: '100%'}}>
+                            <InputAdornment position="start" style={{fontSize:'10px !important',width: 'auto',height: '100%'}}>
                                 <Search />
                             </InputAdornment>
                             )
@@ -102,14 +103,14 @@ export function SelectPeriodos(data){
                             e.stopPropagation();
                             }
                         }}
-                        />
+                    />
                         
                     </ListSubheader>
                     <MenuItem value="all" className='items' classes={{root: isAllSelectPeriodo ? classes.selectedAll : ""}} style={{ display: showMenuItem.periodo ? "flex" : "none" }}>
                         <ListItem>
                             <Checkbox
                                 classes={{ indeterminate: classes.indeterminateColor }}
-                                checked={isAllSelectPeriodo}
+                                checked={isAllSelectPeriodo || selectedOptions1.length >0 && selectedOptions1.length === OptionRender.length}
                                 indeterminate={ selectedOptions1.length > 0 && selectedOptions1.length < OptionRender.length }
                             />
                         </ListItem>
@@ -140,6 +141,7 @@ export function SelectCanales(canal){
                 <Select 
                     labelId="mutiple-select-label"
                     multiple
+                    name="Canales"
                     value={canal.selectedOptions2}
                     open={canal.openCanales}
                     onChange={canal.handleCanales}
@@ -230,6 +232,7 @@ export function SelectRegiones(region){
                 <InputLabel className="inputLabel" id="mutiple-select-label">Regiones</InputLabel>
                 <Select 
                     labelId="mutiple-select-label"
+                    name="Areas"
                     multiple
                     value={selectedOptions3}
                     open={openRegiones}
@@ -277,6 +280,7 @@ function SubRegiones(props) {
             label={item.nombre}
             value={selectedOptions33}
             multiple
+            name="Zonas"
             renderValue={(selected) => {
                 return selected.join(', ');
             }}
@@ -300,7 +304,8 @@ function SubRegiones(props) {
 /*Atributos*/
 
 export function SelectAtributos(atributos){
-    const {selectedOptions4,isSelected,openCesta,handleCesta,handleCloseCesta,handleOpenCesta,Cesta,isAllSelectCesta,showMenuItem,setIDCesta}=atributos
+    const classes = useStyles();
+    const {selectedOptions4,handleChangeSearch,searchText,setRender,focus,isSelected,openCesta,handleCesta,handleCloseCesta,handleOpenCesta,Cesta,isAllSelectCesta,showMenuItem,setIDCesta}=atributos
     const {selectedOptions5,openCategoria,handleCategoria,handleCloseCategoria,handleOpenCategoria,Categorias,isAllSelectCategoria,setIDCategoria}=atributos
     const {Fabricante,selectedOptions6,openFabricante,handleFabricante,handleCloseFabricante,handleOpenFabricante,setIDFabricante}=atributos
     const {Marcas,handleCloseMarcas,handleMarcas,handleOpenMarcas,openMarcas,selectedOptions7}=atributos
@@ -312,9 +317,11 @@ export function SelectAtributos(atributos){
     const {Nacionalidad,handleCloseNacionalidad,handleNacionalidad,handleOpenNacionalidad,openNacionalidad,selectedOptions13}=atributos
 
 
-    console.log(selectedOptions5, selectedOptions4)
-
-    const classes = useStyles();
+    const displayedOptions = useMemo(
+        () => Cesta.filter((option) => containsTexto(option.nombre, searchText)),
+        [searchText]
+    );
+    console.log(displayedOptions)
     const OptionCesta = Cesta.map((option) => (
         <MenuItem key={option.id} value={(option.id)} className='items'>
             <ListItem>
@@ -323,6 +330,30 @@ export function SelectAtributos(atributos){
             <ListItemText primary={option.nombre}/>
         </MenuItem>
     ))
+    
+    // const OptionCestaSearch = displayedOptions.map((option) => (
+    //     <MenuItem key={option.id} value={option.id} className='items'>
+    //         <ListItem>
+    //             <Checkbox checked={(selectedOptions4.indexOf(option) > -1)} />
+    //         </ListItem>
+    //         <ListItemText primary={option.nombre}/>
+    //     </MenuItem>
+    // ))
+    
+    // const OptionRender = useMemo(
+    //     ()=>{
+    //         if(focus === true){
+    //             setRender(displayedOptions)
+    //             return OptionCestaSearch;
+    //         }else{
+    //             setRender(Cesta)
+    //             return OptionCesta
+    //         }
+    //     }
+    // )
+
+    
+
     return(
         <Box style={{border:'.1em solid rgb(87 87 86/11%)',background:'#f7f4f4', borderRadius:'1.5em', width:'15%', height:'90%', display:'flex', flexDirection:'column', alignItems:'center',justifyContent:'space-between'}}>
             <InputLabel style={{width:'auto', padding:'10% 0 5%'}}>PRODUCTOS</InputLabel>
@@ -332,6 +363,7 @@ export function SelectAtributos(atributos){
                     <Select 
                         labelId="mutiple-select-label"
                         multiple
+                        name="Cesta"
                         value={selectedOptions4}
                         open={openCesta}
                         onChange={handleCesta}
@@ -360,6 +392,30 @@ export function SelectAtributos(atributos){
                         }}
                         MenuProps={MenuProps}
                     >
+                    <ListSubheader>
+                        <TextField
+                        name="Canal"
+                        size="small"
+                        autoFocus={focus}
+                        InputProps={{
+                            startAdornment: (
+                            <InputAdornment position="start" style={{width: 'auto',height: '100%'}}>
+                                <Search />
+                            </InputAdornment>
+                            )
+                        }}
+                        onChange={(e) => handleChangeSearch(e)}
+                        //onClick={data.setFocus(true)}
+                        onKeyDown={(e) => {
+                            if (e.key !== "Escape") {
+                            // Prevents autoselecting item while typing (default Select behaviour)
+                            e.stopPropagation();
+                            }
+                        }}
+                    />
+                        
+                    </ListSubheader>
+                        
                         <MenuItem value="all" classes={{root: isAllSelectCesta ? classes.selectedAll : ""}} style={{ display: showMenuItem.Cesta ? "flex" : "none" }}>
                             <ListItem>
                                 <Checkbox
@@ -479,6 +535,7 @@ export function SelectCategorias(categoria) {
             <Select 
                 labelId="mutiple-select-label"
                 multiple
+                name="Categorias"
                 value={selectedOptions5}
                 open={openCategoria}
                 onChange={handleCategoria}
@@ -540,6 +597,7 @@ export function SelectFabricantes(Fabricantes){
             <Select 
                 labelId="mutiple-select-label"
                 multiple
+                name="Fabricantes"
                 value={selectedOptions6}
                 open={openFabricante}
                 onChange={handleFabricante}
@@ -591,6 +649,7 @@ export function SelectMarcas(Marca){
             <Select 
                 labelId="mutiple-select-label"
                 multiple
+                name="Marcas"
                 value={selectedOptions7}
                 open={openMarcas}
                 onChange={handleMarcas}
