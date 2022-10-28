@@ -1,0 +1,31 @@
+{
+  "files": {
+    "main.css": "/retailservices/static/css/main.05f4a138.css",
+    "main.js": "/retailservices/static/js/main.c27a9f85.js",
+    "static/js/787.28cb0dcd.chunk.js": "/retailservices/static/js/787.28cb0dcd.chunk.js",
+    "static/media/IconATSOmnibus.png": "/retailservices/static/media/IconATSOmnibus.e0c9f2aa291217698ca1.png",
+    "static/media/ATSLOGO.png": "/retailservices/static/media/ATSLOGO.2ef1319e841fd26d843e.png",
+    "static/media/lucida sans demibold roman.ttf": "/retailservices/static/media/lucida sans demibold roman.628dda31b6bd2801cc6c.ttf",
+    "static/media/ats_logo-blanco-elises.png": "/retailservices/static/media/ats_logo-blanco-elises.4dd73f1f35c479f9a5c0.png",
+    "static/media/notfound.png": "/retailservices/static/media/notfound.ea5f9013248d18df4120.png",
+    "static/media/ATSLOGO.webp": "/retailservices/static/media/ATSLOGO.5b28fd8842c988f5a117.webp",
+    "static/media/ATSLogoMoneyMarket.png": "/retailservices/static/media/ATSLogoMoneyMarket.bc5c69d10c8bd2e590e5.png",
+    "static/media/IconATSTopProveedores.jpg": "/retailservices/static/media/IconATSTopProveedores.ed6a663ee0d22c92bfe5.jpg",
+    "static/media/IconATSNSE.jpg": "/retailservices/static/media/IconATSNSE.58b3e5142cf98efed229.jpg",
+    "static/media/IconATSCanalesCadenas.jpg": "/retailservices/static/media/IconATSCanalesCadenas.80f6ede9220ad42d5fed.jpg",
+    "static/media/IconATSTopSkus.png": "/retailservices/static/media/IconATSTopSkus.a2985c614fa5f47ecd39.png",
+    "static/media/IconATSCategorias.png": "/retailservices/static/media/IconATSCategorias.38fc784fc596b4d125fb.png",
+    "static/media/ATSElise.webp": "/retailservices/static/media/ATSElise.7ac010e4d909051f764e.webp",
+    "static/media/logo-cauadro.webp": "/retailservices/static/media/logo-cauadro.935ececcfc9ca1246291.webp",
+    "static/media/CuadroFondoBlanco.webp": "/retailservices/static/media/CuadroFondoBlanco.8de162a3e14cc0376168.webp",
+    "index.html": "/retailservices/index.html",
+    "static/media/angle-down.svg": "/retailservices/static/media/angle-down.4e8975a7ad2446890f16f9327e3351fe.svg",
+    "main.05f4a138.css.map": "/retailservices/static/css/main.05f4a138.css.map",
+    "main.c27a9f85.js.map": "/retailservices/static/js/main.c27a9f85.js.map",
+    "787.28cb0dcd.chunk.js.map": "/retailservices/static/js/787.28cb0dcd.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.05f4a138.css",
+    "static/js/main.c27a9f85.js"
+  ]
+}
