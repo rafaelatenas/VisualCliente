@@ -181,7 +181,7 @@ export default function DATA(){
   /*Funciones de Listar PERÍODOS 😄*/
     const peticionSemanas=async()=>{
       setBotonreporte({semanas:true})
-      await axios.get( 'http://localhost:3005/VisorCliente_Api/ListarSemana',{
+      await axios.get( process.env.REACT_APP_API_ENDPOINT+'ListarSemana',{
       // await axios.get( process.env.REACT_APP_API_ENDPOINT+'ListarSemana',{
 
         headers: {'Authorization': `Bearer ${token}`},
@@ -198,7 +198,7 @@ export default function DATA(){
 
     const peticionMeses=async()=>{
       setBotonreporte({meses:true,periodo:true})
-      await axios.get('http://localhost:3005/VisorCliente_Api/listarPeriodo/',{
+      await axios.get(process.env.REACT_APP_API_ENDPOINT+'listarPeriodo/',{
         headers: {'Authorization': `Bearer ${token}`},
       })
       .then(response=>{
@@ -279,7 +279,7 @@ export default function DATA(){
           Tipo=[0];
           break;
       }
-      await axios.post('http://localhost:3005/VisorCliente_Api/ListarCanal/',{
+      await axios.post(process.env.REACT_APP_API_ENDPOINT+'ListarCanal/',{
         headers: {'Authorization': `Bearer ${token}`},
         IdValor:selectedOptions1,
         IdTipo:Tipo
@@ -329,7 +329,7 @@ export default function DATA(){
           IdValor=[0];
           break;
       }
-      await axios.post('http://localhost:3005/VisorCliente_Api/ListarArea/',{
+      await axios.post(process.env.REACT_APP_API_ENDPOINT+'ListarArea/',{
         headers: {'Authorization': `Bearer ${token}`},
         IdValor:selectedOptions1,
         IdCanal:selectedOptions2,
@@ -372,10 +372,10 @@ export default function DATA(){
       let url;
       switch (periodo) {
         case true:
-          url = `http://localhost:3005/VisorCliente_Api/ListarSubRegionPeriodo/`;
+          url = process.env.REACT_APP_API_ENDPOINT+`ListarSubRegionPeriodo/`;
           break;
         default:
-          url=`http://localhost:3005/VisorCliente_Api/ListarSubRegionSemanal/`;
+          url=process.env.REACT_APP_API_ENDPOINT+`ListarSubRegionSemanal/`;
           break;
       }
       await axios.post( url,{
@@ -458,7 +458,7 @@ export default function DATA(){
           ValorSubRegion = 0
           break;
       }
-      await axios.post( `http://localhost:3005/VisorCliente_Api/ListarCesta/`,{
+      await axios.post( process.env.REACT_APP_API_ENDPOINT+`ListarCesta/`,{
         headers: {'Authorization': `Bearer ${token}`},
         IdValor:selectedOptions1,
         IdCanal:selectedOptions2,
@@ -531,7 +531,7 @@ export default function DATA(){
           ValorSubRegion = 0
           break;
       }
-    await axios.post('http://localhost:3005/VisorCliente_Api/ListarCategoria/',{
+    await axios.post(process.env.REACT_APP_API_ENDPOINT+'ListarCategoria/',{
       headers: {'Authorization': `Bearer ${token}`},
       IdValor:selectedOptions1,
       IdCanal:selectedOptions2,
@@ -577,7 +577,7 @@ export default function DATA(){
           ValorSubRegion = 0
           break;
       }
-      await axios.post('http://localhost:3005/VisorCliente_Api/ListarFabricante/',{
+      await axios.post(process.env.REACT_APP_API_ENDPOINT+'ListarFabricante/',{
         headers: {'Authorization': `Bearer ${token}`},
         IdValor:selectedOptions1,
         IdCanal:selectedOptions2,
@@ -642,7 +642,7 @@ export default function DATA(){
           ValorSubRegion = 0
           break;
       }
-      await axios.post('http://localhost:3005/VisorCliente_Api/ListarMarca/',{
+      await axios.post(process.env.REACT_APP_API_ENDPOINT+'ListarMarca/',{
         headers: {'Authorization': `Bearer ${token}`},
         IdValor:selectedOptions1,
         IdCanal:selectedOptions2,
@@ -708,7 +708,7 @@ export default function DATA(){
           ValorSubRegion = 0
           break;
       }
-    await axios.post('http://localhost:3005/VisorCliente_Api/ListarSegmento/',{
+    await axios.post(process.env.REACT_APP_API_ENDPOINT+'ListarSegmento/',{
       headers: {'Authorization': `Bearer ${token}`},
         IdValor:selectedOptions1,
         IdCanal:selectedOptions2,
@@ -749,7 +749,7 @@ export default function DATA(){
   const [openTamanno, setOpenTamanno] = React.useState(false);
   // const [IDMarca, setIDMarca]=React.useState({});
   const peticionTamanno=async()=>{
-    await axios.post('http://localhost:3005/VisorCliente_Api/ListarSegmento/',{
+    await axios.post(process.env.REACT_APP_API_ENDPOINT+'ListarSegmento/',{
       headers: {'Authorization': `Bearer ${token}`},
     })
     .then(response=>{
