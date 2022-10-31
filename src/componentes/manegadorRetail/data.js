@@ -182,8 +182,6 @@ export default function DATA() {
   const peticionSemanas = async () => {
     setBotonreporte({ semanas: true })
     await axios.get(process.env.REACT_APP_API_ENDPOINT + 'ListarSemana', {
-      // await axios.get( process.env.REACT_APP_API_ENDPOINT+'ListarSemana',{
-
       headers: { 'Authorization': `Bearer ${token}` },
     })
       .then(response => {
@@ -402,7 +400,7 @@ export default function DATA() {
           setRegion(response.data.data);
         }
       }).catch(error => {
-        if (error.response.status === 400) {
+        if (error.response.status === 400 || 500) {
           toast.fire({
             icon: 'error',
             title: '' + error.response.data.message,

@@ -148,7 +148,6 @@ function Login (){
     }
   }
   const isHuman=(valueResponse)=>{
-    console.log(valueResponse)
     axios.post(process.env.REACT_APP_API_ENDPOINT+"ValidationCaptcha",valueResponse)
     // axios.post("http://localhost:3005/VisorCliente_Api/ValidationCaptcha",valueResponse)
     .then(result => {

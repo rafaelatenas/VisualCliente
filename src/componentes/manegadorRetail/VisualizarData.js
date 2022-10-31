@@ -5,6 +5,11 @@ import { Box,CssBaseline,Button } from '@material-ui/core';
 import { BotonUsuario, DrawerComponentView } from './components/Components';
 import { ArrowBack } from '@material-ui/icons';
 
+import { AgGridReact } from 'ag-grid-react';
+import 'ag-grid-enterprise';
+import 'ag-grid-community/dist/styles/ag-grid.css';
+import 'ag-grid-community/dist/styles/ag-theme-alpine.css'
+
 export default function Report(){
         const [open, setOpen] = React.useState(false);
         const handleDrawerOpen = () => {
@@ -25,34 +30,9 @@ export default function Report(){
         const id = openo ? 'simple-popover' : undefined;
     return (
         <Box sx={{ display: 'flex' }}>
-          <CssBaseline />
-            <BotonUsuario
-              handleDrawerOpen={handleDrawerOpen}
-              open={open}
-            />
-                <DrawerComponentView
-                    open={open}
-                    id={id}
-                    openo={openo}
-                    anchorEl={anchorEl}
-                    handleClick={handleClick}
-                    handleDrawerClose={handleDrawerClose}
-                    handleClose={handleClose}
-                />
-           <Main open={open}>
-             <div className="Contenedordata">
-               {/* <section className="container-of-table">
-                <HeaderComponent/>
-                   <Stack direction="row" className={styles.buttons}>
-                     <button id='save' style={{width:'35%'}} variant="contained" onClick={abrirCerrarModalSelect}>Guardar</button>
-                     <button id='process' style={{width:'35%'}} variant="contained" onClick={comprobarCombos}>Procesar</button>
-                   </Stack>
-               </section> */}
-             </div>
-           </Main>
            <Button className='atras'
              style={{background: 'transparent',position:'fixed',border:'0.2em solid #fff',minWidth:'50px', borderRadius:'50%'}}
-             variant="contained" href='./Home'>
+             variant="contained" href='/retailservices/home/data'>
                <ArrowBack style={{fontSize:'2.5em', fill:'#fff'}}></ArrowBack>
            </Button>
         </Box>
