@@ -125,7 +125,8 @@ export function SelectPeriodos(data){
 export function SelectCanales(canal){
     const classes = useStyles();
     var ID_Cliente = sessionStorage.getItem('Id_Cliente')
-    let dataUnificada = canal.canal.length>0?[{id:parseInt(ID_Cliente), nombre:'MI CADENA'}].concat(canal.canal):[]
+    let dataUnificada = canal.canal.length>0?[{id:parseInt(ID_Cliente)!==1?parseInt(ID_Cliente):canal.selectedOptionRetail, nombre:'MI CADENA'}].concat(canal.canal):[]
+    
 
     const OptionCanales = dataUnificada.map((item) => (
         <MenuItem key={item.id} value={item.id} className='items'>

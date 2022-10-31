@@ -1211,7 +1211,7 @@ export default function DATA() {
   const isAllSelectPeriodo = data.length > 0 && selectedOptions1.length === render.length;
   const isAllSelectCesta = Cesta.length > 0 && selectedOptions4.length === Cesta.length;
   const isAllSelectCategoria = Categorias.length > 0 && selectedOptions5.length === Categorias.length;
-
+console.log(selectedOptionRetail)
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -1283,6 +1283,7 @@ export default function DATA() {
                 handleCanales={handleChangeSelect}
                 handleCloseCanal={handleCloseCanal}
                 handleOpenCanal={handleOpenCanales}
+                selectedOptionRetail={selectedOptionRetail}
                 canal={canal}
               />
               <SelectRegiones
@@ -1435,10 +1436,11 @@ const useStyles = makeStyles((theme) => ({
     height: '40%',
     justifyContent: 'space-between',
     flexDirection: 'column',
-    overflow: 'visible'
+    overflow: 'visible',
+    alignItems:'center'
   },
   inputMaterial: {
-    width: '95%',
+    width: '100%',
     height: '100%'
   },
   list: {
