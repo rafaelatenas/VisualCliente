@@ -1,12 +1,12 @@
 import { Drawer,Tooltip,Chip,IconButton,Divider,Accordion,AccordionSummary,Typography,List,Paper } from "@material-ui/core"
-import { ListItem,ListItemText,Link,Button,Popover,Avatar, AccordionDetails,Toolbar,Card, CardHeader, CardActions, hexToRgb } from "@mui/material"
+import { ListItem,ListItemText,Link,Button,Popover,Avatar, AccordionDetails,Toolbar,Card, CardHeader, CardActions, hexToRgb, Box, InputLabel, FormControl, Select, Checkbox, TextField } from "@mui/material"
 import { ExpandMore} from "@mui/icons-material"
 import MenuIcon from '@mui/icons-material/Menu';
 import {Stack} from '@mui/material';
 import { styled } from '@mui/material/styles';
 import { makeStyles } from "@material-ui/styles";
 import logoatenas from '../../../landing/Images/ATSLOGO.png'
-import React from "react";
+import React, { useState } from "react";
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import './componentes.css'
@@ -15,14 +15,23 @@ import Collapse from '@mui/material/Collapse';
 import { useAuthContext } from "../../context/authContext";
 
 let icon;
-
+const PruebaRetail = [{id:1, nombre:'Retail 1'}, {id:2, nombre:'Retail 2'}, {id:3, nombre:'Retail 3'}, {id:4, nombre:'Retail 4'}]
 export function DrawerComponent(abrir){
-    const {DeletePeriodo,anchorEl,botonreporte,chipData,handleClick,setData,handleClose,handleDelete,handleDrawerClose,id,label,open,openo,peticionMeses,peticionSemanas,peticionSemestres,peticionTrimestres,seleccionarPeriodo} = abrir
+    const {selectedOptionRetail,setSelectedOptionRetail,DeletePeriodo,anchorEl,botonreporte,chipData,handleClick,setData,handleClose,handleDelete,handleDrawerClose,id,label,open,openo,peticionMeses,peticionSemanas,peticionSemestres,peticionTrimestres,seleccionarPeriodo} = abrir
     const {logout}=useAuthContext();
     const styles= useStyles();
-    const handleDirectURL=(e)=>{
-        window.location = `/home/${e.target.innerText}`
+    const [openPeriodo, setOpenPeriodo]=useState(false)
+    const handlePeriodos =(event)=>{
+        const {value} =event.target;
+        setSelectedOptionRetail(value);
     }
+    const handleOpenPeriodo =()=>{
+        setOpenPeriodo(true)
+    }
+    const handleClosePeriodo =()=>{
+        setOpenPeriodo(false)
+    }
+    
     return(
         <Drawer
             style={{borderTopRightRadius:'.5em',borderButtomRightRadius:'.5em'}}
@@ -44,10 +53,10 @@ export function DrawerComponent(abrir){
         >
             <DrawerHeader>
                 <Stack style={{width:'70%', height:'100%', justifyContent:'center'}}>
-                    <Tooltip title={sessionStorage.getItem('Login')} arrow placement="right" style={{minHeight:36}}>
+                    <Tooltip title={sessionStorage.getItem('user')} arrow placement="right" style={{minHeight:36}}>
                         <Chip
                             avatar={<Avatar style={{minHeight:30,maxHeight:50,minWidth:30, maxWidth:50}}>R</Avatar>}
-                            label={sessionStorage.getItem('Login')}
+                            label={sessionStorage.getItem('user')}
                             variant="outlined"
                         ></Chip>
                     </Tooltip>
@@ -70,7 +79,7 @@ export function DrawerComponent(abrir){
                         <ListItem style={{width:'auto',paddingLeft:'1%',paddingRight:'1%'}}>
                             <Chip style={{background:'#F6B232', color:'#fff'}}
                                 icon={icon}
-                                label={label}
+                                label={'label'}
                                 onDelete={handleDelete(chipData)}
                             />
                         </ListItem>
@@ -88,11 +97,31 @@ export function DrawerComponent(abrir){
                 peticionSemestres={peticionSemestres}
                 setData={setData}
             />
+            {sessionStorage.getItem('Id_Cliente')==1?
+            <>
+            <Divider style={{ width: '90%', background: 'rgb(0 0 0 / 38%)' }} />
+                <Box style={{ background: '#f7f4f4', overflow: 'visible', margin: '2% 0 1%', borderRadius: '1.5em', width: '90%', height: 'auto', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+                    <TextField
+                        id="outlined-select-currency"
+                        select
+                        label="Retailers"
+                        value={selectedOptionRetail}
+                        onChange={handlePeriodos}
+                        sx={{ width: '90%', overflow: 'visible', '& div':{borderRadius:'1.5em', '& div':{p:1.5}}}}
+                    >
+                        {PruebaRetail.map((option) => (
+                            <MenuItem key={option.id} value={option.id} sx={{display:'flex', alignItems:'center'}}>
+                                {option.nombre}
+                            </MenuItem>
+                        ))}
+                    </TextField>
+                </Box>
+            </>:''}
             <Divider style={{width:'90%', background: 'rgb(0 0 0 / 38%)'}}/>
             <List className={styles.list}>
                 <ListItem className={styles.listItem}>
                     <div className={styles.popOver}>
-                        <Button className='buttonPopover' style={{width:'100%', borderRadius:'1.5em', margin:'.3em 0', padding:'0px !important'}}
+                        <Button className='buttonPopover' style={{width:'100%', minHeight:30, borderRadius:'1.5em', margin:'.3em 0', padding:'0px !important'}}
                             aria-describedby={id} variant="contained" 
                             onClick={handleClick}>
                             Opcion de Menu 1
@@ -110,7 +139,7 @@ export function DrawerComponent(abrir){
                             <MenuItem className={styles.MenuItem} onClick={(e)=>{handleDirectURL(e)}}>WOP4</MenuItem>
                             <MenuItem className={styles.MenuItem} onClick={(e)=>{handleDirectURL(e)}}>WOP5</MenuItem>
                         </Menu> */}
-                        <Button className='buttonPopover' style={{width:'100%', borderRadius:'1.5em', margin:'.3em 0', padding:'0px !important'}}
+                        <Button className='buttonPopover' style={{width:'100%', minHeight:30, borderRadius:'1.5em', margin:'.3em 0', padding:'0px !important'}}
                             aria-describedby={id} variant="contained" 
                             onClick={handleClick}>
                             Opcion de Menu 2
@@ -128,7 +157,7 @@ export function DrawerComponent(abrir){
                             <MenuItem className={styles.MenuItem} onClick={(e)=>{handleDirectURL(e)}}>WOP4</MenuItem>
                             <MenuItem className={styles.MenuItem} onClick={(e)=>{handleDirectURL(e)}}>WOP5</MenuItem>
                         </Menu> */}
-                        <Button className='buttonPopover' style={{width:'100%', borderRadius:'1.5em', margin:'.3em 0', padding:'0px !important'}}
+                        <Button className='buttonPopover' style={{width:'100%', minHeight:30, borderRadius:'1.5em', margin:'.3em 0', padding:'0px !important'}}
                             aria-describedby={id} variant="contained" 
                             onClick={handleClick}>
                             Opcion de Menu 3
@@ -146,7 +175,7 @@ export function DrawerComponent(abrir){
                             <MenuItem className={styles.MenuItem} onClick={(e)=>{handleDirectURL(e)}}>WOP4</MenuItem>
                             <MenuItem className={styles.MenuItem} onClick={(e)=>{handleDirectURL(e)}}>WOP5</MenuItem>
                         </Menu> */}
-                        <Button className='buttonPopover' style={{width:'100%', borderRadius:'1.5em', margin:'.3em 0', padding:'0px !important'}}
+                        <Button className='buttonPopover' style={{width:'100%', minHeight:30, borderRadius:'1.5em', margin:'.3em 0', padding:'0px !important'}}
                             aria-describedby={id} variant="contained" 
                             onClick={handleClick}>
                             Opcion de Menu 4
@@ -164,7 +193,7 @@ export function DrawerComponent(abrir){
                             <MenuItem className={styles.MenuItem} onClick={(e)=>{handleDirectURL(e)}}>WOP4</MenuItem>
                             <MenuItem className={styles.MenuItem} onClick={(e)=>{handleDirectURL(e)}}>WOP5</MenuItem>
                         </Menu> */}
-                        <Button className='buttonPopover' style={{width:'100%', borderRadius:'1.5em', margin:'.3em 0', padding:'0px !important'}}
+                        <Button className='buttonPopover' style={{width:'100%', minHeight:30, borderRadius:'1.5em', margin:'.3em 0', padding:'0px !important'}}
                             aria-describedby={id} variant="contained" 
                             onClick={()=>logout()}>
                             Salir
@@ -288,7 +317,7 @@ export function DrawerComponentView(open){
             <List className={styles.list}>
                 <ListItem className={styles.listItem}>
                     <div className={styles.popOver}>
-                        <Button className='buttonPopover' style={{width:'100%', borderRadius:'1.5em', margin:'.3em 0',}}
+                        <Button className='buttonPopover' style={{width:'100%', minHeight:30, borderRadius:'1.5em', margin:'.3em 0',}}
                             aria-describedby={open.id} variant="contained" 
                             onClick={open.handleClick}>
                             WOP
@@ -306,7 +335,7 @@ export function DrawerComponentView(open){
                             <MenuItem className={styles.MenuItem} onClick={(e)=>{handleDirectURL(e)}}>WOP4</MenuItem>
                             <MenuItem className={styles.MenuItem} onClick={(e)=>{handleDirectURL(e)}}>WOP5</MenuItem>
                         </Menu>
-                        <Button className='buttonPopover' style={{width:'100%', borderRadius:'1.5em', margin:'.3em 0',}}
+                        <Button className='buttonPopover' style={{width:'100%', minHeight:30, borderRadius:'1.5em', margin:'.3em 0',}}
                             aria-describedby={open.id} variant="contained" 
                             onClick={open.handleClick}>
                             WOP
@@ -324,7 +353,7 @@ export function DrawerComponentView(open){
                             <MenuItem className={styles.MenuItem} onClick={(e)=>{handleDirectURL(e)}}>WOP4</MenuItem>
                             <MenuItem className={styles.MenuItem} onClick={(e)=>{handleDirectURL(e)}}>WOP5</MenuItem>
                         </Menu>
-                        <Button className='buttonPopover' style={{width:'100%', borderRadius:'1.5em', margin:'.3em 0',}}
+                        <Button className='buttonPopover' style={{width:'100%', minHeight:30, borderRadius:'1.5em', margin:'.3em 0',}}
                             aria-describedby={open.id} variant="contained" 
                             onClick={open.handleClick}>
                             WOP
@@ -342,7 +371,7 @@ export function DrawerComponentView(open){
                             <MenuItem className={styles.MenuItem} onClick={(e)=>{handleDirectURL(e)}}>WOP4</MenuItem>
                             <MenuItem className={styles.MenuItem} onClick={(e)=>{handleDirectURL(e)}}>WOP5</MenuItem>
                         </Menu>
-                        <Button className='buttonPopover' style={{width:'100%', borderRadius:'1.5em', margin:'.3em 0',}}
+                        <Button className='buttonPopover' style={{width:'100%', minHeight:30, borderRadius:'1.5em', margin:'.3em 0',}}
                             aria-describedby={open.id} variant="contained" 
                             onClick={open.handleClick}>
                             WOP
@@ -360,7 +389,7 @@ export function DrawerComponentView(open){
                             <MenuItem className={styles.MenuItem} onClick={(e)=>{handleDirectURL(e)}}>WOP4</MenuItem>
                             <MenuItem className={styles.MenuItem} onClick={(e)=>{handleDirectURL(e)}}>WOP5</MenuItem>
                         </Menu>
-                        <Button className='buttonPopover' style={{width:'100%', borderRadius:'1.5em', margin:'.3em 0',}}
+                        <Button className='buttonPopover' style={{width:'100%', minHeight:30, borderRadius:'1.5em', margin:'.3em 0',}}
                             aria-describedby={open.id} variant="contained" 
                             onClick={()=>logout()}>
                             Salir
@@ -385,7 +414,7 @@ const useStyles = makeStyles((theme) => ({
     },
     list:{
         width:'80%',
-        height:'50%',
+        height:'40%',
         display:'inline-flex',
         flexDirection:'column'
     },

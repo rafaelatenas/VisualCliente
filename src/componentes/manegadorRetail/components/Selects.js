@@ -25,8 +25,7 @@ export function SelectPeriodos(data){
             <ListItemText primary={option.nombre}/>
         </MenuItem>
     ))
-    console.log(selectedOptions1)
-    const OptionPeriodoSearch = displayedOptions.map((option) => (console.log(selectedOptions1.indexOf(option.id), option),
+    const OptionPeriodoSearch = displayedOptions.map((option) => (
         <MenuItem key={option.id} value={option.id} className='items'>
             <ListItem>
                 <Checkbox checked={(selectedOptions1.indexOf(option.id)> -1)} />
@@ -51,7 +50,7 @@ export function SelectPeriodos(data){
         <Box style={{border:'.1em solid rgb(87 87 86/11%)',background:'#f7f4f4', borderRadius:'1.5em', width:'15%', height:'90%', display:'flex', flexDirection:'column', alignItems:'center'}}>
             <InputLabel style={{width:'auto', padding:'10% 0 5%', fontSize:18}}>PERÍODOS</InputLabel>
             <FormControl sx={{width: '100%'}} className={classes.formControl} error={isSelected.selectedOptions1}>
-                <InputLabel size={'small'} className="inputLabel" id="mutiple-select-label">{tiempoReporte}</InputLabel>
+                <InputLabel size={'small'} className={classes.inputLabel} id="mutiple-select-label">{tiempoReporte}</InputLabel>
                 <Select 
                     labelId="mutiple-select-label"
                     multiple
@@ -61,7 +60,7 @@ export function SelectPeriodos(data){
                     onChange={handlePeriodos}
                     onClose={handleClosePeriodo}
                     onOpen={handleOpenPeriodo}
-                    renderValue={(selected) =>{ console.log(selected, render)
+                    renderValue={(selected) =>{
                         if(selected.length>=2 && selected.length<render.length){
                             return(<ListItemText sx={{'& span':{fontSize:'10px'}}} primary={`${selected.length} Opciones Marcadas`}/>)
                         }else if(selected.length === render.length){
@@ -125,9 +124,10 @@ export function SelectPeriodos(data){
 
 export function SelectCanales(canal){
     const classes = useStyles();
-
     var ID_Cliente = sessionStorage.getItem('Id_Cliente')
-    const OptionCanales = canal.canal.map((item) => (
+    let dataUnificada = canal.canal.length>0?[{id:ID_Cliente, nombre:'MI CADENA'}].concat(canal.canal):[]
+    
+    const OptionCanales = dataUnificada.map((item) => (
         <MenuItem key={item.id} value={item.id} className='items'>
           <Checkbox checked={canal.selectedOptions2.indexOf(item.id) > -1} />
           <ListItemText sx={{fontSize:'10px'}} primary={item.nombre} />
@@ -137,7 +137,7 @@ export function SelectCanales(canal){
         <Box style={{border:'.1em solid rgb(87 87 86/11%)',background:'#f7f4f4', borderRadius:'1.5em', width:'15%', height:'90%', display:'flex', flexDirection:'column', alignItems:'center'}}>
             <InputLabel style={{width:'auto', padding:'10% 0 5%'}}>CANALES</InputLabel>
             <FormControl sx={{width: '100%'}} className={classes.formControl} error={canal.isSelected.selectedOptions2}>
-                <InputLabel className="inputLabel" id="mutiple-select-label">Canales</InputLabel>
+                <InputLabel className={classes.inputLabel} id="mutiple-select-label">Canales</InputLabel>
                 <Select 
                     labelId="mutiple-select-label"
                     multiple
@@ -148,16 +148,16 @@ export function SelectCanales(canal){
                     onClose={canal.handleCloseCanal}
                     onOpen={canal.handleOpenCanal}
                     renderValue={(selected) => {
-                        if(selected.length>1 && selected.length < canal.canal.length){
+                        if(selected.length>1 && selected.length < dataUnificada.length){
                             return(<ListItemText sx={{'& span':{fontSize:'10px'}}} primary={`${selected.length} Opciones Marcadas`}/>)
-                        }else if(selected.length === canal.canal.length){
+                        }else if(selected.length === dataUnificada.length){
                             return(<ListItemText sx={{'& span':{fontSize:'10px'}}} primary={`Todas Marcadas (${selected.length})`}/>)
                         }else if(selected.length){
                             return(
                                 <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: 0.5 }}>
                                     {selected.map((value) =>{
-                                        for (let h = 0; h < canal.canal.length; h++) {
-                                            const element = canal.canal[h];
+                                        for (let h = 0; h < dataUnificada.length; h++) {
+                                            const element = dataUnificada[h];
                                             if(element.id === value){
                                                 return(<Chip sx={{'& span':{fontSize:'10px'}}} key={value} label={element.nombre}/>)
                                             }
@@ -169,12 +169,6 @@ export function SelectCanales(canal){
                     }}
                     MenuProps={MenuProps}
                 >
-                    {/* <MenuItem value={parseInt(ID_Cliente)}>
-                        <ListItem>
-                            <Checkbox style={{display:'block', padding:'0'}} checked={canal.selectedOptions2.indexOf(parseInt(ID_Cliente)) > -1}/>
-                        </ListItem>
-                        <ListItemText sx={{'& span':{fontSize:'10px'}}} primary={'MI CADENA'} />
-                    </MenuItem> */}
                     {OptionCanales}
                 </Select>
             </FormControl>
@@ -187,8 +181,8 @@ export function SelectRegiones(region){
     /*Sub Regiones*/
     const {idRegiones,selectedOptions33,handleSubRegiones}=region
     const classes = useStyles();
-    
-    const OptionRegiones = regiones.map((item) => (
+    let dataUnificada = regiones.length>0?[{id:0, nombre:'TOTAL VENEZUELA'}].concat(regiones):[]
+    const OptionRegiones = dataUnificada.map((item) => (
         <MenuItem key={item.id} value={item.id} className='items'>
           <Checkbox checked={selectedOptions3.indexOf(item.id) > -1} />
           <ListItemText  primary={item.nombre} />
@@ -229,7 +223,7 @@ export function SelectRegiones(region){
         <Box style={{border:'.1em solid rgb(87 87 86/11%)',background:'#f7f4f4', borderRadius:'1.5em', width:'15%', height:'90%', display:'flex', flexDirection:'column', alignItems:'center'}}>
             <InputLabel style={{width:'auto', padding:'10% 0 5%'}}>ÁREAS</InputLabel>
             <FormControl sx={{width: '100%'}} className={classes.formControl} error={isSelected.selectedOptions3}>
-                <InputLabel className="inputLabel" id="mutiple-select-label">Regiones</InputLabel>
+                <InputLabel className={classes.inputLabel} id="mutiple-select-label">Regiones</InputLabel>
                 <Select 
                     labelId="mutiple-select-label"
                     name="Areas"
@@ -240,16 +234,16 @@ export function SelectRegiones(region){
                     onClose={handleCloseRegion}
                     onOpen={handleOpenRegiones}
                     renderValue={(selected) => {
-                        if(selected.length>1 && selected.length < regiones.length){
+                        if(selected.length>1 && selected.length < dataUnificada.length){
                             return(<ListItemText sx={{'& span':{fontSize:'10px'}}} primary={`${selected.length} Opciones Marcadas`}/>)
-                        }else if(selected.length === regiones.length){
+                        }else if(selected.length === dataUnificada.length){
                             return(<ListItemText sx={{'& span':{fontSize:'10px'}}} primary={`Todas Marcadas (${selected.length})`}/>)
                         }else if(selected.length){
                             return(
                                 <Box sx={{ display: 'flex', flexWrap: 'nowrap', gap: 0.5 }}>
                                     {selected.map((value) =>{
-                                        for (let h = 0; h < regiones.length; h++) {
-                                            const element = regiones[h];
+                                        for (let h = 0; h < dataUnificada.length; h++) {
+                                            const element = dataUnificada[h];
                                             if(element.id === value){
                                                 return(<Chip sx={{'& span':{fontSize:'10px'}}} key={value} label={element.nombre}/>)
                                             }
@@ -321,7 +315,6 @@ export function SelectAtributos(atributos){
         () => Cesta.filter((option) => containsTexto(option.nombre, searchText)),
         [searchText]
     );
-    console.log(displayedOptions)
     const OptionCesta = Cesta.map((option) => (
         <MenuItem key={option.id} value={(option.id)} className='items'>
             <ListItem>
@@ -1105,5 +1098,10 @@ const useStyles = makeStyles((theme) => ({
         height: '8%',
         minHeight: 27,
         maxHeight:35
+    },
+    inputLabel:{
+        background:'rgb(247, 244, 244)',
+        width: 'auto',
+        fontSize: '10px !Important'
     }
 }))
