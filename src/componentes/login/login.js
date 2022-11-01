@@ -106,14 +106,14 @@ function Login (){
       sessionStorage.setItem('token', result.data.token);
       sessionStorage.setItem('user', result.data.Login);
       sessionStorage.setItem('Id_Cliente', result.data.ID_Cliente);
-      sessionStorage.setItem('success', result.data.success);
+      sessionStorage.setItem('successAuthAtenas', result.data.success);
       toast.fire({
           icon: 'success',
           title: ''+result.data.message+' '+nombre+' '+apellidos+'',
           confirmButtonText: `Ok`,
       })
       if (result.data.success) {
-        login(sessionStorage.getItem('success'));
+        login(sessionStorage.getItem('successAuthAtenas'));
         console.log(result.data)
       }
     }).catch(err => {
@@ -338,10 +338,10 @@ const styles = makeStyles(()=>({
       padding: '0 !important',
   },
   boxRecovery:{
-      width: '73%',
+      width: '50%',
       height: '95%',
       maxHeight: 490,
-      minWidth: 365,
+      minWidth: 250,
       maxWidth: 400,
       display: 'flex',
       alignItems: 'center',
@@ -349,7 +349,7 @@ const styles = makeStyles(()=>({
       flexDirection: 'column',
   },
   logoRecovery:{
-    width: '45%',
+    width: '60%',
     height: 'auto',
     maxWidth: 250,
   },
@@ -686,7 +686,7 @@ const styles = makeStyles(()=>({
           maxHeight: 70
       },
       emailRecovery:{
-        width: '70%',
+        width: '90%',
         height: '15%',
         maxWidth: 270,
         maxHeight: 60,
@@ -699,7 +699,17 @@ const styles = makeStyles(()=>({
         },
       },
       gruopConfirm:{
-
+        '& p':{
+          fontSize:12
+        },
+        '& label':{
+          '& span svg':{
+            fontSize:'1.5em'
+          }
+        },
+        '& span':{
+          fontSize:12
+        }
       }
     },
     '@media screen and (min-width:1451px)':{

@@ -7,7 +7,7 @@ export const AuthContext = createContext({
 });
 
 export function AuthContextProvider({children}){
-    const [isAuthenticated, setAuthenticated] = useState(sessionStorage.getItem('success'));
+    const [isAuthenticated, setAuthenticated] = useState(sessionStorage.getItem('successAuthAtenas'));
     const [confirmisAuthenticated, setConfirmisAuthenticated] = useState()
     // const IdUser = sessionStorage.getItem('ID_Perfil')
     const IdUser=2

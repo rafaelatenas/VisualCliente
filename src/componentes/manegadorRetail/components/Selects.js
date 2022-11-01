@@ -6,12 +6,11 @@ import { useState, useMemo } from "react";
 import './select.css'
 
 const containsText = (text, searchText) =>text.toString().toLowerCase().indexOf(searchText.toString().toLowerCase()) >-1;
-const containsTexto = (text, searchText) =>text.toString().toLowerCase().indexOf(searchText.toString().toLowerCase()) >-1;
+// const containsTexto = (text, searchText) =>text.toString().toLowerCase().indexOf(searchText.toString().toLowerCase()) >-1;
 
 export function SelectPeriodos(data){
     const {datos,focus,handleChangeSearch,handleClosePeriodo,handleOpenPeriodo,handlePeriodos,isAllSelectPeriodo,isSelected,openPeriodo,render,searchText,selectedOptions1,setFocus,setRender,setSearchText,showMenuItem,tiempoReporte}=data
     const classes = useStyles();
-
     const displayedOptions = useMemo(
         () => datos.filter((option) => containsText(option.nombre, searchText)),
         [searchText]
@@ -183,6 +182,7 @@ export function SelectRegiones(region){
     const {idRegiones,selectedOptions33,handleSubRegiones}=region
     const classes = useStyles();
     let dataUnificada = regiones.length>0?[{id:0, nombre:'TOTAL VENEZUELA'}].concat(regiones):[]
+    // console.log([...dataUnificada])
     const OptionRegiones = dataUnificada.map((item) => (
         <MenuItem key={item.id} value={item.id} className='items'>
           <Checkbox checked={selectedOptions3.indexOf(item.id) > -1} />
@@ -311,11 +311,10 @@ export function SelectAtributos(atributos){
     const {CBarra,handleCloseCBarra,handleCBarra,handleOpenCBarra,openCBarra,selectedOptions12}=atributos
     const {Nacionalidad,handleCloseNacionalidad,handleNacionalidad,handleOpenNacionalidad,openNacionalidad,selectedOptions13}=atributos
 
-
-    const displayedOptions = useMemo(
-        () => Cesta.filter((option) => containsTexto(option.nombre, searchText)),
-        [searchText]
-    );
+// console.log(searchText)
+//     const displayedOptions=Cesta.filter((option) => option.name.toString().toLowerCase().indexOf(searchText.toString().toLowerCase()) >-1)
+//     console.log(displayedOptions)
+    
     const OptionCesta = Cesta.map((option) => (
         <MenuItem key={option.id} value={(option.id)} className='items'>
             <ListItem>
@@ -388,7 +387,7 @@ export function SelectAtributos(atributos){
                     >
                     <ListSubheader>
                         <TextField
-                        name="Canal"
+                        name="cesta"
                         size="small"
                         autoFocus={focus}
                         InputProps={{
@@ -513,8 +512,22 @@ export function SelectAtributos(atributos){
     )
 }
 export function SelectCategorias(categoria) {
-    const {selectedOptions5,isSelected,openCategoria,handleCategoria,handleCloseCategoria,handleOpenCategoria,Categorias,isAllSelectCategoria,setIDCategoria}=categoria
+    const {selectedOptions5,isSelected,openCategoria,handleCategoria,handleCloseCategoria,handleOpenCategoria,Categorias,isAllSelectCategoria}=categoria
     const classes = useStyles();
+
+    // const displayedOptions = useMemo(
+    //     () => datos.filter((option) => containsTexto(option.nombre, searchText)),
+    //     [searchText]
+    // );
+
+    // const OptionCategoriaSearch = displayedOptions.map((option) => (
+    //     <MenuItem key={option.id} value={option.id} className='items'>
+    //         <ListItem>
+    //             <Checkbox checked={(selectedOptions5.indexOf(option.id)> -1)} />
+    //         </ListItem>
+    //         <ListItemText primary={option.nombre}/>
+    //     </MenuItem>
+    // ))
     const OptionCategoria = Categorias.map((option) => (
         <MenuItem key={option.id} value={(option.id)} className='items'>
             <ListItem>
@@ -523,6 +536,18 @@ export function SelectCategorias(categoria) {
             <ListItemText primary={option.nombre}/>
         </MenuItem>
     ))
+    // const OptionRender = useMemo(
+    //     ()=>{
+    //         if(focus === true){
+    //             setRender(displayedOptions)
+    //             return OptionPeriodoSearch;
+    //         }else{
+    //             setRender(Categorias)
+    //             return OptionCategoria
+    //         }
+    //     }
+    // )
+    
     return(
         <FormControl sx={{width: '100%'}} className={classes.formControl} error={isSelected.selectedOptions5}>
             <InputLabel className="inputLabel input" id="mutiple-select-label">Categorias</InputLabel>
@@ -535,8 +560,7 @@ export function SelectCategorias(categoria) {
                 onChange={handleCategoria}
                 onClose={handleCloseCategoria}
                 onOpen={handleOpenCategoria}
-                renderValue={(selected) =>{ console.log(selected)
-                    setIDCategoria(selected)
+                renderValue={(selected) =>{
                     if(selected.length>=2 && selected.length<Categorias.length){
                         return(<ListItemText sx={{'& span':{fontSize:'10px'}}} primary={`${selected.length} Opciones Marcadas`}/>)
                     }else if(selected.length === Categorias.length){
@@ -1007,20 +1031,26 @@ export function SelectIndicadores(Indicador){
                     onChange={handleIndicadores}
                     onClose={handleCloseIndicadores}
                     onOpen={handleOpenIndicadores}
-                    renderValue={(selected) => (
-                        <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-                            {selected.map((value) =>{
-                              for (let h = 0; h < Indicadores.length; h++) {
-                              const element = Indicadores[h];
-                                if(element.id === value){
-                                  return(<Chip style={{fontSize:'.7em'}} key={value} label={element.nombre}/>)
-                                }else if(value === parseInt(ID_Cliente)){
-                                  return(<Chip style={{fontSize:'.7em'}} key={value} label="MI CADENA"/>)
-                                }
-                              }
-                            })}
-                          </Box>
-                      )}
+                    renderValue={(selected) =>{
+                        if(selected.length>=2 && selected.length<Indicadores.length){
+                            return(<ListItemText sx={{fontSize:'15px'}} primary={`${selected.length} Opciones Marcadas`}/>)
+                        }else if(selected.length === Indicadores.length){
+                            return(<ListItemText sx={{fontSize:'15px'}} primary={`Todas Marcadas (${selected.length})`}/>)
+                        }else if(selected.length<3){
+                            return(
+                                <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
+                                    {selected.map((value) =>{
+                                        for (let h = 0; h <Indicadores.length; h++) {
+                                            const element =Indicadores[h];
+                                            if(element.id === value){
+                                                return(<Chip style={{fontSize:'.7em'}} key={value} label={element.nombre}/>)
+                                            }
+                                        }
+                                    })}
+                                </Box>
+                               )
+                        }
+                    }}
                     MenuProps={MenuProps}
                 >
                     

@@ -3,7 +3,7 @@ import './data.css'
 import { styled } from '@mui/material/styles';
 import { Box, CssBaseline, ListItemText, IconButton } from '@material-ui/core';
 import { ArrowBack } from '@material-ui/icons';
-import { MenuItem, Stack, Button, TextField, Checkbox } from '@mui/material';
+import { MenuItem, Stack, Button, TextField, Checkbox, Stepper, Step, StepLabel, StepContent } from '@mui/material';
 import { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { Modal } from '@material-ui/core';
@@ -13,6 +13,7 @@ import withReactContent from 'sweetalert2-react-content'
 import { DrawerComponent, BotonUsuario, CardComponents, HeaderComponent } from './components/Components';
 import { SelectCanales, SelectAtributos, SelectIndicadores, SelectPeriodos, SelectRegiones, } from './components/Selects';
 import Alert from '@mui/material/Alert';
+import Report from './VisualizarData';
 
 const MySwal = withReactContent(Swal)
 const toast = MySwal.mixin({
@@ -47,7 +48,7 @@ export default function DATA() {
           </IconButton>
         }
       >
-        {sessionStorage.getItem('Id_Cliente') == 1 ? selectedOptionRetail !== null ? 'Debe Selecionar un Reporte' : 'Debe Seleccionar un Retail' : 'Debe Selecionar un Reporte'}
+        {parseInt(sessionStorage.getItem('Id_Cliente')) === 1 ? selectedOptionRetail !== null ? 'Debe Selecionar un Reporte' : 'Debe Seleccionar un Retail' : 'Debe Selecionar un Reporte'}
       </Alert>
     </Box>
 
@@ -137,6 +138,8 @@ export default function DATA() {
   /*Data Indicadores*/
   const [Indicadores, setIndicadores] = useState([]);
   const [selectedOptions14, setSelectedOptions14] = useState([]);
+  /*Data Global de Grilla*/
+  const [dataGrid, setDataGrid]= useState([])
   /* Funcion Onchange Agrupada de todos los combos */
   const handleChangeSelect = (event) => {
     const { name, value } = event.target;
@@ -166,7 +169,7 @@ export default function DATA() {
         setSelectedOptions4(value);
         break;
       case "Categorias":
-        setSelectedOptions6(value);
+        setSelectedOptions5(value);
         break;
       case "Fabricantes":
         setSelectedOptions6(value);
@@ -338,7 +341,6 @@ export default function DATA() {
           })
         } else {
           setCanal(response.data.data);
-          console.log(response.data.data)
         }
       }).catch(error => {
         if (error.response.status === 400 || 500) {
@@ -359,13 +361,23 @@ export default function DATA() {
   }
   const handleOpenCanales = () => {
     setOpenCanales(true);
+
     if (selectedOptions2.length >= 1) {
+      setRegion([])
+      prueba()
       setSelectedOptions2([]); setSelectedOptions3([]); setSelectedOptions4([]);
       setSelectedOptions5([]); setSelectedOptions6([]); setSelectedOptions7([]);
       setSelectedOptions8([]); setSelectedOptions9([]); setSelectedOptions10([]);
       setSelectedOptions11([]); setSelectedOptions12([]); setSelectedOptions13([]);
     }
   };
+  const prueba = () => {
+    console.log(region)
+    setTimeout(() => {
+      console.log(region)
+
+    }, 5000);
+  }
 
 
   /*Funciones de Listar REGIONES 😄*/
@@ -387,7 +399,7 @@ export default function DATA() {
     await axios.post(process.env.REACT_APP_API_ENDPOINT + 'ListarArea/', {
       headers: { 'Authorization': `Bearer ${token}` },
       IdValor: selectedOptions1,
-      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : null,
+      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : "",
       IdTipo: IdValor
     })
       .then(response => {
@@ -398,6 +410,7 @@ export default function DATA() {
           })
         } else {
           setRegion(response.data.data);
+          console.log(response.data.data)
         }
       }).catch(error => {
         if (error.response.status === 400 || 500) {
@@ -416,7 +429,7 @@ export default function DATA() {
     setOpenRegiones(true);
     peticionRegiones()
     if (selectedOptions3.length >= 1) {
-      setSelectedOptions3([]);setSelectedOptions4([]); setSelectedOptions5([]); setSelectedOptions6([]);
+      setSelectedOptions3([]); setSelectedOptions4([]); setSelectedOptions5([]); setSelectedOptions6([]);
       setSelectedOptions7([]); setSelectedOptions8([]); setSelectedOptions9([]);
       setSelectedOptions10([]); setSelectedOptions11([]); setSelectedOptions12([]);
       setSelectedOptions13([]);
@@ -511,9 +524,9 @@ export default function DATA() {
       headers: { 'Authorization': `Bearer ${token}` },
       IdTipo: Tipo,
       IdValor: selectedOptions1,
-      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : null,
-      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : null,
-      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : null,
+      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : "",
+      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : "",
+      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : "",
 
     })
       .then(response => {
@@ -573,15 +586,25 @@ export default function DATA() {
       headers: { 'Authorization': `Bearer ${token}` },
       IdTipo: Tipo,
       IdValor: selectedOptions1,
-      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : null,
-      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : null,
-      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : null,
-      IdCesta: selectedOptions4.length > 0 ? selectedOptions4 : null,
+      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : "",
+      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : "",
+      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : "",
+      IdCesta: selectedOptions4.length > 0 ? selectedOptions4 : "",
     })
       .then(response => {
-        setCategorias(response.data.data);
+        if (response.data.message) {
+          toast.fire({
+            icon: 'warning',
+            title: '' + response.data.message,
+          })
+        } else {
+          if (response.data.data === undefined) {
+            setCategorias([])
+          }
+          setCategorias(response.data.data);
+        }
       }).catch(error => {
-        console.log(error.response.data.message);
+        console.log(error.response);
         console.log(error.response.status);
         console.log(error.response.headers);
       })
@@ -606,15 +629,25 @@ export default function DATA() {
       headers: { 'Authorization': `Bearer ${token}` },
       IdTipo: Tipo,
       IdValor: selectedOptions1,
-      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : null,
-      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : null,
-      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : null,
-      IdCesta: selectedOptions4.length > 0 ? selectedOptions4 : null,
-      IdCategoria: selectedOptions5.length > 0 ? selectedOptions5 : null,
+      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : "",
+      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : "",
+      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : "",
+      IdCesta: selectedOptions4.length > 0 ? selectedOptions4 : "",
+      IdCategoria: selectedOptions5.length > 0 ? selectedOptions5 : "",
     })
       .then(response => {
         console.log(response.data.data)
-        setFabricante(response.data.data)
+        if (response.data.message) {
+          toast.fire({
+            icon: 'warning',
+            title: '' + response.data.message,
+          })
+        } else {
+          if (response.data.data === undefined) {
+            setFabricante([])
+          }
+          setFabricante(response.data.data);
+        }
       }).catch(error => {
         console.log(error.response.data.message);
         console.log(error.response.status);
@@ -628,8 +661,8 @@ export default function DATA() {
     setOpenFabricante(true);
     peticionFabricantes()
     if (selectedOptions6.length >= 1) {
-      setSelectedOptions6([]);setSelectedOptions7([]); setSelectedOptions8([]);setSelectedOptions9([]);
-      setSelectedOptions10([]); setSelectedOptions11([]);setSelectedOptions12([]);
+      setSelectedOptions6([]); setSelectedOptions7([]); setSelectedOptions8([]); setSelectedOptions9([]);
+      setSelectedOptions10([]); setSelectedOptions11([]); setSelectedOptions12([]);
       setSelectedOptions13([]);
     }
   };
@@ -656,16 +689,25 @@ export default function DATA() {
       headers: { 'Authorization': `Bearer ${token}` },
       IdTipo: Tipo,
       IdValor: selectedOptions1,
-      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : null,
-      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : null,
-      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : null,
-      IdCesta: selectedOptions4.length > 0 ? selectedOptions4 : null,
-      IdCategoria: selectedOptions5.length > 0 ? selectedOptions5 : null,
+      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : "",
+      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : "",
+      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : "",
+      IdCesta: selectedOptions4.length > 0 ? selectedOptions4 : "",
+      IdCategoria: selectedOptions5.length > 0 ? selectedOptions5 : "",
       IdFabricante: selectedOptions6.length > 0 ? selectedOptions6 : null
     })
       .then(response => {
-        console.log(response.data)
-        // setMarcas(response.data.data)
+        if (response.data.message) {
+          toast.fire({
+            icon: 'warning',
+            title: '' + response.data.message,
+          })
+        } else {
+          if (response.data.data === undefined) {
+            setMarcas([])
+          }
+          setMarcas(response.data.data);
+        }
       }).catch(error => {
         console.log(error.response.data.message);
         console.log(error.response.status);
@@ -677,9 +719,10 @@ export default function DATA() {
   }
   const handleOpenMarcas = () => {
     setOpenMarcas(true);
+    peticionMarcas()
     if (selectedOptions7.length >= 1) {
-      setSelectedOptions7([]);setSelectedOptions8([]);setSelectedOptions9([]);setSelectedOptions10([]);
-      setSelectedOptions11([]);setSelectedOptions12([]);setSelectedOptions13([]);
+      setSelectedOptions7([]); setSelectedOptions8([]); setSelectedOptions9([]); setSelectedOptions10([]);
+      setSelectedOptions11([]); setSelectedOptions12([]); setSelectedOptions13([]);
     }
   };
 
@@ -703,16 +746,26 @@ export default function DATA() {
       headers: { 'Authorization': `Bearer ${token}` },
       IdTipo: Tipo,
       IdValor: selectedOptions1,
-      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : null,
-      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : null,
-      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : null,
-      IdCesta: selectedOptions4.length > 0 ? selectedOptions4 : null,
-      IdCategoria: selectedOptions5.length > 0 ? selectedOptions5 : null,
-      IdFabricante: selectedOptions6.length > 0 ? selectedOptions6 : null,
-      IdMarca: selectedOptions7.length > 0 ? selectedOptions7 : null,
+      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : "",
+      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : "",
+      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : "",
+      IdCesta: selectedOptions4.length > 0 ? selectedOptions4 : "",
+      IdCategoria: selectedOptions5.length > 0 ? selectedOptions5 : "",
+      IdFabricante: selectedOptions6.length > 0 ? selectedOptions6 : "",
+      IdMarca: selectedOptions7.length > 0 ? selectedOptions7 : "",
     })
       .then(response => {
-        setSegmentos(response.data.data)
+        if (response.data.message) {
+          toast.fire({
+            icon: 'warning',
+            title: '' + response.data.message,
+          })
+        } else {
+          if (response.data.data === undefined) {
+            setSegmentos([])
+          }
+          setSegmentos(response.data.data);
+        }
       }).catch(error => {
         console.log(error.response.data.message);
         console.log(error.response.status);
@@ -726,8 +779,8 @@ export default function DATA() {
     setOpenSegmentos(true);
     peticionSegmentos()
     if (selectedOptions8.length >= 1) {
-      setSelectedOptions8([]);setSelectedOptions9([]);setSelectedOptions10([]);setSelectedOptions11([]);
-      setSelectedOptions12([]);setSelectedOptions13([]);
+      setSelectedOptions8([]); setSelectedOptions9([]); setSelectedOptions10([]); setSelectedOptions11([]);
+      setSelectedOptions12([]); setSelectedOptions13([]);
     }
   };
   const handleSegmentos = (event) => {
@@ -756,18 +809,28 @@ export default function DATA() {
       headers: { 'Authorization': `Bearer ${token}` },
       IdTipo: Tipo,
       IdValor: selectedOptions1,
-      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : null,
-      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : null,
-      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : null,
-      IdCesta: selectedOptions4.length > 0 ? selectedOptions4 : null,
-      IdCategoria: selectedOptions5.length > 0 ? selectedOptions5 : null,
-      IdFabricante: selectedOptions6.length > 0 ? selectedOptions6 : null,
-      IdMarca: selectedOptions7.length > 0 ? selectedOptions7 : null,
-      IdSegmento: selectedOptions8.length > 0 ? selectedOptions8 : null,
+      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : "",
+      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : "",
+      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : "",
+      IdCesta: selectedOptions4.length > 0 ? selectedOptions4 : "",
+      IdCategoria: selectedOptions5.length > 0 ? selectedOptions5 : "",
+      IdFabricante: selectedOptions6.length > 0 ? selectedOptions6 : "",
+      IdMarca: selectedOptions7.length > 0 ? selectedOptions7 : "",
+      IdSegmento: selectedOptions8.length > 0 ? selectedOptions8 : "",
 
     })
       .then(response => {
-        setTamanno(response.data.data)
+        if (response.data.message) {
+          toast.fire({
+            icon: 'warning',
+            title: '' + response.data.message,
+          })
+        } else {
+          if (response.data.data === undefined) {
+            setTamanno([])
+          }
+          setTamanno(response.data.data);
+        }
       }).catch(error => {
         console.log(error.response.data.message);
         console.log(error.response.status);
@@ -784,13 +847,13 @@ export default function DATA() {
     setOpenTamanno(true);
     peticionTamanno()
     if (selectedOptions9.length >= 1) {
-      setSelectedOptions9([]);setSelectedOptions10([]);setSelectedOptions11([]);setSelectedOptions12([]);
+      setSelectedOptions9([]); setSelectedOptions10([]); setSelectedOptions11([]); setSelectedOptions12([]);
       setSelectedOptions13([]);
     }
   };
   const handleTamanno = (event) => {
     const value = event.target.value;
-    setSelectedOptions8(value);
+    setSelectedOptions9(value);
   };
 
   /*Funciones de Listar RTamanno 😄*/
@@ -809,23 +872,33 @@ export default function DATA() {
         Tipo = [0];
         break;
     }
-    await axios.get(process.env.REACT_APP_API_ENDPOINT + 'ListarRTamano', {
+    await axios.post(process.env.REACT_APP_API_ENDPOINT + 'ListarRTamano', {
       headers: { 'Authorization': `Bearer ${token}` },
       IdTipo: Tipo,
       IdValor: selectedOptions1,
-      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : null,
-      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : null,
-      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : null,
-      IdCesta: selectedOptions4.length > 0 ? selectedOptions4 : null,
-      IdCategoria: selectedOptions5.length > 0 ? selectedOptions5 : null,
-      IdFabricante: selectedOptions6.length > 0 ? selectedOptions6 : null,
-      IdMarca: selectedOptions7.length > 0 ? selectedOptions7 : null,
-      IdSegmento: selectedOptions8.length > 0 ? selectedOptions8 : null,
-      IdTamano: selectedOptions9.length > 0 ? selectedOptions9 : null,
+      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : "",
+      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : "",
+      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : "",
+      IdCesta: selectedOptions4.length > 0 ? selectedOptions4 : "",
+      IdCategoria: selectedOptions5.length > 0 ? selectedOptions5 : "",
+      IdFabricante: selectedOptions6.length > 0 ? selectedOptions6 : "",
+      IdMarca: selectedOptions7.length > 0 ? selectedOptions7 : "",
+      IdSegmento: selectedOptions8.length > 0 ? selectedOptions8 : "",
+      IdTamano: selectedOptions9.length > 0 ? selectedOptions9 : "",
 
     })
       .then(response => {
-        setRTamanno(response.data.data)
+        if (response.data.message) {
+          toast.fire({
+            icon: 'warning',
+            title: '' + response.data.message,
+          })
+        } else {
+          if (response.data.data === undefined) {
+            setRTamanno([])
+          }
+          setRTamanno(response.data.data);
+        }
       }).catch(error => {
         console.log(error.response.data.message);
         console.log(error.response.status);
@@ -839,12 +912,12 @@ export default function DATA() {
     setOpenRTamanno(true);
     peticionRTamanno()
     if (selectedOptions10.length >= 1) {
-      setSelectedOptions10([]);setSelectedOptions11([]);setSelectedOptions12([]);setSelectedOptions13([]);
+      setSelectedOptions10([]); setSelectedOptions11([]); setSelectedOptions12([]); setSelectedOptions13([]);
     }
   };
   const handleRTamanno = (event) => {
     const value = event.target.value;
-    setSelectedOptions8(value);
+    setSelectedOptions10(value);
   };
 
   /*Funciones de Listar Producto 😄*/
@@ -863,23 +936,33 @@ export default function DATA() {
         Tipo = [0];
         break;
     }
-    await axios.get(process.env.REACT_APP_API_ENDPOINT + 'ListarProducto', {
+    await axios.post(process.env.REACT_APP_API_ENDPOINT + 'ListarProducto', {
       headers: { 'Authorization': `Bearer ${token}` },
       IdTipo: Tipo,
       IdValor: selectedOptions1,
-      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : null,
-      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : null,
-      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : null,
-      IdCesta: selectedOptions4.length > 0 ? selectedOptions4 : null,
-      IdCategoria: selectedOptions5.length > 0 ? selectedOptions5 : null,
-      IdFabricante: selectedOptions6.length > 0 ? selectedOptions6 : null,
-      IdMarca: selectedOptions7.length > 0 ? selectedOptions7 : null,
-      IdSegmento: selectedOptions8.length > 0 ? selectedOptions8 : null,
-      IdTamano: selectedOptions9.length > 0 ? selectedOptions9 : null,
-      IdRTamano: selectedOptions10.length > 0 ? selectedOptions10 : null,
+      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : "",
+      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : "",
+      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : "",
+      IdCesta: selectedOptions4.length > 0 ? selectedOptions4 : "",
+      IdCategoria: selectedOptions5.length > 0 ? selectedOptions5 : "",
+      IdFabricante: selectedOptions6.length > 0 ? selectedOptions6 : "",
+      IdMarca: selectedOptions7.length > 0 ? selectedOptions7 : "",
+      IdSegmento: selectedOptions8.length > 0 ? selectedOptions8 : "",
+      IdTamano: selectedOptions9.length > 0 ? selectedOptions9 : "",
+      IdRTamano: selectedOptions10.length > 0 ? selectedOptions10 : "",
     })
       .then(response => {
-        setProductos(response.data.data)
+        if (response.data.message) {
+          toast.fire({
+            icon: 'warning',
+            title: '' + response.data.message,
+          })
+        } else {
+          if (response.data.data === undefined) {
+            setProductos([])
+          }
+          setProductos(response.data.data);
+        }
       }).catch(error => {
         console.log(error.response.data.message);
         console.log(error.response.status);
@@ -889,16 +972,17 @@ export default function DATA() {
   const handleCloseProducto = () => {
     setOpenProducto(false);
   }
-  const handleOpenProducto = () => {
+  const handleOpenProducto = (e) => {
     setOpenProducto(true);
     peticionProducto()
+    console.log(e)
     if (selectedOptions11.length >= 1) {
-      setSelectedOptions11([]);setSelectedOptions12([]);setSelectedOptions13([]);
+      setSelectedOptions11([]); setSelectedOptions12([]); setSelectedOptions13([]);
     }
   };
   const handleProducto = (event) => {
     const value = event.target.value;
-    setSelectedOptions8(value);
+    setSelectedOptions11(value);
   };
 
   /*Funciones de Listar CBarra 😄*/
@@ -921,20 +1005,30 @@ export default function DATA() {
       headers: { 'Authorization': `Bearer ${token}` },
       IdTipo: Tipo,
       IdValor: selectedOptions1,
-      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : null,
-      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : null,
-      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : null,
-      IdCesta: selectedOptions4.length > 0 ? selectedOptions4 : null,
-      IdCategoria: selectedOptions5.length > 0 ? selectedOptions5 : null,
-      IdFabricante: selectedOptions6.length > 0 ? selectedOptions6 : null,
-      IdMarca: selectedOptions7.length > 0 ? selectedOptions7 : null,
-      IdSegmento: selectedOptions8.length > 0 ? selectedOptions8 : null,
-      IdTamano: selectedOptions9.length > 0 ? selectedOptions9 : null,
-      IdRTamano: selectedOptions10.length > 0 ? selectedOptions10 : null,
-      IdProducto: selectedOptions11.length > 0 ? selectedOptions11 : null,
+      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : "",
+      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : "",
+      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : "",
+      IdCesta: selectedOptions4.length > 0 ? selectedOptions4 : "",
+      IdCategoria: selectedOptions5.length > 0 ? selectedOptions5 : "",
+      IdFabricante: selectedOptions6.length > 0 ? selectedOptions6 : "",
+      IdMarca: selectedOptions7.length > 0 ? selectedOptions7 : "",
+      IdSegmento: selectedOptions8.length > 0 ? selectedOptions8 : "",
+      IdTamano: selectedOptions9.length > 0 ? selectedOptions9 : "",
+      IdRTamano: selectedOptions10.length > 0 ? selectedOptions10 : "",
+      IdProducto: selectedOptions11.length > 0 ? selectedOptions11 : "",
     })
       .then(response => {
-        setCBarras(response.data.data)
+        if (response.data.message) {
+          toast.fire({
+            icon: 'warning',
+            title: '' + response.data.message,
+          })
+        } else {
+          if (response.data.data === undefined) {
+            setCBarras([])
+          }
+          setCBarras(response.data.data);
+        }
       }).catch(error => {
         console.log(error.response.data.message);
         console.log(error.response.status);
@@ -948,7 +1042,7 @@ export default function DATA() {
     setOpenCBarra(true);
     peticionCBarra()
     if (selectedOptions12.length >= 1) {
-      setSelectedOptions12([]);setSelectedOptions13([]);
+      setSelectedOptions12([]); setSelectedOptions13([]);
     }
   };
   const handleCBarra = (event) => {
@@ -973,24 +1067,34 @@ export default function DATA() {
         Tipo = [0];
         break;
     }
-    await axios.get(process.env.REACT_APP_API_ENDPOINT + 'ListarNacionalidad', {
+    await axios.post(process.env.REACT_APP_API_ENDPOINT + 'ListarNacionalidad', {
       headers: { 'Authorization': `Bearer ${token}` },
       IdTipo: Tipo,
       IdValor: selectedOptions1,
-      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : null,
-      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : null,
-      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : null,
-      IdCesta: selectedOptions4.length > 0 ? selectedOptions4 : null,
-      IdCategoria: selectedOptions5.length > 0 ? selectedOptions5 : null,
-      IdFabricante: selectedOptions6.length > 0 ? selectedOptions6 : null,
-      IdMarca: selectedOptions7.length > 0 ? selectedOptions7 : null,
-      IdSegmento: selectedOptions8.length > 0 ? selectedOptions8 : null,
-      IdTamano: selectedOptions9.length > 0 ? selectedOptions9 : null,
-      IdRTamano: selectedOptions10.length > 0 ? selectedOptions10 : null,
-      IdCBarra: selectedOptions12.length > 0 ? selectedOptions12 : null,
+      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : "",
+      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : "",
+      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : "",
+      IdCesta: selectedOptions4.length > 0 ? selectedOptions4 : "",
+      IdCategoria: selectedOptions5.length > 0 ? selectedOptions5 : "",
+      IdFabricante: selectedOptions6.length > 0 ? selectedOptions6 : "",
+      IdMarca: selectedOptions7.length > 0 ? selectedOptions7 : "",
+      IdSegmento: selectedOptions8.length > 0 ? selectedOptions8 : "",
+      IdTamano: selectedOptions9.length > 0 ? selectedOptions9 : "",
+      IdRTamano: selectedOptions10.length > 0 ? selectedOptions10 : "",
+      IdCBarra: selectedOptions12.length > 0 ? selectedOptions12 : "",
     })
       .then(response => {
-        setNacionalidad(response.data.data)
+        if (response.data.message) {
+          toast.fire({
+            icon: 'warning',
+            title: '' + response.data.message,
+          })
+        } else {
+          if (response.data.data === undefined) {
+            setNacionalidad([])
+          }
+          setNacionalidad(response.data.data);
+        }
       }).catch(error => {
         console.log(error.response.data.message);
         console.log(error.response.status);
@@ -1034,7 +1138,17 @@ export default function DATA() {
       IdTipo: Tipo
     })
       .then(response => {
-        setIndicadores(response.data.data)
+        if (response.data.message) {
+          toast.fire({
+            icon: 'warning',
+            title: '' + response.data.message,
+          })
+        } else {
+          if (response.data.data === undefined) {
+            setIndicadores([])
+          }
+          setIndicadores(response.data.data);
+        }
       }).catch(error => {
         console.log(error.response.data.message);
         console.log(error.response.status);
@@ -1043,24 +1157,16 @@ export default function DATA() {
   }
   const handleCloseIndicadores = () => {
     setOpenIndicadores(false);
-    // if(selectedOptions4.length>=1){
-    //   peticionFabricantes();
-    // }
   }
   const handleOpenIndicadores = () => {
     setOpenIndicadores(true);
-    if(selectedOptions1.length>0 && selectedOptions2.length>0){
-      console.log(1)
+    if (selectedOptions1.length > 0 ) {
       peticionIndicadores()
     }
-    
-    //  if(selectedOptions4.length>=1){
-    //     setSelectedOptions4([]); setSelectedOptions5([]); setSelectedOptions6([])
-    //   }
   };
   const handleIndicadores = (event) => {
     const value = event.target.value;
-    setSelectedOptions8(value);
+    setSelectedOptions14(value);
   };
 
   /*Mis Selecciones*/
@@ -1083,11 +1189,9 @@ export default function DATA() {
       }, [])
       ids = result.concat(selectedOptions2, selectedOptions3).join('*')
       setChipData({ [name]: value, id: ids })
-      console.log(ids)
     } else {
       ids = selectedOptions1.concat(selectedOptions2, selectedOptions3).join('*')
       setChipData({ [name]: value, id: ids })
-      console.log(ids)
     }
   }
   const GuardarSelecciones = () => {
@@ -1103,7 +1207,51 @@ export default function DATA() {
     selectedOptions5: false,
     selectedOptions6: false,
   });
-  const comprobarCombos = () => {
+  const comprobarCombos =  async () => {
+    handleNext()
+    const datosEnviar = {
+      IdValor: selectedOptions1,
+      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : "",
+      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : "",
+      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : "",
+      IdCesta: selectedOptions4.length > 0 ? selectedOptions4 : "",
+      IdCategoria: selectedOptions5.length > 0 ? selectedOptions5 : "",
+      // IdFabricante: selectedOptions6.length > 0 ? selectedOptions6 : "",
+      // IdMarca: selectedOptions7.length > 0 ? selectedOptions7 : "",
+      // IdSegmento: selectedOptions8.length > 0 ? selectedOptions8 : "",
+      // IdTamano: selectedOptions9.length > 0 ? selectedOptions9 : "",
+      // IdRTamano: selectedOptions10.length > 0 ? selectedOptions10 : "",
+      // IdCBarra: selectedOptions12.length > 0 ? selectedOptions12 : "",
+    }
+      await axios.post('http://localhost:3005/VisorCliente_Api/GenerarDataSemanal/', {
+        headers: { 'Authorization': `Bearer ${token}` },
+        IdValor: selectedOptions1,
+        IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : "",
+        IdArea: selectedOptions3.length > 0 ? selectedOptions3 : "",
+        IdZona: selectedOptions33.length > 0 ? selectedOptions33 : "",
+        IdCesta: selectedOptions4.length > 0 ? selectedOptions4 : "",
+        IdCategoria: selectedOptions5.length > 0 ? selectedOptions5 : "",
+        IdIndicador: selectedOptions14
+
+        
+      })
+        .then(response => {
+          if (response.data.message) {
+            toast.fire({
+              icon: 'warning',
+              title: '' + response.data.message,
+            })
+          } else {
+            if (response.data.data === undefined) {
+              setDataGrid([])
+            }
+            setDataGrid(response.data.data);
+          }
+        }).catch(error => {
+          console.log(error.response.data.message);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        })
     switch (true) {
       case selectedOptions1.length === 0:
         setIsSelected({ selectedOptions1: true })
@@ -1121,23 +1269,16 @@ export default function DATA() {
           confirmButtonText: `Ok`,
         })
         break;
-      case selectedOptions3.length === 0:
-        setIsSelected({ selectedOptions3: true })
-        toast.fire({
-          icon: 'error',
-          title: 'No ha Seleccionado una Región',
-          confirmButtonText: `Ok`,
-        })
-        break;
       default:
-        setModalSelect(!modalSelect);
+        // setModalSelect(!modalSelect);
         setIsSelected({ selectedOptions1: false, selectedOptions2: false, selectedOptions3: false })
         break;
     }
   }
   const abrirCerrarModalSelect = () => {
-    comprobarCombos()
+    // comprobarCombos()
   }
+  console.log(dataGrid)
   const bodyMySelect = (
     <div style={{ width: '25%', height: '40%', justifyContent: 'space-around' }} className={styles.modal}>
       <h1 style={{ textAlign: 'center' }}>Crear Filtro de Selección</h1>
@@ -1178,8 +1319,10 @@ export default function DATA() {
     marca: '',
     segmento: ''
   })
+  console.log(searchText.periodo)
   const handleChangeSearch = (e) => {
     const { name, value } = e.target
+    console.log(name, value)
     setSearchText({ [name]: value })
     setFocus(true)
   }
@@ -1211,7 +1354,13 @@ export default function DATA() {
   const isAllSelectPeriodo = data.length > 0 && selectedOptions1.length === render.length;
   const isAllSelectCesta = Cesta.length > 0 && selectedOptions4.length === Cesta.length;
   const isAllSelectCategoria = Categorias.length > 0 && selectedOptions5.length === Categorias.length;
-console.log(selectedOptionRetail)
+
+
+  const [activeStep, setActiveStep] =useState(0);
+
+  const handleNext = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  };
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -1253,154 +1402,171 @@ console.log(selectedOptionRetail)
       <Main open={open}>
         {alerta}
         <div className="Contenedordata">
-          <section className="container-of-table">
-            <HeaderComponent />
-            <article className="table-of-data">
-              <SelectPeriodos
-                className='propor'
-                tiempoReporte={tiempoReporte}
-                selectedOptions1={selectedOptions1}
-                isSelected={isSelected}
-                openPeriodo={openPeriodo}
-                handlePeriodos={handleChangeSelect}
-                handleClosePeriodo={handleClosePeriodo}
-                handleOpenPeriodo={handleOpenPeriodo}
-                datos={data}
-                isAllSelectPeriodo={isAllSelectPeriodo}
-                showMenuItem={showMenuItem}
-                handleChangeSearch={handleChangeSearch}
-                focus={focus}
-                searchText={searchText.periodo}
-                setRender={setRender}
-                setSearchText={setSearchText}
-                setFocus={setFocus}
-                render={render}
-              />
-              <SelectCanales
-                selectedOptions2={selectedOptions2}
-                isSelected={isSelected}
-                openCanales={openCanales}
-                handleCanales={handleChangeSelect}
-                handleCloseCanal={handleCloseCanal}
-                handleOpenCanal={handleOpenCanales}
-                selectedOptionRetail={selectedOptionRetail}
-                canal={canal}
-              />
-              <SelectRegiones
-                selectedOptions3={selectedOptions3}
-                isSelected={isSelected}
-                openRegiones={openRegiones}
-                handleRegiones={handleChangeSelect}
-                handleCloseRegion={handleCloseRegion}
-                handleOpenRegiones={handleOpenRegiones}
-                regiones={region}
-                /* SubRegiones */
-                idRegiones={idRegiones}
-                SubRegion={SubRegion}
-                selectedOptions33={selectedOptions33}
-                handleSubRegiones={handleChangeSelect}
+        <Stepper activeStep={activeStep} orientation="vertical">
+          <Step>
+            <StepContent>
+              <section className="container-of-table">
+                <HeaderComponent />
+                <article className="table-of-data">
+                  <SelectPeriodos
+                    className='propor'
+                    tiempoReporte={tiempoReporte}
+                    selectedOptions1={selectedOptions1}
+                    isSelected={isSelected}
+                    openPeriodo={openPeriodo}
+                    handlePeriodos={handleChangeSelect}
+                    handleClosePeriodo={handleClosePeriodo}
+                    handleOpenPeriodo={handleOpenPeriodo}
+                    datos={data}
+                    isAllSelectPeriodo={isAllSelectPeriodo}
+                    showMenuItem={showMenuItem}
+                    handleChangeSearch={handleChangeSearch}
+                    focus={focus}
+                    searchText={searchText.periodo}
+                    setRender={setRender}
+                    setSearchText={setSearchText}
+                    setFocus={setFocus}
+                    render={render}
+                  />
+                  <SelectCanales
+                    selectedOptions2={selectedOptions2}
+                    isSelected={isSelected}
+                    openCanales={openCanales}
+                    handleCanales={handleChangeSelect}
+                    handleCloseCanal={handleCloseCanal}
+                    handleOpenCanal={handleOpenCanales}
+                    selectedOptionRetail={selectedOptionRetail}
+                    canal={canal}
+                  />
+                  <SelectRegiones
+                    selectedOptions3={selectedOptions3}
+                    isSelected={isSelected}
+                    openRegiones={openRegiones}
+                    handleRegiones={handleChangeSelect}
+                    handleCloseRegion={handleCloseRegion}
+                    handleOpenRegiones={handleOpenRegiones}
+                    regiones={region}
+                    /* SubRegiones */
+                    idRegiones={idRegiones}
+                    SubRegion={SubRegion}
+                    selectedOptions33={selectedOptions33}
+                    handleSubRegiones={handleChangeSelect}
 
-              />
-              <SelectAtributos
-                selectedOptions4={selectedOptions4}
-                isSelected={isSelected}
-                openCesta={openCesta}
-                handleCesta={handleChangeSelect}
-                handleCloseCesta={handleCloseCesta}
-                handleOpenCesta={handleOpenCesta}
-                Cesta={Cesta}
-                setIDCesta={setIDCesta}
-                IDCesta={IDCesta}
-                searchText={searchText.cesta}
-                setRender={setRender}
-                setSearchText={setSearchText}
-                isAllSelectCesta={isAllSelectCesta}
-                showMenuItem={showMenuItem}
-                handleChangeSearch={handleChangeSearch}
-                //Categorias
-                Categorias={Categorias}
-                selectedOptions5={selectedOptions5}
-                openCategoria={openCategoria}
-                handleCategoria={handleChangeSelect}
-                isAllSelectCategoria={isAllSelectCategoria}
-                handleCloseCategoria={handleCloseCategoria}
-                handleOpenCategoria={handleOpenCategoria}
-                focus={focus}
+                  />
+                  <SelectAtributos
+                    selectedOptions4={selectedOptions4}
+                    isSelected={isSelected}
+                    openCesta={openCesta}
+                    handleCesta={handleChangeSelect}
+                    handleCloseCesta={handleCloseCesta}
+                    handleOpenCesta={handleOpenCesta}
+                    Cesta={Cesta}
+                    setIDCesta={setIDCesta}
+                    IDCesta={IDCesta}
+                    
+                    isAllSelectCesta={isAllSelectCesta}
+                    setRender={setRender}
+                    setSearchText={setSearchText}
+                    showMenuItem={showMenuItem}
+                    handleChangeSearch={handleChangeSearch}
+                    searchText={searchText.cesta}
+                    render={render}
+                    //Categorias
+                    Categorias={Categorias}
+                    selectedOptions5={selectedOptions5}
+                    openCategoria={openCategoria}
+                    handleCategoria={handleChangeSelect}
+                    isAllSelectCategoria={isAllSelectCategoria}
+                    handleCloseCategoria={handleCloseCategoria}
+                    handleOpenCategoria={handleOpenCategoria}
+                    focus={focus}
+                    //Fabricantes
+                    Fabricante={Fabricante}
+                    selectedOptions6={selectedOptions6}
+                    openFabricante={openFabricante}
+                    handleFabricante={handleChangeSelect}
+                    handleCloseFabricante={handleCloseFabricante}
+                    handleOpenFabricante={handleOpenFabricante}
+                    setIDFabricante={setIDFabricante}
+                    //Marcas
+                    Marcas={Marcas}
+                    selectedOptions7={selectedOptions7}
+                    openMarcas={openMarcas}
+                    handleMarcas={handleChangeSelect}
+                    handleCloseMarcas={handleCloseMarcas}
+                    handleOpenMarcas={handleOpenMarcas}
+                    //Segmentos
+                    Segmentos={Segmentos}
+                    selectedOptions8={selectedOptions8}
+                    openSegmentos={openSegmentos}
+                    handleSegmentos={handleSegmentos}
+                    handleCloseSegmentos={handleCloseSegmentos}
+                    handleOpenSegmentos={handleOpenSegmentos}
+                    //Tamaño
+                    Tamanno={Tamanno}
+                    selectedOptions9={selectedOptions9}
+                    openTamanno={openTamanno}
+                    handleTamanno={handleTamanno}
+                    handleCloseTamanno={handleCloseTamanno}
+                    handleOpenTamanno={handleOpenTamanno}
+                    //Rango Tamaño
+                    RTamanno={RTamanno}
+                    selectedOptions10={selectedOptions10}
+                    openRTamanno={openRTamanno}
+                    handleRTamanno={handleRTamanno}
+                    handleCloseRTamanno={handleCloseRTamanno}
+                    handleOpenRTamanno={handleOpenRTamanno}
+                    //Producto
+                    Productos={Productos}
+                    selectedOptions11={selectedOptions11}
+                    openProductos={openProducto}
+                    handleProductos={handleProducto}
+                    handleCloseProductos={handleCloseProducto}
+                    handleOpenProductos={handleOpenProducto}
+                    //Codigo de Barras
+                    CBarra={CBarras}
+                    selectedOptions12={selectedOptions12}
+                    openCBarras={openCBarra}
+                    handleCBarras={handleCBarra}
+                    handleCloseCBarras={handleCloseCBarra}
+                    handleOpenCBarras={handleOpenCBarra}
+                    //Nacionalidad
+                    Nacionalidad={Nacionalidad}
+                    selectedOptions13={selectedOptions13}
+                    openNacionalidad={openNacionalidad}
+                    handleNacionalidad={handleNacionalidad}
+                    handleCloseNacionalidad={handleCloseNacionalidad}
+                    handleOpenNacionalidad={handleOpenNacionalidad}
+                  />
+                  <SelectIndicadores
+                    Indicadores={Indicadores}
+                    selectedOptions14={selectedOptions14}
+                    openIndicadores={openIndicadores}
+                    handleIndicadores={handleIndicadores}
+                    handleCloseIndicadores={handleCloseIndicadores}
+                    handleOpenIndicadores={handleOpenIndicadores}
+                    setIDIndicadores={setIDFabricante}
+                    isSelected={isSelected}
+                  />
+                </article>
+                <Stack direction="row" className={styles.buttons}>
+                  <button id='save' style={{ width: '35%' }} variant="contained" onClick={abrirCerrarModalSelect}>Guardar</button>
+                  <button id='process' style={{ width: '35%' }} variant="contained" onClick={comprobarCombos}>Procesar</button>
+                </Stack>
+              </section>
+            </StepContent>
+          </Step>
+          <Step>
+            <StepContent>
+              <Report dataGrid={dataGrid}/>
+            </StepContent>
+          </Step>
 
-                //Fabricantes
-                Fabricante={Fabricante}
-                selectedOptions6={selectedOptions6}
-                openFabricante={openFabricante}
-                handleFabricante={handleChangeSelect}
-                handleCloseFabricante={handleCloseFabricante}
-                handleOpenFabricante={handleOpenFabricante}
-                setIDFabricante={setIDFabricante}
-                //Marcas
-                Marcas={Marcas}
-                selectedOptions7={selectedOptions7}
-                openMarcas={openMarcas}
-                handleMarcas={handleChangeSelect}
-                handleCloseMarcas={handleCloseMarcas}
-                handleOpenMarcas={handleOpenMarcas}
-                //Segmentos
-                Segmentos={Segmentos}
-                selectedOptions8={selectedOptions8}
-                openSegmentos={openSegmentos}
-                handleSegmentos={handleSegmentos}
-                handleCloseSegmentos={handleCloseSegmentos}
-                handleOpenSegmentos={handleOpenSegmentos}
-                //Tamaño
-                Tamanno={Tamanno}
-                selectedOptions9={selectedOptions9}
-                openTamanno={openTamanno}
-                handleTamanno={handleTamanno}
-                handleCloseTamanno={handleCloseTamanno}
-                handleOpenTamanno={handleOpenTamanno}
-                //Rango Tamaño
-                RTamanno={RTamanno}
-                selectedOptions10={selectedOptions10}
-                openRTamanno={openRTamanno}
-                handleRTamanno={handleRTamanno}
-                handleCloseRTamanno={handleCloseRTamanno}
-                handleOpenRTamanno={handleOpenRTamanno}
-                //Producto
-                Productos={Productos}
-                selectedOptions11={selectedOptions11}
-                openProductos={openProducto}
-                handleProductos={handleProducto}
-                handleCloseProductos={handleCloseProducto}
-                handleOpenProductos={handleOpenProducto}
-                //Codigo de Barras
-                CBarra={CBarras}
-                selectedOptions12={selectedOptions12}
-                openCBarras={openCBarra}
-                handleCBarras={handleCBarra}
-                handleCloseCBarras={handleCloseCBarra}
-                handleOpenCBarras={handleOpenCBarra}
-                //Nacionalidad
-                Nacionalidad={Nacionalidad}
-                selectedOptions13={selectedOptions13}
-                openNacionalidad={openNacionalidad}
-                handleNacionalidad={handleNacionalidad}
-                handleCloseNacionalidad={handleCloseNacionalidad}
-                handleOpenNacionalidad={handleOpenNacionalidad}
-              />
-              <SelectIndicadores
-                Indicadores={Indicadores}
-                selectedOptions14={selectedOptions14}
-                openIndicadores={openIndicadores}
-                handleIndicadores={handleIndicadores}
-                handleCloseIndicadores={handleCloseIndicadores}
-                handleOpenIndicadores={handleOpenIndicadores}
-                setIDIndicadores={setIDFabricante}
-                isSelected={isSelected}
-              />
-            </article>
-            <Stack direction="row" className={styles.buttons}>
-              <button id='save' style={{ width: '35%' }} variant="contained" onClick={abrirCerrarModalSelect}>Guardar</button>
-              <button id='process' style={{ width: '35%' }} variant="contained" onClick={comprobarCombos}>Procesar</button>
-            </Stack>
-          </section>
+          
+          
+        </Stepper>
+          
+            
         </div>
       </Main>
       <Button className='atras'
@@ -1408,6 +1574,7 @@ console.log(selectedOptionRetail)
         variant="contained" onClick={() => window.location = '/retailservices/home'}>
         <ArrowBack style={{ fontSize: '2.5em', fill: '#fff' }}></ArrowBack>
       </Button>
+      
     </Box>
   );
 }
@@ -1437,7 +1604,7 @@ const useStyles = makeStyles((theme) => ({
     justifyContent: 'space-between',
     flexDirection: 'column',
     overflow: 'visible',
-    alignItems:'center'
+    alignItems: 'center'
   },
   inputMaterial: {
     width: '100%',
@@ -1475,7 +1642,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
-    marginLeft: 0,
+    marginLeft: "",
     ...(open && {
       transition: theme.transitions.create('margin', {
         easing: theme.transitions.easing.easeOut,

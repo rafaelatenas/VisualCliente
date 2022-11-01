@@ -9,8 +9,10 @@ import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-enterprise';
 import 'ag-grid-community/dist/styles/ag-grid.css';
 import 'ag-grid-community/dist/styles/ag-theme-alpine.css'
+  /*Data Global de Grilla*/
 
-export default function Report(){
+export default function Report(params){
+  console.log(params)
         const [open, setOpen] = React.useState(false);
         const handleDrawerOpen = () => {
             setOpen(true);
@@ -30,11 +32,7 @@ export default function Report(){
         const id = openo ? 'simple-popover' : undefined;
     return (
         <Box sx={{ display: 'flex' }}>
-           <Button className='atras'
-             style={{background: 'transparent',position:'fixed',border:'0.2em solid #fff',minWidth:'50px', borderRadius:'50%'}}
-             variant="contained" href='/retailservices/home/data'>
-               <ArrowBack style={{fontSize:'2.5em', fill:'#fff'}}></ArrowBack>
-           </Button>
+          <p>hola</p>
         </Box>
       );
 }
