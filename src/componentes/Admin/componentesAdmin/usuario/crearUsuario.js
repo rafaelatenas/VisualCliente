@@ -142,7 +142,7 @@ export default class crearUsuario extends React.Component{
     console.log(result)
     console.log(result.data); 
       setTimeout(() => {
-        window.location.href = '/management/panel/createUser'
+        window.location.href = '/retailservices/management/panel/user'
       }, 3500); 
       toast.fire({
         icon: 'success',
@@ -299,6 +299,7 @@ componentDidMount(){
   }
   handleRegister=()=>{
     this.setState({activeStep:this.state.activeStep+1})
+    this.enviarDatos()
   }
 
 // const handleStep = (step) => () => {
@@ -328,7 +329,7 @@ componentDidMount(){
                       onChange={(e)=>this.handleUserInput(e)}
                     />
                     <TextField className='textField' id="outlined-multiline-flexible" label="Género"
-                      value={this.state.genero} name={'genero'}
+                      value={this.state.genero} name={'genero'} select 
                       onChange={(e)=>this.handleUserInput(e)}
                     />
                   </Box>
@@ -372,7 +373,7 @@ componentDidMount(){
                 </Box>
               <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
                 <Button onClick={this.handleBack}>Regresar</Button>
-                <Button onClick={this.handleRegister}>Enviar</Button>
+                <Button onClick={this.enviarDatos}>Enviar</Button>
               </Box>  
               </StepContent>
             </Step>

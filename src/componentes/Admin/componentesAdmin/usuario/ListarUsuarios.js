@@ -142,6 +142,7 @@ const styles= useStyles();
     apellidos:consolaSeleccionada.apellidos,
     id_perfil:consolaSeleccionada.id_perfil,    
   } 
+  console.log(datosEnviar)
   const peticionPost=()=>{
     axios.post(process.env.REACT_APP_API_ENDPOINT+'UpdateUsuarios',datosEnviar,{
       headers: {'Authorization': `Bearer ${token}`}
@@ -153,7 +154,7 @@ const styles= useStyles();
         title: ''+response.data.message+'',
         confirmButtonText: `Ok`,
       })
-      setTimeout(() => {window.location.href = '/management/panel/createUser'}, 2000);
+      setTimeout(() => {window.location.href = '/retailservices/management/panel/user'}, 2000);
     }).catch(error=>{
       console.log(error.response.data.message);
       console.log(error.response.status);
@@ -168,7 +169,9 @@ const styles= useStyles();
 /*Petición POST a la API INACTIVAR USUARIOS para cumplir la funcion de "Eliminar"*/
   const peticionDelete=async()=>{
     const ID = consolaDelete.id_usuario
-    await axios.get(process.env.REACT_APP_API_ENDPOINT+'InactivarUsuario/'+ID)
+    await axios.get(process.env.REACT_APP_API_ENDPOINT+'InactivarUsuario/'+ID,{
+      headers: { 'Authorization': `Bearer ${token}` },
+    })
     .then(response=>{
       abrirCerrarModalEliminar();
       toast.fire({
@@ -176,7 +179,7 @@ const styles= useStyles();
         title: ''+response.data.message+'',
         confirmButtonText: `Ok`,
       })  
-      setTimeout(() => {window.location.href = '/management/panel/createUser'}, 11000);
+      setTimeout(() => {window.location.href = '/retailservices/management/panel/user'}, 5000);
     }).catch(error=>{
       console.log(error.response.data.message);
       console.log(error.response.status);
