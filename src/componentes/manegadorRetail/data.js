@@ -2,7 +2,7 @@ import * as React from 'react';
 import './data.css'
 import { styled } from '@mui/material/styles';
 import { Box, CssBaseline, ListItemText, IconButton } from '@material-ui/core';
-import { ArrowBack } from '@material-ui/icons';
+import { ArrowBack, ArrowUpwardRounded, Update } from '@material-ui/icons';
 import { MenuItem, Stack, Button, TextField, Checkbox, Stepper, Step, StepLabel, StepContent } from '@mui/material';
 import { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
@@ -14,7 +14,12 @@ import { DrawerComponent, BotonUsuario, CardComponents, HeaderComponent } from '
 import { SelectCanales, SelectAtributos, SelectIndicadores, SelectPeriodos, SelectRegiones, } from './components/Selects';
 import Alert from '@mui/material/Alert';
 import Report from './VisualizarData';
-
+import { AgGridReact } from 'ag-grid-react';
+import 'ag-grid-enterprise';
+import 'ag-grid-community/dist/styles/ag-grid.css';
+import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
+import { CommentsDisabledOutlined } from '@mui/icons-material';
+import { useMemo } from 'react';
 const MySwal = withReactContent(Swal)
 const toast = MySwal.mixin({
   toast: true,
@@ -28,8 +33,13 @@ const toast = MySwal.mixin({
   }
 });
 export default function DATA() {
+  const [activeStep, setActiveStep] =useState(0);
 
-  const styles = useStyles();
+  const handleNext = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  };
+
+  const styles = useStyles(activeStep);
   var token = sessionStorage.getItem('token');
   const [selectedOptionRetail, setSelectedOptionRetail] = useState(null)
   /*Control del ComponetDrawer*/
@@ -91,7 +101,7 @@ export default function DATA() {
   /*Data Regiones*/
   const [region, setRegion] = useState([]);
   const [selectedOptions3, setSelectedOptions3] = useState([]);
-
+console.log(region)
   /*Data SubRegionres*/
   const [selectedOptions33, setSelectedOptions33] = useState([]);
 
@@ -328,11 +338,25 @@ export default function DATA() {
         Tipo = [0];
         break;
     }
-    await axios.post(process.env.REACT_APP_API_ENDPOINT + 'ListarCanal/', {
-      headers: { 'Authorization': `Bearer ${token}` },
-      IdValor: selectedOptions1,
-      IdTipo: Tipo
-    })
+
+      let headersList = {
+      "Authorization": `Bearer ${token}`,
+      "Content-Type": "application/json" 
+      }
+
+      let bodyContent = JSON.stringify({
+        "IdValor": selectedOptions1,
+        "IdTipo": Tipo
+      });
+
+      let reqOptions = {
+        url: process.env.REACT_APP_API_ENDPOINT + 'ListarCanal/',
+        method: "POST",
+        headers: headersList,
+        data: bodyContent,
+      }
+
+      await axios.request(reqOptions)
       .then(response => {
         if (response.data.message) {
           toast.fire({
@@ -386,22 +410,34 @@ export default function DATA() {
 
   const peticionRegiones = async () => {
     const { periodo } = botonreporte
-    let IdValor;
+    let Tipo;
     switch (periodo) {
       case true:
-        IdValor = [1];
+        Tipo = [1];
         break;
 
       default:
-        IdValor = [0];
+        Tipo = [0];
         break;
     }
-    await axios.post(process.env.REACT_APP_API_ENDPOINT + 'ListarArea/', {
-      headers: { 'Authorization': `Bearer ${token}` },
-      IdValor: selectedOptions1,
-      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : "",
-      IdTipo: IdValor
-    })
+    let headersList = {
+      "Authorization": `Bearer ${token}`,
+      "Content-Type": "application/json" 
+      }
+
+      let bodyContent = JSON.stringify({
+        "IdTipo": Tipo,
+        "IdValor": selectedOptions1,
+        "IdCanal": selectedOptions2.length > 0 ? selectedOptions2 : "",
+      });
+
+      let reqOptions = {
+        url: process.env.REACT_APP_API_ENDPOINT + 'ListarArea/',
+        method: "POST",
+        headers: headersList,
+        data: bodyContent,
+      }
+      await axios.request(reqOptions)
       .then(response => {
         if (response.data.message) {
           toast.fire({
@@ -520,15 +556,26 @@ export default function DATA() {
         Tipo = [0];
         break;
     }
-    await axios.post(process.env.REACT_APP_API_ENDPOINT + `ListarCesta/`, {
-      headers: { 'Authorization': `Bearer ${token}` },
-      IdTipo: Tipo,
-      IdValor: selectedOptions1,
-      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : "",
-      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : "",
-      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : "",
+    let headersList = {
+      "Authorization": `Bearer ${token}`,
+      "Content-Type": "application/json" 
+      }
 
-    })
+      let bodyContent = JSON.stringify({
+        "IdTipo": Tipo,
+        "IdValor": selectedOptions1,
+        "IdCanal": selectedOptions2.length > 0 ? selectedOptions2 : "",
+        "IdArea": selectedOptions3.length > 0 ? selectedOptions3 : "",
+        "IdZona": selectedOptions33.length > 0 ? selectedOptions33 : "",
+      });
+
+      let reqOptions = {
+        url: process.env.REACT_APP_API_ENDPOINT + 'ListarCesta/',
+        method: "POST",
+        headers: headersList,
+        data: bodyContent,
+      }
+      await axios.request(reqOptions)
       .then(response => {
         if (response.data.message) {
           toast.fire({
@@ -582,15 +629,27 @@ export default function DATA() {
         Tipo = [0];
         break;
     }
-    await axios.post(process.env.REACT_APP_API_ENDPOINT + 'ListarCategoria/', {
-      headers: { 'Authorization': `Bearer ${token}` },
-      IdTipo: Tipo,
-      IdValor: selectedOptions1,
-      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : "",
-      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : "",
-      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : "",
-      IdCesta: selectedOptions4.length > 0 ? selectedOptions4 : "",
-    })
+    let headersList = {
+      "Authorization": `Bearer ${token}`,
+      "Content-Type": "application/json" 
+      }
+
+      let bodyContent = JSON.stringify({
+        "IdTipo": Tipo,
+        "IdValor": selectedOptions1,
+        "IdCanal": selectedOptions2.length > 0 ? selectedOptions2 : "",
+        "IdArea": selectedOptions3.length > 0 ? selectedOptions3 : "",
+        "IdZona": selectedOptions33.length > 0 ? selectedOptions33 : "",
+        "IdCesta": selectedOptions4.length > 0 ? selectedOptions4 : "",
+      });
+
+      let reqOptions = {
+        url: process.env.REACT_APP_API_ENDPOINT + 'ListarCategoria/',
+        method: "POST",
+        headers: headersList,
+        data: bodyContent,
+      }
+      await axios.request(reqOptions)
       .then(response => {
         if (response.data.message) {
           toast.fire({
@@ -625,16 +684,28 @@ export default function DATA() {
         Tipo = [0];
         break;
     }
-    await axios.post(process.env.REACT_APP_API_ENDPOINT + 'ListarFabricante/', {
-      headers: { 'Authorization': `Bearer ${token}` },
-      IdTipo: Tipo,
-      IdValor: selectedOptions1,
-      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : "",
-      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : "",
-      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : "",
-      IdCesta: selectedOptions4.length > 0 ? selectedOptions4 : "",
-      IdCategoria: selectedOptions5.length > 0 ? selectedOptions5 : "",
-    })
+    let headersList = {
+      "Authorization": `Bearer ${token}`,
+      "Content-Type": "application/json" 
+      }
+
+      let bodyContent = JSON.stringify({
+        "IdTipo": Tipo,
+        "IdValor": selectedOptions1,
+        "IdCanal": selectedOptions2.length > 0 ? selectedOptions2 : "",
+        "IdArea": selectedOptions3.length > 0 ? selectedOptions3 : "",
+        "IdZona": selectedOptions33.length > 0 ? selectedOptions33 : "",
+        "IdCesta": selectedOptions4.length > 0 ? selectedOptions4 : "",
+        "IdCategoria": selectedOptions5.length > 0 ? selectedOptions5 : "",
+      });
+
+      let reqOptions = {
+        url: process.env.REACT_APP_API_ENDPOINT + 'ListarFabricante/',
+        method: "POST",
+        headers: headersList,
+        data: bodyContent,
+      }
+      await axios.request(reqOptions)
       .then(response => {
         console.log(response.data.data)
         if (response.data.message) {
@@ -684,18 +755,29 @@ export default function DATA() {
         Tipo = [0];
         break;
     }
+    let headersList = {
+      "Authorization": `Bearer ${token}`,
+      "Content-Type": "application/json" 
+      }
 
-    await axios.post(process.env.REACT_APP_API_ENDPOINT + 'ListarMarca/', {
-      headers: { 'Authorization': `Bearer ${token}` },
-      IdTipo: Tipo,
-      IdValor: selectedOptions1,
-      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : "",
-      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : "",
-      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : "",
-      IdCesta: selectedOptions4.length > 0 ? selectedOptions4 : "",
-      IdCategoria: selectedOptions5.length > 0 ? selectedOptions5 : "",
-      IdFabricante: selectedOptions6.length > 0 ? selectedOptions6 : null
-    })
+      let bodyContent = JSON.stringify({
+        "IdTipo": Tipo,
+        "IdValor": selectedOptions1,
+        "IdCanal": selectedOptions2.length > 0 ? selectedOptions2 : "",
+        "IdArea": selectedOptions3.length > 0 ? selectedOptions3 : "",
+        "IdZona": selectedOptions33.length > 0 ? selectedOptions33 : "",
+        "IdCesta": selectedOptions4.length > 0 ? selectedOptions4 : "",
+        "IdCategoria": selectedOptions5.length > 0 ? selectedOptions5 : "",
+        "IdFabricante": selectedOptions6.length > 0 ? selectedOptions6 : ""
+      });
+
+      let reqOptions = {
+        url: process.env.REACT_APP_API_ENDPOINT + 'ListarMarca/',
+        method: "POST",
+        headers: headersList,
+        data: bodyContent,
+      }
+      await axios.request(reqOptions)
       .then(response => {
         if (response.data.message) {
           toast.fire({
@@ -742,18 +824,30 @@ export default function DATA() {
         Tipo = [0];
         break;
     }
-    await axios.post(process.env.REACT_APP_API_ENDPOINT + 'ListarSegmento/', {
-      headers: { 'Authorization': `Bearer ${token}` },
-      IdTipo: Tipo,
-      IdValor: selectedOptions1,
-      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : "",
-      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : "",
-      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : "",
-      IdCesta: selectedOptions4.length > 0 ? selectedOptions4 : "",
-      IdCategoria: selectedOptions5.length > 0 ? selectedOptions5 : "",
-      IdFabricante: selectedOptions6.length > 0 ? selectedOptions6 : "",
-      IdMarca: selectedOptions7.length > 0 ? selectedOptions7 : "",
-    })
+    let headersList = {
+      "Authorization": `Bearer ${token}`,
+      "Content-Type": "application/json" 
+      }
+
+      let bodyContent = JSON.stringify({
+        "IdTipo": Tipo,
+        "IdValor": selectedOptions1,
+        "IdCanal": selectedOptions2.length > 0 ? selectedOptions2 : "",
+        "IdArea": selectedOptions3.length > 0 ? selectedOptions3 : "",
+        "IdZona": selectedOptions33.length > 0 ? selectedOptions33 : "",
+        "IdCesta": selectedOptions4.length > 0 ? selectedOptions4 : "",
+        "IdCategoria": selectedOptions5.length > 0 ? selectedOptions5 : "",
+        "IdFabricante": selectedOptions6.length > 0 ? selectedOptions6 : "",
+        "IdMarca": selectedOptions7.length > 0 ? selectedOptions7 : "",
+      });
+
+      let reqOptions = {
+        url: process.env.REACT_APP_API_ENDPOINT + 'ListarSegmento/',
+        method: "POST",
+        headers: headersList,
+        data: bodyContent,
+      }
+      await axios.request(reqOptions)
       .then(response => {
         if (response.data.message) {
           toast.fire({
@@ -805,20 +899,31 @@ export default function DATA() {
         Tipo = [0];
         break;
     }
-    await axios.post(process.env.REACT_APP_API_ENDPOINT + 'ListarTamano/', {
-      headers: { 'Authorization': `Bearer ${token}` },
-      IdTipo: Tipo,
-      IdValor: selectedOptions1,
-      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : "",
-      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : "",
-      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : "",
-      IdCesta: selectedOptions4.length > 0 ? selectedOptions4 : "",
-      IdCategoria: selectedOptions5.length > 0 ? selectedOptions5 : "",
-      IdFabricante: selectedOptions6.length > 0 ? selectedOptions6 : "",
-      IdMarca: selectedOptions7.length > 0 ? selectedOptions7 : "",
-      IdSegmento: selectedOptions8.length > 0 ? selectedOptions8 : "",
+    let headersList = {
+      "Authorization": `Bearer ${token}`,
+      "Content-Type": "application/json" 
+      }
 
-    })
+      let bodyContent = JSON.stringify({
+        "IdTipo": Tipo,
+        "IdValor": selectedOptions1,
+        "IdCanal": selectedOptions2.length > 0 ? selectedOptions2 : "",
+        "IdArea": selectedOptions3.length > 0 ? selectedOptions3 : "",
+        "IdZona": selectedOptions33.length > 0 ? selectedOptions33 : "",
+        "IdCesta": selectedOptions4.length > 0 ? selectedOptions4 : "",
+        "IdCategoria": selectedOptions5.length > 0 ? selectedOptions5 : "",
+        "IdFabricante": selectedOptions6.length > 0 ? selectedOptions6 : "",
+        "IdMarca": selectedOptions7.length > 0 ? selectedOptions7 : "",
+        "IdSegmento": selectedOptions8.length > 0 ? selectedOptions8 : "",
+      });
+
+      let reqOptions = {
+        url: process.env.REACT_APP_API_ENDPOINT + 'ListarTamano/',
+        method: "POST",
+        headers: headersList,
+        data: bodyContent,
+      }
+      await axios.request(reqOptions)
       .then(response => {
         if (response.data.message) {
           toast.fire({
@@ -872,21 +977,32 @@ export default function DATA() {
         Tipo = [0];
         break;
     }
-    await axios.post(process.env.REACT_APP_API_ENDPOINT + 'ListarRTamano', {
-      headers: { 'Authorization': `Bearer ${token}` },
-      IdTipo: Tipo,
-      IdValor: selectedOptions1,
-      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : "",
-      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : "",
-      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : "",
-      IdCesta: selectedOptions4.length > 0 ? selectedOptions4 : "",
-      IdCategoria: selectedOptions5.length > 0 ? selectedOptions5 : "",
-      IdFabricante: selectedOptions6.length > 0 ? selectedOptions6 : "",
-      IdMarca: selectedOptions7.length > 0 ? selectedOptions7 : "",
-      IdSegmento: selectedOptions8.length > 0 ? selectedOptions8 : "",
-      IdTamano: selectedOptions9.length > 0 ? selectedOptions9 : "",
+    let headersList = {
+      "Authorization": `Bearer ${token}`,
+      "Content-Type": "application/json" 
+      }
 
-    })
+      let bodyContent = JSON.stringify({
+        "IdTipo": Tipo,
+        "IdValor": selectedOptions1,
+        "IdCanal": selectedOptions2.length > 0 ? selectedOptions2 : "",
+        "IdArea": selectedOptions3.length > 0 ? selectedOptions3 : "",
+        "IdZona": selectedOptions33.length > 0 ? selectedOptions33 : "",
+        "IdCesta": selectedOptions4.length > 0 ? selectedOptions4 : "",
+        "IdCategoria": selectedOptions5.length > 0 ? selectedOptions5 : "",
+        "IdFabricante": selectedOptions6.length > 0 ? selectedOptions6 : "",
+        "IdMarca": selectedOptions7.length > 0 ? selectedOptions7 : "",
+        "IdSegmento": selectedOptions8.length > 0 ? selectedOptions8 : "",
+        "IdTamano": selectedOptions9.length > 0 ? selectedOptions9 : "",
+      });
+
+      let reqOptions = {
+        url: process.env.REACT_APP_API_ENDPOINT + 'ListarRTamano/',
+        method: "POST",
+        headers: headersList,
+        data: bodyContent,
+      }
+      await axios.request(reqOptions)
       .then(response => {
         if (response.data.message) {
           toast.fire({
@@ -936,21 +1052,33 @@ export default function DATA() {
         Tipo = [0];
         break;
     }
-    await axios.post(process.env.REACT_APP_API_ENDPOINT + 'ListarProducto', {
-      headers: { 'Authorization': `Bearer ${token}` },
-      IdTipo: Tipo,
-      IdValor: selectedOptions1,
-      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : "",
-      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : "",
-      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : "",
-      IdCesta: selectedOptions4.length > 0 ? selectedOptions4 : "",
-      IdCategoria: selectedOptions5.length > 0 ? selectedOptions5 : "",
-      IdFabricante: selectedOptions6.length > 0 ? selectedOptions6 : "",
-      IdMarca: selectedOptions7.length > 0 ? selectedOptions7 : "",
-      IdSegmento: selectedOptions8.length > 0 ? selectedOptions8 : "",
-      IdTamano: selectedOptions9.length > 0 ? selectedOptions9 : "",
-      IdRTamano: selectedOptions10.length > 0 ? selectedOptions10 : "",
-    })
+    let headersList = {
+      "Authorization": `Bearer ${token}`,
+      "Content-Type": "application/json" 
+      }
+
+      let bodyContent = JSON.stringify({
+        "IdTipo": Tipo,
+        "IdValor": selectedOptions1,
+        "IdCanal": selectedOptions2.length > 0 ? selectedOptions2 : "",
+        "IdArea": selectedOptions3.length > 0 ? selectedOptions3 : "",
+        "IdZona": selectedOptions33.length > 0 ? selectedOptions33 : "",
+        "IdCesta": selectedOptions4.length > 0 ? selectedOptions4 : "",
+        "IdCategoria": selectedOptions5.length > 0 ? selectedOptions5 : "",
+        "IdFabricante": selectedOptions6.length > 0 ? selectedOptions6 : "",
+        "IdMarca": selectedOptions7.length > 0 ? selectedOptions7 : "",
+        "IdSegmento": selectedOptions8.length > 0 ? selectedOptions8 : "",
+        "IdTamano": selectedOptions9.length > 0 ? selectedOptions9 : "",
+        "IdRTamano": selectedOptions10.length > 0 ? selectedOptions10 : "",
+      });
+
+      let reqOptions = {
+        url: process.env.REACT_APP_API_ENDPOINT + 'ListarRTamano/',
+        method: "POST",
+        headers: headersList,
+        data: bodyContent,
+      }
+      await axios.request(reqOptions)
       .then(response => {
         if (response.data.message) {
           toast.fire({
@@ -1001,22 +1129,34 @@ export default function DATA() {
         Tipo = [0];
         break;
     }
-    await axios.get(process.env.REACT_APP_API_ENDPOINT + 'ListarCodBarra', {
-      headers: { 'Authorization': `Bearer ${token}` },
-      IdTipo: Tipo,
-      IdValor: selectedOptions1,
-      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : "",
-      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : "",
-      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : "",
-      IdCesta: selectedOptions4.length > 0 ? selectedOptions4 : "",
-      IdCategoria: selectedOptions5.length > 0 ? selectedOptions5 : "",
-      IdFabricante: selectedOptions6.length > 0 ? selectedOptions6 : "",
-      IdMarca: selectedOptions7.length > 0 ? selectedOptions7 : "",
-      IdSegmento: selectedOptions8.length > 0 ? selectedOptions8 : "",
-      IdTamano: selectedOptions9.length > 0 ? selectedOptions9 : "",
-      IdRTamano: selectedOptions10.length > 0 ? selectedOptions10 : "",
-      IdProducto: selectedOptions11.length > 0 ? selectedOptions11 : "",
-    })
+    let headersList = {
+      "Authorization": `Bearer ${token}`,
+      "Content-Type": "application/json" 
+      }
+
+      let bodyContent = JSON.stringify({
+        "IdTipo": Tipo,
+        "IdValor": selectedOptions1,
+        "IdCanal": selectedOptions2.length > 0 ? selectedOptions2 : "",
+        "IdArea": selectedOptions3.length > 0 ? selectedOptions3 : "",
+        "IdZona": selectedOptions33.length > 0 ? selectedOptions33 : "",
+        "IdCesta": selectedOptions4.length > 0 ? selectedOptions4 : "",
+        "IdCategoria": selectedOptions5.length > 0 ? selectedOptions5 : "",
+        "IdFabricante": selectedOptions6.length > 0 ? selectedOptions6 : "",
+        "IdMarca": selectedOptions7.length > 0 ? selectedOptions7 : "",
+        "IdSegmento": selectedOptions8.length > 0 ? selectedOptions8 : "",
+        "IdTamano": selectedOptions9.length > 0 ? selectedOptions9 : "",
+        "IdRTamano": selectedOptions10.length > 0 ? selectedOptions10 : "",
+        "IdProducto": selectedOptions11.length > 0 ? selectedOptions11 : "",
+      });
+
+      let reqOptions = {
+        url: process.env.REACT_APP_API_ENDPOINT + 'ListarRTamano/',
+        method: "POST",
+        headers: headersList,
+        data: bodyContent,
+      }
+      await axios.request(reqOptions)
       .then(response => {
         if (response.data.message) {
           toast.fire({
@@ -1067,22 +1207,35 @@ export default function DATA() {
         Tipo = [0];
         break;
     }
-    await axios.post(process.env.REACT_APP_API_ENDPOINT + 'ListarNacionalidad', {
-      headers: { 'Authorization': `Bearer ${token}` },
-      IdTipo: Tipo,
-      IdValor: selectedOptions1,
-      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : "",
-      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : "",
-      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : "",
-      IdCesta: selectedOptions4.length > 0 ? selectedOptions4 : "",
-      IdCategoria: selectedOptions5.length > 0 ? selectedOptions5 : "",
-      IdFabricante: selectedOptions6.length > 0 ? selectedOptions6 : "",
-      IdMarca: selectedOptions7.length > 0 ? selectedOptions7 : "",
-      IdSegmento: selectedOptions8.length > 0 ? selectedOptions8 : "",
-      IdTamano: selectedOptions9.length > 0 ? selectedOptions9 : "",
-      IdRTamano: selectedOptions10.length > 0 ? selectedOptions10 : "",
-      IdCBarra: selectedOptions12.length > 0 ? selectedOptions12 : "",
-    })
+    let headersList = {
+      "Authorization": `Bearer ${token}`,
+      "Content-Type": "application/json" 
+      }
+
+      let bodyContent = JSON.stringify({
+        "IdTipo": Tipo,
+        "IdValor": selectedOptions1,
+        "IdCanal": selectedOptions2.length > 0 ? selectedOptions2 : "",
+        "IdArea": selectedOptions3.length > 0 ? selectedOptions3 : "",
+        "IdZona": selectedOptions33.length > 0 ? selectedOptions33 : "",
+        "IdCesta": selectedOptions4.length > 0 ? selectedOptions4 : "",
+        "IdCategoria": selectedOptions5.length > 0 ? selectedOptions5 : "",
+        "IdFabricante": selectedOptions6.length > 0 ? selectedOptions6 : "",
+        "IdMarca": selectedOptions7.length > 0 ? selectedOptions7 : "",
+        "IdSegmento": selectedOptions8.length > 0 ? selectedOptions8 : "",
+        "IdTamano": selectedOptions9.length > 0 ? selectedOptions9 : "",
+        "IdRTamano": selectedOptions10.length > 0 ? selectedOptions10 : "",
+        "IdProducto": selectedOptions11.length > 0 ? selectedOptions11 : "",
+        "IdCBarra": selectedOptions12.length > 0 ? selectedOptions12 : "",
+      });
+
+      let reqOptions = {
+        url: process.env.REACT_APP_API_ENDPOINT + 'ListarRTamano/',
+        method: "POST",
+        headers: headersList,
+        data: bodyContent,
+      }
+      await axios.request(reqOptions)
       .then(response => {
         if (response.data.message) {
           toast.fire({
@@ -1133,10 +1286,22 @@ export default function DATA() {
         Tipo = [0];
         break;
     }
-    await axios.post('http://localhost:3005/VisorCliente_Api/Indicadores/', {
-      headers: { 'Authorization': `Bearer ${token}` },
-      IdTipo: Tipo
-    })
+    let headersList = {
+      "Authorization": `Bearer ${token}`,
+      "Content-Type": "application/json" 
+      }
+
+      let bodyContent = JSON.stringify({
+        "IdTipo": Tipo,
+      });
+
+      let reqOptions = {
+        url: process.env.REACT_APP_API_ENDPOINT + 'ListarRTamano/',
+        method: "POST",
+        headers: headersList,
+        data: bodyContent,
+      }
+      await axios.request(reqOptions)
       .then(response => {
         if (response.data.message) {
           toast.fire({
@@ -1208,50 +1373,36 @@ export default function DATA() {
     selectedOptions6: false,
   });
   const comprobarCombos =  async () => {
-    handleNext()
-    const datosEnviar = {
-      IdValor: selectedOptions1,
-      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : "",
-      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : "",
-      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : "",
-      IdCesta: selectedOptions4.length > 0 ? selectedOptions4 : "",
-      IdCategoria: selectedOptions5.length > 0 ? selectedOptions5 : "",
-      // IdFabricante: selectedOptions6.length > 0 ? selectedOptions6 : "",
-      // IdMarca: selectedOptions7.length > 0 ? selectedOptions7 : "",
-      // IdSegmento: selectedOptions8.length > 0 ? selectedOptions8 : "",
-      // IdTamano: selectedOptions9.length > 0 ? selectedOptions9 : "",
-      // IdRTamano: selectedOptions10.length > 0 ? selectedOptions10 : "",
-      // IdCBarra: selectedOptions12.length > 0 ? selectedOptions12 : "",
+    if(selectedOptions1.length>0){
+      handleNext()
     }
-      await axios.post('http://localhost:3005/VisorCliente_Api/GenerarDataSemanal/', {
-        headers: { 'Authorization': `Bearer ${token}` },
-        IdValor: selectedOptions1,
-        IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : "",
-        IdArea: selectedOptions3.length > 0 ? selectedOptions3 : "",
-        IdZona: selectedOptions33.length > 0 ? selectedOptions33 : "",
-        IdCesta: selectedOptions4.length > 0 ? selectedOptions4 : "",
-        IdCategoria: selectedOptions5.length > 0 ? selectedOptions5 : "",
-        IdIndicador: selectedOptions14
+    let headersList = {
+      "Authorization": `Bearer ${token}`,
+      "Content-Type": "application/json" 
+      }
 
-        
+      let bodyContent = JSON.stringify({
+        "IdValor": selectedOptions1,
+        "IdCanal": selectedOptions2.length > 0 ? selectedOptions2 : "",
+        "IdArea": selectedOptions3.length > 0 ? selectedOptions3 : "",
+        "IdZona": selectedOptions33.length > 0 ? selectedOptions33 : "",
+        "IdCesta": selectedOptions4.length > 0 ? selectedOptions4 : "",
+        "IdCategoria": selectedOptions5.length > 0 ? selectedOptions5 : "",
+      });
+      console.log(bodyContent)
+      let reqOptions = {
+        url: process.env.REACT_APP_API_ENDPOINT + 'GenerarDataSemanal/',
+        method: "POST",
+        headers: headersList,
+        data:bodyContent
+      }
+      axios.request(reqOptions)
+      .then(response => { console.log(response)
+        setGridApi(response.data.data)
       })
-        .then(response => {
-          if (response.data.message) {
-            toast.fire({
-              icon: 'warning',
-              title: '' + response.data.message,
-            })
-          } else {
-            if (response.data.data === undefined) {
-              setDataGrid([])
-            }
-            setDataGrid(response.data.data);
-          }
-        }).catch(error => {
-          console.log(error.response.data.message);
-          console.log(error.response.status);
-          console.log(error.response.headers);
-        })
+      .catch(error => {
+        console.error(error);
+      })
     switch (true) {
       case selectedOptions1.length === 0:
         setIsSelected({ selectedOptions1: true })
@@ -1278,7 +1429,6 @@ export default function DATA() {
   const abrirCerrarModalSelect = () => {
     // comprobarCombos()
   }
-  console.log(dataGrid)
   const bodyMySelect = (
     <div style={{ width: '25%', height: '40%', justifyContent: 'space-around' }} className={styles.modal}>
       <h1 style={{ textAlign: 'center' }}>Crear Filtro de Selección</h1>
@@ -1354,13 +1504,44 @@ export default function DATA() {
   const isAllSelectPeriodo = data.length > 0 && selectedOptions1.length === render.length;
   const isAllSelectCesta = Cesta.length > 0 && selectedOptions4.length === Cesta.length;
   const isAllSelectCategoria = Categorias.length > 0 && selectedOptions5.length === Categorias.length;
+/*Grilla */
+const [gridApi, setGridApi] = useState(null);
 
+const columns = [
+  // { headerName:"Areas",field:"Areas", filter: "agTextColumnFilter" ,chartDataType: 'category', rowGroup: true, hidden:true},
+  // { headerName:"Zona",field:"Zona", filter: "agTextColumnFilter" ,chartDataType: 'category', rowGroup: true, hidden:true},
+  
+  { headerName:"Canal", field: "Canal"},
+  { headerName:"Area", field: "Areas"},
+  { headerName:"Zona", field: "Zona"},
+  { headerName:'Cesta', field: "Cesta"},
+  { headerName:'Categoria', field: "Categoria"},
+  { headerName:'Fabricante', field: 'Fabricante'},
+  { headerName:'Marca', field: 'Marca'},
+  { headerName:'Codigo de Barra', field: 'CodigoBarra'},
 
-  const [activeStep, setActiveStep] =useState(0);
-
-  const handleNext = () => {
-    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  // { headerName:'Indicador', field: 'Indicador'},
+  { headerName:'Semana', field: 'Semana'},
+]
+let bodyContent = JSON.stringify({
+  "IdValor": selectedOptions1,
+  "IdCanal": selectedOptions2.length > 0 ? selectedOptions2 : "",
+  "IdArea": selectedOptions3.length > 0 ? selectedOptions3 : "",
+  "IdZona": selectedOptions33.length > 0 ? selectedOptions33 : "",
+  "IdCesta": selectedOptions4.length > 0 ? selectedOptions4 : "",
+  "IdCategoria": selectedOptions5.length > 0 ? selectedOptions5 : "",
+});
+const defaultColDef = useMemo(() => {
+  return {
+    editable: true,
+    sortable: true,
+    resizable: true,
+    filter: true,
+    flex: 1,
+    minWidth: 100,
   };
+}, []);
+
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -1402,171 +1583,191 @@ export default function DATA() {
       <Main open={open}>
         {alerta}
         <div className="Contenedordata">
-        <Stepper activeStep={activeStep} orientation="vertical">
-          <Step>
-            <StepContent>
-              <section className="container-of-table">
-                <HeaderComponent />
-                <article className="table-of-data">
-                  <SelectPeriodos
-                    className='propor'
-                    tiempoReporte={tiempoReporte}
-                    selectedOptions1={selectedOptions1}
-                    isSelected={isSelected}
-                    openPeriodo={openPeriodo}
-                    handlePeriodos={handleChangeSelect}
-                    handleClosePeriodo={handleClosePeriodo}
-                    handleOpenPeriodo={handleOpenPeriodo}
-                    datos={data}
-                    isAllSelectPeriodo={isAllSelectPeriodo}
-                    showMenuItem={showMenuItem}
-                    handleChangeSearch={handleChangeSearch}
-                    focus={focus}
-                    searchText={searchText.periodo}
-                    setRender={setRender}
-                    setSearchText={setSearchText}
-                    setFocus={setFocus}
-                    render={render}
-                  />
-                  <SelectCanales
-                    selectedOptions2={selectedOptions2}
-                    isSelected={isSelected}
-                    openCanales={openCanales}
-                    handleCanales={handleChangeSelect}
-                    handleCloseCanal={handleCloseCanal}
-                    handleOpenCanal={handleOpenCanales}
-                    selectedOptionRetail={selectedOptionRetail}
-                    canal={canal}
-                  />
-                  <SelectRegiones
-                    selectedOptions3={selectedOptions3}
-                    isSelected={isSelected}
-                    openRegiones={openRegiones}
-                    handleRegiones={handleChangeSelect}
-                    handleCloseRegion={handleCloseRegion}
-                    handleOpenRegiones={handleOpenRegiones}
-                    regiones={region}
-                    /* SubRegiones */
-                    idRegiones={idRegiones}
-                    SubRegion={SubRegion}
-                    selectedOptions33={selectedOptions33}
-                    handleSubRegiones={handleChangeSelect}
+          <Stepper activeStep={activeStep} orientation="vertical" className={styles.stepper}>
+            <Step className={styles.stepCombo}>
+              <StepContent>
+                <section className={styles.table}>
+                  <HeaderComponent />
+                  <article className={styles.tableOfData}>
+                    <SelectPeriodos
+                      className='propor'
+                      tiempoReporte={tiempoReporte}
+                      selectedOptions1={selectedOptions1}
+                      isSelected={isSelected}
+                      openPeriodo={openPeriodo}
+                      handlePeriodos={handleChangeSelect}
+                      handleClosePeriodo={handleClosePeriodo}
+                      handleOpenPeriodo={handleOpenPeriodo}
+                      datos={data}
+                      isAllSelectPeriodo={isAllSelectPeriodo}
+                      showMenuItem={showMenuItem}
+                      handleChangeSearch={handleChangeSearch}
+                      focus={focus}
+                      searchText={searchText.periodo}
+                      setRender={setRender}
+                      setSearchText={setSearchText}
+                      setFocus={setFocus}
+                      render={render}
+                    />
+                    <SelectCanales
+                      selectedOptions2={selectedOptions2}
+                      isSelected={isSelected}
+                      openCanales={openCanales}
+                      handleCanales={handleChangeSelect}
+                      handleCloseCanal={handleCloseCanal}
+                      handleOpenCanal={handleOpenCanales}
+                      selectedOptionRetail={selectedOptionRetail}
+                      canal={canal}
+                    />
+                    <SelectRegiones
+                      selectedOptions3={selectedOptions3}
+                      isSelected={isSelected}
+                      openRegiones={openRegiones}
+                      handleRegiones={handleChangeSelect}
+                      handleCloseRegion={handleCloseRegion}
+                      handleOpenRegiones={handleOpenRegiones}
+                      regiones={region}
+                      /* SubRegiones */
+                      idRegiones={idRegiones}
+                      SubRegion={SubRegion}
+                      selectedOptions33={selectedOptions33}
+                      handleSubRegiones={handleChangeSelect}
 
+                    />
+                    <SelectAtributos
+                      selectedOptions4={selectedOptions4}
+                      isSelected={isSelected}
+                      openCesta={openCesta}
+                      handleCesta={handleChangeSelect}
+                      handleCloseCesta={handleCloseCesta}
+                      handleOpenCesta={handleOpenCesta}
+                      Cesta={Cesta}
+                      setIDCesta={setIDCesta}
+                      IDCesta={IDCesta}
+                      
+                      isAllSelectCesta={isAllSelectCesta}
+                      setRender={setRender}
+                      setSearchText={setSearchText}
+                      showMenuItem={showMenuItem}
+                      handleChangeSearch={handleChangeSearch}
+                      searchText={searchText.cesta}
+                      render={render}
+                      //Categorias
+                      Categorias={Categorias}
+                      selectedOptions5={selectedOptions5}
+                      openCategoria={openCategoria}
+                      handleCategoria={handleChangeSelect}
+                      isAllSelectCategoria={isAllSelectCategoria}
+                      handleCloseCategoria={handleCloseCategoria}
+                      handleOpenCategoria={handleOpenCategoria}
+                      focus={focus}
+                      //Fabricantes
+                      Fabricante={Fabricante}
+                      selectedOptions6={selectedOptions6}
+                      openFabricante={openFabricante}
+                      handleFabricante={handleChangeSelect}
+                      handleCloseFabricante={handleCloseFabricante}
+                      handleOpenFabricante={handleOpenFabricante}
+                      setIDFabricante={setIDFabricante}
+                      //Marcas
+                      Marcas={Marcas}
+                      selectedOptions7={selectedOptions7}
+                      openMarcas={openMarcas}
+                      handleMarcas={handleChangeSelect}
+                      handleCloseMarcas={handleCloseMarcas}
+                      handleOpenMarcas={handleOpenMarcas}
+                      //Segmentos
+                      Segmentos={Segmentos}
+                      selectedOptions8={selectedOptions8}
+                      openSegmentos={openSegmentos}
+                      handleSegmentos={handleSegmentos}
+                      handleCloseSegmentos={handleCloseSegmentos}
+                      handleOpenSegmentos={handleOpenSegmentos}
+                      //Tamaño
+                      Tamanno={Tamanno}
+                      selectedOptions9={selectedOptions9}
+                      openTamanno={openTamanno}
+                      handleTamanno={handleTamanno}
+                      handleCloseTamanno={handleCloseTamanno}
+                      handleOpenTamanno={handleOpenTamanno}
+                      //Rango Tamaño
+                      RTamanno={RTamanno}
+                      selectedOptions10={selectedOptions10}
+                      openRTamanno={openRTamanno}
+                      handleRTamanno={handleRTamanno}
+                      handleCloseRTamanno={handleCloseRTamanno}
+                      handleOpenRTamanno={handleOpenRTamanno}
+                      //Producto
+                      Productos={Productos}
+                      selectedOptions11={selectedOptions11}
+                      openProductos={openProducto}
+                      handleProductos={handleProducto}
+                      handleCloseProductos={handleCloseProducto}
+                      handleOpenProductos={handleOpenProducto}
+                      //Codigo de Barras
+                      CBarra={CBarras}
+                      selectedOptions12={selectedOptions12}
+                      openCBarras={openCBarra}
+                      handleCBarras={handleCBarra}
+                      handleCloseCBarras={handleCloseCBarra}
+                      handleOpenCBarras={handleOpenCBarra}
+                      //Nacionalidad
+                      Nacionalidad={Nacionalidad}
+                      selectedOptions13={selectedOptions13}
+                      openNacionalidad={openNacionalidad}
+                      handleNacionalidad={handleNacionalidad}
+                      handleCloseNacionalidad={handleCloseNacionalidad}
+                      handleOpenNacionalidad={handleOpenNacionalidad}
+                    />
+                    <SelectIndicadores
+                      Indicadores={Indicadores}
+                      selectedOptions14={selectedOptions14}
+                      openIndicadores={openIndicadores}
+                      handleIndicadores={handleIndicadores}
+                      handleCloseIndicadores={handleCloseIndicadores}
+                      handleOpenIndicadores={handleOpenIndicadores}
+                      setIDIndicadores={setIDFabricante}
+                      isSelected={isSelected}
+                    />
+                  </article>
+                  <Stack direction="row" className={styles.buttons}>
+                    <button id='save' style={{ width: '35%' }} variant="contained" onClick={abrirCerrarModalSelect}>Guardar</button>
+                    <button id='process' style={{ width: '35%' }} variant="contained" onClick={comprobarCombos}>Procesar</button>
+                  </Stack>
+                </section>
+              </StepContent>
+            </Step>
+            <Step className={styles.stepGrilla}>
+              <StepLabel>
+                <IconButton onClick={()=>setActiveStep(0)}><ArrowUpwardRounded/></IconButton>
+              </StepLabel>
+              <StepContent>
+              <div style={{width:'100%', height:'100vh'}}>
+                <div className="ag-theme-alpine" style={{width:'100%', height:'90%'}}>
+                <div className="ag-theme-alpine" style={ {height: '100%'} }>
+                <AgGridReact
+                    defaultColDef={defaultColDef}
+                    columnDefs={columns}
+                    rowData={gridApi}
+                    alwaysShowHorizontalScroll={true}
+                    alwaysShowVerticalScroll={true}
+                    groupDisplayType = {'groupRows'}
+                    autoGroupColumnDef={true}
+                    sideBar={true}
+                    enableCharts={true}
+                    animateRows={true}
+                    enableRangeSelection={true}
+                    enableRangeHandle={true}
+                    enableFillHandle={true}
+                    // domLayout='normal'
+                    // defaultColDef={{ filter: true, floatingFilter: true, sortable: true , enableRowGroup: true, resizable:true}}
                   />
-                  <SelectAtributos
-                    selectedOptions4={selectedOptions4}
-                    isSelected={isSelected}
-                    openCesta={openCesta}
-                    handleCesta={handleChangeSelect}
-                    handleCloseCesta={handleCloseCesta}
-                    handleOpenCesta={handleOpenCesta}
-                    Cesta={Cesta}
-                    setIDCesta={setIDCesta}
-                    IDCesta={IDCesta}
-                    
-                    isAllSelectCesta={isAllSelectCesta}
-                    setRender={setRender}
-                    setSearchText={setSearchText}
-                    showMenuItem={showMenuItem}
-                    handleChangeSearch={handleChangeSearch}
-                    searchText={searchText.cesta}
-                    render={render}
-                    //Categorias
-                    Categorias={Categorias}
-                    selectedOptions5={selectedOptions5}
-                    openCategoria={openCategoria}
-                    handleCategoria={handleChangeSelect}
-                    isAllSelectCategoria={isAllSelectCategoria}
-                    handleCloseCategoria={handleCloseCategoria}
-                    handleOpenCategoria={handleOpenCategoria}
-                    focus={focus}
-                    //Fabricantes
-                    Fabricante={Fabricante}
-                    selectedOptions6={selectedOptions6}
-                    openFabricante={openFabricante}
-                    handleFabricante={handleChangeSelect}
-                    handleCloseFabricante={handleCloseFabricante}
-                    handleOpenFabricante={handleOpenFabricante}
-                    setIDFabricante={setIDFabricante}
-                    //Marcas
-                    Marcas={Marcas}
-                    selectedOptions7={selectedOptions7}
-                    openMarcas={openMarcas}
-                    handleMarcas={handleChangeSelect}
-                    handleCloseMarcas={handleCloseMarcas}
-                    handleOpenMarcas={handleOpenMarcas}
-                    //Segmentos
-                    Segmentos={Segmentos}
-                    selectedOptions8={selectedOptions8}
-                    openSegmentos={openSegmentos}
-                    handleSegmentos={handleSegmentos}
-                    handleCloseSegmentos={handleCloseSegmentos}
-                    handleOpenSegmentos={handleOpenSegmentos}
-                    //Tamaño
-                    Tamanno={Tamanno}
-                    selectedOptions9={selectedOptions9}
-                    openTamanno={openTamanno}
-                    handleTamanno={handleTamanno}
-                    handleCloseTamanno={handleCloseTamanno}
-                    handleOpenTamanno={handleOpenTamanno}
-                    //Rango Tamaño
-                    RTamanno={RTamanno}
-                    selectedOptions10={selectedOptions10}
-                    openRTamanno={openRTamanno}
-                    handleRTamanno={handleRTamanno}
-                    handleCloseRTamanno={handleCloseRTamanno}
-                    handleOpenRTamanno={handleOpenRTamanno}
-                    //Producto
-                    Productos={Productos}
-                    selectedOptions11={selectedOptions11}
-                    openProductos={openProducto}
-                    handleProductos={handleProducto}
-                    handleCloseProductos={handleCloseProducto}
-                    handleOpenProductos={handleOpenProducto}
-                    //Codigo de Barras
-                    CBarra={CBarras}
-                    selectedOptions12={selectedOptions12}
-                    openCBarras={openCBarra}
-                    handleCBarras={handleCBarra}
-                    handleCloseCBarras={handleCloseCBarra}
-                    handleOpenCBarras={handleOpenCBarra}
-                    //Nacionalidad
-                    Nacionalidad={Nacionalidad}
-                    selectedOptions13={selectedOptions13}
-                    openNacionalidad={openNacionalidad}
-                    handleNacionalidad={handleNacionalidad}
-                    handleCloseNacionalidad={handleCloseNacionalidad}
-                    handleOpenNacionalidad={handleOpenNacionalidad}
-                  />
-                  <SelectIndicadores
-                    Indicadores={Indicadores}
-                    selectedOptions14={selectedOptions14}
-                    openIndicadores={openIndicadores}
-                    handleIndicadores={handleIndicadores}
-                    handleCloseIndicadores={handleCloseIndicadores}
-                    handleOpenIndicadores={handleOpenIndicadores}
-                    setIDIndicadores={setIDFabricante}
-                    isSelected={isSelected}
-                  />
-                </article>
-                <Stack direction="row" className={styles.buttons}>
-                  <button id='save' style={{ width: '35%' }} variant="contained" onClick={abrirCerrarModalSelect}>Guardar</button>
-                  <button id='process' style={{ width: '35%' }} variant="contained" onClick={comprobarCombos}>Procesar</button>
-                </Stack>
-              </section>
-            </StepContent>
-          </Step>
-          <Step>
-            <StepContent>
-              <Report dataGrid={dataGrid}/>
-            </StepContent>
-          </Step>
-
-          
-          
-        </Stepper>
-          
-            
+                </div>
+                </div>
+              </div>
+              </StepContent>
+            </Step>
+          </Stepper>
         </div>
       </Main>
       <Button className='atras'
@@ -1579,7 +1780,7 @@ export default function DATA() {
   );
 }
 
-const useStyles = makeStyles((theme) => ({
+const useStyles = makeStyles({
   modal: {
     position: 'absolute',
     width: '30%',
@@ -1622,15 +1823,88 @@ const useStyles = makeStyles((theme) => ({
     width: '90%', borderRadius: '1.5em', background: 'transparent'
   },
   buttons: {
-    position: 'absolute', top: '90%', right: '3%', width: '30%', justifyContent: 'space-around', height: '5%'
+    position: 'absolute', top: '90%', right: '3%', width: '30%', justifyContent: 'space-around', height: '5% !important'
   },
   botonReportes: {
     color: '#fff !important', borderRadius: '1.5em !important', width: '90% !important', margin: '4% 0 2% !important', padding: '10% !important'
   },
   Collapse: {
     position: 'absolute', width: '30%', height: 'auto', top: '15%', left: '15%', zIndex: '100000'
+  },
+  stepper:{
+    height:'100vh',
+    '& div div':{
+      margin:0,
+      padding:0,
+      border:0
+    },
+    
+    '& .Mui-disabled':{
+      display:'none'
+    }
+  },
+  stepCombo:{
+    height:(props) => props!==1?'100%':0,
+    '& div':{
+      height:(props) => props!==1?'100%':0,
+      '& div':{
+        height:(props) => props!==1?'100%':0,
+        '& div':{
+          height:(props) => props!==1?'100%':0,
+        } 
+      } 
+    }
+  },
+  stepGrilla:{
+    height:(props) => props!=0?'100%':0,
+    '& div':{
+      height:(props) => props!=0?'100%':0,
+      
+      '& div':{
+        height:(props) => props!=0?'100%':0,
+        '& div':{
+          '& .ag-theme-alpine .ag-popup':{
+            height:'auto',
+             '& div':{
+              height:'auto'
+            },
+          },
+         
+          height:(props) => props!=0?'100%':0,
+          '& .ag-column-drop-wrapper':{
+            height:'auto'
+          },
+          '& .ag-theme-alpine .ag-row':{
+            fontSize:10
+          }
+        } 
+      } 
+    }
+  },
+  table:{
+    margin:0,
+    background: '#fff',
+    width: '100%',
+    height: '100%',
+    alignItems: 'center',
+    justifyItems: 'center',
+    display: 'grid',
+    gridTemplateColumns: '1fr 20%',
+    gridTemplateRows: '15% 70% 15%',
+    '-webkit-box-shadow': '-4px 6px 20px 0px rgba(0, 0, 0, 0.49)',
+    boxShadow: '-4px 6px 20px 0px rgba(0, 0, 0, 0.49)',
+  },
+  tableOfData:{
+    gridColumn: '1/3',
+    gridRow: '2/3',
+    display:'flex',
+    alignItems:'center',
+    justifyContent: 'space-around',
+    overflow:'visible',
+    height: '100%',
+    width: '97%',
   }
-}))
+})
 
 const drawerWidth = 15;
 
