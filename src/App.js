@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
-import './App.css';
 import DataReport from './componentes/manegadorRetail/data';
 import Home from './componentes/Home/Home'
 import Login from './componentes/login/login'
@@ -18,7 +17,8 @@ import Perfiles from './componentes/Admin/componentesAdmin/perfil/Perfiles';
 import Administrator from './componentes/context/administrator';
 import MoneyMarket from './componentes/moneyMarket/MoneyMarket';
 import ItemCarousel from './componentes/Admin/componentesAdmin/carousel/crearItem';
-
+import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
+import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
 function App() {
   const {IdUser} = useAuthContext();
 

@@ -28,3 +28,15 @@ main {
   background: rgb(6, 41, 78);
   background: linear-gradient(180deg, rgba(6, 41, 78, 1) 0%, rgba(6, 51, 97, 1) 7%, rgba(9, 61, 113, 0.9724264705882353) 12%, rgba(3, 69, 124, 0.9948354341736695) 16%, rgba(3, 80, 143, 1) 24%, rgba(3, 80, 143, 1) 74%, rgba(10, 70, 128, 0.97) 84%, rgba(9, 61, 113, 0.98) 90%, rgba(6, 51, 97, 1) 95%, rgba(6, 41, 78, 1) 100%);
 }
+.css-9npbnl-MuiFormLabel-root-MuiInputLabel-root,
+.MuiTypography-body1,
+.css-1qvr50w-MuiTypography-root,
+.css-1e6y48t-MuiButtonBase-root-MuiButton-root,
+.css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root,
+.css-uuickr-MuiButtonBase-root-MuiMenuItem-root,
+.css-sghohy-MuiButtonBase-root-MuiButton-root,
+.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input,
+.css-1pysi21-MuiFormLabel-root-MuiInputLabel-root,
+.css-1sumxir-MuiFormLabel-root-MuiInputLabel-root{
+  font-family: 'Lucida Sans Demibold Roman', sans-serif !important;
+}

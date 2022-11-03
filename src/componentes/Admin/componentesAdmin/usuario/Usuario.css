@@ -1,13 +1,3 @@
-@font-face {
-	font-family: 'Lucida Sans Demibold Roman';
-	src: url(../../../../landing/fonts/lucida\ sans\ demibold\ roman.ttf) format('TRUETYPE');
-	font-style: normal;
-	font-weight: 600;
-  }
-*{
-	font-family: 'Lucida Sans Demibold Roman', sans-serif !important;
-}
-
 .Contenedorcompleto{
     width: 100%;
     height: 100%;

@@ -1,8 +1,12 @@
+import { AgGridReact } from 'ag-grid-react';
+import 'ag-grid-enterprise';
+import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
+import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
 import * as React from 'react';
 import './data.css'
 import { styled } from '@mui/material/styles';
 import { Box, CssBaseline, ListItemText, IconButton } from '@material-ui/core';
-import { ArrowBack, ArrowUpwardRounded, Update } from '@material-ui/icons';
+import { ArrowBack, ArrowUpwardRounded} from '@material-ui/icons';
 import { MenuItem, Stack, Button, TextField, Checkbox, Stepper, Step, StepLabel, StepContent } from '@mui/material';
 import { useState } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
@@ -10,15 +14,10 @@ import { Modal } from '@material-ui/core';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import withReactContent from 'sweetalert2-react-content'
-import { DrawerComponent, BotonUsuario, CardComponents, HeaderComponent } from './components/Components';
+import { DrawerComponent, BotonUsuario, HeaderComponent } from './components/Components';
 import { SelectCanales, SelectAtributos, SelectIndicadores, SelectPeriodos, SelectRegiones, } from './components/Selects';
 import Alert from '@mui/material/Alert';
-import Report from './VisualizarData';
-import { AgGridReact } from 'ag-grid-react';
-import 'ag-grid-enterprise';
-import 'ag-grid-community/dist/styles/ag-grid.css';
-import 'ag-grid-community/dist/styles/ag-theme-alpine.css';
-import { CommentsDisabledOutlined } from '@mui/icons-material';
+
 import { useMemo } from 'react';
 const MySwal = withReactContent(Swal)
 const toast = MySwal.mixin({
@@ -32,13 +31,16 @@ const toast = MySwal.mixin({
     toast.addEventListener('mouseleave', Swal.resumeTimer)
   }
 });
-export default function DATA() {
+export default function DataGrid() {
   const [activeStep, setActiveStep] =useState(0);
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
-
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  }
+  
   const styles = useStyles(activeStep);
   var token = sessionStorage.getItem('token');
   const [selectedOptionRetail, setSelectedOptionRetail] = useState(null)
@@ -101,7 +103,6 @@ export default function DATA() {
   /*Data Regiones*/
   const [region, setRegion] = useState([]);
   const [selectedOptions3, setSelectedOptions3] = useState([]);
-console.log(region)
   /*Data SubRegionres*/
   const [selectedOptions33, setSelectedOptions33] = useState([]);
 
@@ -148,8 +149,6 @@ console.log(region)
   /*Data Indicadores*/
   const [Indicadores, setIndicadores] = useState([]);
   const [selectedOptions14, setSelectedOptions14] = useState([]);
-  /*Data Global de Grilla*/
-  const [dataGrid, setDataGrid]= useState([])
   /* Funcion Onchange Agrupada de todos los combos */
   const handleChangeSelect = (event) => {
     const { name, value } = event.target;
@@ -338,7 +337,6 @@ console.log(region)
         Tipo = [0];
         break;
     }
-
       let headersList = {
       "Authorization": `Bearer ${token}`,
       "Content-Type": "application/json" 
@@ -1379,33 +1377,44 @@ console.log(region)
     let headersList = {
       "Authorization": `Bearer ${token}`,
       "Content-Type": "application/json" 
-      }
-
-      let bodyContent = JSON.stringify({
-        "IdValor": selectedOptions1,
-        "IdCanal": selectedOptions2.length > 0 ? selectedOptions2 : "",
-        "IdArea": selectedOptions3.length > 0 ? selectedOptions3 : "",
-        "IdZona": selectedOptions33.length > 0 ? selectedOptions33 : "",
-        "IdCesta": selectedOptions4.length > 0 ? selectedOptions4 : "",
-        "IdCategoria": selectedOptions5.length > 0 ? selectedOptions5 : "",
-      });
-      console.log(bodyContent)
-      let reqOptions = {
-        url: process.env.REACT_APP_API_ENDPOINT + 'GenerarDataSemanal/',
-        method: "POST",
-        headers: headersList,
-        data:bodyContent
-      }
-      axios.request(reqOptions)
-      .then(response => { console.log(response)
-        setGridApi(response.data.data)
-      })
-      .catch(error => {
-        console.error(error);
-      })
+    }
+    let ValuePeticionData;
+    const { periodo } = botonreporte
+    /* Valores condicionales necesarios para variable Semana o Periodo*/
+    switch (periodo) {
+      case true:
+        // Periodo
+        ValuePeticionData = 'GenerarDataPeriodo/';
+        break;
+      // Semana
+      default:
+        ValuePeticionData = 'GenerarDataSemanal/'
+        break;
+    }
+    let bodyContent = JSON.stringify({
+      "IdValor": selectedOptions1,
+      "IdCanal": selectedOptions2.length > 0 ? selectedOptions2 : "",
+      "IdArea": selectedOptions3.length > 0 ? selectedOptions3 : "",
+      "IdZona": selectedOptions33.length > 0 ? selectedOptions33 : "",
+      "IdCesta": selectedOptions4.length > 0 ? selectedOptions4 : "",
+      "IdCategoria": selectedOptions5.length > 0 ? selectedOptions5 : "",
+    });
+    let reqOptions = {
+      url: process.env.REACT_APP_API_ENDPOINT + ValuePeticionData,
+      method: "POST",
+      headers: headersList,
+      data:bodyContent
+    }
+    // axios.request(reqOptions)
+    // .then(response => { console.log(response)
+    //   setGridApi(response.data.data)
+    // })
+    // .catch(error => {
+    //   console.error(error);
+    // })
     switch (true) {
       case selectedOptions1.length === 0:
-        setIsSelected({ selectedOptions1: true })
+      setIsSelected({ selectedOptions1: true })
         toast.fire({
           icon: 'error',
           title: 'No ha Seleccionado un Período',
@@ -1420,8 +1429,16 @@ console.log(region)
           confirmButtonText: `Ok`,
         })
         break;
+      case selectedOptions1.length !== 0:
+        axios.request(reqOptions)
+        .then(response => { console.log(response)
+          setGridApi(response.data.data)
+        })
+        .catch(error => {
+          console.error(error);
+        })
+        break;
       default:
-        // setModalSelect(!modalSelect);
         setIsSelected({ selectedOptions1: false, selectedOptions2: false, selectedOptions3: false })
         break;
     }
@@ -1506,22 +1523,53 @@ console.log(region)
   const isAllSelectCategoria = Categorias.length > 0 && selectedOptions5.length === Categorias.length;
 /*Grilla */
 const [gridApi, setGridApi] = useState(null);
+  let valorEspecifivo;
+  let valorEspecifivoNombre;
 
+  switch (botonreporte.periodo) {
+    case true:
+      // Periodo
+      if (botonreporte.meses) {
+        valorEspecifivoNombre='Meses'
+      }if (botonreporte.trimestres) {
+        valorEspecifivoNombre='Trimestre'
+      }if (botonreporte.semestres) {
+        valorEspecifivoNombre='Semestres'
+      }
+      valorEspecifivo = 'Periodo';
+      break;
+    // Semana
+    default:
+      valorEspecifivo = 'Semana';
+      break;
+  }
 const columns = [
-  // { headerName:"Areas",field:"Areas", filter: "agTextColumnFilter" ,chartDataType: 'category', rowGroup: true, hidden:true},
-  // { headerName:"Zona",field:"Zona", filter: "agTextColumnFilter" ,chartDataType: 'category', rowGroup: true, hidden:true},
-  
-  { headerName:"Canal", field: "Canal"},
-  { headerName:"Area", field: "Areas"},
-  { headerName:"Zona", field: "Zona"},
-  { headerName:'Cesta', field: "Cesta"},
-  { headerName:'Categoria', field: "Categoria"},
-  { headerName:'Fabricante', field: 'Fabricante'},
-  { headerName:'Marca', field: 'Marca'},
-  { headerName:'Codigo de Barra', field: 'CodigoBarra'},
-
-  // { headerName:'Indicador', field: 'Indicador'},
-  { headerName:'Semana', field: 'Semana'},
+  { headerName:"Canal", field: "Canal", filter:'agTextColumnFilter',pivot: true,enablePivot: true,enableRowGroup: true},
+  { headerName:"Area", field: "Areas", filter:'agTextColumnFilter',pivot: true, enablePivot: true,enableRowGroup: true},
+  { headerName:"Zona", field: "Zona", filter:'agTextColumnFilter',pivot: true, enablePivot: true,enableRowGroup: true},
+  { headerName:'Cesta',pivot: true, field: "Cesta", filter:'agTextColumnFilter', pivot: true, enablePivot: true,enableRowGroup: true},
+  { headerName:'Categoria', field: "Categoria", filter:'agTextColumnFilter', enablePivot: true,enableRowGroup: true},
+  { headerName:'Fabricante', field: 'Fabricante', filter:'agTextColumnFilter', enablePivot: true,enableRowGroup: true},
+  { headerName:'Marca', field: 'Marca', filter:'agTextColumnFilter', enablePivot: true,enableRowGroup: true},
+  { headerName:'Codigo de Barra', field: 'CodigoBarra', filter: 'agNumberColumnFilter',},
+  { headerName:'PrecioMax (Bs)', field: 'PrecioMaxBs', filter: 'agNumberColumnFilter', },
+  { headerName:'PrecioMin (Bs)', field: 'PrecioMinBs', filter: 'agNumberColumnFilter', },
+  { headerName:'PrecioMax ($)', field: 'PrecioMaxDolar', filter: 'agNumberColumnFilter', },
+  { headerName:'PrecioMin ($)', field: 'PrecioMinDolar', filter: 'agNumberColumnFilter', },
+  { headerName:'PrecioProm (Bs)', field: 'PrecioPromBs', filter: 'agNumberColumnFilter', },
+  { headerName:'PrecioProm ($)', field: 'PrecioPromDolar', filter: 'agNumberColumnFilter', },
+  { headerName:'Producto', field: 'Producto', filter: 'agNumberColumnFilter', },
+  { headerName:'Retail', field: 'Retail', filter: 'agNumberColumnFilter', },
+  { headerName:'Segmento', field: 'Segmento', filter: 'agNumberColumnFilter', },
+  // { headerName:'ShareValor', field: 'ShareValor', filter: 'agNumberColumnFilter', pivot: true},
+  // { headerName:'ShareUnidades', field: 'ShareUnidades', filter: 'agNumberColumnFilter', pivot: true},
+  // { headerName:'VariacionUnidades', field: 'VariacionUnidades', filter: 'agNumberColumnFilter', pivot: true},
+  // { headerName:'VariacionValor', field: 'VariacionValor', filter: 'agNumberColumnFilter', pivot: true},
+  // { headerName:'VentasTotalUnidades', field: 'VentasTotalUnidades', filter: 'agNumberColumnFilter', pivot: true},
+  // { headerName:'VentasTotalValor', field: 'VentasTotalValor', filter: 'agNumberColumnFilter', pivot: true},
+  { headerName:'VentasUnidades', field: 'VentasUnidades', filter: 'agNumberColumnFilter',},
+  { headerName:'VentasValor', field: 'VentasValor', filter: 'agNumberColumnFilter',},
+  { headerName:valorEspecifivoNombre, field: valorEspecifivo},
 ]
 let bodyContent = JSON.stringify({
   "IdValor": selectedOptions1,
@@ -1533,15 +1581,43 @@ let bodyContent = JSON.stringify({
 });
 const defaultColDef = useMemo(() => {
   return {
-    editable: true,
-    sortable: true,
-    resizable: true,
+    sortable: true ,
+    enableRowGroup: true,
+    resizable:true,
     filter: true,
     flex: 1,
-    minWidth: 100,
+    minWidth: 200,
+    showRowGroup: false,
+    enablePivot: true,
+    enableValue: true,
   };
 }, []);
-
+const sideBar = useMemo(() => {
+  return {
+    toolPanels: [
+      {
+        id: 'columns',
+        labelDefault: 'Columns',
+        labelKey: 'columns',
+        iconKey: 'columns',
+        toolPanel: 'agColumnsToolPanel',
+        
+        toolPanelParams: {
+          allowDragFromColumnsToolPanel:true,
+          suppressRowGroups: false,
+          suppressValues: false,
+          suppressPivots: false,
+          suppressPivotMode: false,
+          suppressColumnFilter: false,
+          suppressColumnSelectAll: false,
+          suppressColumnExpandAll: false,
+        },
+      },
+    ],
+    defaultToolPanel: 'columns',
+  };
+}, []);
+console.log(activeStep)
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
@@ -1585,7 +1661,7 @@ const defaultColDef = useMemo(() => {
         <div className="Contenedordata">
           <Stepper activeStep={activeStep} orientation="vertical" className={styles.stepper}>
             <Step className={styles.stepCombo}>
-              <StepContent>
+              <StepContent sx={{'& div':{height:'100% !important'}}}>
                 <section className={styles.table}>
                   <HeaderComponent />
                   <article className={styles.tableOfData}>
@@ -1738,8 +1814,8 @@ const defaultColDef = useMemo(() => {
               </StepContent>
             </Step>
             <Step className={styles.stepGrilla}>
-              <StepLabel>
-                <IconButton onClick={()=>setActiveStep(0)}><ArrowUpwardRounded/></IconButton>
+              <StepLabel sx={{'& .MuiStepLabel-iconContainer':{display:'none'}}}>
+                <IconButton onClick={handleBack}><ArrowUpwardRounded/></IconButton>
               </StepLabel>
               <StepContent>
               <div style={{width:'100%', height:'100vh'}}>
@@ -1751,16 +1827,17 @@ const defaultColDef = useMemo(() => {
                     rowData={gridApi}
                     alwaysShowHorizontalScroll={true}
                     alwaysShowVerticalScroll={true}
+                    rowGroupPanelShow={'always'}
                     groupDisplayType = {'groupRows'}
                     autoGroupColumnDef={true}
-                    sideBar={true}
+                    sideBar={sideBar}
                     enableCharts={true}
                     animateRows={true}
                     enableRangeSelection={true}
                     enableRangeHandle={true}
                     enableFillHandle={true}
-                    // domLayout='normal'
-                    // defaultColDef={{ filter: true, floatingFilter: true, sortable: true , enableRowGroup: true, resizable:true}}
+                    domLayout='normal'
+                    pagination={true}
                   />
                 </div>
                 </div>
@@ -1780,7 +1857,7 @@ const defaultColDef = useMemo(() => {
   );
 }
 
-const useStyles = makeStyles({
+const useStyles = makeStyles({ 
   modal: {
     position: 'absolute',
     width: '30%',
@@ -1823,7 +1900,7 @@ const useStyles = makeStyles({
     width: '90%', borderRadius: '1.5em', background: 'transparent'
   },
   buttons: {
-    position: 'absolute', top: '90%', right: '3%', width: '30%', justifyContent: 'space-around', height: '5% !important'
+    position: 'absolute', top: '90%', right: '3%', width: '30%', justifyContent: 'space-around',maxHeight:40, height: '5% !important'
   },
   botonReportes: {
     color: '#fff !important', borderRadius: '1.5em !important', width: '90% !important', margin: '4% 0 2% !important', padding: '10% !important'
@@ -1841,6 +1918,9 @@ const useStyles = makeStyles({
     
     '& .Mui-disabled':{
       display:'none'
+    },
+    '& .css-1pe7n21-MuiStepConnector-root':{
+      display:'none'
     }
   },
   stepCombo:{
@@ -1856,29 +1936,24 @@ const useStyles = makeStyles({
     }
   },
   stepGrilla:{
-    height:(props) => props!=0?'100%':0,
-    '& div':{
-      height:(props) => props!=0?'100%':0,
-      
-      '& div':{
-        height:(props) => props!=0?'100%':0,
-        '& div':{
-          '& .ag-theme-alpine .ag-popup':{
+    '& .ag-theme-alpine .ag-popup':{
             height:'auto',
              '& div':{
+              '& .ag-layout-normal':{
+                height:'98%'
+              },
               height:'auto'
             },
+            
           },
-         
-          height:(props) => props!=0?'100%':0,
+    height:(props) => props!==0?'100%':0,
+    '& div':{
           '& .ag-column-drop-wrapper':{
             height:'auto'
           },
           '& .ag-theme-alpine .ag-row':{
             fontSize:10
           }
-        } 
-      } 
     }
   },
   table:{
