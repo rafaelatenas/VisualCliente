@@ -5,6 +5,7 @@ import axios from "axios";
 import withReactContent from 'sweetalert2-react-content';
 import { Box, Button, Paper, Step, StepContent, StepLabel, Stepper, TextField, Typography } from "@mui/material";
 import { PhotoCameraRounded } from "@mui/icons-material";
+import { makeStyles } from "@material-ui/core";
 
 export default class crearUsuario extends React.Component{
     //Validación de Formulario
@@ -315,7 +316,6 @@ componentDidMount(){
               <StepLabel>Datos de Usuario</StepLabel>
               <StepContent>
                 <Box sx={{height:'75%', display: 'flex', overflow:'visible', flexDirection: 'column', alignContent: 'space-around',width: '100%',justifyContent: 'space-around'}}>
-                  <Box sx={{display:'flex', overflow:'visible', justifyContent:'space-around'}}>
                     <TextField className='textField' id="outlined-multiline-flexible" label="Nombres"
                       value={this.state.nombres} name={'nombres'}
                       onChange={(e)=>this.handleUserInput(e)}
@@ -332,7 +332,6 @@ componentDidMount(){
                       value={this.state.genero} name={'genero'} select 
                       onChange={(e)=>this.handleUserInput(e)}
                     />
-                  </Box>
                   <Box sx={{display:'flex', overflow:'visible', justifyContent:'space-around'}}>
                     <TextField className='textField' id="outlined-multiline-flexible" label="Cargo"
                       value={this.state.cargo} name={'cargo'}
@@ -391,3 +390,12 @@ componentDidMount(){
   }
 }
 
+const styles = makeStyles({
+  boxStep:{
+    height: '75%',
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(150px, 25%))',
+    gridTemplateRows:'repeat(auto-fit, minmax(60px, 25%))',
+    justifyItems:'center'
+},
+})
