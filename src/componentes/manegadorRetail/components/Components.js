@@ -1,5 +1,5 @@
 import { Drawer, Tooltip, Chip, IconButton, Divider, Accordion, AccordionSummary, Typography, List, Paper } from "@material-ui/core"
-import { ListItem, ListItemText, Link, Button, Popover, Avatar, AccordionDetails, Toolbar, Card, CardHeader, CardActions, hexToRgb, Box, InputLabel, FormControl, Select, Checkbox, TextField } from "@mui/material"
+import { ListItem, Button, Avatar, AccordionDetails, Toolbar, Card, CardHeader, CardActions,  Box, TextField } from "@mui/material"
 import { ExpandMore } from "@mui/icons-material"
 import MenuIcon from '@mui/icons-material/Menu';
 import { Stack } from '@mui/material';
@@ -10,14 +10,12 @@ import React, { useState } from "react";
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import './componentes.css'
-import Alert from '@mui/material/Alert';
-import Collapse from '@mui/material/Collapse';
 import { useAuthContext } from "../../context/authContext";
+import cargando from "../../../landing/favicon/loader.svg";
 
 let icon;
-const PruebaRetail = [{ id: 1, nombre: 'Retail 1' }, { id: 2, nombre: 'Retail 2' }, { id: 3, nombre: 'Retail 3' }, { id: 4, nombre: 'Retail 4' }]
 export function DrawerComponent(abrir) {
-    const { selectedOptionRetail, setSelectedOptionRetail, DeletePeriodo, anchorEl, botonreporte, chipData, handleClick, setData, handleClose, handleDelete, handleDrawerClose, id, label, open, openo, peticionMeses, peticionSemanas, peticionSemestres, peticionTrimestres, seleccionarPeriodo } = abrir
+    const { selectedOptionRetail, setSelectedOptionRetail, DeletePeriodo, Retail, botonreporte, chipData, handleClick, setData, handleClose, handleDelete, handleDrawerClose, id, label, open, openo, peticionMeses, peticionSemanas, peticionSemestres, peticionTrimestres, seleccionarPeriodo } = abrir
     const { logout } = useAuthContext();
     const styles = useStyles();
     const [openPeriodo, setOpenPeriodo] = useState(false)
@@ -25,13 +23,6 @@ export function DrawerComponent(abrir) {
         const { value } = event.target;
         setSelectedOptionRetail(value);
     }
-    const handleOpenPeriodo = () => {
-        setOpenPeriodo(true)
-    }
-    const handleClosePeriodo = () => {
-        setOpenPeriodo(false)
-    }
-
     return (
         <Drawer
             style={{ borderTopRightRadius: '.5em', borderButtomRightRadius: '.5em' }}
@@ -110,11 +101,22 @@ export function DrawerComponent(abrir) {
                             onChange={handlePeriodos}
                             sx={{ width: '90%', overflow: 'visible', '& div': { borderRadius: '1.5em', '& div': { p: 1.5 } } }}
                         >
-                            {PruebaRetail.map((option) => (
+                            {Retail.length>0?
+                            Retail.map((option) => (
                                 <MenuItem key={option.id} value={option.id} sx={{ display: 'flex', alignItems: 'center' }}>
                                     {option.nombre}
                                 </MenuItem>
-                            ))}
+                            )):(
+                                <Box
+                                  sx={{
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                  }}
+                                >
+                                  <img src={cargando} alt="Cargando..." title="" />
+                                </Box>
+                              )}
                         </TextField>
                     </Box>
                 </> : ''}

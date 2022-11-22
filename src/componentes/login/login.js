@@ -8,10 +8,10 @@ import { EmailOutlined, Visibility, VisibilityOff} from '@material-ui/icons';
 import { makeStyles } from "@material-ui/styles";
 import { IconButton, Button} from '@mui/material';
 import ReCAPTCHA from 'react-google-recaptcha';
-import LogoCuadro from '../../landing/Images/logo-cauadro.webp'
-import CuadroFondoBlanco from '../../landing/Images/CuadroFondoBlanco.webp'
-import atenaslogoEliseBlanca from '../../landing/Images/ATSElise.webp'
-import atenasLogo from '../../landing/Images/ATSLOGO.webp'
+import LogoCuadro from '../../landing/Images/logo-cauadro.png'
+import CuadroFondoBlanco from '../../landing/Images/CuadroFondoBlanco.png'
+import atenaslogoEliseBlanca from '../../landing/Images/ATSElise.png'
+import atenasLogo from '../../landing/Images/ATSLOGO.png'
 import { useState } from 'react';
 import { useNavigate } from "react-router-dom";
 import { useAuthContext } from '../context/authContext';
@@ -100,22 +100,27 @@ function Login (){
       password:password,
       captcha:responseKey
     } 
+    console.log(datosEnviar)
     axios.post(process.env.REACT_APP_API_ENDPOINT+"login",datosEnviar).then(result => {
       var nombre=result.data.NombresUsuarios;
       var apellidos=result.data.ApellidosUsuarios;  
       sessionStorage.setItem('token', result.data.token);
+      sessionStorage.setItem('nombre', result.data.NombresUsuarios);
       sessionStorage.setItem('user', result.data.Login);
+      sessionStorage.setItem('linkWop', result.data.LinkWop);
       sessionStorage.setItem('Id_Cliente', result.data.ID_Cliente);
+      sessionStorage.setItem('ID_Perfil', result.data.ID_Perfil);
       sessionStorage.setItem('successAuthAtenas', result.data.success);
+      if (result.data.success) {
+        login(sessionStorage.getItem('successAuthAtenas'));
+        console.log(result.data)
+      }
       toast.fire({
           icon: 'success',
           title: ''+result.data.message+' '+nombre+' '+apellidos+'',
           confirmButtonText: `Ok`,
       })
-      if (result.data.success) {
-        login(sessionStorage.getItem('successAuthAtenas'));
-        console.log(result.data)
-      }
+      
     }).catch(err => {
         if(err.response) {
           console.log(err.response)

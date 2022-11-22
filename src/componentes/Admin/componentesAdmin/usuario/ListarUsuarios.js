@@ -300,7 +300,6 @@ const styles= useStyles();
       align: 'center',
       renderCell:(params) => {
         const {value}=params
-        console.log(value)
         const [year, month, day] = value.split("T")[0].split('-');
         const [hour, min] = value.split("T")[1].split(':')
         const date = [day, month, year].join('/');

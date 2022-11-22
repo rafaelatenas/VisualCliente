@@ -88,7 +88,7 @@ export default function ActivarUsuario(){
       email:email,
       password:password,
     } 
-    axios.post(process.env.REACT_APP_API_ENDPOINT+"Activar",datosEnviar).then(result => {
+    axios.post(process.env.REACT_APP_API_ENDPOINT+"ActivarUsuario",datosEnviar).then(result => {
       var nombre=result.data.NombresUsuarios;
       var apellidos=result.data.ApellidosUsuarios;  
       sessionStorage.setItem('token', result.data.token);

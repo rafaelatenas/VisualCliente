@@ -6,7 +6,7 @@ export default function Public(){
     const Home = <Navigate to='/retailservices/home'/>
     const Panel = <Navigate to='/retailservices/management/panel'/>
     if(isAuthenticated){
-        if (IdUser != 1) {
+        if (IdUser !== 1) {
             return Home
         }
         return Panel

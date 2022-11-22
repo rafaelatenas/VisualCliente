@@ -5,6 +5,7 @@ import React from "react";
 import { useState, useMemo } from "react";
 import './select.css'
 
+
 const containsText = (text, searchText) =>text.toString().toLowerCase().indexOf(searchText.toString().toLowerCase()) >-1;
 // const containsTexto = (text, searchText) =>text.toString().toLowerCase().indexOf(searchText.toString().toLowerCase()) >-1;
 
@@ -123,10 +124,10 @@ export function SelectPeriodos(data){
 
 export function SelectCanales(canal){
     const classes = useStyles();
+    console.log(canal.selectedOptionRetail)
     var ID_Cliente = sessionStorage.getItem('Id_Cliente')
     let dataUnificada = canal.canal.length>0?[{id:parseInt(ID_Cliente)!==1?parseInt(ID_Cliente):canal.selectedOptionRetail, nombre:'MI CADENA'}].concat(canal.canal):[]
-    
-
+console.log(dataUnificada)
     const OptionCanales = dataUnificada.map((item) => (
         <MenuItem key={item.id} value={item.id} className='items'>
           <Checkbox checked={canal.selectedOptions2.indexOf(item.id) > -1} />
@@ -1128,7 +1129,11 @@ const useStyles = makeStyles((theme) => ({
         marginTop: '2%',
         height: '8%',
         minHeight: 27,
-        maxHeight:35
+        maxHeight:35,
+        '& div .MuiList-root, .MuiList-padding, .MuiMenu-list, .css-6hp17o-MuiList-root-MuiMenu-list':{
+            display: 'inline-flex',
+            flexDirection:'column'
+        }
     },
     inputLabel:{
         background:'rgb(247, 244, 244)',

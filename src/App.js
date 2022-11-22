@@ -37,8 +37,8 @@ function App() {
             <Route path='/retailservices/home/' element={<Privado/>}>
               <Route index element={<Home/>} />
               <Route path='/retailservices/home/data/'  element={<DataReport/>} />
-              <Route exact path='/retailservices/home/report' element={<Report/>}/>
-              <Route exact path='/retailservices/home/MoneyMarket' element={<MoneyMarket/>}/>
+              {/* <Route exact path='/retailservices/home/report' element={<Report/>}/> */}
+              <Route exact path='/retailservices/home/moneymarket' element={<MoneyMarket/>}/>
               <Route exact path="/retailservices/home/changepassword/:email" element={<CambiarClave/>}/>
               
               {/* 

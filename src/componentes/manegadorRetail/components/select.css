@@ -13,3 +13,24 @@
 .input{
     top: -5px !important;
 }
+
+
+.css-9npbnl-MuiFormLabel-root-MuiInputLabel-root,
+.MuiTypography-body1,
+.css-1qvr50w-MuiTypography-root,
+.css-1e6y48t-MuiButtonBase-root-MuiButton-root,
+.css-14s5rfu-MuiFormLabel-root-MuiInputLabel-root,
+.css-uuickr-MuiButtonBase-root-MuiMenuItem-root,
+.css-sghohy-MuiButtonBase-root-MuiButton-root,
+.css-11u53oe-MuiSelect-select-MuiInputBase-input-MuiOutlinedInput-input,
+.css-1pysi21-MuiFormLabel-root-MuiInputLabel-root,
+.css-1sumxir-MuiFormLabel-root-MuiInputLabel-root{
+  font-family: 'Lucida Sans Demibold Roman', sans-serif !important;
+}
+.MuiList-root, 
+.MuiList-padding, 
+.MuiMenu-list,
+.css-6hp17o-MuiList-root-MuiMenu-list{
+  display: flex;
+  flex-direction: column;
+}

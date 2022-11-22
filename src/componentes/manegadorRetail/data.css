@@ -29,6 +29,9 @@
 }
 .MuiListItemText-root:first-child{
     text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 .MuiListItemText-root{
     width: 100%;

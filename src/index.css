@@ -40,3 +40,7 @@ main {
 .css-1sumxir-MuiFormLabel-root-MuiInputLabel-root{
   font-family: 'Lucida Sans Demibold Roman', sans-serif !important;
 }
+.css-6hp17o-MuiList-root-MuiMenu-list{
+  display: flex;
+  flex-direction: column;
+}

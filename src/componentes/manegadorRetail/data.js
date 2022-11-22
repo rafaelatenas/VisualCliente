@@ -1,69 +1,104 @@
-import { AgGridReact } from 'ag-grid-react';
-import 'ag-grid-enterprise';
-import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
-import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
-import * as React from 'react';
-import './data.css'
-import { styled } from '@mui/material/styles';
-import { Box, CssBaseline, ListItemText, IconButton } from '@material-ui/core';
-import { ArrowBack, ArrowUpwardRounded} from '@material-ui/icons';
-import { MenuItem, Stack, Button, TextField, Checkbox, Stepper, Step, StepLabel, StepContent } from '@mui/material';
-import { useState } from 'react';
-import { makeStyles } from '@material-ui/core/styles';
-import { Modal } from '@material-ui/core';
-import axios from 'axios';
-import Swal from 'sweetalert2';
-import withReactContent from 'sweetalert2-react-content'
-import { DrawerComponent, BotonUsuario, HeaderComponent } from './components/Components';
-import { SelectCanales, SelectAtributos, SelectIndicadores, SelectPeriodos, SelectRegiones, } from './components/Selects';
-import Alert from '@mui/material/Alert';
+import { AgGridReact } from "ag-grid-react";
+import "ag-grid-enterprise";
+import "ag-grid-community/styles/ag-grid.css"; // Core grid CSS, always needed
+import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
+import * as React from "react";
+import "./data.css";
+import { styled } from "@mui/material/styles";
+import { Box, CssBaseline, ListItemText, IconButton } from "@material-ui/core";
+import { ArrowBack, ArrowUpwardRounded } from "@material-ui/icons";
+import {
+  MenuItem,
+  Stack,
+  Button,
+  TextField,
+  Checkbox,
+  Stepper,
+  Step,
+  StepLabel,
+  StepContent,
+  Tooltip,
+  CircularProgress,
+} from "@mui/material";
+import { useState } from "react";
+import { makeStyles } from "@material-ui/core/styles";
+import { Modal } from "@material-ui/core";
+import axios from "axios";
+import Swal from "sweetalert2";
+import withReactContent from "sweetalert2-react-content";
+import {
+  DrawerComponent,
+  BotonUsuario,
+  HeaderComponent,
+} from "./components/Components";
+import {
+  SelectCanales,
+  SelectAtributos,
+  SelectIndicadores,
+  SelectPeriodos,
+  SelectRegiones,
+} from "./components/Selects";
+import Alert from "@mui/material/Alert";
 
-import { useMemo } from 'react';
-const MySwal = withReactContent(Swal)
+import { useMemo } from "react";
+import { useEffect } from "react";
+import { display } from "@mui/system";
+const MySwal = withReactContent(Swal);
 const toast = MySwal.mixin({
   toast: true,
-  position: 'top-end',
+  position: "top-end",
   showConfirmButton: false,
   timer: 3000,
   timerProgressBar: true,
   didOpen: (toast) => {
-    toast.addEventListener('mouseenter', Swal.stopTimer)
-    toast.addEventListener('mouseleave', Swal.resumeTimer)
-  }
+    toast.addEventListener("mouseenter", Swal.stopTimer);
+    toast.addEventListener("mouseleave", Swal.resumeTimer);
+  },
 });
 export default function DataGrid() {
-  const [activeStep, setActiveStep] =useState(0);
+  const [activeStep, setActiveStep] = useState(0);
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
-  }
-  
+  };
+
   const styles = useStyles(activeStep);
-  var token = sessionStorage.getItem('token');
-  const [selectedOptionRetail, setSelectedOptionRetail] = useState(null)
+  var token = sessionStorage.getItem("token");
+  const [selectedOptionRetail, setSelectedOptionRetail] = useState(null);
   /*Control del ComponetDrawer*/
   const [alert, setAlert] = React.useState(false);
-  const alerta =
-    <Box className={styles.Collapse} style={{ display: alert ? 'block' : 'none' }}>
+  const alerta = (
+    <Box
+      className={styles.Collapse}
+      style={{ display: alert ? "block" : "none" }}
+    >
       <Alert
-        severity="error" variant="filled"
+        severity="error"
+        variant="filled"
         action={
           <IconButton
             aria-label="close"
             color="inherit"
             size="small"
-            onClick={() => { setAlert(false); }}
-          >Ok
+            onClick={() => {
+              setAlert(false);
+            }}
+          >
+            Ok
           </IconButton>
         }
       >
-        {parseInt(sessionStorage.getItem('Id_Cliente')) === 1 ? selectedOptionRetail !== null ? 'Debe Selecionar un Reporte' : 'Debe Seleccionar un Retail' : 'Debe Selecionar un Reporte'}
+        {parseInt(sessionStorage.getItem("Id_Cliente")) === 1
+          ? selectedOptionRetail !== null
+            ? "Debe Selecionar un Reporte"
+            : "Debe Seleccionar un Retail"
+          : "Debe Selecionar un Reporte"}
       </Alert>
     </Box>
-
+  );
 
   const [open, setOpen] = React.useState(false);
   const handleDrawerOpen = () => {
@@ -82,19 +117,35 @@ export default function DataGrid() {
   };
 
   const openo = Boolean(anchorEl);
-  const id = openo ? 'simple-popover' : undefined;
+  const id = openo ? "simple-popover" : undefined;
 
   /*Data Periodo y Tiempo del Reporte*/
   const [tiempoReporte, setTiempoReporte] = React.useState([]);
   const seleccionarPeriodo = (parametro) => {
-    setTiempoReporte(parametro)
-    setAlert(false)
-    handleDrawerClose()
-  }
+    setTiempoReporte(parametro);
+    setAlert(false);
+    handleDrawerClose();
+  };
 
+  const [selectedOptions, setSelectedOption]=useState({
+    Periodo:[],
+    Canal:[],
+    Area:[],
+    Zona:[],
+    Cesta:[],
+    Categrias:[],
+    Fabricantes:[],
+    Marcas:[],
+    Segmentos:[],
+    Tamanno:[],
+    RTamanno:[],
+    Productos:[],
+    CodBarras:[],
+    Nacionalidad:[],
+    Indicadores:[],
+  })
   const [data, setData] = useState([]);
   const [selectedOptions1, setSelectedOptions1] = useState([]);
-
 
   /*Data Canales*/
   const [canal, setCanal] = useState([]);
@@ -105,7 +156,6 @@ export default function DataGrid() {
   const [selectedOptions3, setSelectedOptions3] = useState([]);
   /*Data SubRegionres*/
   const [selectedOptions33, setSelectedOptions33] = useState([]);
-
 
   /*Data Cestas*/
   const [Cesta, setCesta] = useState([]);
@@ -149,18 +199,54 @@ export default function DataGrid() {
   /*Data Indicadores*/
   const [Indicadores, setIndicadores] = useState([]);
   const [selectedOptions14, setSelectedOptions14] = useState([]);
+  /*Data Retail*/
+  const [Retail, setRetail] = useState([]);
+  useEffect(() => {
+    const PeticionRetailers = async () => {
+      try {
+        await axios
+          .get(process.env.REACT_APP_API_ENDPOINT + "ListarRetail", {
+            headers: { Authorization: `Bearer ${token}` },
+          })
+          .then((response) => {
+            if (response.data.message) {
+              toast.fire({
+                icon: "warning",
+                title: "" + response.data.message,
+              });
+            } else {
+              console.log(response);
+              setRetail(response.data.data);
+            }
+          });
+      } catch (error) {
+        if (error.response.status === 400 || 500) {
+          toast.fire({
+            icon: "error",
+            title: "" + error.response.data.message,
+          });
+        }
+        console.log(error.response.data.message);
+        console.log(error.response.status);
+        console.log(error.response.headers);
+      }
+    };
+    PeticionRetailers();
+  }, []);
+
   /* Funcion Onchange Agrupada de todos los combos */
   const handleChangeSelect = (event) => {
     const { name, value } = event.target;
+    setSelectedOption({...selectedOptions,[name]:value})
     switch (name) {
       case "Periodo":
-        const ValorID = render.map(
-          function ({ id }) {
-            return id
-          }
-        );
+        const ValorID = render.map(function ({ id }) {
+          return id;
+        });
         if (value[value.length - 1] === "all") {
-          setSelectedOptions1(selectedOptions1.length === data.length ? [] : ValorID);
+          setSelectedOptions1(
+            selectedOptions1.length === data.length ? [] : ValorID
+          );
           return;
         }
         setSelectedOptions1(value);
@@ -192,139 +278,150 @@ export default function DataGrid() {
   };
   /*Funciones de Listar PERÍODOS 😄*/
   const peticionSemanas = async () => {
-    setBotonreporte({ semanas: true })
-    await axios.get(process.env.REACT_APP_API_ENDPOINT + 'ListarSemana', {
-      headers: { 'Authorization': `Bearer ${token}` },
-    })
-      .then(response => {
+    setBotonreporte({ semanas: true });
+    await axios
+      .get(process.env.REACT_APP_API_ENDPOINT + "ListarSemana", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
         if (response.data.message) {
           toast.fire({
-            icon: 'warning',
-            title: '' + response.data.message,
-          })
+            icon: "warning",
+            title: "" + response.data.message,
+          });
         } else {
           setData(response.data.data);
         }
-      }).catch(error => {
+      })
+      .catch((error) => {
         if (error.response.status === 400 || 500) {
           toast.fire({
-            icon: 'error',
-            title: '' + error.response.data.message,
-          })
+            icon: "error",
+            title: "" + error.response.data.message,
+          });
         }
-        console.log(error)
+        console.log(error);
         console.log(error.response.data.message);
         console.log(error.response.status);
         console.log(error.response.headers);
-      })
-  }
+      });
+  };
   const peticionMeses = async () => {
-    setBotonreporte({ meses: true, periodo: true })
-    await axios.get(process.env.REACT_APP_API_ENDPOINT + 'listarPeriodo/', {
-      headers: { 'Authorization': `Bearer ${token}` },
-    })
-      .then(response => {
+    setBotonreporte({ meses: true, periodo: true });
+    await axios
+      .get(process.env.REACT_APP_API_ENDPOINT + "listarPeriodo/", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
         if (response.data.message) {
           toast.fire({
-            icon: 'warning',
-            title: '' + response.data.message,
-          })
+            icon: "warning",
+            title: "" + response.data.message,
+          });
         } else {
           setData(response.data.data);
         }
-      }).catch(error => {
+      })
+      .catch((error) => {
         if (error.response.status === 400 || 500) {
           toast.fire({
-            icon: 'error',
-            title: '' + error.response.data.message,
-          })
+            icon: "error",
+            title: "" + error.response.data.message,
+          });
         }
         console.log(error.response.data.message);
         console.log(error.response.status);
         console.log(error.response.headers);
-      })
-  }
+      });
+  };
   const PeticionTrimestres = async () => {
-    setBotonreporte({ trimestres: true, periodo: true })
-    await axios.get(process.env.REACT_APP_API_ENDPOINT + 'ListarTrimestre', {
-      headers: { 'Authorization': `Bearer ${token}` },
-    })
-      .then(response => {
+    setBotonreporte({ trimestres: true, periodo: true });
+    await axios
+      .get(process.env.REACT_APP_API_ENDPOINT + "ListarTrimestre", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
         if (response.data.message) {
           toast.fire({
-            icon: 'warning',
-            title: '' + response.data.message,
-          })
+            icon: "warning",
+            title: "" + response.data.message,
+          });
         } else {
           setData(response.data.data);
         }
-      }).catch(error => {
+      })
+      .catch((error) => {
         if (error.response.status === 400 || 500) {
           toast.fire({
-            icon: 'error',
-            title: '' + error.response.data.message,
-          })
+            icon: "error",
+            title: "" + error.response.data.message,
+          });
         }
         console.log(error.response.data.message);
         console.log(error.response.status);
         console.log(error.response.headers);
-      })
-  }
+      });
+  };
   const PeticionSemestres = async () => {
-    setBotonreporte({ semestres: true, periodo: true })
-    await axios.get(process.env.REACT_APP_API_ENDPOINT + 'ListarSemestre', {
-      headers: { 'Authorization': `Bearer ${token}` },
-    })
-      .then(response => {
+    setBotonreporte({ semestres: true, periodo: true });
+    await axios
+      .get(process.env.REACT_APP_API_ENDPOINT + "ListarSemestre", {
+        headers: { Authorization: `Bearer ${token}` },
+      })
+      .then((response) => {
         if (response.data.message) {
           toast.fire({
-            icon: 'warning',
-            title: '' + response.data.message,
-          })
+            icon: "warning",
+            title: "" + response.data.message,
+          });
         } else {
           setData(response.data.data);
         }
-      }).catch(error => {
+      })
+      .catch((error) => {
         if (error.response.status === 400 || 500) {
           toast.fire({
-            icon: 'error',
-            title: '' + error.response.data.message,
-          })
+            icon: "error",
+            title: "" + error.response.data.message,
+          });
         }
         console.log(error.response.data.message);
         console.log(error.response.status);
         console.log(error.response.headers);
-      })
-  }
+      });
+  };
   const [openPeriodo, setOpenPeriodo] = React.useState(false);
   const handleClosePeriodo = () => {
     setOpenPeriodo(false);
     if (selectedOptions1.length >= 1) {
-      peticionCanales()
+      peticionCanales();
     }
   };
   const handleOpenPeriodo = () => {
     controladorAll();
-    setCanal([])
-    setTimeout(console.log(canal), 20000)
+    setCanal([]);
 
     if (selectedOptions2.length >= 1) {
-      setSelectedOptions2([]); setSelectedOptions3([]); setSelectedOptions4([]); setSelectedOptions5([]); setSelectedOptions6([])
+      setSelectedOptions2([]);
+      setSelectedOptions3([]);
+      setSelectedOptions4([]);
+      setSelectedOptions5([]);
+      setSelectedOptions6([]);
     }
 
     if (tiempoReporte.length === 0) {
       setOpen(true);
       setOpenPeriodo(false);
-      setAlert(true)
+      setAlert(true);
     } else {
       setOpenPeriodo(true);
-      setAlert(false)
+      setAlert(false);
     }
   };
 
   /*Funciones de Listar CANALES 😄*/
   const peticionCanales = async () => {
-    const { periodo } = botonreporte
+    const { periodo } = botonreporte;
     let Tipo;
     /* Valores condicionales necesarios para variable Semana o Periodo*/
     switch (periodo) {
@@ -337,69 +434,71 @@ export default function DataGrid() {
         Tipo = [0];
         break;
     }
-      let headersList = {
-      "Authorization": `Bearer ${token}`,
-      "Content-Type": "application/json" 
-      }
+    let headersList = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
 
-      let bodyContent = JSON.stringify({
-        "IdValor": selectedOptions1,
-        "IdTipo": Tipo
-      });
+    let bodyContent = JSON.stringify({
+      IdValor: selectedOptions1,
+      IdTipo: Tipo,
+    });
 
-      let reqOptions = {
-        url: process.env.REACT_APP_API_ENDPOINT + 'ListarCanal/',
-        method: "POST",
-        headers: headersList,
-        data: bodyContent,
-      }
+    let reqOptions = {
+      url: process.env.REACT_APP_API_ENDPOINT + "ListarCanal/",
+      method: "POST",
+      headers: headersList,
+      data: bodyContent,
+    };
 
-      await axios.request(reqOptions)
-      .then(response => {
+    await axios
+      .request(reqOptions)
+      .then((response) => {
         if (response.data.message) {
           toast.fire({
-            icon: 'warning',
-            title: '' + response.data.message,
-          })
+            icon: "warning",
+            title: "" + response.data.message,
+          });
         } else {
           setCanal(response.data.data);
         }
-      }).catch(error => {
+      })
+      .catch((error) => {
         if (error.response.status === 400 || 500) {
           toast.fire({
-            icon: 'error',
-            title: '' + error.response.data.message,
-          })
+            icon: "error",
+            title: "" + error.response.data.message,
+          });
         }
         console.log(error.response.data.message);
         console.log(error.response.status);
         console.log(error.response.headers);
-      })
-  }
+      });
+  };
   const [openCanales, setOpenCanales] = React.useState(false);
 
   const handleCloseCanal = () => {
     setOpenCanales(false);
-  }
+  };
   const handleOpenCanales = () => {
     setOpenCanales(true);
 
     if (selectedOptions2.length >= 1) {
-      setRegion([])
-      prueba()
-      setSelectedOptions2([]); setSelectedOptions3([]); setSelectedOptions4([]);
-      setSelectedOptions5([]); setSelectedOptions6([]); setSelectedOptions7([]);
-      setSelectedOptions8([]); setSelectedOptions9([]); setSelectedOptions10([]);
-      setSelectedOptions11([]); setSelectedOptions12([]); setSelectedOptions13([]);
+      setRegion([]);
+      setSelectedOptions2([]);
+      setSelectedOptions3([]);
+      setSelectedOptions4([]);
+      setSelectedOptions5([]);
+      setSelectedOptions6([]);
+      setSelectedOptions7([]);
+      setSelectedOptions8([]);
+      setSelectedOptions9([]);
+      setSelectedOptions10([]);
+      setSelectedOptions11([]);
+      setSelectedOptions12([]);
+      setSelectedOptions13([]);
     }
   };
-  const prueba = () => {
-    console.log(region)
-    setTimeout(() => {
-      console.log(region)
-
-    }, 5000);
-  }
 
 
   /*Funciones de Listar REGIONES 😄*/
@@ -407,7 +506,7 @@ export default function DataGrid() {
   const [idRegiones, setIdRegiones] = useState();
 
   const peticionRegiones = async () => {
-    const { periodo } = botonreporte
+    const { periodo } = botonreporte;
     let Tipo;
     switch (periodo) {
       case true:
@@ -419,65 +518,73 @@ export default function DataGrid() {
         break;
     }
     let headersList = {
-      "Authorization": `Bearer ${token}`,
-      "Content-Type": "application/json" 
-      }
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
 
-      let bodyContent = JSON.stringify({
-        "IdTipo": Tipo,
-        "IdValor": selectedOptions1,
-        "IdCanal": selectedOptions2.length > 0 ? selectedOptions2 : "",
-      });
+    let bodyContent = JSON.stringify({
+      IdTipo: Tipo,
+      IdValor: selectedOptions1,
+      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : "",
+    });
 
-      let reqOptions = {
-        url: process.env.REACT_APP_API_ENDPOINT + 'ListarArea/',
-        method: "POST",
-        headers: headersList,
-        data: bodyContent,
-      }
-      await axios.request(reqOptions)
-      .then(response => {
+    let reqOptions = {
+      url: process.env.REACT_APP_API_ENDPOINT + "ListarArea/",
+      method: "POST",
+      headers: headersList,
+      data: bodyContent,
+    };
+    await axios
+      .request(reqOptions)
+      .then((response) => {
         if (response.data.message) {
           toast.fire({
-            icon: 'warning',
-            title: '' + response.data.message,
-          })
+            icon: "warning",
+            title: "" + response.data.message,
+          });
         } else {
           setRegion(response.data.data);
-          console.log(response.data.data)
+          console.log(response.data.data);
         }
-      }).catch(error => {
+      })
+      .catch((error) => {
         if (error.response.status === 400 || 500) {
           toast.fire({
-            icon: 'error',
-            title: '' + error.response.data.message,
-          })
+            icon: "error",
+            title: "" + error.response.data.message,
+          });
         }
         console.log(error);
         console.log(error);
-      })
-
-  }
+      });
+  };
 
   const handleOpenRegiones = () => {
     setOpenRegiones(true);
-    peticionRegiones()
+    peticionRegiones();
     if (selectedOptions3.length >= 1) {
-      setSelectedOptions3([]); setSelectedOptions4([]); setSelectedOptions5([]); setSelectedOptions6([]);
-      setSelectedOptions7([]); setSelectedOptions8([]); setSelectedOptions9([]);
-      setSelectedOptions10([]); setSelectedOptions11([]); setSelectedOptions12([]);
+      setSelectedOptions3([]);
+      setSelectedOptions4([]);
+      setSelectedOptions5([]);
+      setSelectedOptions6([]);
+      setSelectedOptions7([]);
+      setSelectedOptions8([]);
+      setSelectedOptions9([]);
+      setSelectedOptions10([]);
+      setSelectedOptions11([]);
+      setSelectedOptions12([]);
       setSelectedOptions13([]);
     }
   };
   const handleCloseRegion = () => {
     setOpenRegiones(false);
-    setShowMenuItem({ categoria: true })
+    setShowMenuItem({ categoria: true });
   };
 
   /*Funcion onChange del combo SubRegiones */
-  const [SubRegion, setSubRegion] = useState([])
+  const [SubRegion, setSubRegion] = useState([]);
   const peticionSubRegiones = async (value) => {
-    const { periodo } = botonreporte
+    const { periodo } = botonreporte;
     let url;
     switch (periodo) {
       case true:
@@ -487,32 +594,34 @@ export default function DataGrid() {
         url = process.env.REACT_APP_API_ENDPOINT + `ListarSubRegionSemanal/`;
         break;
     }
-    await axios.post(url, {
-      headers: {
-        'Authorization': `Bearer ${token}`,
-      },
-      IdOption: selectedOptions1,
-      IdCanal: selectedOptions2,
-      IdArea: value
-    })
-      .then(response => {
-        console.log(response)
+    await axios
+      .post(url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+        IdOption: selectedOptions1,
+        IdCanal: selectedOptions2,
+        IdArea: value,
+      })
+      .then((response) => {
+        console.log(response);
         // setSubRegion(response.data.data);
-      }).catch(error => {
+      })
+      .catch((error) => {
         console.log(error.response.data.message);
         console.log(error.response.status);
         console.log(error.response.headers);
-      })
-  }
+      });
+  };
   const handleSubRegiones = (event) => {
     const value = event.target.value;
   };
   const OptionSubRegion = SubRegion.map((item) => (
     <MenuItem key={item.id} value={item.id}>
       <Checkbox checked={selectedOptions2.indexOf(item.id) > -1} />
-      <ListItemText sx={{ fontSize: '1em' }} primary={item.nombre} />
+      <ListItemText sx={{ fontSize: "1em" }} primary={item.nombre} />
     </MenuItem>
-  ))
+  ));
 
   /*Funciones de Listar Cestas 😄*/
   const [openCesta, setOpenCesta] = React.useState(false);
@@ -521,7 +630,9 @@ export default function DataGrid() {
   const handleCesta = (event) => {
     const value = event.target.value;
     if (value[value.length - 1] === "all") {
-      setSelectedOptions4(selectedOptions4.length === Cesta.length ? [] : Cesta);
+      setSelectedOptions4(
+        selectedOptions4.length === Cesta.length ? [] : Cesta
+      );
       return;
     } else {
       setSelectedOptions4(value);
@@ -530,18 +641,25 @@ export default function DataGrid() {
 
   const handleCloseCesta = () => {
     setOpenCesta(false);
-  }
+  };
   const handleOpenCesta = () => {
     setOpenCesta(true);
-    peticionCestas()
+    peticionCestas();
     if (selectedOptions4.length >= 1) {
-      setSelectedOptions4([]); setSelectedOptions5([]); setSelectedOptions6([]); setSelectedOptions7([]);
-      setSelectedOptions8([]); setSelectedOptions9([]); setSelectedOptions10([]);
-      setSelectedOptions11([]); setSelectedOptions12([]); setSelectedOptions13([]);
+      setSelectedOptions4([]);
+      setSelectedOptions5([]);
+      setSelectedOptions6([]);
+      setSelectedOptions7([]);
+      setSelectedOptions8([]);
+      setSelectedOptions9([]);
+      setSelectedOptions10([]);
+      setSelectedOptions11([]);
+      setSelectedOptions12([]);
+      setSelectedOptions13([]);
     }
   };
   const peticionCestas = async () => {
-    const { periodo } = botonreporte
+    const { periodo } = botonreporte;
     let Tipo;
     /* Valores condicionales necesarios para variable Semana o Periodo*/
     switch (periodo) {
@@ -555,46 +673,50 @@ export default function DataGrid() {
         break;
     }
     let headersList = {
-      "Authorization": `Bearer ${token}`,
-      "Content-Type": "application/json" 
-      }
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
 
-      let bodyContent = JSON.stringify({
-        "IdTipo": Tipo,
-        "IdValor": selectedOptions1,
-        "IdCanal": selectedOptions2.length > 0 ? selectedOptions2 : "",
-        "IdArea": selectedOptions3.length > 0 ? selectedOptions3 : "",
-        "IdZona": selectedOptions33.length > 0 ? selectedOptions33 : "",
-      });
+    let bodyContent = JSON.stringify({
+      IdTipo: Tipo,
+      IdValor: selectedOptions1,
+      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : "",
+      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : "",
+      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : "",
+    });
 
-      let reqOptions = {
-        url: process.env.REACT_APP_API_ENDPOINT + 'ListarCesta/',
-        method: "POST",
-        headers: headersList,
-        data: bodyContent,
-      }
-      await axios.request(reqOptions)
-      .then(response => {
+    let reqOptions = {
+      url: process.env.REACT_APP_API_ENDPOINT + "ListarCesta/",
+      method: "POST",
+      headers: headersList,
+      data: bodyContent,
+    };
+    await axios
+      .request(reqOptions)
+      .then((response) => {
         if (response.data.message) {
           toast.fire({
-            icon: 'warning',
-            title: '' + response.data.message,
-          })
+            icon: "warning",
+            title: "" + response.data.message,
+          });
         } else {
           setCesta(response.data.data);
         }
-      }).catch(error => {
+      })
+      .catch((error) => {
         console.log(error.response.data.message);
         console.log(error.response.status);
         console.log(error.response.headers);
-      })
-  }
+      });
+  };
   /*Funciones de Listar Categorias 😄*/
   const [openCategoria, setOpenCategoria] = React.useState(false);
   const handleCategoria = (event) => {
     const value = event.target.value;
     if (value[value.length - 1] === "all") {
-      setSelectedOptions5(selectedOptions5.length === Categorias.length ? [] : Categorias);
+      setSelectedOptions5(
+        selectedOptions5.length === Categorias.length ? [] : Categorias
+      );
       return;
     } else {
       setSelectedOptions5(value);
@@ -603,18 +725,24 @@ export default function DataGrid() {
 
   const handleCloseCategoria = () => {
     setOpenCategoria(false);
-  }
+  };
   const handleOpenCategoria = () => {
     setOpenCategoria(true);
-    peticionCategorias()
+    peticionCategorias();
     if (selectedOptions5.length >= 1) {
-      setSelectedOptions5([]); setSelectedOptions6([]); setSelectedOptions7([]); setSelectedOptions8([]);
-      setSelectedOptions9([]); setSelectedOptions10([]); setSelectedOptions11([]);
-      setSelectedOptions12([]); setSelectedOptions13([]);
+      setSelectedOptions5([]);
+      setSelectedOptions6([]);
+      setSelectedOptions7([]);
+      setSelectedOptions8([]);
+      setSelectedOptions9([]);
+      setSelectedOptions10([]);
+      setSelectedOptions11([]);
+      setSelectedOptions12([]);
+      setSelectedOptions13([]);
     }
   };
   const peticionCategorias = async () => {
-    const { periodo } = botonreporte
+    const { periodo } = botonreporte;
     let Tipo;
     /* Valores condicionales necesarios para variable Semana o Periodo*/
     switch (periodo) {
@@ -628,48 +756,50 @@ export default function DataGrid() {
         break;
     }
     let headersList = {
-      "Authorization": `Bearer ${token}`,
-      "Content-Type": "application/json" 
-      }
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
 
-      let bodyContent = JSON.stringify({
-        "IdTipo": Tipo,
-        "IdValor": selectedOptions1,
-        "IdCanal": selectedOptions2.length > 0 ? selectedOptions2 : "",
-        "IdArea": selectedOptions3.length > 0 ? selectedOptions3 : "",
-        "IdZona": selectedOptions33.length > 0 ? selectedOptions33 : "",
-        "IdCesta": selectedOptions4.length > 0 ? selectedOptions4 : "",
-      });
+    let bodyContent = JSON.stringify({
+      IdTipo: Tipo,
+      IdValor: selectedOptions1,
+      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : "",
+      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : "",
+      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : "",
+      IdCesta: selectedOptions4.length > 0 ? selectedOptions4 : "",
+    });
 
-      let reqOptions = {
-        url: process.env.REACT_APP_API_ENDPOINT + 'ListarCategoria/',
-        method: "POST",
-        headers: headersList,
-        data: bodyContent,
-      }
-      await axios.request(reqOptions)
-      .then(response => {
+    let reqOptions = {
+      url: process.env.REACT_APP_API_ENDPOINT + "ListarCategoria/",
+      method: "POST",
+      headers: headersList,
+      data: bodyContent,
+    };
+    await axios
+      .request(reqOptions)
+      .then((response) => {
         if (response.data.message) {
           toast.fire({
-            icon: 'warning',
-            title: '' + response.data.message,
-          })
+            icon: "warning",
+            title: "" + response.data.message,
+          });
         } else {
           if (response.data.data === undefined) {
-            setCategorias([])
+            setCategorias([]);
           }
           setCategorias(response.data.data);
         }
-      }).catch(error => {
+      })
+      .catch((error) => {
         console.log(error.response);
         console.log(error.response.status);
         console.log(error.response.headers);
-      })
-  }
+      });
+  };
   /*Funciones de Listar Fabricantes 😄*/
   const [openFabricante, setOpenFabricante] = React.useState(false);
   const peticionFabricantes = async () => {
-    const { periodo } = botonreporte
+    const { periodo } = botonreporte;
     let Tipo;
     /* Valores condicionales necesarios para variable Semana o Periodo*/
     switch (periodo) {
@@ -683,55 +813,62 @@ export default function DataGrid() {
         break;
     }
     let headersList = {
-      "Authorization": `Bearer ${token}`,
-      "Content-Type": "application/json" 
-      }
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
 
-      let bodyContent = JSON.stringify({
-        "IdTipo": Tipo,
-        "IdValor": selectedOptions1,
-        "IdCanal": selectedOptions2.length > 0 ? selectedOptions2 : "",
-        "IdArea": selectedOptions3.length > 0 ? selectedOptions3 : "",
-        "IdZona": selectedOptions33.length > 0 ? selectedOptions33 : "",
-        "IdCesta": selectedOptions4.length > 0 ? selectedOptions4 : "",
-        "IdCategoria": selectedOptions5.length > 0 ? selectedOptions5 : "",
-      });
+    let bodyContent = JSON.stringify({
+      IdTipo: Tipo,
+      IdValor: selectedOptions1,
+      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : "",
+      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : "",
+      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : "",
+      IdCesta: selectedOptions4.length > 0 ? selectedOptions4 : "",
+      IdCategoria: selectedOptions5.length > 0 ? selectedOptions5 : "",
+    });
 
-      let reqOptions = {
-        url: process.env.REACT_APP_API_ENDPOINT + 'ListarFabricante/',
-        method: "POST",
-        headers: headersList,
-        data: bodyContent,
-      }
-      await axios.request(reqOptions)
-      .then(response => {
-        console.log(response.data.data)
+    let reqOptions = {
+      url: process.env.REACT_APP_API_ENDPOINT + "ListarFabricante/",
+      method: "POST",
+      headers: headersList,
+      data: bodyContent,
+    };
+    await axios
+      .request(reqOptions)
+      .then((response) => {
+        console.log(response.data.data);
         if (response.data.message) {
           toast.fire({
-            icon: 'warning',
-            title: '' + response.data.message,
-          })
+            icon: "warning",
+            title: "" + response.data.message,
+          });
         } else {
           if (response.data.data === undefined) {
-            setFabricante([])
+            setFabricante([]);
           }
           setFabricante(response.data.data);
         }
-      }).catch(error => {
+      })
+      .catch((error) => {
         console.log(error.response.data.message);
         console.log(error.response.status);
         console.log(error.response.headers);
-      })
-  }
+      });
+  };
   const handleCloseFabricante = () => {
     setOpenFabricante(false);
-  }
+  };
   const handleOpenFabricante = () => {
     setOpenFabricante(true);
-    peticionFabricantes()
+    peticionFabricantes();
     if (selectedOptions6.length >= 1) {
-      setSelectedOptions6([]); setSelectedOptions7([]); setSelectedOptions8([]); setSelectedOptions9([]);
-      setSelectedOptions10([]); setSelectedOptions11([]); setSelectedOptions12([]);
+      setSelectedOptions6([]);
+      setSelectedOptions7([]);
+      setSelectedOptions8([]);
+      setSelectedOptions9([]);
+      setSelectedOptions10([]);
+      setSelectedOptions11([]);
+      setSelectedOptions12([]);
       setSelectedOptions13([]);
     }
   };
@@ -740,7 +877,7 @@ export default function DataGrid() {
   const [openMarcas, setOpenMarcas] = React.useState(false);
   const [IDFabricante, setIDFabricante] = React.useState({});
   const peticionMarcas = async () => {
-    const { periodo } = botonreporte
+    const { periodo } = botonreporte;
     let Tipo;
     /* Valores condicionales necesarios para variable Semana o Periodo*/
     switch (periodo) {
@@ -754,62 +891,69 @@ export default function DataGrid() {
         break;
     }
     let headersList = {
-      "Authorization": `Bearer ${token}`,
-      "Content-Type": "application/json" 
-      }
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
 
-      let bodyContent = JSON.stringify({
-        "IdTipo": Tipo,
-        "IdValor": selectedOptions1,
-        "IdCanal": selectedOptions2.length > 0 ? selectedOptions2 : "",
-        "IdArea": selectedOptions3.length > 0 ? selectedOptions3 : "",
-        "IdZona": selectedOptions33.length > 0 ? selectedOptions33 : "",
-        "IdCesta": selectedOptions4.length > 0 ? selectedOptions4 : "",
-        "IdCategoria": selectedOptions5.length > 0 ? selectedOptions5 : "",
-        "IdFabricante": selectedOptions6.length > 0 ? selectedOptions6 : ""
-      });
+    let bodyContent = JSON.stringify({
+      IdTipo: Tipo,
+      IdValor: selectedOptions1,
+      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : "",
+      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : "",
+      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : "",
+      IdCesta: selectedOptions4.length > 0 ? selectedOptions4 : "",
+      IdCategoria: selectedOptions5.length > 0 ? selectedOptions5 : "",
+      IdFabricante: selectedOptions6.length > 0 ? selectedOptions6 : "",
+    });
 
-      let reqOptions = {
-        url: process.env.REACT_APP_API_ENDPOINT + 'ListarMarca/',
-        method: "POST",
-        headers: headersList,
-        data: bodyContent,
-      }
-      await axios.request(reqOptions)
-      .then(response => {
+    let reqOptions = {
+      url: process.env.REACT_APP_API_ENDPOINT + "ListarMarca/",
+      method: "POST",
+      headers: headersList,
+      data: bodyContent,
+    };
+    await axios
+      .request(reqOptions)
+      .then((response) => {
         if (response.data.message) {
           toast.fire({
-            icon: 'warning',
-            title: '' + response.data.message,
-          })
+            icon: "warning",
+            title: "" + response.data.message,
+          });
         } else {
           if (response.data.data === undefined) {
-            setMarcas([])
+            setMarcas([]);
           }
           setMarcas(response.data.data);
         }
-      }).catch(error => {
+      })
+      .catch((error) => {
         console.log(error.response.data.message);
         console.log(error.response.status);
         console.log(error.response.headers);
-      })
-  }
+      });
+  };
   const handleCloseMarcas = () => {
     setOpenMarcas(false);
-  }
+  };
   const handleOpenMarcas = () => {
     setOpenMarcas(true);
-    peticionMarcas()
+    peticionMarcas();
     if (selectedOptions7.length >= 1) {
-      setSelectedOptions7([]); setSelectedOptions8([]); setSelectedOptions9([]); setSelectedOptions10([]);
-      setSelectedOptions11([]); setSelectedOptions12([]); setSelectedOptions13([]);
+      setSelectedOptions7([]);
+      setSelectedOptions8([]);
+      setSelectedOptions9([]);
+      setSelectedOptions10([]);
+      setSelectedOptions11([]);
+      setSelectedOptions12([]);
+      setSelectedOptions13([]);
     }
   };
 
   /*Funciones de Listar Segmentos 😄*/
   const [openSegmentos, setOpenSegmentos] = React.useState(false);
   const peticionSegmentos = async () => {
-    const { periodo } = botonreporte
+    const { periodo } = botonreporte;
     let Tipo;
     /* Valores condicionales necesarios para variable Semana o Periodo*/
     switch (periodo) {
@@ -823,56 +967,62 @@ export default function DataGrid() {
         break;
     }
     let headersList = {
-      "Authorization": `Bearer ${token}`,
-      "Content-Type": "application/json" 
-      }
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
 
-      let bodyContent = JSON.stringify({
-        "IdTipo": Tipo,
-        "IdValor": selectedOptions1,
-        "IdCanal": selectedOptions2.length > 0 ? selectedOptions2 : "",
-        "IdArea": selectedOptions3.length > 0 ? selectedOptions3 : "",
-        "IdZona": selectedOptions33.length > 0 ? selectedOptions33 : "",
-        "IdCesta": selectedOptions4.length > 0 ? selectedOptions4 : "",
-        "IdCategoria": selectedOptions5.length > 0 ? selectedOptions5 : "",
-        "IdFabricante": selectedOptions6.length > 0 ? selectedOptions6 : "",
-        "IdMarca": selectedOptions7.length > 0 ? selectedOptions7 : "",
-      });
+    let bodyContent = JSON.stringify({
+      IdTipo: Tipo,
+      IdValor: selectedOptions1,
+      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : "",
+      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : "",
+      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : "",
+      IdCesta: selectedOptions4.length > 0 ? selectedOptions4 : "",
+      IdCategoria: selectedOptions5.length > 0 ? selectedOptions5 : "",
+      IdFabricante: selectedOptions6.length > 0 ? selectedOptions6 : "",
+      IdMarca: selectedOptions7.length > 0 ? selectedOptions7 : "",
+    });
 
-      let reqOptions = {
-        url: process.env.REACT_APP_API_ENDPOINT + 'ListarSegmento/',
-        method: "POST",
-        headers: headersList,
-        data: bodyContent,
-      }
-      await axios.request(reqOptions)
-      .then(response => {
+    let reqOptions = {
+      url: process.env.REACT_APP_API_ENDPOINT + "ListarSegmento/",
+      method: "POST",
+      headers: headersList,
+      data: bodyContent,
+    };
+    await axios
+      .request(reqOptions)
+      .then((response) => {
         if (response.data.message) {
           toast.fire({
-            icon: 'warning',
-            title: '' + response.data.message,
-          })
+            icon: "warning",
+            title: "" + response.data.message,
+          });
         } else {
           if (response.data.data === undefined) {
-            setSegmentos([])
+            setSegmentos([]);
           }
           setSegmentos(response.data.data);
         }
-      }).catch(error => {
+      })
+      .catch((error) => {
         console.log(error.response.data.message);
         console.log(error.response.status);
         console.log(error.response.headers);
-      })
-  }
+      });
+  };
   const handleCloseSegmentos = () => {
     setOpenSegmentos(false);
-  }
+  };
   const handleOpenSegmentos = () => {
     setOpenSegmentos(true);
-    peticionSegmentos()
+    peticionSegmentos();
     if (selectedOptions8.length >= 1) {
-      setSelectedOptions8([]); setSelectedOptions9([]); setSelectedOptions10([]); setSelectedOptions11([]);
-      setSelectedOptions12([]); setSelectedOptions13([]);
+      setSelectedOptions8([]);
+      setSelectedOptions9([]);
+      setSelectedOptions10([]);
+      setSelectedOptions11([]);
+      setSelectedOptions12([]);
+      setSelectedOptions13([]);
     }
   };
   const handleSegmentos = (event) => {
@@ -884,7 +1034,7 @@ export default function DataGrid() {
   const [openTamanno, setOpenTamanno] = React.useState(false);
   // const [IDMarca, setIDMarca]=React.useState({});
   const peticionTamanno = async () => {
-    const { periodo } = botonreporte
+    const { periodo } = botonreporte;
     let Tipo;
     /* Valores condicionales necesarios para variable Semana o Periodo*/
     switch (periodo) {
@@ -898,59 +1048,64 @@ export default function DataGrid() {
         break;
     }
     let headersList = {
-      "Authorization": `Bearer ${token}`,
-      "Content-Type": "application/json" 
-      }
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
 
-      let bodyContent = JSON.stringify({
-        "IdTipo": Tipo,
-        "IdValor": selectedOptions1,
-        "IdCanal": selectedOptions2.length > 0 ? selectedOptions2 : "",
-        "IdArea": selectedOptions3.length > 0 ? selectedOptions3 : "",
-        "IdZona": selectedOptions33.length > 0 ? selectedOptions33 : "",
-        "IdCesta": selectedOptions4.length > 0 ? selectedOptions4 : "",
-        "IdCategoria": selectedOptions5.length > 0 ? selectedOptions5 : "",
-        "IdFabricante": selectedOptions6.length > 0 ? selectedOptions6 : "",
-        "IdMarca": selectedOptions7.length > 0 ? selectedOptions7 : "",
-        "IdSegmento": selectedOptions8.length > 0 ? selectedOptions8 : "",
-      });
+    let bodyContent = JSON.stringify({
+      IdTipo: Tipo,
+      IdValor: selectedOptions1,
+      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : "",
+      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : "",
+      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : "",
+      IdCesta: selectedOptions4.length > 0 ? selectedOptions4 : "",
+      IdCategoria: selectedOptions5.length > 0 ? selectedOptions5 : "",
+      IdFabricante: selectedOptions6.length > 0 ? selectedOptions6 : "",
+      IdMarca: selectedOptions7.length > 0 ? selectedOptions7 : "",
+      IdSegmento: selectedOptions8.length > 0 ? selectedOptions8 : "",
+    });
 
-      let reqOptions = {
-        url: process.env.REACT_APP_API_ENDPOINT + 'ListarTamano/',
-        method: "POST",
-        headers: headersList,
-        data: bodyContent,
-      }
-      await axios.request(reqOptions)
-      .then(response => {
+    let reqOptions = {
+      url: process.env.REACT_APP_API_ENDPOINT + "ListarTamano/",
+      method: "POST",
+      headers: headersList,
+      data: bodyContent,
+    };
+    await axios
+      .request(reqOptions)
+      .then((response) => {
         if (response.data.message) {
           toast.fire({
-            icon: 'warning',
-            title: '' + response.data.message,
-          })
+            icon: "warning",
+            title: "" + response.data.message,
+          });
         } else {
           if (response.data.data === undefined) {
-            setTamanno([])
+            setTamanno([]);
           }
           setTamanno(response.data.data);
         }
-      }).catch(error => {
+      })
+      .catch((error) => {
         console.log(error.response.data.message);
         console.log(error.response.status);
         console.log(error.response.headers);
-      })
-  }
+      });
+  };
   const handleCloseTamanno = () => {
     setOpenTamanno(false);
     // if(selectedOptions4.length>=1){
     //   peticionFabricantes();
     // }
-  }
+  };
   const handleOpenTamanno = () => {
     setOpenTamanno(true);
-    peticionTamanno()
+    peticionTamanno();
     if (selectedOptions9.length >= 1) {
-      setSelectedOptions9([]); setSelectedOptions10([]); setSelectedOptions11([]); setSelectedOptions12([]);
+      setSelectedOptions9([]);
+      setSelectedOptions10([]);
+      setSelectedOptions11([]);
+      setSelectedOptions12([]);
       setSelectedOptions13([]);
     }
   };
@@ -962,7 +1117,7 @@ export default function DataGrid() {
   /*Funciones de Listar RTamanno 😄*/
   const [openRTamanno, setOpenRTamanno] = React.useState(false);
   const peticionRTamanno = async () => {
-    const { periodo } = botonreporte
+    const { periodo } = botonreporte;
     let Tipo;
     /* Valores condicionales necesarios para variable Semana o Periodo*/
     switch (periodo) {
@@ -976,57 +1131,62 @@ export default function DataGrid() {
         break;
     }
     let headersList = {
-      "Authorization": `Bearer ${token}`,
-      "Content-Type": "application/json" 
-      }
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
 
-      let bodyContent = JSON.stringify({
-        "IdTipo": Tipo,
-        "IdValor": selectedOptions1,
-        "IdCanal": selectedOptions2.length > 0 ? selectedOptions2 : "",
-        "IdArea": selectedOptions3.length > 0 ? selectedOptions3 : "",
-        "IdZona": selectedOptions33.length > 0 ? selectedOptions33 : "",
-        "IdCesta": selectedOptions4.length > 0 ? selectedOptions4 : "",
-        "IdCategoria": selectedOptions5.length > 0 ? selectedOptions5 : "",
-        "IdFabricante": selectedOptions6.length > 0 ? selectedOptions6 : "",
-        "IdMarca": selectedOptions7.length > 0 ? selectedOptions7 : "",
-        "IdSegmento": selectedOptions8.length > 0 ? selectedOptions8 : "",
-        "IdTamano": selectedOptions9.length > 0 ? selectedOptions9 : "",
-      });
+    let bodyContent = JSON.stringify({
+      IdTipo: Tipo,
+      IdValor: selectedOptions1,
+      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : "",
+      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : "",
+      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : "",
+      IdCesta: selectedOptions4.length > 0 ? selectedOptions4 : "",
+      IdCategoria: selectedOptions5.length > 0 ? selectedOptions5 : "",
+      IdFabricante: selectedOptions6.length > 0 ? selectedOptions6 : "",
+      IdMarca: selectedOptions7.length > 0 ? selectedOptions7 : "",
+      IdSegmento: selectedOptions8.length > 0 ? selectedOptions8 : "",
+      IdTamano: selectedOptions9.length > 0 ? selectedOptions9 : "",
+    });
 
-      let reqOptions = {
-        url: process.env.REACT_APP_API_ENDPOINT + 'ListarRTamano/',
-        method: "POST",
-        headers: headersList,
-        data: bodyContent,
-      }
-      await axios.request(reqOptions)
-      .then(response => {
+    let reqOptions = {
+      url: process.env.REACT_APP_API_ENDPOINT + "ListarRTamano/",
+      method: "POST",
+      headers: headersList,
+      data: bodyContent,
+    };
+    await axios
+      .request(reqOptions)
+      .then((response) => {
         if (response.data.message) {
           toast.fire({
-            icon: 'warning',
-            title: '' + response.data.message,
-          })
+            icon: "warning",
+            title: "" + response.data.message,
+          });
         } else {
           if (response.data.data === undefined) {
-            setRTamanno([])
+            setRTamanno([]);
           }
           setRTamanno(response.data.data);
         }
-      }).catch(error => {
+      })
+      .catch((error) => {
         console.log(error.response.data.message);
         console.log(error.response.status);
         console.log(error.response.headers);
-      })
-  }
+      });
+  };
   const handleCloseRTamanno = () => {
     setOpenRTamanno(false);
-  }
+  };
   const handleOpenRTamanno = () => {
     setOpenRTamanno(true);
-    peticionRTamanno()
+    peticionRTamanno();
     if (selectedOptions10.length >= 1) {
-      setSelectedOptions10([]); setSelectedOptions11([]); setSelectedOptions12([]); setSelectedOptions13([]);
+      setSelectedOptions10([]);
+      setSelectedOptions11([]);
+      setSelectedOptions12([]);
+      setSelectedOptions13([]);
     }
   };
   const handleRTamanno = (event) => {
@@ -1037,7 +1197,7 @@ export default function DataGrid() {
   /*Funciones de Listar Producto 😄*/
   const [openProducto, setOpenProducto] = React.useState(false);
   const peticionProducto = async () => {
-    const { periodo } = botonreporte
+    const { periodo } = botonreporte;
     let Tipo;
     /* Valores condicionales necesarios para variable Semana o Periodo*/
     switch (periodo) {
@@ -1051,59 +1211,63 @@ export default function DataGrid() {
         break;
     }
     let headersList = {
-      "Authorization": `Bearer ${token}`,
-      "Content-Type": "application/json" 
-      }
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
 
-      let bodyContent = JSON.stringify({
-        "IdTipo": Tipo,
-        "IdValor": selectedOptions1,
-        "IdCanal": selectedOptions2.length > 0 ? selectedOptions2 : "",
-        "IdArea": selectedOptions3.length > 0 ? selectedOptions3 : "",
-        "IdZona": selectedOptions33.length > 0 ? selectedOptions33 : "",
-        "IdCesta": selectedOptions4.length > 0 ? selectedOptions4 : "",
-        "IdCategoria": selectedOptions5.length > 0 ? selectedOptions5 : "",
-        "IdFabricante": selectedOptions6.length > 0 ? selectedOptions6 : "",
-        "IdMarca": selectedOptions7.length > 0 ? selectedOptions7 : "",
-        "IdSegmento": selectedOptions8.length > 0 ? selectedOptions8 : "",
-        "IdTamano": selectedOptions9.length > 0 ? selectedOptions9 : "",
-        "IdRTamano": selectedOptions10.length > 0 ? selectedOptions10 : "",
-      });
+    let bodyContent = JSON.stringify({
+      IdTipo: Tipo,
+      IdValor: selectedOptions1,
+      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : "",
+      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : "",
+      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : "",
+      IdCesta: selectedOptions4.length > 0 ? selectedOptions4 : "",
+      IdCategoria: selectedOptions5.length > 0 ? selectedOptions5 : "",
+      IdFabricante: selectedOptions6.length > 0 ? selectedOptions6 : "",
+      IdMarca: selectedOptions7.length > 0 ? selectedOptions7 : "",
+      IdSegmento: selectedOptions8.length > 0 ? selectedOptions8 : "",
+      IdTamano: selectedOptions9.length > 0 ? selectedOptions9 : "",
+      IdRTamano: selectedOptions10.length > 0 ? selectedOptions10 : "",
+    });
 
-      let reqOptions = {
-        url: process.env.REACT_APP_API_ENDPOINT + 'ListarRTamano/',
-        method: "POST",
-        headers: headersList,
-        data: bodyContent,
-      }
-      await axios.request(reqOptions)
-      .then(response => {
+    let reqOptions = {
+      url: process.env.REACT_APP_API_ENDPOINT + "ListarRTamano/",
+      method: "POST",
+      headers: headersList,
+      data: bodyContent,
+    };
+    await axios
+      .request(reqOptions)
+      .then((response) => {
         if (response.data.message) {
           toast.fire({
-            icon: 'warning',
-            title: '' + response.data.message,
-          })
+            icon: "warning",
+            title: "" + response.data.message,
+          });
         } else {
           if (response.data.data === undefined) {
-            setProductos([])
+            setProductos([]);
           }
           setProductos(response.data.data);
         }
-      }).catch(error => {
+      })
+      .catch((error) => {
         console.log(error.response.data.message);
         console.log(error.response.status);
         console.log(error.response.headers);
-      })
-  }
+      });
+  };
   const handleCloseProducto = () => {
     setOpenProducto(false);
-  }
+  };
   const handleOpenProducto = (e) => {
     setOpenProducto(true);
-    peticionProducto()
-    console.log(e)
+    peticionProducto();
+    console.log(e);
     if (selectedOptions11.length >= 1) {
-      setSelectedOptions11([]); setSelectedOptions12([]); setSelectedOptions13([]);
+      setSelectedOptions11([]);
+      setSelectedOptions12([]);
+      setSelectedOptions13([]);
     }
   };
   const handleProducto = (event) => {
@@ -1114,7 +1278,7 @@ export default function DataGrid() {
   /*Funciones de Listar CBarra 😄*/
   const [openCBarra, setOpenCBarra] = React.useState(false);
   const peticionCBarra = async () => {
-    const { periodo } = botonreporte
+    const { periodo } = botonreporte;
     let Tipo;
     /* Valores condicionales necesarios para variable Semana o Periodo*/
     switch (periodo) {
@@ -1128,59 +1292,62 @@ export default function DataGrid() {
         break;
     }
     let headersList = {
-      "Authorization": `Bearer ${token}`,
-      "Content-Type": "application/json" 
-      }
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
 
-      let bodyContent = JSON.stringify({
-        "IdTipo": Tipo,
-        "IdValor": selectedOptions1,
-        "IdCanal": selectedOptions2.length > 0 ? selectedOptions2 : "",
-        "IdArea": selectedOptions3.length > 0 ? selectedOptions3 : "",
-        "IdZona": selectedOptions33.length > 0 ? selectedOptions33 : "",
-        "IdCesta": selectedOptions4.length > 0 ? selectedOptions4 : "",
-        "IdCategoria": selectedOptions5.length > 0 ? selectedOptions5 : "",
-        "IdFabricante": selectedOptions6.length > 0 ? selectedOptions6 : "",
-        "IdMarca": selectedOptions7.length > 0 ? selectedOptions7 : "",
-        "IdSegmento": selectedOptions8.length > 0 ? selectedOptions8 : "",
-        "IdTamano": selectedOptions9.length > 0 ? selectedOptions9 : "",
-        "IdRTamano": selectedOptions10.length > 0 ? selectedOptions10 : "",
-        "IdProducto": selectedOptions11.length > 0 ? selectedOptions11 : "",
-      });
+    let bodyContent = JSON.stringify({
+      IdTipo: Tipo,
+      IdValor: selectedOptions1,
+      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : "",
+      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : "",
+      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : "",
+      IdCesta: selectedOptions4.length > 0 ? selectedOptions4 : "",
+      IdCategoria: selectedOptions5.length > 0 ? selectedOptions5 : "",
+      IdFabricante: selectedOptions6.length > 0 ? selectedOptions6 : "",
+      IdMarca: selectedOptions7.length > 0 ? selectedOptions7 : "",
+      IdSegmento: selectedOptions8.length > 0 ? selectedOptions8 : "",
+      IdTamano: selectedOptions9.length > 0 ? selectedOptions9 : "",
+      IdRTamano: selectedOptions10.length > 0 ? selectedOptions10 : "",
+      IdProducto: selectedOptions11.length > 0 ? selectedOptions11 : "",
+    });
 
-      let reqOptions = {
-        url: process.env.REACT_APP_API_ENDPOINT + 'ListarRTamano/',
-        method: "POST",
-        headers: headersList,
-        data: bodyContent,
-      }
-      await axios.request(reqOptions)
-      .then(response => {
+    let reqOptions = {
+      url: process.env.REACT_APP_API_ENDPOINT + "ListarRTamano/",
+      method: "POST",
+      headers: headersList,
+      data: bodyContent,
+    };
+    await axios
+      .request(reqOptions)
+      .then((response) => {
         if (response.data.message) {
           toast.fire({
-            icon: 'warning',
-            title: '' + response.data.message,
-          })
+            icon: "warning",
+            title: "" + response.data.message,
+          });
         } else {
           if (response.data.data === undefined) {
-            setCBarras([])
+            setCBarras([]);
           }
           setCBarras(response.data.data);
         }
-      }).catch(error => {
+      })
+      .catch((error) => {
         console.log(error.response.data.message);
         console.log(error.response.status);
         console.log(error.response.headers);
-      })
-  }
+      });
+  };
   const handleCloseCBarra = () => {
     setOpenCBarra(false);
-  }
+  };
   const handleOpenCBarra = () => {
     setOpenCBarra(true);
-    peticionCBarra()
+    peticionCBarra();
     if (selectedOptions12.length >= 1) {
-      setSelectedOptions12([]); setSelectedOptions13([]);
+      setSelectedOptions12([]);
+      setSelectedOptions13([]);
     }
   };
   const handleCBarra = (event) => {
@@ -1192,7 +1359,7 @@ export default function DataGrid() {
   const [openNacionalidad, setOpenNacionalidad] = React.useState(false);
   // const [IDMarca, setIDMarca]=React.useState({});
   const peticionNacionalidad = async () => {
-    const { periodo } = botonreporte
+    const { periodo } = botonreporte;
     let Tipo;
     /* Valores condicionales necesarios para variable Semana o Periodo*/
     switch (periodo) {
@@ -1206,58 +1373,60 @@ export default function DataGrid() {
         break;
     }
     let headersList = {
-      "Authorization": `Bearer ${token}`,
-      "Content-Type": "application/json" 
-      }
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
 
-      let bodyContent = JSON.stringify({
-        "IdTipo": Tipo,
-        "IdValor": selectedOptions1,
-        "IdCanal": selectedOptions2.length > 0 ? selectedOptions2 : "",
-        "IdArea": selectedOptions3.length > 0 ? selectedOptions3 : "",
-        "IdZona": selectedOptions33.length > 0 ? selectedOptions33 : "",
-        "IdCesta": selectedOptions4.length > 0 ? selectedOptions4 : "",
-        "IdCategoria": selectedOptions5.length > 0 ? selectedOptions5 : "",
-        "IdFabricante": selectedOptions6.length > 0 ? selectedOptions6 : "",
-        "IdMarca": selectedOptions7.length > 0 ? selectedOptions7 : "",
-        "IdSegmento": selectedOptions8.length > 0 ? selectedOptions8 : "",
-        "IdTamano": selectedOptions9.length > 0 ? selectedOptions9 : "",
-        "IdRTamano": selectedOptions10.length > 0 ? selectedOptions10 : "",
-        "IdProducto": selectedOptions11.length > 0 ? selectedOptions11 : "",
-        "IdCBarra": selectedOptions12.length > 0 ? selectedOptions12 : "",
-      });
+    let bodyContent = JSON.stringify({
+      IdTipo: Tipo,
+      IdValor: selectedOptions1,
+      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : "",
+      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : "",
+      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : "",
+      IdCesta: selectedOptions4.length > 0 ? selectedOptions4 : "",
+      IdCategoria: selectedOptions5.length > 0 ? selectedOptions5 : "",
+      IdFabricante: selectedOptions6.length > 0 ? selectedOptions6 : "",
+      IdMarca: selectedOptions7.length > 0 ? selectedOptions7 : "",
+      IdSegmento: selectedOptions8.length > 0 ? selectedOptions8 : "",
+      IdTamano: selectedOptions9.length > 0 ? selectedOptions9 : "",
+      IdRTamano: selectedOptions10.length > 0 ? selectedOptions10 : "",
+      IdProducto: selectedOptions11.length > 0 ? selectedOptions11 : "",
+      IdCBarra: selectedOptions12.length > 0 ? selectedOptions12 : "",
+    });
 
-      let reqOptions = {
-        url: process.env.REACT_APP_API_ENDPOINT + 'ListarRTamano/',
-        method: "POST",
-        headers: headersList,
-        data: bodyContent,
-      }
-      await axios.request(reqOptions)
-      .then(response => {
+    let reqOptions = {
+      url: process.env.REACT_APP_API_ENDPOINT + "ListarRTamano/",
+      method: "POST",
+      headers: headersList,
+      data: bodyContent,
+    };
+    await axios
+      .request(reqOptions)
+      .then((response) => {
         if (response.data.message) {
           toast.fire({
-            icon: 'warning',
-            title: '' + response.data.message,
-          })
+            icon: "warning",
+            title: "" + response.data.message,
+          });
         } else {
           if (response.data.data === undefined) {
-            setNacionalidad([])
+            setNacionalidad([]);
           }
           setNacionalidad(response.data.data);
         }
-      }).catch(error => {
+      })
+      .catch((error) => {
         console.log(error.response.data.message);
         console.log(error.response.status);
         console.log(error.response.headers);
-      })
-  }
+      });
+  };
   const handleCloseNacionalidad = () => {
     setOpenNacionalidad(false);
-  }
+  };
   const handleOpenNacionalidad = () => {
     setOpenNacionalidad(true);
-    peticionNacionalidad()
+    peticionNacionalidad();
     if (selectedOptions13.length >= 1) {
       setSelectedOptions13([]);
     }
@@ -1271,7 +1440,7 @@ export default function DataGrid() {
   const [openIndicadores, setOpenIndicadores] = React.useState(false);
   // const [IDMarca, setIDMarca]=React.useState({});
   const peticionIndicadores = async () => {
-    const { periodo } = botonreporte
+    const { periodo } = botonreporte;
     let Tipo;
     /* Valores condicionales necesarios para variable Semana o Periodo*/
     switch (periodo) {
@@ -1285,46 +1454,48 @@ export default function DataGrid() {
         break;
     }
     let headersList = {
-      "Authorization": `Bearer ${token}`,
-      "Content-Type": "application/json" 
-      }
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
 
-      let bodyContent = JSON.stringify({
-        "IdTipo": Tipo,
-      });
+    let bodyContent = JSON.stringify({
+      IdTipo: Tipo,
+    });
 
-      let reqOptions = {
-        url: process.env.REACT_APP_API_ENDPOINT + 'ListarRTamano/',
-        method: "POST",
-        headers: headersList,
-        data: bodyContent,
-      }
-      await axios.request(reqOptions)
-      .then(response => {
+    let reqOptions = {
+      url: process.env.REACT_APP_API_ENDPOINT + "ListarRTamano/",
+      method: "POST",
+      headers: headersList,
+      data: bodyContent,
+    };
+    await axios
+      .request(reqOptions)
+      .then((response) => {
         if (response.data.message) {
           toast.fire({
-            icon: 'warning',
-            title: '' + response.data.message,
-          })
+            icon: "warning",
+            title: "" + response.data.message,
+          });
         } else {
           if (response.data.data === undefined) {
-            setIndicadores([])
+            setIndicadores([]);
           }
           setIndicadores(response.data.data);
         }
-      }).catch(error => {
+      })
+      .catch((error) => {
         console.log(error.response.data.message);
         console.log(error.response.status);
         console.log(error.response.headers);
-      })
-  }
+      });
+  };
   const handleCloseIndicadores = () => {
     setOpenIndicadores(false);
-  }
+  };
   const handleOpenIndicadores = () => {
     setOpenIndicadores(true);
-    if (selectedOptions1.length > 0 ) {
-      peticionIndicadores()
+    if (selectedOptions1.length > 0) {
+      peticionIndicadores();
     }
   };
   const handleIndicadores = (event) => {
@@ -1334,11 +1505,11 @@ export default function DataGrid() {
 
   /*Mis Selecciones*/
   const [chipData, setChipData] = React.useState({
-    nombre: '',
-    id: ''
+    nombre: "",
+    id: "",
   });
   const handleDelete = (chipToDelete) => () => {
-    setChipData((chips) => (chips.nombre !== chipToDelete.key));
+    setChipData((chips) => chips.nombre !== chipToDelete.key);
   };
   const handleChip = (e) => {
     let ids;
@@ -1346,21 +1517,26 @@ export default function DataGrid() {
     if (selectedOptions1.length === render.length) {
       let result = selectedOptions1.reduce((acc, cur) => {
         let { id } = cur;
-        let ex = acc.find(x => x.id === id);
-        if (!ex) { ex = id; acc.push(ex); }
+        let ex = acc.find((x) => x.id === id);
+        if (!ex) {
+          ex = id;
+          acc.push(ex);
+        }
         return acc;
-      }, [])
-      ids = result.concat(selectedOptions2, selectedOptions3).join('*')
-      setChipData({ [name]: value, id: ids })
+      }, []);
+      ids = result.concat(selectedOptions2, selectedOptions3).join("*");
+      setChipData({ [name]: value, id: ids });
     } else {
-      ids = selectedOptions1.concat(selectedOptions2, selectedOptions3).join('*')
-      setChipData({ [name]: value, id: ids })
+      ids = selectedOptions1
+        .concat(selectedOptions2, selectedOptions3)
+        .join("*");
+      setChipData({ [name]: value, id: ids });
     }
-  }
+  };
   const GuardarSelecciones = () => {
-    abrirCerrarModalSelect()
-    setChipData({ nombre: [] })
-  }
+    abrirCerrarModalSelect();
+    setChipData({ nombre: [] });
+  };
   const [modalSelect, setModalSelect] = useState(false);
   const [isSelected, setIsSelected] = useState({
     selectedOptions1: false,
@@ -1370,41 +1546,41 @@ export default function DataGrid() {
     selectedOptions5: false,
     selectedOptions6: false,
   });
-  const comprobarCombos =  async () => {
-    if(selectedOptions1.length>0){
-      handleNext()
+  const comprobarCombos = async () => {
+    if (selectedOptions1.length > 0) {
+      handleNext();
     }
     let headersList = {
-      "Authorization": `Bearer ${token}`,
-      "Content-Type": "application/json" 
-    }
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
     let ValuePeticionData;
-    const { periodo } = botonreporte
+    const { periodo } = botonreporte;
     /* Valores condicionales necesarios para variable Semana o Periodo*/
     switch (periodo) {
       case true:
         // Periodo
-        ValuePeticionData = 'GenerarDataPeriodo/';
+        ValuePeticionData = "GenerarDataPeriodo/";
         break;
       // Semana
       default:
-        ValuePeticionData = 'GenerarDataSemanal/'
+        ValuePeticionData = "GenerarDataSemanal/";
         break;
     }
     let bodyContent = JSON.stringify({
-      "IdValor": selectedOptions1,
-      "IdCanal": selectedOptions2.length > 0 ? selectedOptions2 : "",
-      "IdArea": selectedOptions3.length > 0 ? selectedOptions3 : "",
-      "IdZona": selectedOptions33.length > 0 ? selectedOptions33 : "",
-      "IdCesta": selectedOptions4.length > 0 ? selectedOptions4 : "",
-      "IdCategoria": selectedOptions5.length > 0 ? selectedOptions5 : "",
+      IdValor: selectedOptions1,
+      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : "",
+      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : "",
+      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : "",
+      IdCesta: selectedOptions4.length > 0 ? selectedOptions4 : "",
+      IdCategoria: selectedOptions5.length > 0 ? selectedOptions5 : "",
     });
     let reqOptions = {
       url: process.env.REACT_APP_API_ENDPOINT + ValuePeticionData,
       method: "POST",
       headers: headersList,
-      data:bodyContent
-    }
+      data: bodyContent,
+    };
     // axios.request(reqOptions)
     // .then(response => { console.log(response)
     //   setGridApi(response.data.data)
@@ -1414,59 +1590,87 @@ export default function DataGrid() {
     // })
     switch (true) {
       case selectedOptions1.length === 0:
-      setIsSelected({ selectedOptions1: true })
+        setIsSelected({ selectedOptions1: true });
         toast.fire({
-          icon: 'error',
-          title: 'No ha Seleccionado un Período',
+          icon: "error",
+          title: "No ha Seleccionado un Período",
           confirmButtonText: `Ok`,
-        })
+        });
         break;
       case selectedOptions2.length === 0:
-        setIsSelected({ selectedOptions2: true })
+        setIsSelected({ selectedOptions2: true });
         toast.fire({
-          icon: 'error',
-          title: 'No ha Seleccionado un Canal',
+          icon: "error",
+          title: "No ha Seleccionado un Canal",
           confirmButtonText: `Ok`,
-        })
+        });
         break;
       case selectedOptions1.length !== 0:
-        axios.request(reqOptions)
-        .then(response => { console.log(response)
-          setGridApi(response.data.data)
-        })
-        .catch(error => {
-          console.error(error);
-        })
+        axios
+          .request(reqOptions)
+          .then((response) => {
+            console.log(response);
+            setGridApi(response.data.data);
+          })
+          .catch((error) => {
+            console.error(error);
+          });
         break;
       default:
-        setIsSelected({ selectedOptions1: false, selectedOptions2: false, selectedOptions3: false })
+        setIsSelected({
+          selectedOptions1: false,
+          selectedOptions2: false,
+          selectedOptions3: false,
+        });
         break;
     }
-  }
+  };
   const abrirCerrarModalSelect = () => {
     // comprobarCombos()
-  }
+  };
   const bodyMySelect = (
-    <div style={{ width: '25%', height: '40%', justifyContent: 'space-around' }} className={styles.modal}>
-      <h1 style={{ textAlign: 'center' }}>Crear Filtro de Selección</h1>
+    <div
+      style={{ width: "25%", height: "40%", justifyContent: "space-around" }}
+      className={styles.modal}
+    >
+      <h1 style={{ textAlign: "center" }}>Crear Filtro de Selección</h1>
       <div className={styles.agrupar}>
-        <div style={{ width: '100%', overflow: 'visible' }} className='grupoEditar'>
-          <TextField name="nombre" className={styles.inputMaterial} type='text' onChange={handleChip} value={chipData && chipData.nombre} label="Nombre del Filtro" placeholder='Escriba el nombre de sus Selecciones' />
+        <div
+          style={{ width: "100%", overflow: "visible" }}
+          className="grupoEditar"
+        >
+          <TextField
+            name="nombre"
+            className={styles.inputMaterial}
+            type="text"
+            onChange={handleChip}
+            value={chipData && chipData.nombre}
+            label="Nombre del Filtro"
+            placeholder="Escriba el nombre de sus Selecciones"
+          />
         </div>
-        <Stack direction="row" justifyContent={'flex-end'} spacing={2}>
-          <Button style={{ background: "#2FAC6A" }} variant="contained" onClick={() => GuardarSelecciones()}>Guardar</Button>
-          <Button variant="contained" onClick={() => abrirCerrarModalSelect()}>Cancelar</Button>
+        <Stack direction="row" justifyContent={"flex-end"} spacing={2}>
+          <Button
+            style={{ background: "#2FAC6A" }}
+            variant="contained"
+            onClick={() => GuardarSelecciones()}
+          >
+            Guardar
+          </Button>
+          <Button variant="contained" onClick={() => abrirCerrarModalSelect()}>
+            Cancelar
+          </Button>
         </Stack>
       </div>
     </div>
-  )
+  );
   const DeletePeriodo = () => {
     if (selectedOptions1 !== []) {
-      setSelectedOptions1([])
-      setSelectedOptions2([])
-      setSelectedOptions3([])
+      setSelectedOptions1([]);
+      setSelectedOptions2([]);
+      setSelectedOptions3([]);
     }
-  }
+  };
   const [botonreporte, setBotonreporte] = useState({
     semanas: false,
     meses: false,
@@ -1474,55 +1678,58 @@ export default function DataGrid() {
     semestres: false,
     /* Indicador Perido usado en la llamada de canal periodo */
     periodo: false,
-  })
+  });
   /*Controles de Search*/
   const [focus, setFocus] = React.useState(false);
   const [render, setRender] = React.useState(false);
   const [searchText, setSearchText] = React.useState({
-    periodo: '',
-    cesta: '',
-    categoria: '',
-    fabricante: '',
-    marca: '',
-    segmento: ''
-  })
-  console.log(searchText.periodo)
+    periodo: "",
+    cesta: "",
+    categoria: "",
+    fabricante: "",
+    marca: "",
+    segmento: "",
+  });
+  console.log(searchText.periodo);
   const handleChangeSearch = (e) => {
-    const { name, value } = e.target
-    console.log(name, value)
-    setSearchText({ [name]: value })
-    setFocus(true)
-  }
+    const { name, value } = e.target;
+    console.log(name, value);
+    setSearchText({ [name]: value });
+    setFocus(true);
+  };
   /*Controles de Select All*/
   const [showMenuItem, setShowMenuItem] = React.useState({
     periodo: false,
-    cesta: '',
-    categoria: '',
-    fabricante: '',
-    marca: '',
-    segmento: ''
+    cesta: "",
+    categoria: "",
+    fabricante: "",
+    marca: "",
+    segmento: "",
   });
   const controladorAll = () => {
     switch (true) {
       case data.length === 0:
-        setShowMenuItem({ periodo: false })
+        setShowMenuItem({ periodo: false });
         break;
-      case tiempoReporte === 'Trimestres':
-        setShowMenuItem({ periodo: false })
+      case tiempoReporte === "Trimestres":
+        setShowMenuItem({ periodo: false });
         break;
-      case tiempoReporte === 'Semestres':
-        setShowMenuItem({ periodo: false })
+      case tiempoReporte === "Semestres":
+        setShowMenuItem({ periodo: false });
         break;
       default:
-        setShowMenuItem({ periodo: true })
+        setShowMenuItem({ periodo: true });
         break;
     }
-  }
-  const isAllSelectPeriodo = data.length > 0 && selectedOptions1.length === render.length;
-  const isAllSelectCesta = Cesta.length > 0 && selectedOptions4.length === Cesta.length;
-  const isAllSelectCategoria = Categorias.length > 0 && selectedOptions5.length === Categorias.length;
-/*Grilla */
-const [gridApi, setGridApi] = useState(null);
+  };
+  const isAllSelectPeriodo =
+    data.length > 0 && selectedOptions1.length === render.length;
+  const isAllSelectCesta =
+    Cesta.length > 0 && selectedOptions4.length === Cesta.length;
+  const isAllSelectCategoria =
+    Categorias.length > 0 && selectedOptions5.length === Categorias.length;
+  /*Grilla */
+  const [gridApi, setGridApi] = useState(null);
   let valorEspecifivo;
   let valorEspecifivoNombre;
 
@@ -1530,101 +1737,211 @@ const [gridApi, setGridApi] = useState(null);
     case true:
       // Periodo
       if (botonreporte.meses) {
-        valorEspecifivoNombre='Meses'
-      }if (botonreporte.trimestres) {
-        valorEspecifivoNombre='Trimestre'
-      }if (botonreporte.semestres) {
-        valorEspecifivoNombre='Semestres'
+        valorEspecifivoNombre = "Meses";
       }
-      valorEspecifivo = 'Periodo';
+      if (botonreporte.trimestres) {
+        valorEspecifivoNombre = "Trimestre";
+      }
+      if (botonreporte.semestres) {
+        valorEspecifivoNombre = "Semestres";
+      }
+      valorEspecifivo = "Periodo";
       break;
     // Semana
     default:
-      valorEspecifivo = 'Semana';
+      valorEspecifivo = "Semana";
       break;
   }
-const columns = [
-  { headerName:"Canal", field: "Canal", filter:'agTextColumnFilter',pivot: true,enablePivot: true,enableRowGroup: true},
-  { headerName:"Area", field: "Areas", filter:'agTextColumnFilter',pivot: true, enablePivot: true,enableRowGroup: true},
-  { headerName:"Zona", field: "Zona", filter:'agTextColumnFilter',pivot: true, enablePivot: true,enableRowGroup: true},
-  { headerName:'Cesta',pivot: true, field: "Cesta", filter:'agTextColumnFilter', pivot: true, enablePivot: true,enableRowGroup: true},
-  { headerName:'Categoria', field: "Categoria", filter:'agTextColumnFilter', enablePivot: true,enableRowGroup: true},
-  { headerName:'Fabricante', field: 'Fabricante', filter:'agTextColumnFilter', enablePivot: true,enableRowGroup: true},
-  { headerName:'Marca', field: 'Marca', filter:'agTextColumnFilter', enablePivot: true,enableRowGroup: true},
-  { headerName:'Codigo de Barra', field: 'CodigoBarra', filter: 'agNumberColumnFilter',},
-  { headerName:'PrecioMax (Bs)', field: 'PrecioMaxBs', filter: 'agNumberColumnFilter', },
-  { headerName:'PrecioMin (Bs)', field: 'PrecioMinBs', filter: 'agNumberColumnFilter', },
-  { headerName:'PrecioMax ($)', field: 'PrecioMaxDolar', filter: 'agNumberColumnFilter', },
-  { headerName:'PrecioMin ($)', field: 'PrecioMinDolar', filter: 'agNumberColumnFilter', },
-  { headerName:'PrecioProm (Bs)', field: 'PrecioPromBs', filter: 'agNumberColumnFilter', },
-  { headerName:'PrecioProm ($)', field: 'PrecioPromDolar', filter: 'agNumberColumnFilter', },
-  { headerName:'Producto', field: 'Producto', filter: 'agNumberColumnFilter', },
-  { headerName:'Retail', field: 'Retail', filter: 'agNumberColumnFilter', },
-  { headerName:'Segmento', field: 'Segmento', filter: 'agNumberColumnFilter', },
-  // { headerName:'ShareValor', field: 'ShareValor', filter: 'agNumberColumnFilter', pivot: true},
-  // { headerName:'ShareUnidades', field: 'ShareUnidades', filter: 'agNumberColumnFilter', pivot: true},
-  // { headerName:'VariacionUnidades', field: 'VariacionUnidades', filter: 'agNumberColumnFilter', pivot: true},
-  // { headerName:'VariacionValor', field: 'VariacionValor', filter: 'agNumberColumnFilter', pivot: true},
-  // { headerName:'VentasTotalUnidades', field: 'VentasTotalUnidades', filter: 'agNumberColumnFilter', pivot: true},
-  // { headerName:'VentasTotalValor', field: 'VentasTotalValor', filter: 'agNumberColumnFilter', pivot: true},
-  { headerName:'VentasUnidades', field: 'VentasUnidades', filter: 'agNumberColumnFilter',},
-  { headerName:'VentasValor', field: 'VentasValor', filter: 'agNumberColumnFilter',},
-  { headerName:valorEspecifivoNombre, field: valorEspecifivo},
-]
-let bodyContent = JSON.stringify({
-  "IdValor": selectedOptions1,
-  "IdCanal": selectedOptions2.length > 0 ? selectedOptions2 : "",
-  "IdArea": selectedOptions3.length > 0 ? selectedOptions3 : "",
-  "IdZona": selectedOptions33.length > 0 ? selectedOptions33 : "",
-  "IdCesta": selectedOptions4.length > 0 ? selectedOptions4 : "",
-  "IdCategoria": selectedOptions5.length > 0 ? selectedOptions5 : "",
-});
-const defaultColDef = useMemo(() => {
-  return {
-    sortable: true ,
-    enableRowGroup: true,
-    resizable:true,
-    filter: true,
-    flex: 1,
-    minWidth: 200,
-    showRowGroup: false,
-    enablePivot: true,
-    enableValue: true,
-  };
-}, []);
-const sideBar = useMemo(() => {
-  return {
-    toolPanels: [
-      {
-        id: 'columns',
-        labelDefault: 'Columns',
-        labelKey: 'columns',
-        iconKey: 'columns',
-        toolPanel: 'agColumnsToolPanel',
-        
-        toolPanelParams: {
-          allowDragFromColumnsToolPanel:true,
-          suppressRowGroups: false,
-          suppressValues: false,
-          suppressPivots: false,
-          suppressPivotMode: false,
-          suppressColumnFilter: false,
-          suppressColumnSelectAll: false,
-          suppressColumnExpandAll: false,
+  const columns = [
+    {
+      headerName: valorEspecifivoNombre,
+      field: valorEspecifivo,
+      cellStyle: { textAlign: "left" },
+    },
+    {
+      headerName: "Segmento",
+      field: "Segmento",
+      filter: "agNumberColumnFilter",
+      cellStyle: { textAlign: "left" },
+    },
+    {
+      headerName: "Canal",
+      field: "Canal",
+      filter: "agTextColumnFilter",
+      pivot: true,
+      enablePivot: true,
+      rowGroup: true,
+      enableRowGroup: true,
+      hide: true,
+      cellStyle: { textAlign: "left" },
+    },
+    {
+      headerName: "Area",
+      field: "Areas",
+      filter: "agTextColumnFilter",
+      pivot: true,
+      enablePivot: true,
+      rowGroup: true,
+      enableRowGroup: true,
+      hide: true,
+      cellStyle: { textAlign: "left" },
+    },
+    {
+      headerName: "Zona",
+      field: "Zona",
+      filter: "agTextColumnFilter",
+      pivot: true,
+      enablePivot: true,
+      rowGroup: true,
+      enableRowGroup: true,
+      hide: true,
+      cellStyle: { textAlign: "left" },
+    },
+    {
+      headerName: "Cesta",
+      field: "Cesta",
+      filter: "agTextColumnFilter",
+      pivot: true,
+      enablePivot: true,
+      rowGroup: true,
+      enableRowGroup: true,
+      hide: true,
+      cellStyle: { textAlign: "left" },
+    },
+    {
+      headerName: "Categoria",
+      field: "Categoria",
+      filter: "agTextColumnFilter",
+      enablePivot: true,
+      enableRowGroup: true,
+      cellStyle: { textAlign: "left" },
+    },
+    {
+      headerName: "Fabricante",
+      field: "Fabricante",
+      filter: "agTextColumnFilter",
+      enablePivot: true,
+      enableRowGroup: true,
+      cellStyle: { textAlign: "left" },
+    },
+    {
+      headerName: "Marca",
+      field: "Marca",
+      filter: "agTextColumnFilter",
+      enablePivot: true,
+      enableRowGroup: true,
+      cellStyle: { textAlign: "left" },
+    },
+    {
+      headerName: "Codigo de Barra",
+      field: "CodigoBarra",
+      filter: "agNumberColumnFilter",
+      cellStyle: { textAlign: "left" },
+    },
+    {
+      headerName: "PrecioMax ($)",
+      field: "PrecioMaxDolar",
+      filter: "agNumberColumnFilter",
+      cellStyle: { textAlign: "left" },
+    },
+    {
+      headerName: "PrecioMin ($)",
+      field: "PrecioMinDolar",
+      filter: "agNumberColumnFilter",
+      cellStyle: { textAlign: "left" },
+    },
+    {
+      headerName: "PrecioProm ($)",
+      field: "PrecioPromDolar",
+      filter: "agNumberColumnFilter",
+      cellStyle: { textAlign: "left" },
+    },
+    {
+      headerName: "Producto",
+      field: "Producto",
+      filter: "agNumberColumnFilter",
+      cellStyle: { textAlign: "left" },
+    },
+    {
+      headerName: "Retail",
+      field: "Retail",
+      filter: "agNumberColumnFilter",
+      cellStyle: { textAlign: "left" },
+    },
+    // { headerName:'ShareValor', field: 'ShareValor', filter: 'agNumberColumnFilter', pivot: true, cellStyle: { textAlign: "left"},},
+    // { headerName:'ShareUnidades', field: 'ShareUnidades', filter: 'agNumberColumnFilter', pivot: true, cellStyle: { textAlign: "left"},},
+    // { headerName:'VariacionUnidades', field: 'VariacionUnidades', filter: 'agNumberColumnFilter', pivot: true, cellStyle: { textAlign: "left"},},
+    // { headerName:'VariacionValor', field: 'VariacionValor', filter: 'agNumberColumnFilter', pivot: true, cellStyle: { textAlign: "left"},},
+    // { headerName:'VentasTotalUnidades', field: 'VentasTotalUnidades', filter: 'agNumberColumnFilter', pivot: true, cellStyle: { textAlign: "left"},},
+    // { headerName:'VentasTotalValor', field: 'VentasTotalValor', filter: 'agNumberColumnFilter', pivot: true, cellStyle: { textAlign: "left"},},
+    {
+      headerName: "VentasUnidades",
+      field: "VentasUnidades",
+      filter: "agNumberColumnFilter",
+      cellStyle: { textAlign: "left" },
+    },
+    {
+      headerName: "VentasValor",
+      field: "VentasValor",
+      filter: "agNumberColumnFilter",
+      cellStyle: { textAlign: "left" },
+    },
+  ];
+  let bodyContent = JSON.stringify({
+    IdValor: selectedOptions1,
+    IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : "",
+    IdArea: selectedOptions3.length > 0 ? selectedOptions3 : "",
+    IdZona: selectedOptions33.length > 0 ? selectedOptions33 : "",
+    IdCesta: selectedOptions4.length > 0 ? selectedOptions4 : "",
+    IdCategoria: selectedOptions5.length > 0 ? selectedOptions5 : "",
+  });
+  const defaultColDef = useMemo(() => {
+    return {
+      sortable: true,
+      enableRowGroup: true,
+      resizable: true,
+      filter: true,
+      flex: 1,
+      minWidth: 200,
+      showRowGroup: false,
+      enablePivot: true,
+      enableValue: true,
+    };
+  }, []);
+  const autoGroupColumnDef = useMemo(() => {
+    return {
+      minWidth: 200,
+    };
+  }, []);
+  const sideBar = useMemo(() => {
+    return {
+      toolPanels: [
+        {
+          id: "columns",
+          labelDefault: "Columns",
+          labelKey: "columns",
+          iconKey: "columns",
+          toolPanel: "agColumnsToolPanel",
+
+          toolPanelParams: {
+            allowDragFromColumnsToolPanel: true,
+            suppressRowGroups: false,
+            suppressValues: false,
+            suppressPivots: false,
+            suppressPivotMode: false,
+            suppressColumnFilter: false,
+            suppressColumnSelectAll: false,
+            suppressColumnExpandAll: false,
+          },
         },
-      },
-    ],
-    defaultToolPanel: 'columns',
-  };
-}, []);
-console.log(activeStep)
+      ],
+      defaultToolPanel: "columns",
+    };
+  }, []);
   return (
-    <Box sx={{ display: 'flex' }}>
+    <Box sx={{ display: "flex" }}>
       <CssBaseline />
-      <BotonUsuario
-        handleDrawerOpen={handleDrawerOpen}
-        open={open}
-      />
+      <BotonUsuario handleDrawerOpen={handleDrawerOpen} open={open} />
 
       <DrawerComponent
         open={open}
@@ -1648,25 +1965,31 @@ console.log(activeStep)
         setData={setData}
         selectedOptionRetail={selectedOptionRetail}
         setSelectedOptionRetail={setSelectedOptionRetail}
-      >
-
-      </DrawerComponent>
-      <Modal
-        open={modalSelect}
-        onClose={abrirCerrarModalSelect}
-      >{bodyMySelect}
+        Retail={Retail}
+      ></DrawerComponent>
+      <Modal open={modalSelect} onClose={abrirCerrarModalSelect}>
+        {bodyMySelect}
       </Modal>
       <Main open={open}>
         {alerta}
         <div className="Contenedordata">
-          <Stepper activeStep={activeStep} orientation="vertical" className={styles.stepper}>
+          <Stepper
+            activeStep={activeStep}
+            orientation="vertical"
+            className={styles.stepper}
+          >
             <Step className={styles.stepCombo}>
-              <StepContent sx={{'& div':{height:'100% !important'}}}>
+              <StepContent sx={{ "& div": { height: "100% !important" } }}>
                 <section className={styles.table}>
+                  <Modal>
+                    <Box sx={{ display: "flex" }}>
+                      <CircularProgress/>
+                    </Box>
+                  </Modal>
                   <HeaderComponent />
                   <article className={styles.tableOfData}>
                     <SelectPeriodos
-                      className='propor'
+                      className="propor"
                       tiempoReporte={tiempoReporte}
                       selectedOptions1={selectedOptions1}
                       isSelected={isSelected}
@@ -1708,7 +2031,6 @@ console.log(activeStep)
                       SubRegion={SubRegion}
                       selectedOptions33={selectedOptions33}
                       handleSubRegiones={handleChangeSelect}
-
                     />
                     <SelectAtributos
                       selectedOptions4={selectedOptions4}
@@ -1720,7 +2042,6 @@ console.log(activeStep)
                       Cesta={Cesta}
                       setIDCesta={setIDCesta}
                       IDCesta={IDCesta}
-                      
                       isAllSelectCesta={isAllSelectCesta}
                       setRender={setRender}
                       setSearchText={setSearchText}
@@ -1807,197 +2128,250 @@ console.log(activeStep)
                     />
                   </article>
                   <Stack direction="row" className={styles.buttons}>
-                    <button id='save' style={{ width: '35%' }} variant="contained" onClick={abrirCerrarModalSelect}>Guardar</button>
-                    <button id='process' style={{ width: '35%' }} variant="contained" onClick={comprobarCombos}>Procesar</button>
+                    <button
+                      id="save"
+                      style={{ width: "35%" }}
+                      variant="contained"
+                      onClick={abrirCerrarModalSelect}
+                    >
+                      Guardar
+                    </button>
+                    <button
+                      id="process"
+                      style={{ width: "35%" }}
+                      variant="contained"
+                      onClick={comprobarCombos}
+                    >
+                      Procesar
+                    </button>
                   </Stack>
                 </section>
               </StepContent>
             </Step>
             <Step className={styles.stepGrilla}>
-              <StepLabel sx={{'& .MuiStepLabel-iconContainer':{display:'none'}}}>
-                <IconButton onClick={handleBack}><ArrowUpwardRounded/></IconButton>
+              <StepLabel
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  "& .MuiStepLabel-iconContainer": { display: "none" },
+                }}
+              >
+                <Tooltip title="Volver">
+                  <IconButton onClick={handleBack}>
+                    <ArrowUpwardRounded />
+                  </IconButton>
+                </Tooltip>
               </StepLabel>
               <StepContent>
-              <div style={{width:'100%', height:'100vh'}}>
-                <div className="ag-theme-alpine" style={{width:'100%', height:'90%'}}>
-                <div className="ag-theme-alpine" style={ {height: '100%'} }>
-                <AgGridReact
-                    defaultColDef={defaultColDef}
-                    columnDefs={columns}
-                    rowData={gridApi}
-                    alwaysShowHorizontalScroll={true}
-                    alwaysShowVerticalScroll={true}
-                    rowGroupPanelShow={'always'}
-                    groupDisplayType = {'groupRows'}
-                    autoGroupColumnDef={true}
-                    sideBar={sideBar}
-                    enableCharts={true}
-                    animateRows={true}
-                    enableRangeSelection={true}
-                    enableRangeHandle={true}
-                    enableFillHandle={true}
-                    domLayout='normal'
-                    pagination={true}
-                  />
+                <div style={{ width: "100%", height: "100vh" }}>
+                  <div
+                    className="ag-theme-alpine"
+                    style={{ width: "100%", height: "90%" }}
+                  >
+                    <div className="ag-theme-alpine" style={{ height: "100%" }}>
+                      <AgGridReact
+                        defaultColDef={defaultColDef}
+                        columnDefs={columns}
+                        rowData={gridApi}
+                        alwaysShowHorizontalScroll={true}
+                        alwaysShowVerticalScroll={true}
+                        rowGroupPanelShow={"always"}
+                        groupDisplayType={"groupRows"}
+                        sideBar={sideBar}
+                        enableCharts={true}
+                        animateRows={true}
+                        enableRangeSelection={true}
+                        enableRangeHandle={true}
+                        enableFillHandle={true}
+                        autoGroupColumnDef={autoGroupColumnDef}
+                        domLayout="normal"
+                        // pagination={true}
+                      />
+                    </div>
+                  </div>
                 </div>
-                </div>
-              </div>
               </StepContent>
             </Step>
           </Stepper>
         </div>
       </Main>
-      <Button className='atras'
-        style={{ background: 'transparent', position: 'fixed', border: '0.2em solid #fff', minWidth: '50px', borderRadius: '50%' }}
-        variant="contained" onClick={() => window.location = '/retailservices/home'}>
-        <ArrowBack style={{ fontSize: '2.5em', fill: '#fff' }}></ArrowBack>
+      <Button
+        className="atras"
+        style={{
+          background: "transparent",
+          position: "fixed",
+          border: "0.2em solid #fff",
+          minWidth: "50px",
+          borderRadius: "50%",
+        }}
+        variant="contained"
+        href="/retailservices/home"
+      >
+        <ArrowBack style={{ fontSize: "2.5em", fill: "#fff" }}></ArrowBack>
       </Button>
-      
     </Box>
   );
 }
 
-const useStyles = makeStyles({ 
+const useStyles = makeStyles({
   modal: {
-    position: 'absolute',
-    width: '30%',
-    height: '40%',
-    minHeight: '300px',
-    padding: '2%',
-    border: '1.3px solid #000',
-    background: '#ffefd5',
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)',
-    borderRadius: '1em',
-    display: 'inline-flex',
-    flexDirection: 'column',
-    justifyContent: 'space-evenly',
-    alignItems: 'center'
+    position: "absolute",
+    width: "30%",
+    height: "40%",
+    minHeight: "300px",
+    padding: "2%",
+    border: "1.3px solid #000",
+    background: "#ffefd5",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    borderRadius: "1em",
+    display: "inline-flex",
+    flexDirection: "column",
+    justifyContent: "space-evenly",
+    alignItems: "center",
   },
   agrupar: {
-    display: 'flex',
-    width: '100%',
-    height: '40%',
-    justifyContent: 'space-between',
-    flexDirection: 'column',
-    overflow: 'visible',
-    alignItems: 'center'
+    display: "flex",
+    width: "100%",
+    height: "40%",
+    justifyContent: "space-between",
+    flexDirection: "column",
+    overflow: "visible",
+    alignItems: "center",
   },
   inputMaterial: {
-    width: '100%',
-    height: '100%'
+    width: "100%",
+    height: "100%",
   },
   list: {
-    width: '80%',
-    display: 'inline-flex',
-    flexDirection: 'column'
+    width: "80%",
+    display: "inline-flex",
+    flexDirection: "column",
   },
   listItem: {
-    padding: '5% 0', justifyContent: 'center', width: 'auto'
+    padding: "5% 0",
+    justifyContent: "center",
+    width: "auto",
   },
   popOver: {
-    width: '90%', borderRadius: '1.5em', background: 'transparent'
+    width: "90%",
+    borderRadius: "1.5em",
+    background: "transparent",
   },
   buttons: {
-    position: 'absolute', top: '90%', right: '3%', width: '30%', justifyContent: 'space-around',maxHeight:40, height: '5% !important'
+    position: "absolute",
+    top: "90%",
+    right: "3%",
+    width: "30%",
+    justifyContent: "space-around",
+    maxHeight: 40,
+    height: "5% !important",
   },
   botonReportes: {
-    color: '#fff !important', borderRadius: '1.5em !important', width: '90% !important', margin: '4% 0 2% !important', padding: '10% !important'
+    color: "#fff !important",
+    borderRadius: "1.5em !important",
+    width: "90% !important",
+    margin: "4% 0 2% !important",
+    padding: "10% !important",
   },
   Collapse: {
-    position: 'absolute', width: '30%', height: 'auto', top: '15%', left: '15%', zIndex: '100000'
+    position: "absolute",
+    width: "30%",
+    height: "auto",
+    top: "15%",
+    left: "15%",
+    zIndex: "100000",
   },
-  stepper:{
-    height:'100vh',
-    '& div div':{
-      margin:0,
-      padding:0,
-      border:0
+  stepper: {
+    height: "100vh",
+    "& div div": {
+      margin: 0,
+      padding: 0,
+      border: 0,
     },
-    
-    '& .Mui-disabled':{
-      display:'none'
+
+    "& .Mui-disabled": {
+      display: "none",
     },
-    '& .css-1pe7n21-MuiStepConnector-root':{
-      display:'none'
-    }
+    "& .css-1pe7n21-MuiStepConnector-root": {
+      display: "none",
+    },
   },
-  stepCombo:{
-    height:(props) => props!==1?'100%':0,
-    '& div':{
-      height:(props) => props!==1?'100%':0,
-      '& div':{
-        height:(props) => props!==1?'100%':0,
-        '& div':{
-          height:(props) => props!==1?'100%':0,
-        } 
-      } 
-    }
+  stepCombo: {
+    height: (props) => (props !== 1 ? "100%" : 0),
+    "& div": {
+      height: (props) => (props !== 1 ? "100%" : 0),
+      "& div": {
+        height: (props) => (props !== 1 ? "100%" : 0),
+        "& div": {
+          height: (props) => (props !== 1 ? "100%" : 0),
+        },
+      },
+    },
   },
-  stepGrilla:{
-    '& .ag-theme-alpine .ag-popup':{
-            height:'auto',
-             '& div':{
-              '& .ag-layout-normal':{
-                height:'98%'
-              },
-              height:'auto'
-            },
-            
-          },
-    height:(props) => props!==0?'100%':0,
-    '& div':{
-          '& .ag-column-drop-wrapper':{
-            height:'auto'
-          },
-          '& .ag-theme-alpine .ag-row':{
-            fontSize:10
-          }
-    }
+  stepGrilla: {
+    "& .ag-theme-alpine .ag-popup": {
+      height: "auto",
+      "& div": {
+        "& .ag-layout-normal": {
+          height: "98%",
+        },
+        height: "auto",
+      },
+    },
+    height: (props) => (props !== 0 ? "100%" : 0),
+    "& div": {
+      "& .ag-column-drop-wrapper": {
+        height: "auto",
+      },
+      "& .ag-theme-alpine .ag-row": {
+        fontSize: 10,
+      },
+    },
   },
-  table:{
-    margin:0,
-    background: '#fff',
-    width: '100%',
-    height: '100%',
-    alignItems: 'center',
-    justifyItems: 'center',
-    display: 'grid',
-    gridTemplateColumns: '1fr 20%',
-    gridTemplateRows: '15% 70% 15%',
-    '-webkit-box-shadow': '-4px 6px 20px 0px rgba(0, 0, 0, 0.49)',
-    boxShadow: '-4px 6px 20px 0px rgba(0, 0, 0, 0.49)',
+  table: {
+    margin: 0,
+    background: "#fff",
+    width: "100%",
+    height: "100%",
+    alignItems: "center",
+    justifyItems: "center",
+    display: "grid",
+    gridTemplateColumns: "1fr 20%",
+    gridTemplateRows: "15% 70% 15%",
+    "-webkit-box-shadow": "-4px 6px 20px 0px rgba(0, 0, 0, 0.49)",
+    boxShadow: "-4px 6px 20px 0px rgba(0, 0, 0, 0.49)",
   },
-  tableOfData:{
-    gridColumn: '1/3',
-    gridRow: '2/3',
-    display:'flex',
-    alignItems:'center',
-    justifyContent: 'space-around',
-    overflow:'visible',
-    height: '100%',
-    width: '97%',
-  }
-})
+  tableOfData: {
+    gridColumn: "1/3",
+    gridRow: "2/3",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-around",
+    overflow: "visible",
+    height: "100%",
+    width: "97%",
+  },
+});
 
 const drawerWidth = 15;
 
-const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
+const Main = styled("main", { shouldForwardProp: (prop) => prop !== "open" })(
   ({ theme, open }) => ({
     flexGrow: 1,
-    width: '80%',
-    transition: theme.transitions.create('margin', {
+    width: "80%",
+    transition: theme.transitions.create("margin", {
       easing: theme.transitions.easing.sharp,
       duration: theme.transitions.duration.leavingScreen,
     }),
     marginLeft: "",
     ...(open && {
-      transition: theme.transitions.create('margin', {
+      transition: theme.transitions.create("margin", {
         easing: theme.transitions.easing.easeOut,
         duration: theme.transitions.duration.enteringScreen,
       }),
       marginLeft: `${drawerWidth + 2}%`,
     }),
-  }),
+  })
 );

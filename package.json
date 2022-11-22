@@ -1,10 +1,10 @@
 {
   "name": "my-app",
   "version": "0.1.0",
-  "homepage": "http://RAFAEL-DESKTOP-/retailservices/",
+  "homepage": "http://104.238.248.34/retailservices/",
   "private": true,
   "dependencies": {
-    "@ag-grid-enterprise/core": "^28.2.1",
+    "@ag-grid-enterprise/core": "^28.2.0",
     "@emotion/react": "^11.9.0",
     "@emotion/styled": "^11.8.1",
     "@material-ui/core": "^4.12.4",

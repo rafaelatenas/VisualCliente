@@ -28,17 +28,17 @@ class Home extends React.Component {
     /*Controles Popover */
     reports=[
         {id:1, key:1, target:'', url:'/retailservices/home/data', padre:'WOP', name:'Resumen Táctico'},
-        {id:1, key:2, target:'_black', url:`//app.powerbi.com/reportEmbed?${this.LinkWopUser}`, padre:'WOP', name:'WOP'},
-        {id:1, key:3, target:'', url:'', padre:'WOP', name:'Ranking de Tiendas'},
-        {id:1, key:4, target:'', url:'', padre:'WOP', name:'Panel de Cadenas'},
-        {id:2, key:5, target:'', url:'', padre:'Retail Scanning', name:'Reporte Retail Scanning'},
-        {id:2, key:6, target:'', url:'/retailservices/home/MoneyMarket', padre:'Retail Scanning', name:'Money Market'},
-        {id:2, key:7, target:'', url:'', padre:'Retail Scanning', name:'Categories Performance'},
-        {id:2, key:8, target:'', url:'', padre:'Retail Scanning', name:'Suppliers Performance'},
-        {id:2, key:9, target:'', url:'', padre:'Retail Scanning', name:'Skus Performance'},
+        {id:1, key:2, target:'_black', url:`//${sessionStorage.getItem('linkWop')}`, padre:'WOP', name:'WOP'},
+        // {id:1, key:3, target:'', url:'', padre:'WOP', name:'Ranking de Tiendas'},
+        // {id:1, key:4, target:'', url:'', padre:'WOP', name:'Panel de Cadenas'},
+        {id:2, key:5, target:'', url:'', padre:'Retail Scanning', name:'Retail Scanning'},
+        {id:2, key:6, target:'', url:'/retailservices/home/moneymarket', padre:'Retail Scanning', name:'Money Market'},
+        // {id:2, key:7, target:'', url:'', padre:'Retail Scanning', name:'Categories Performance'},
+        // {id:2, key:8, target:'', url:'', padre:'Retail Scanning', name:'Suppliers Performance'},
+        // {id:2, key:9, target:'', url:'', padre:'Retail Scanning', name:'Skus Performance'},
         {id:3, key:10, target:'', url:'', padre:'Home Pantry', name:'Canales y Cadenas'},
-        {id:3, key:11, target:'', url:'', padre:'Home Pantry', name:'NSE'},
-        {id:3, key:12, target:'', url:'', padre:'Home Pantry', name:'Categorías'},
+        {id:3, key:11, target:'', url:'', padre:'Home Pantry', name:'Medicinas'},
+        // {id:3, key:12, target:'', url:'', padre:'Home Pantry', name:'Categorías'},
         {id:4, key:13, target:'', url:'', padre:'CI', name:'Omnibus'},
         {id:4, key:14, target:'', url:'', padre:'CI', name:'CI a la Medida'},
         {id:4, key:15, target:'', url:'', padre:'CI', name:'Reportes Sindicados'},
@@ -83,7 +83,7 @@ class Home extends React.Component {
                                 <IconButton onClick={this.handleCloseModal} title='Cerrar Modal'>
                                 <CloseRounded></CloseRounded>
                             </IconButton>
-                            <Typography>{this.state.textModal}</Typography>
+                            <Typography> {/*{this.state.textModal}*/}</Typography> 
                             </CardContent>
                         </Card>
                     </Box>

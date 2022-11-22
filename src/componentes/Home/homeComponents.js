@@ -65,6 +65,7 @@ const useStylesMoViles = makeStyles((withdScreen, heightScreen) => ({
 }))
 export function HeaderDesktop(props) {
     const { logout, isAuthenticated } = useAuthContext();
+    const nombreUsuario = sessionStorage.getItem('nombre')
 
     const styles = useStyles();
     const actions = [
@@ -114,7 +115,7 @@ export function HeaderDesktop(props) {
             <Paper className={`paperUser boxSecundaryLogo`}>
                 <div>
                     <img src={temporal} alt="Logo de Usuario" title="" />
-                    <Typography>Nombre de Usuario</Typography>
+                    <Typography>{nombreUsuario}</Typography>
                 </div>
             </Paper>
         </Container>

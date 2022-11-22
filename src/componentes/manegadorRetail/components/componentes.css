@@ -59,7 +59,7 @@
     } 
     .items div span{
         width: 100%;
-        font-size: 16px;
+        font-size: 10px;
     }  
 }
 
@@ -173,3 +173,10 @@
 .css-1poimk-MuiPaper-root-MuiMenu-paper-MuiPaper-root-MuiPopover-paper {
     width: 15%;
 } */
+
+
+
+.MuiList-root .MuiList-padding .MuiMenu-list .css-6hp17o-MuiList-root-MuiMenu-list{
+    display: flex;
+    flex-direction: column;
+  }
