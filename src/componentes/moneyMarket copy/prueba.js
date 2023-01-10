@@ -43,7 +43,7 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 }));
 const tblPreciosSemanales = React.createRef();
 
-export default function MoneyMarket() {
+export default function Wop() {
   
   var token = sessionStorage.getItem("token");
   var idCliente = sessionStorage.getItem("Id_Cliente");
@@ -59,8 +59,6 @@ export default function MoneyMarket() {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     ExcPrcWeek();
   };
-  const [TituloSemana, setTituloSemana] = useState([]);
-
   function ExcPrcWeek() {
     let bodyContent = JSON.stringify({
       idSemana: filtros.Semanas,
@@ -73,8 +71,9 @@ export default function MoneyMarket() {
       idCodBarras: filtros.CodBarras,
       idMoneda: filtros.Monedas,
     });
+    console.log(filtros, bodyContent)
     let urlReporte;
-    switch (filtros.Monedas) {
+    switch (filtros.Monedas[0]) {
       case 1:
         urlReporte = "GenerarReporteBolivaresMnyMkt";
         break;
@@ -92,12 +91,8 @@ export default function MoneyMarket() {
     };
     localStorage.setItem("UltimaPeticion", bodyContent);
     /* Se comparan las peticiones para evitar pedir la misma data */
-    const peticionIgual = localStorage.getItem("UltimaPeticion") === bodyContent;
-    console.log(peticionIgual)
-    console.log(localStorage.getItem("UltimaPeticion"))
-    console.log(bodyContent)
-
-
+    const peticionIgual =
+      localStorage.getItem("UltimaPeticion") === bodyContent;
     switch (peticionIgual) {
       case false:
         axios
@@ -112,15 +107,8 @@ export default function MoneyMarket() {
               });
             } else {
               let jsonData = response.data.data;
-              for (let i = 0; i < dataSemanal.length; i++) {
-                const element = dataSemanal[i];
-                if (filtros.Semanas.lastIndexOf(element.id) > -1) {
-                  TituloSemana.push(element.nombre);
-                  console.log(element.nombre)
-                }
-              }
-              setTituloSemana(TituloSemana)
               setDataGrid(jsonData);
+              console.log(jsonData);
             }
           })
           .catch((error) => {
@@ -134,34 +122,23 @@ export default function MoneyMarket() {
             console.log(error.response.headers);
           });
         break;
-      case true:
-        setTituloSemana([])
-        setDataGrid([])
+
+      default:
         axios
           .request(reqOptions)
           .then((response) => {
-            console.log(response)
             if (response.data.message) {
-              console.log(response.data.message,)
+              getLocaleText({respuesta:response.data.message})
               toast.fire({
                 icon: "warning",
                 title: "" + response.data.message,
               });
             } else {
               let jsonData = response.data.data;
-              for (let i = 0; i < dataSemanal.length; i++) {
-                const element = dataSemanal[i];
-                if (filtros.Semanas.lastIndexOf(element.id) > -1) {
-                  TituloSemana.push(element.nombre);
-                  console.log(element.nombre)
-                }
-              }
-              setTituloSemana(TituloSemana)
               setDataGrid(jsonData);
             }
           })
           .catch((error) => {
-            console.log(error)
             toast.fire({
               icon: "error",
               title: "" + error.response.data.message,
@@ -171,10 +148,9 @@ export default function MoneyMarket() {
             console.log(error.response.headers);
           });
         break;
-      default:
-        break;
     }
   }
+
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
@@ -594,7 +570,7 @@ export default function MoneyMarket() {
     Marcas: [],
     Fabricantes: [],
     CodBarras: [],
-    Monedas: [2],
+    Monedas: 2,
   });
   
   const handleChangeFiltros = (e) => {
@@ -839,7 +815,6 @@ export default function MoneyMarket() {
       try {
         await axios.request(reqOptions)
         .then((response) => {
-          console.log(response.data.data)
           if (response.data.message) {
             setSelecciones([])
             console.log(response.data.message)
@@ -868,7 +843,6 @@ export default function MoneyMarket() {
       let ValMarca = params.Id_Marca.split(',').map(Number)
       let ValFabricante = params.Id_Fabricante.split(',').map(Number)
       let ValCodigoBarra = params.CodigoBarra.split(',').map(Number)
-
       setFiltros({
         ...filtros,
         'Semanas':ValSemana,
@@ -879,9 +853,8 @@ export default function MoneyMarket() {
         'Marcas':ValMarca,
         'Fabricantes':ValFabricante,
         'CodBarras':ValCodigoBarra,
-        'Monedas': parseInt(params.Id_Moneda),
+        'Monedas': params.Id_Moneda.split(',').map(Number),
       })
-      PeticionSemanas()
     }
     const handleDeleteFiltros=(params) => {
       const {id, nombre}=params
@@ -937,9 +910,13 @@ export default function MoneyMarket() {
       setExpanded(isExpanded ? panel : false);
       peticionSelecciones()
     };
-  const paramsDecimal = (params) => {
-    return params.value.toString().replace(/[.]/g, ',');
-  };
+  let TituloSemana = [];
+  for (let i = 0; i < dataSemanal.length; i++) {
+    const element = dataSemanal[i];
+    if (filtros.Semanas.lastIndexOf(element.id) > -1) {
+      TituloSemana.push(element.nombre);
+    }
+  }
   const columns = [
     {
       headerName: "Retail",
@@ -987,26 +964,23 @@ export default function MoneyMarket() {
       headerName: "Mínimo",
       field: "Minimo",
       cellStyle: { textAlign: "right" },
-      valueFormatter: paramsDecimal
     },
     {
       headerName: "Máximo",
       field: "Maximo",
       cellStyle: { textAlign: "right" },
-      valueFormatter: paramsDecimal
     },
     {
       headerName: "Promedio",
       field: "Promedio",
       cellStyle: { textAlign: "right" },
-      valueFormatter: paramsDecimal
     },
     {
       headerName: `${TituloSemana[0]}`,
       field: `${filtros.Semanas[0]}`,
       cellRenderer: (params) => {
         if (params.value !== null) {
-          return parseFloat(params.value).toFixed(2).toString().replace(/[.]/g, ',');
+          return parseFloat(params.value).toFixed(2);
         }
         return "--";
       },
@@ -1033,7 +1007,7 @@ export default function MoneyMarket() {
       hide: `${filtros.Semanas[1] ? false : true}`,
       cellRenderer: (params) => {
         if (params.value !== null) {
-          return parseFloat(params.value).toFixed(2).toString().replace(/[.]/g, ',');
+          return parseFloat(params.value).toFixed(2);
         }
         return "--";
       },
@@ -1060,7 +1034,7 @@ export default function MoneyMarket() {
       hide: `${filtros.Semanas[2] ? false : true}`,
       cellRenderer: (params) => {
         if (params.value !== null) {
-          return parseFloat(params.value).toFixed(2).toString().replace(/[.]/g, ',');
+          return parseFloat(params.value).toFixed(2);
         }
         return "--";
       },
@@ -1086,7 +1060,7 @@ export default function MoneyMarket() {
       hide: `${filtros.Semanas[3] ? false : true}`,
       cellRenderer: (params) => {
         if (params.value !== null) {
-          return parseFloat(params.value).toFixed(2).toString().replace(/[.]/g, ',');
+          return parseFloat(params.value).toFixed(2);
         }
         return "--";
       },
@@ -1112,7 +1086,7 @@ export default function MoneyMarket() {
       hide: `${filtros.Semanas[4] ? false : true}`,
       cellRenderer: (params) => {
         if (params.value !== null) {
-          return parseFloat(params.value).toFixed(2).toString().replace(/[.]/g, ',');
+          return parseFloat(params.value).toFixed(2);
         }
         return "--";
       },
@@ -1138,7 +1112,7 @@ export default function MoneyMarket() {
       hide: `${filtros.Semanas[5] ? false : true}`,
       cellRenderer: (params) => {
         if (params.value !== null) {
-          return parseFloat(params.value).toFixed(2).toString().replace(/[.]/g, ',');
+          return parseFloat(params.value).toFixed(2);
         }
         return "--";
       },
@@ -1164,7 +1138,7 @@ export default function MoneyMarket() {
       hide: `${filtros.Semanas[6] ? false : true}`,
       cellRenderer: (params) => {
         if (params.value !== null) {
-          return parseFloat(params.value).toFixed(2).toString().replace(/[.]/g, ',');
+          return parseFloat(params.value).toFixed(2);
         }
         return "--";
       },
@@ -1190,7 +1164,7 @@ export default function MoneyMarket() {
       hide: `${filtros.Semanas[7] ? false : true}`,
       cellRenderer: (params) => {
         if (params.value !== null) {
-          return parseFloat(params.value).toFixed(2).toString().replace(/[.]/g, ',');
+          return parseFloat(params.value).toFixed(2);
         }
         return "--";
       },
@@ -1216,7 +1190,7 @@ export default function MoneyMarket() {
       hide: `${filtros.Semanas[8] ? false : true}`,
       cellRenderer: (params) => {
         if (params.value !== null) {
-          return parseFloat(params.value).toFixed(2).toString().replace(/[.]/g, ',');
+          return parseFloat(params.value).toFixed(2);
         }
         return "--";
       },
@@ -1252,7 +1226,7 @@ export default function MoneyMarket() {
     };
   }, []);
   const getLocaleText = useCallback((params) => {
-    console.log(params.response, params)
+    console.log(params.respuesta)
     switch (params.key) {
       case "rowGroupColumnsEmptyMessage":
         return "Arrastre aquí para agrupar.";

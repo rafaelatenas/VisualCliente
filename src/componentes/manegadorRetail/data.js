@@ -5,44 +5,22 @@ import "ag-grid-community/styles/ag-theme-alpine.css"; // Optional theme CSS
 import * as React from "react";
 import "./data.css";
 import { styled } from "@mui/material/styles";
-import { Box, CssBaseline, ListItemText, IconButton } from "@material-ui/core";
+import { Box, CssBaseline, IconButton } from "@material-ui/core";
 import { ArrowBack, ArrowUpwardRounded } from "@material-ui/icons";
-import {
-  MenuItem,
-  Stack,
-  Button,
-  TextField,
-  Checkbox,
-  Stepper,
-  Step,
-  StepLabel,
-  StepContent,
-  Tooltip,
-  CircularProgress,
-} from "@mui/material";
+import {Stack,Button,Step,StepLabel,StepContent,Tooltip,CircularProgress, Drawer, Divider,Stepper, Typography} from "@mui/material";
 import { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { Modal } from "@material-ui/core";
 import axios from "axios";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-import {
-  DrawerComponent,
-  BotonUsuario,
-  HeaderComponent,
-} from "./components/Components";
-import {
-  SelectCanales,
-  SelectAtributos,
-  SelectIndicadores,
-  SelectPeriodos,
-  SelectRegiones,
-} from "./components/Selects";
+import {BotonUsuario,HeaderComponent, DrawerHeaderComponent, CardComponents, MySelecctionComponent, MenuAtenas, SelecctionRetail,} from "./components/Components";
+import {SelectCanales,SelectAtributos,SelectIndicadores,SelectPeriodos,SelectRegiones,} from "./components/Selects";
 import Alert from "@mui/material/Alert";
-
 import { useMemo } from "react";
 import { useEffect } from "react";
-import { display } from "@mui/system";
+import { desencriptar } from "../../functionsValidas/cripto";
+
 const MySwal = withReactContent(Swal);
 const toast = MySwal.mixin({
   toast: true,
@@ -60,6 +38,10 @@ export default function DataGrid() {
 
   const handleNext = () => {
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    if (open!== false) {
+      handleDrawerClose()
+    }
+
   };
   const handleBack = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
@@ -67,7 +49,12 @@ export default function DataGrid() {
 
   const styles = useStyles(activeStep);
   var token = sessionStorage.getItem("token");
-  const [selectedOptionRetail, setSelectedOptionRetail] = useState(null);
+  const [idClienteCrip, setidCliente]=useState()
+  var idPerfil = sessionStorage.getItem("ID_Perfil");
+  const [selectedOptionRetail, setSelectedOptionRetail] = useState({
+    id:[],
+    nombre:[]
+  });
   /*Control del ComponetDrawer*/
   const [alert, setAlert] = React.useState(false);
   const alerta = (
@@ -99,10 +86,12 @@ export default function DataGrid() {
       </Alert>
     </Box>
   );
-
   const [open, setOpen] = React.useState(false);
   const handleDrawerOpen = () => {
     setOpen(true);
+    if (setActiveStep !== 0) {
+      setActiveStep(0)
+    }
   };
   const handleDrawerClose = () => {
     setOpen(false);
@@ -110,18 +99,13 @@ export default function DataGrid() {
   /*Elementos de Control Menu Desplegable*/
   const [anchorEl, setAnchorEl] = React.useState(null);
   const handleClick = (event) => {
+    console.log(event.currentTarget)
     setAnchorEl(event.currentTarget);
   };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const openo = Boolean(anchorEl);
-  const id = openo ? "simple-popover" : undefined;
-
   /*Data Periodo y Tiempo del Reporte*/
   const [tiempoReporte, setTiempoReporte] = React.useState([]);
   const seleccionarPeriodo = (parametro) => {
+    console.log(parametro)
     setTiempoReporte(parametro);
     setAlert(false);
     handleDrawerClose();
@@ -129,78 +113,70 @@ export default function DataGrid() {
 
   const [selectedOptions, setSelectedOption]=useState({
     Periodo:[],
-    Canal:[],
-    Area:[],
+    Canales:[],
+    Areas:[],
     Zona:[],
     Cesta:[],
-    Categrias:[],
+    Categorias:[],
     Fabricantes:[],
     Marcas:[],
-    Segmentos:[],
+    Segmento:[],
     Tamanno:[],
     RTamanno:[],
-    Productos:[],
-    CodBarras:[],
+    Producto:[],
+    CodBarra:[],
     Nacionalidad:[],
-    Indicadores:[],
+    Indicador:[],
+  })
+  const [Openfiltros, setOpenfiltros]=useState({
+    Periodo:false,
+    Canales:false,
+    Areas:false,
+    Zona:false,
+    Cesta:false,
+    Categorias:false,
+    Fabricantes:false,
+    Marcas:false,
+    Segmentos:false,
+    Tamanno:false,
+    RTamanno:false,
+    Producto:false,
+    CodBarra:false,
+    Nacionalidad:false,
+    Indicador:false,
   })
   const [data, setData] = useState([]);
-  const [selectedOptions1, setSelectedOptions1] = useState([]);
-
   /*Data Canales*/
   const [canal, setCanal] = useState([]);
-  const [selectedOptions2, setSelectedOptions2] = useState([]);
-
   /*Data Regiones*/
-  const [region, setRegion] = useState([]);
-  const [selectedOptions3, setSelectedOptions3] = useState([]);
+  const [area, setArea] = useState([]);
   /*Data SubRegionres*/
-  const [selectedOptions33, setSelectedOptions33] = useState([]);
-
+  const [zona, setZona] = useState([]);
   /*Data Cestas*/
   const [Cesta, setCesta] = useState([]);
-  const [selectedOptions4, setSelectedOptions4] = useState([]);
-
   /*Data Categorias*/
   const [Categorias, setCategorias] = useState([]);
-  const [selectedOptions5, setSelectedOptions5] = useState([]);
   /*Data Fabricantes*/
   const [Fabricante, setFabricante] = useState([]);
-  const [selectedOptions6, setSelectedOptions6] = useState([]);
-
   /*Data Marcas*/
   const [Marcas, setMarcas] = useState([]);
-  const [selectedOptions7, setSelectedOptions7] = useState([]);
-
   /*Data Segmentos*/
   const [Segmentos, setSegmentos] = useState([]);
-  const [selectedOptions8, setSelectedOptions8] = useState([]);
-
   /*Data Tamaño*/
   const [Tamanno, setTamanno] = useState([]);
-  const [selectedOptions9, setSelectedOptions9] = useState([]);
-
   /*Data Rango de Tamaño*/
   const [RTamanno, setRTamanno] = useState([]);
-  const [selectedOptions10, setSelectedOptions10] = useState([]);
-
   /*Data Productos*/
   const [Productos, setProductos] = useState([]);
-  const [selectedOptions11, setSelectedOptions11] = useState([]);
-
   /*Data Codigo de Barras*/
   const [CBarras, setCBarras] = useState([]);
-  const [selectedOptions12, setSelectedOptions12] = useState([]);
-
   /*Data Nacionalidad*/
   const [Nacionalidad, setNacionalidad] = useState([]);
-  const [selectedOptions13, setSelectedOptions13] = useState([]);
-
   /*Data Indicadores*/
   const [Indicadores, setIndicadores] = useState([]);
-  const [selectedOptions14, setSelectedOptions14] = useState([]);
   /*Data Retail*/
   const [Retail, setRetail] = useState([]);
+
   useEffect(() => {
     const PeticionRetailers = async () => {
       try {
@@ -215,7 +191,6 @@ export default function DataGrid() {
                 title: "" + response.data.message,
               });
             } else {
-              console.log(response);
               setRetail(response.data.data);
             }
           });
@@ -231,51 +206,335 @@ export default function DataGrid() {
         console.log(error.response.headers);
       }
     };
-    PeticionRetailers();
+    const Peticiondesencriptado = async () => {
+      try{
+        const desencriptado = await desencriptar(process.env.REACT_APP_PUBLIC_KEY_NORMAL, sessionStorage.getItem('Id_Cliente'));
+        setidCliente(desencriptado)
+        switch (desencriptado === process.env.REACT_APP_PUBLIC_ID_SECRET) {
+          case true:
+            PeticionRetailers()
+            break;
+          default:
+            break;
+        }
+      } catch(e){
+        console.log("Error desencriptando: " + e.message + ". ¿La contraseña es la correcta y la información está en base64?")
+      }
+    }
+    Peticiondesencriptado()
   }, []);
-
   /* Funcion Onchange Agrupada de todos los combos */
   const handleChangeSelect = (event) => {
     const { name, value } = event.target;
-    setSelectedOption({...selectedOptions,[name]:value})
+    switch (value[value.length - 1] === "all") {
+      case true:
+        switch (name) {
+          case "Periodo":
+            let todosPeriodos = [];
+            for (let i = 0; i < data.length; i++) {
+              const element = data[i];
+              todosPeriodos.push(element.id)
+            }
+            if (selectedOptions.Periodo.length>0) {
+              setSelectedOption({ ...selectedOptions, 'Periodo':[]})
+            }else{
+              setSelectedOption({ ...selectedOptions, 'Periodo': todosPeriodos })
+            };
+            break;
+          case "Canales":
+            let todosCanal = [];
+            for (let i = 0; i < canal.length; i++) {
+              const element = canal[i];
+              todosCanal.push(element.id)
+              console.log(element)
+            }
+            if (selectedOptions.Canales.length>0) {
+              setSelectedOption({ ...selectedOptions, 'Canales':[]})
+            }else{
+              setSelectedOption({ ...selectedOptions, 'Canales': todosCanal })
+            };
+            break;
+          case "Areas":
+            let todosArea = [];
+            for (let i = 0; i < area.length; i++) {
+              const element = area[i];
+              todosArea.push(element.id)
+            }
+            if (selectedOptions.Areas.length>0) {
+              setSelectedOption({ ...selectedOptions, 'Area':[]})
+            }else{
+              setSelectedOption({ ...selectedOptions, 'Area': todosArea })
+            };
+            break;
+          case "Zona":
+            let todosZona = [];
+            for (let i = 0; i < zona.length; i++) {
+              const element = zona[i];
+              todosZona.push(element.id)
+            }
+            if (selectedOptions.Zona.length>0) {
+              setSelectedOption({ ...selectedOptions, 'Zona':[]})
+            }else{
+              setSelectedOption({ ...selectedOptions, 'Zona': todosZona })
+            };
+            break;
+          case "Cesta":
+            let todosCesta = [];
+            for (let i = 0; i < Cesta.length; i++) {
+              const element = Cesta[i];
+              todosCesta.push(element.id)
+            }
+            if (selectedOptions.Cesta.length>0) {
+              setSelectedOption({ ...selectedOptions, 'Cesta':[]})
+            }else{
+              setSelectedOption({ ...selectedOptions, 'Cesta': todosCesta })
+            };
+            break;
+          case "Categorias":
+            let todosCategoria = [];
+            for (let i = 0; i < Categorias.length; i++) {
+              const element = Categorias[i];
+              todosCategoria.push(element.id)
+            }
+            if (selectedOptions.Categorias.length>0) {
+              setSelectedOption({ ...selectedOptions, 'Categorias':[]})
+            }else{
+              setSelectedOption({ ...selectedOptions, 'Categorias': todosCategoria })
+            };
+            break;
+          case "Fabricantes":
+            let todosFabricante = [];
+            for (let i = 0; i < Fabricante.length; i++) {
+              const element = Fabricante[i];
+              todosFabricante.push(element.id)
+            }
+            if (selectedOptions.Fabricante.length>0) {
+              setSelectedOption({ ...selectedOptions, 'Fabricante':[]})
+            }else{
+              setSelectedOption({ ...selectedOptions, 'Fabricante': todosFabricante })
+            };
+            break;
+          case "Marcas":
+            let todosMarca = [];
+            for (let i = 0; i < Marcas.length; i++) {
+              const element = Marcas[i];
+              todosMarca.push(element.id)
+            }
+            if (selectedOptions.Marca.length>0) {
+              setSelectedOption({ ...selectedOptions, 'Marca':[]})
+            }else{
+              setSelectedOption({ ...selectedOptions, 'Marca': todosMarca })
+            };
+            break;
+          case "Segmento":
+            let todosSegmento = [];
+            for (let i = 0; i < Segmentos.length; i++) {
+              const element = Segmentos[i];
+              todosSegmento.push(element.id)
+            }
+            if (selectedOptions.Segmento.length>0) {
+              setSelectedOption({ ...selectedOptions, 'Segmento':[]})
+            }else{
+              setSelectedOption({ ...selectedOptions, 'Segmento': todosSegmento })
+            };
+            break;
+          case "Tamanno":
+            let todosTamanno = [];
+            for (let i = 0; i < Tamanno.length; i++) {
+              const element = Tamanno[i];
+              todosTamanno.push(element.id)
+            }
+            if (selectedOptions.Tamanno.length>0) {
+              setSelectedOption({ ...selectedOptions, 'Tamanno':[]})
+            }else{
+              setSelectedOption({ ...selectedOptions, 'Tamanno': todosTamanno })
+            };
+            break;
+          case "Rtamanno":
+            let todosRtamanno = [];
+            for (let i = 0; i < RTamanno.length; i++) {
+              const element = RTamanno[i];
+              todosRtamanno.push(element.id)
+            }
+            if (selectedOptions.Rtamanno.length>0) {
+              setSelectedOption({ ...selectedOptions, 'Rtamanno':[]})
+            }else{
+              setSelectedOption({ ...selectedOptions, 'Rtamanno': todosRtamanno })
+            };
+            break;
+          case "Producto":
+            let todosProducto = [];
+            for (let i = 0; i < Productos.length; i++) {
+              const element = Productos[i];
+              todosProducto.push(element.id)
+            }
+            if (selectedOptions.Producto.length>0) {
+              setSelectedOption({ ...selectedOptions, 'Producto':[]})
+            }else{
+              setSelectedOption({ ...selectedOptions, 'Producto': todosProducto })
+            };
+            break;
+          case "CodBarra":
+            let todosCodBarra = [];
+            for (let i = 0; i < CBarras.length; i++) {
+              const element = CBarras[i];
+              todosCodBarra.push(element.id)
+            }
+            if (selectedOptions.CodBarra.length>0) {
+              setSelectedOption({ ...selectedOptions, 'CodBarra':[]})
+            }else{
+              setSelectedOption({ ...selectedOptions, 'CodBarra': todosCodBarra })
+            };
+            break;
+          case "Nacionalidad":
+            let todoNacionalidad = [];
+            for (let i = 0; i < Nacionalidad.length; i++) {
+              const element = Nacionalidad[i];
+              todoNacionalidad.push(element.id)
+            }
+            if (selectedOptions.Nacionalidad.length>0) {
+              setSelectedOption({ ...selectedOptions, 'Nacionalidad':[]})
+            }else{
+              setSelectedOption({ ...selectedOptions, 'Nacionalidad': todoNacionalidad })
+            };
+            break;
+          case "Indicador":
+            let todoCodBarra = [];
+            for (let i = 0; i < Indicadores.length; i++) {
+              const element = Indicadores[i];
+              todoCodBarra.push(element.id)
+            }
+            if (selectedOptions.Indicador.length>0) {
+              setSelectedOption({ ...selectedOptions, 'Indicador':[]})
+            }else{
+              setSelectedOption({ ...selectedOptions, 'Indicador': todoCodBarra })
+            };
+            break;
+          default:
+            break;
+        }
+        break;
+      default:
+        setSelectedOption({ ...selectedOptions, [name]: value });
+        break;
+    }
+  };
+  const handleOpenFiltros = (name) => {
+    setOpenfiltros({ ...Openfiltros, [name]: true });
     switch (name) {
       case "Periodo":
-        const ValorID = render.map(function ({ id }) {
-          return id;
-        });
-        if (value[value.length - 1] === "all") {
-          setSelectedOptions1(
-            selectedOptions1.length === data.length ? [] : ValorID
-          );
-          return;
+        setSelectedOption({ ...selectedOptions,
+          'Canales': [],
+          'Areas': [],
+          'Zona': [],
+          'Cesta': [],
+          'Categorias': [],
+          'Fabricantes': [],
+          'Marcas': [],
+          'Segmento': [],
+          'Tamanno': [],
+          'RTamanno': [],
+          'Producto': [],
+          'CodBarra': [],
+          'Nacionalidad': [],
+          'Indicador': [],})
+        if (sessionStorage.getItem('Id_Cliente') === '11' && selectedOptionRetail.id.length<1) {
+          handleDrawerOpen()
+          setOpenfiltros({ ...Openfiltros, 'Periodo': false });
         }
-        setSelectedOptions1(value);
+        switch (tiempoReporte) {
+          case 'Semanas':
+            peticionSemanas()
+            break;
+          case 'Meses':
+            peticionMeses()
+            break;
+          case 'Trimestres':
+            PeticionTrimestres()
+            break;
+          case 'Semestres':
+            PeticionSemestres()
+            break;
+          default:
+            break;
+        }
         break;
       case "Canales":
-        setSelectedOptions2(value);
+        setSelectedOption({ ...selectedOptions,
+          'Areas': [],
+          'Zona': [],
+          'Cesta': [],
+          'Categorias': [],
+          'Fabricantes': [],
+          'Marcas': [],
+          'Segmento': [],
+          'Tamanno': [],
+          'RTamanno': [],
+          'Producto': [],
+          'CodBarra': [],
+          'Nacionalidad': [],
+          'Indicador': [],})
+        peticionCanales();
         break;
       case "Areas":
-        setSelectedOptions3(value);
+        setSelectedOption({ ...selectedOptions,
+          'Zona': [],
+          'Cesta': [],
+          'Categorias': [],
+          'Fabricantes': [],
+          'Marcas': [],
+          'Segmento': [],
+          'Tamanno': [],
+          'RTamanno': [],
+          'Producto': [],
+          'CodBarra': [],
+          'Nacionalidad': [],
+          'Indicador': [],})
+        peticionArea();
         break;
-      case "Zonas":
-        setSelectedOptions33(value);
+      case "Zona":
         break;
       case "Cesta":
-        setSelectedOptions4(value);
-        break;
+          peticionCestas();
+          break;
       case "Categorias":
-        setSelectedOptions5(value);
+        peticionCategorias();
         break;
       case "Fabricantes":
-        setSelectedOptions6(value);
+        peticionFabricantes();
         break;
       case "Marcas":
-        setSelectedOptions7(value);
+        peticionMarcas();
+        break;
+      case "Segmento":
+        peticionSegmentos();
+        break;
+      case "Tamanno":
+        peticionTamanno();
+        break;
+      case "RTamanno":
+        peticionRTamanno();
+        break;
+      case "Producto":
+        peticionProducto();
+        break;
+      case "CodBarra":
+        peticionCBarra();
+        break;
+      case "Nacionalidad":
+        peticionNacionalidad();
+        break;
+      case "Indicador":
+        peticionIndicadores();
         break;
       default:
         break;
     }
   };
+  const handleCloseFiltros = (name) => {
+    setOpenfiltros({ ...Openfiltros, [name]: false });
+  };
+
   /*Funciones de Listar PERÍODOS 😄*/
   const peticionSemanas = async () => {
     setBotonreporte({ semanas: true });
@@ -291,6 +550,7 @@ export default function DataGrid() {
           });
         } else {
           setData(response.data.data);
+
         }
       })
       .catch((error) => {
@@ -390,48 +650,25 @@ export default function DataGrid() {
         console.log(error.response.headers);
       });
   };
-  const [openPeriodo, setOpenPeriodo] = React.useState(false);
-  const handleClosePeriodo = () => {
-    setOpenPeriodo(false);
-    if (selectedOptions1.length >= 1) {
-      peticionCanales();
-    }
-  };
-  const handleOpenPeriodo = () => {
-    controladorAll();
-    setCanal([]);
-
-    if (selectedOptions2.length >= 1) {
-      setSelectedOptions2([]);
-      setSelectedOptions3([]);
-      setSelectedOptions4([]);
-      setSelectedOptions5([]);
-      setSelectedOptions6([]);
-    }
-
-    if (tiempoReporte.length === 0) {
-      setOpen(true);
-      setOpenPeriodo(false);
-      setAlert(true);
-    } else {
-      setOpenPeriodo(true);
-      setAlert(false);
-    }
-  };
-
   /*Funciones de Listar CANALES 😄*/
   const peticionCanales = async () => {
-    const { periodo } = botonreporte;
+    const {semanas,meses,trimestres,semestres}= botonreporte;
     let Tipo;
-    /* Valores condicionales necesarios para variable Semana o Periodo*/
-    switch (periodo) {
-      case true:
-        // Periodo
+    /* Valores condicionales necesarios para variable Semana, Meses, Trimestres y Semestres*/
+    switch (true) {
+      case semanas:
+        Tipo = [0];
+        break;
+      case meses:
         Tipo = [1];
         break;
-      // Semana
+      case trimestres:
+        Tipo = [2];
+      break;
+      case semestres:
+        Tipo = [3];
+      break;
       default:
-        Tipo = [0];
         break;
     }
     let headersList = {
@@ -440,8 +677,9 @@ export default function DataGrid() {
     };
 
     let bodyContent = JSON.stringify({
-      IdValor: selectedOptions1,
+      IdValor: selectedOptions.Periodo,
       IdTipo: Tipo,
+      IdRetail: selectedOptionRetail.id,
     });
 
     let reqOptions = {
@@ -460,6 +698,7 @@ export default function DataGrid() {
             title: "" + response.data.message,
           });
         } else {
+          console.log(response)
           setCanal(response.data.data);
         }
       })
@@ -475,46 +714,25 @@ export default function DataGrid() {
         console.log(error.response.headers);
       });
   };
-  const [openCanales, setOpenCanales] = React.useState(false);
-
-  const handleCloseCanal = () => {
-    setOpenCanales(false);
-  };
-  const handleOpenCanales = () => {
-    setOpenCanales(true);
-
-    if (selectedOptions2.length >= 1) {
-      setRegion([]);
-      setSelectedOptions2([]);
-      setSelectedOptions3([]);
-      setSelectedOptions4([]);
-      setSelectedOptions5([]);
-      setSelectedOptions6([]);
-      setSelectedOptions7([]);
-      setSelectedOptions8([]);
-      setSelectedOptions9([]);
-      setSelectedOptions10([]);
-      setSelectedOptions11([]);
-      setSelectedOptions12([]);
-      setSelectedOptions13([]);
-    }
-  };
-
-
   /*Funciones de Listar REGIONES 😄*/
-  const [openRegiones, setOpenRegiones] = React.useState(false);
-  const [idRegiones, setIdRegiones] = useState();
-
-  const peticionRegiones = async () => {
-    const { periodo } = botonreporte;
+  const peticionArea = async () => {
+    const {semanas,meses,trimestres,semestres}= botonreporte;
     let Tipo;
-    switch (periodo) {
-      case true:
+    /* Valores condicionales necesarios para variable Semana, Meses, Trimestres y Semestres*/
+    switch (true) {
+      case semanas:
+        Tipo = [0];
+        break;
+      case meses:
         Tipo = [1];
         break;
-
+      case trimestres:
+        Tipo = [2];
+      break;
+      case semestres:
+        Tipo = [3];
+      break;
       default:
-        Tipo = [0];
         break;
     }
     let headersList = {
@@ -524,9 +742,9 @@ export default function DataGrid() {
 
     let bodyContent = JSON.stringify({
       IdTipo: Tipo,
-      IdValor: selectedOptions1,
-      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : "",
-    });
+      IdValor: selectedOptions.Periodo,
+      IdCanal: selectedOptions.Canales.length > 0 ? selectedOptions.Canales : "",
+      IdRetail: selectedOptions.Canales.indexOf(selectedOptionRetail.id) > -1?selectedOptionRetail.id:"",    });
 
     let reqOptions = {
       url: process.env.REACT_APP_API_ENDPOINT + "ListarArea/",
@@ -543,8 +761,7 @@ export default function DataGrid() {
             title: "" + response.data.message,
           });
         } else {
-          setRegion(response.data.data);
-          console.log(response.data.data);
+          setArea(response.data.data);
         }
       })
       .catch((error) => {
@@ -558,31 +775,7 @@ export default function DataGrid() {
         console.log(error);
       });
   };
-
-  const handleOpenRegiones = () => {
-    setOpenRegiones(true);
-    peticionRegiones();
-    if (selectedOptions3.length >= 1) {
-      setSelectedOptions3([]);
-      setSelectedOptions4([]);
-      setSelectedOptions5([]);
-      setSelectedOptions6([]);
-      setSelectedOptions7([]);
-      setSelectedOptions8([]);
-      setSelectedOptions9([]);
-      setSelectedOptions10([]);
-      setSelectedOptions11([]);
-      setSelectedOptions12([]);
-      setSelectedOptions13([]);
-    }
-  };
-  const handleCloseRegion = () => {
-    setOpenRegiones(false);
-    setShowMenuItem({ categoria: true });
-  };
-
   /*Funcion onChange del combo SubRegiones */
-  const [SubRegion, setSubRegion] = useState([]);
   const peticionSubRegiones = async (value) => {
     const { periodo } = botonreporte;
     let url;
@@ -599,8 +792,8 @@ export default function DataGrid() {
         headers: {
           Authorization: `Bearer ${token}`,
         },
-        IdOption: selectedOptions1,
-        IdCanal: selectedOptions2,
+        IdOption: selectedOptions.Periodo,
+        IdCanal: selectedOptions.Canal,
         IdArea: value,
       })
       .then((response) => {
@@ -613,63 +806,25 @@ export default function DataGrid() {
         console.log(error.response.headers);
       });
   };
-  const handleSubRegiones = (event) => {
-    const value = event.target.value;
-  };
-  const OptionSubRegion = SubRegion.map((item) => (
-    <MenuItem key={item.id} value={item.id}>
-      <Checkbox checked={selectedOptions2.indexOf(item.id) > -1} />
-      <ListItemText sx={{ fontSize: "1em" }} primary={item.nombre} />
-    </MenuItem>
-  ));
-
   /*Funciones de Listar Cestas 😄*/
-  const [openCesta, setOpenCesta] = React.useState(false);
-  const [IDCesta, setIDCesta] = React.useState({});
-
-  const handleCesta = (event) => {
-    const value = event.target.value;
-    if (value[value.length - 1] === "all") {
-      setSelectedOptions4(
-        selectedOptions4.length === Cesta.length ? [] : Cesta
-      );
-      return;
-    } else {
-      setSelectedOptions4(value);
-    }
-  };
-
-  const handleCloseCesta = () => {
-    setOpenCesta(false);
-  };
-  const handleOpenCesta = () => {
-    setOpenCesta(true);
-    peticionCestas();
-    if (selectedOptions4.length >= 1) {
-      setSelectedOptions4([]);
-      setSelectedOptions5([]);
-      setSelectedOptions6([]);
-      setSelectedOptions7([]);
-      setSelectedOptions8([]);
-      setSelectedOptions9([]);
-      setSelectedOptions10([]);
-      setSelectedOptions11([]);
-      setSelectedOptions12([]);
-      setSelectedOptions13([]);
-    }
-  };
   const peticionCestas = async () => {
-    const { periodo } = botonreporte;
+    const {semanas,meses,trimestres,semestres}= botonreporte;
     let Tipo;
-    /* Valores condicionales necesarios para variable Semana o Periodo*/
-    switch (periodo) {
-      case true:
-        // Periodo
+    /* Valores condicionales necesarios para variable Semana, Meses, Trimestres y Semestres*/
+    switch (true) {
+      case semanas:
+        Tipo = [0];
+        break;
+      case meses:
         Tipo = [1];
         break;
-      // Semana
+      case trimestres:
+        Tipo = [2];
+      break;
+      case semestres:
+        Tipo = [3];
+      break;
       default:
-        Tipo = [0];
         break;
     }
     let headersList = {
@@ -679,12 +834,13 @@ export default function DataGrid() {
 
     let bodyContent = JSON.stringify({
       IdTipo: Tipo,
-      IdValor: selectedOptions1,
-      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : "",
-      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : "",
-      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : "",
+      IdValor: selectedOptions.Periodo,
+      IdCanal: selectedOptions.Canales.length > 0 ? selectedOptions.Canales : "",
+      IdArea: selectedOptions.Areas.length > 0 ? selectedOptions.Areas : "",
+      IdZona: selectedOptions.Zona.length > 0 ? selectedOptions.Zona :"",
+      IdRetail: selectedOptions.Canales.indexOf(selectedOptionRetail.id) > -1?selectedOptionRetail.id:"",
     });
-
+console.log(bodyContent)
     let reqOptions = {
       url: process.env.REACT_APP_API_ENDPOINT + "ListarCesta/",
       method: "POST",
@@ -710,63 +866,38 @@ export default function DataGrid() {
       });
   };
   /*Funciones de Listar Categorias 😄*/
-  const [openCategoria, setOpenCategoria] = React.useState(false);
-  const handleCategoria = (event) => {
-    const value = event.target.value;
-    if (value[value.length - 1] === "all") {
-      setSelectedOptions5(
-        selectedOptions5.length === Categorias.length ? [] : Categorias
-      );
-      return;
-    } else {
-      setSelectedOptions5(value);
-    }
-  };
-
-  const handleCloseCategoria = () => {
-    setOpenCategoria(false);
-  };
-  const handleOpenCategoria = () => {
-    setOpenCategoria(true);
-    peticionCategorias();
-    if (selectedOptions5.length >= 1) {
-      setSelectedOptions5([]);
-      setSelectedOptions6([]);
-      setSelectedOptions7([]);
-      setSelectedOptions8([]);
-      setSelectedOptions9([]);
-      setSelectedOptions10([]);
-      setSelectedOptions11([]);
-      setSelectedOptions12([]);
-      setSelectedOptions13([]);
-    }
-  };
   const peticionCategorias = async () => {
-    const { periodo } = botonreporte;
+    const {semanas,meses,trimestres,semestres}= botonreporte;
     let Tipo;
-    /* Valores condicionales necesarios para variable Semana o Periodo*/
-    switch (periodo) {
-      case true:
-        // Periodo
+    /* Valores condicionales necesarios para variable Semana, Meses, Trimestres y Semestres*/
+    switch (true) {
+      case semanas:
+        Tipo = [0];
+        break;
+      case meses:
         Tipo = [1];
         break;
-      // Semana
+      case trimestres:
+        Tipo = [2];
+      break;
+      case semestres:
+        Tipo = [3];
+      break;
       default:
-        Tipo = [0];
         break;
     }
     let headersList = {
       Authorization: `Bearer ${token}`,
       "Content-Type": "application/json",
     };
-
     let bodyContent = JSON.stringify({
       IdTipo: Tipo,
-      IdValor: selectedOptions1,
-      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : "",
-      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : "",
-      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : "",
-      IdCesta: selectedOptions4.length > 0 ? selectedOptions4 : "",
+      IdValor: selectedOptions.Periodo,
+      IdCanal: selectedOptions.Canales.length > 0 ? selectedOptions.Canales : "",
+      IdArea: selectedOptions.Areas.length > 0 ? selectedOptions.Areas : "",
+      IdZona: selectedOptions.Zona.length > 0 ? selectedOptions.Zona :"",
+      IdCesta: selectedOptions.Cesta.length > 0 ? selectedOptions.Cesta : "",
+      IdRetail: selectedOptions.Canales.indexOf(selectedOptionRetail.id) > -1?selectedOptionRetail.id:"",
     });
 
     let reqOptions = {
@@ -797,19 +928,24 @@ export default function DataGrid() {
       });
   };
   /*Funciones de Listar Fabricantes 😄*/
-  const [openFabricante, setOpenFabricante] = React.useState(false);
   const peticionFabricantes = async () => {
-    const { periodo } = botonreporte;
+    const {semanas,meses,trimestres,semestres}= botonreporte;
     let Tipo;
-    /* Valores condicionales necesarios para variable Semana o Periodo*/
-    switch (periodo) {
-      case true:
-        // Periodo
+    /* Valores condicionales necesarios para variable Semana, Meses, Trimestres y Semestres*/
+    switch (true) {
+      case semanas:
+        Tipo = [0];
+        break;
+      case meses:
         Tipo = [1];
         break;
-      // Semana
+      case trimestres:
+        Tipo = [2];
+      break;
+      case semestres:
+        Tipo = [3];
+      break;
       default:
-        Tipo = [0];
         break;
     }
     let headersList = {
@@ -819,14 +955,14 @@ export default function DataGrid() {
 
     let bodyContent = JSON.stringify({
       IdTipo: Tipo,
-      IdValor: selectedOptions1,
-      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : "",
-      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : "",
-      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : "",
-      IdCesta: selectedOptions4.length > 0 ? selectedOptions4 : "",
-      IdCategoria: selectedOptions5.length > 0 ? selectedOptions5 : "",
+      IdValor: selectedOptions.Periodo,
+      IdCanal: selectedOptions.Canales.length > 0 ? selectedOptions.Canales : "",
+      IdArea: selectedOptions.Areas.length > 0 ? selectedOptions.Areas : "",
+      IdZona: selectedOptions.Zona.length > 0 ? selectedOptions.Zona :"",
+      IdCesta: selectedOptions.Cesta.length > 0 ? selectedOptions.Cesta : "",
+      IdCategoria: selectedOptions.Categorias.length > 0 ? selectedOptions.Categorias : "",
+      IdRetail: selectedOptions.Canales.indexOf(selectedOptionRetail.id) > -1?selectedOptionRetail.id:"",
     });
-
     let reqOptions = {
       url: process.env.REACT_APP_API_ENDPOINT + "ListarFabricante/",
       method: "POST",
@@ -842,52 +978,35 @@ export default function DataGrid() {
             icon: "warning",
             title: "" + response.data.message,
           });
+          setFabricante([]);
         } else {
-          if (response.data.data === undefined) {
-            setFabricante([]);
-          }
           setFabricante(response.data.data);
         }
       })
-      .catch((error) => {
-        console.log(error.response.data.message);
-        console.log(error.response.status);
-        console.log(error.response.headers);
-      });
+      // .catch((error) => {
+      //   console.log(error.response.status);
+      //   console.log(error.response.headers);
+      // });
   };
-  const handleCloseFabricante = () => {
-    setOpenFabricante(false);
-  };
-  const handleOpenFabricante = () => {
-    setOpenFabricante(true);
-    peticionFabricantes();
-    if (selectedOptions6.length >= 1) {
-      setSelectedOptions6([]);
-      setSelectedOptions7([]);
-      setSelectedOptions8([]);
-      setSelectedOptions9([]);
-      setSelectedOptions10([]);
-      setSelectedOptions11([]);
-      setSelectedOptions12([]);
-      setSelectedOptions13([]);
-    }
-  };
-
   /*Funciones de Listar Marcas 😄*/
-  const [openMarcas, setOpenMarcas] = React.useState(false);
-  const [IDFabricante, setIDFabricante] = React.useState({});
   const peticionMarcas = async () => {
-    const { periodo } = botonreporte;
+    const {semanas,meses,trimestres,semestres}= botonreporte;
     let Tipo;
-    /* Valores condicionales necesarios para variable Semana o Periodo*/
-    switch (periodo) {
-      case true:
-        // Periodo
+    /* Valores condicionales necesarios para variable Semana, Meses, Trimestres y Semestres*/
+    switch (true) {
+      case semanas:
+        Tipo = [0];
+        break;
+      case meses:
         Tipo = [1];
         break;
-      // Semana
+      case trimestres:
+        Tipo = [2];
+      break;
+      case semestres:
+        Tipo = [3];
+      break;
       default:
-        Tipo = [0];
         break;
     }
     let headersList = {
@@ -897,13 +1016,15 @@ export default function DataGrid() {
 
     let bodyContent = JSON.stringify({
       IdTipo: Tipo,
-      IdValor: selectedOptions1,
-      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : "",
-      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : "",
-      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : "",
-      IdCesta: selectedOptions4.length > 0 ? selectedOptions4 : "",
-      IdCategoria: selectedOptions5.length > 0 ? selectedOptions5 : "",
-      IdFabricante: selectedOptions6.length > 0 ? selectedOptions6 : "",
+      IdValor: selectedOptions.Periodo,
+      IdCanal: selectedOptions.Canales.length > 0 ? selectedOptions.Canales : "",
+      IdArea: selectedOptions.Areas.length > 0 ? selectedOptions.Areas : "",
+      IdZona: selectedOptions.Zona.length > 0 ? selectedOptions.Zona :"",
+      IdCesta: selectedOptions.Cesta.length > 0 ? selectedOptions.Cesta : "",
+      IdCategoria: selectedOptions.Categorias.length > 0 ? selectedOptions.Categorias : "",
+      IdFabricante: selectedOptions.Fabricantes.length > 0 ? selectedOptions.Fabricantes : "",
+      IdRetail:selectedOptionRetail.id
+
     });
 
     let reqOptions = {
@@ -933,37 +1054,25 @@ export default function DataGrid() {
         console.log(error.response.headers);
       });
   };
-  const handleCloseMarcas = () => {
-    setOpenMarcas(false);
-  };
-  const handleOpenMarcas = () => {
-    setOpenMarcas(true);
-    peticionMarcas();
-    if (selectedOptions7.length >= 1) {
-      setSelectedOptions7([]);
-      setSelectedOptions8([]);
-      setSelectedOptions9([]);
-      setSelectedOptions10([]);
-      setSelectedOptions11([]);
-      setSelectedOptions12([]);
-      setSelectedOptions13([]);
-    }
-  };
-
   /*Funciones de Listar Segmentos 😄*/
-  const [openSegmentos, setOpenSegmentos] = React.useState(false);
   const peticionSegmentos = async () => {
-    const { periodo } = botonreporte;
+    const {semanas,meses,trimestres,semestres}= botonreporte;
     let Tipo;
-    /* Valores condicionales necesarios para variable Semana o Periodo*/
-    switch (periodo) {
-      case true:
-        // Periodo
+    /* Valores condicionales necesarios para variable Semana, Meses, Trimestres y Semestres*/
+    switch (true) {
+      case semanas:
+        Tipo = [0];
+        break;
+      case meses:
         Tipo = [1];
         break;
-      // Semana
+      case trimestres:
+        Tipo = [2];
+      break;
+      case semestres:
+        Tipo = [3];
+      break;
       default:
-        Tipo = [0];
         break;
     }
     let headersList = {
@@ -973,14 +1082,16 @@ export default function DataGrid() {
 
     let bodyContent = JSON.stringify({
       IdTipo: Tipo,
-      IdValor: selectedOptions1,
-      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : "",
-      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : "",
-      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : "",
-      IdCesta: selectedOptions4.length > 0 ? selectedOptions4 : "",
-      IdCategoria: selectedOptions5.length > 0 ? selectedOptions5 : "",
-      IdFabricante: selectedOptions6.length > 0 ? selectedOptions6 : "",
-      IdMarca: selectedOptions7.length > 0 ? selectedOptions7 : "",
+      IdValor: selectedOptions.Periodo,
+      IdCanal: selectedOptions.Canales.length > 0 ? selectedOptions.Canales : "",
+      IdArea: selectedOptions.Areas.length > 0 ? selectedOptions.Areas : "",
+      IdZona: selectedOptions.Zona.length > 0 ? selectedOptions.Zona :"",
+      IdCesta: selectedOptions.Cesta.length > 0 ? selectedOptions.Cesta : "",
+      IdCategoria: selectedOptions.Categorias.length > 0 ? selectedOptions.Categorias : "",
+      IdFabricante: selectedOptions.Fabricantes.length > 0 ? selectedOptions.Fabricantes : "",
+      IdMarca: selectedOptions.Marcas.length > 0 ? selectedOptions.Marcas : "",
+      IdRetail:selectedOptionRetail.id
+
     });
 
     let reqOptions = {
@@ -1010,41 +1121,25 @@ export default function DataGrid() {
         console.log(error.response.headers);
       });
   };
-  const handleCloseSegmentos = () => {
-    setOpenSegmentos(false);
-  };
-  const handleOpenSegmentos = () => {
-    setOpenSegmentos(true);
-    peticionSegmentos();
-    if (selectedOptions8.length >= 1) {
-      setSelectedOptions8([]);
-      setSelectedOptions9([]);
-      setSelectedOptions10([]);
-      setSelectedOptions11([]);
-      setSelectedOptions12([]);
-      setSelectedOptions13([]);
-    }
-  };
-  const handleSegmentos = (event) => {
-    const value = event.target.value;
-    setSelectedOptions8(value);
-  };
-
   /*Funciones de Listar Tamanno 😄*/
-  const [openTamanno, setOpenTamanno] = React.useState(false);
-  // const [IDMarca, setIDMarca]=React.useState({});
   const peticionTamanno = async () => {
-    const { periodo } = botonreporte;
+    const {semanas,meses,trimestres,semestres}= botonreporte;
     let Tipo;
-    /* Valores condicionales necesarios para variable Semana o Periodo*/
-    switch (periodo) {
-      case true:
-        // Periodo
+    /* Valores condicionales necesarios para variable Semana, Meses, Trimestres y Semestres*/
+    switch (true) {
+      case semanas:
+        Tipo = [0];
+        break;
+      case meses:
         Tipo = [1];
         break;
-      // Semana
+      case trimestres:
+        Tipo = [2];
+      break;
+      case semestres:
+        Tipo = [3];
+      break;
       default:
-        Tipo = [0];
         break;
     }
     let headersList = {
@@ -1054,15 +1149,17 @@ export default function DataGrid() {
 
     let bodyContent = JSON.stringify({
       IdTipo: Tipo,
-      IdValor: selectedOptions1,
-      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : "",
-      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : "",
-      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : "",
-      IdCesta: selectedOptions4.length > 0 ? selectedOptions4 : "",
-      IdCategoria: selectedOptions5.length > 0 ? selectedOptions5 : "",
-      IdFabricante: selectedOptions6.length > 0 ? selectedOptions6 : "",
-      IdMarca: selectedOptions7.length > 0 ? selectedOptions7 : "",
-      IdSegmento: selectedOptions8.length > 0 ? selectedOptions8 : "",
+      IdValor: selectedOptions.Periodo,
+      IdCanal: selectedOptions.Canales.length > 0 ? selectedOptions.Canales : "",
+      IdArea: selectedOptions.Areas.length > 0 ? selectedOptions.Areas : "",
+      IdZona: selectedOptions.Zona.length > 0 ? selectedOptions.Zona :"",
+      IdCesta: selectedOptions.Cesta.length > 0 ? selectedOptions.Cesta : "",
+      IdCategoria: selectedOptions.Categorias.length > 0 ? selectedOptions.Categorias : "",
+      IdFabricante: selectedOptions.Fabricantes.length > 0 ? selectedOptions.Fabricantes : "",
+      IdMarca: selectedOptions.Marcas.length > 0 ? selectedOptions.Marcas : "",
+      IdSegmento: selectedOptions.Segmento.length > 0 ? selectedOptions.Segmento : "",
+      IdRetail:selectedOptionRetail.id
+
     });
 
     let reqOptions = {
@@ -1092,42 +1189,25 @@ export default function DataGrid() {
         console.log(error.response.headers);
       });
   };
-  const handleCloseTamanno = () => {
-    setOpenTamanno(false);
-    // if(selectedOptions4.length>=1){
-    //   peticionFabricantes();
-    // }
-  };
-  const handleOpenTamanno = () => {
-    setOpenTamanno(true);
-    peticionTamanno();
-    if (selectedOptions9.length >= 1) {
-      setSelectedOptions9([]);
-      setSelectedOptions10([]);
-      setSelectedOptions11([]);
-      setSelectedOptions12([]);
-      setSelectedOptions13([]);
-    }
-  };
-  const handleTamanno = (event) => {
-    const value = event.target.value;
-    setSelectedOptions9(value);
-  };
-
   /*Funciones de Listar RTamanno 😄*/
-  const [openRTamanno, setOpenRTamanno] = React.useState(false);
   const peticionRTamanno = async () => {
-    const { periodo } = botonreporte;
+    const {semanas,meses,trimestres,semestres}= botonreporte;
     let Tipo;
-    /* Valores condicionales necesarios para variable Semana o Periodo*/
-    switch (periodo) {
-      case true:
-        // Periodo
+    /* Valores condicionales necesarios para variable Semana, Meses, Trimestres y Semestres*/
+    switch (true) {
+      case semanas:
+        Tipo = [0];
+        break;
+      case meses:
         Tipo = [1];
         break;
-      // Semana
+      case trimestres:
+        Tipo = [2];
+      break;
+      case semestres:
+        Tipo = [3];
+      break;
       default:
-        Tipo = [0];
         break;
     }
     let headersList = {
@@ -1137,16 +1217,17 @@ export default function DataGrid() {
 
     let bodyContent = JSON.stringify({
       IdTipo: Tipo,
-      IdValor: selectedOptions1,
-      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : "",
-      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : "",
-      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : "",
-      IdCesta: selectedOptions4.length > 0 ? selectedOptions4 : "",
-      IdCategoria: selectedOptions5.length > 0 ? selectedOptions5 : "",
-      IdFabricante: selectedOptions6.length > 0 ? selectedOptions6 : "",
-      IdMarca: selectedOptions7.length > 0 ? selectedOptions7 : "",
-      IdSegmento: selectedOptions8.length > 0 ? selectedOptions8 : "",
-      IdTamano: selectedOptions9.length > 0 ? selectedOptions9 : "",
+      IdValor: selectedOptions.Periodo,
+      IdCanal: selectedOptions.Canales.length > 0 ? selectedOptions.Canales : "",
+      IdArea: selectedOptions.Areas.length > 0 ? selectedOptions.Areas : "",
+      IdZona: selectedOptions.Zona.length > 0 ? selectedOptions.Zona :"",
+      IdCesta: selectedOptions.Cesta.length > 0 ? selectedOptions.Cesta : "",
+      IdCategoria: selectedOptions.Categorias.length > 0 ? selectedOptions.Categorias : "",
+      IdFabricante: selectedOptions.Fabricantes.length > 0 ? selectedOptions.Fabricantes : "",
+      IdMarca: selectedOptions.Marcas.length > 0 ? selectedOptions.Marcas : "",
+      IdSegmento: selectedOptions.Segmento.length > 0 ? selectedOptions.Segmento : "",
+      IdTamano: selectedOptions.Tamanno.length > 0 ? selectedOptions.Tamanno : "",
+      IdRetail:selectedOptionRetail.id
     });
 
     let reqOptions = {
@@ -1176,38 +1257,25 @@ export default function DataGrid() {
         console.log(error.response.headers);
       });
   };
-  const handleCloseRTamanno = () => {
-    setOpenRTamanno(false);
-  };
-  const handleOpenRTamanno = () => {
-    setOpenRTamanno(true);
-    peticionRTamanno();
-    if (selectedOptions10.length >= 1) {
-      setSelectedOptions10([]);
-      setSelectedOptions11([]);
-      setSelectedOptions12([]);
-      setSelectedOptions13([]);
-    }
-  };
-  const handleRTamanno = (event) => {
-    const value = event.target.value;
-    setSelectedOptions10(value);
-  };
-
   /*Funciones de Listar Producto 😄*/
-  const [openProducto, setOpenProducto] = React.useState(false);
   const peticionProducto = async () => {
-    const { periodo } = botonreporte;
+    const {semanas,meses,trimestres,semestres}= botonreporte;
     let Tipo;
-    /* Valores condicionales necesarios para variable Semana o Periodo*/
-    switch (periodo) {
-      case true:
-        // Periodo
+    /* Valores condicionales necesarios para variable Semana, Meses, Trimestres y Semestres*/
+    switch (true) {
+      case semanas:
+        Tipo = [0];
+        break;
+      case meses:
         Tipo = [1];
         break;
-      // Semana
+      case trimestres:
+        Tipo = [2];
+      break;
+      case semestres:
+        Tipo = [3];
+      break;
       default:
-        Tipo = [0];
         break;
     }
     let headersList = {
@@ -1217,17 +1285,18 @@ export default function DataGrid() {
 
     let bodyContent = JSON.stringify({
       IdTipo: Tipo,
-      IdValor: selectedOptions1,
-      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : "",
-      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : "",
-      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : "",
-      IdCesta: selectedOptions4.length > 0 ? selectedOptions4 : "",
-      IdCategoria: selectedOptions5.length > 0 ? selectedOptions5 : "",
-      IdFabricante: selectedOptions6.length > 0 ? selectedOptions6 : "",
-      IdMarca: selectedOptions7.length > 0 ? selectedOptions7 : "",
-      IdSegmento: selectedOptions8.length > 0 ? selectedOptions8 : "",
-      IdTamano: selectedOptions9.length > 0 ? selectedOptions9 : "",
-      IdRTamano: selectedOptions10.length > 0 ? selectedOptions10 : "",
+      IdValor: selectedOptions.Periodo,
+      IdCanal: selectedOptions.Canales.length > 0 ? selectedOptions.Canales : "",
+      IdArea: selectedOptions.Areas.length > 0 ? selectedOptions.Areas : "",
+      IdZona: selectedOptions.Zona.length > 0 ? selectedOptions.Zona :"",
+      IdCesta: selectedOptions.Cesta.length > 0 ? selectedOptions.Cesta : "",
+      IdCategoria: selectedOptions.Categorias.length > 0 ? selectedOptions.Categorias : "",
+      IdFabricante: selectedOptions.Fabricantes.length > 0 ? selectedOptions.Fabricantes : "",
+      IdMarca: selectedOptions.Marcas.length > 0 ? selectedOptions.Marcas : "",
+      IdSegmento: selectedOptions.Segmento.length > 0 ? selectedOptions.Segmento : "",
+      IdTamano: selectedOptions.Tamanno.length > 0 ? selectedOptions.Tamanno : "",
+      IdRTamano: selectedOptions.RTamanno.length > 0 ? selectedOptions.RTamanno : "",
+      IdRetail:selectedOptionRetail.id
     });
 
     let reqOptions = {
@@ -1257,38 +1326,25 @@ export default function DataGrid() {
         console.log(error.response.headers);
       });
   };
-  const handleCloseProducto = () => {
-    setOpenProducto(false);
-  };
-  const handleOpenProducto = (e) => {
-    setOpenProducto(true);
-    peticionProducto();
-    console.log(e);
-    if (selectedOptions11.length >= 1) {
-      setSelectedOptions11([]);
-      setSelectedOptions12([]);
-      setSelectedOptions13([]);
-    }
-  };
-  const handleProducto = (event) => {
-    const value = event.target.value;
-    setSelectedOptions11(value);
-  };
-
   /*Funciones de Listar CBarra 😄*/
-  const [openCBarra, setOpenCBarra] = React.useState(false);
   const peticionCBarra = async () => {
-    const { periodo } = botonreporte;
+    const {semanas,meses,trimestres,semestres}= botonreporte;
     let Tipo;
-    /* Valores condicionales necesarios para variable Semana o Periodo*/
-    switch (periodo) {
-      case true:
-        // Periodo
+    /* Valores condicionales necesarios para variable Semana, Meses, Trimestres y Semestres*/
+    switch (true) {
+      case semanas:
+        Tipo = [0];
+        break;
+      case meses:
         Tipo = [1];
         break;
-      // Semana
+      case trimestres:
+        Tipo = [2];
+      break;
+      case semestres:
+        Tipo = [3];
+      break;
       default:
-        Tipo = [0];
         break;
     }
     let headersList = {
@@ -1298,18 +1354,19 @@ export default function DataGrid() {
 
     let bodyContent = JSON.stringify({
       IdTipo: Tipo,
-      IdValor: selectedOptions1,
-      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : "",
-      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : "",
-      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : "",
-      IdCesta: selectedOptions4.length > 0 ? selectedOptions4 : "",
-      IdCategoria: selectedOptions5.length > 0 ? selectedOptions5 : "",
-      IdFabricante: selectedOptions6.length > 0 ? selectedOptions6 : "",
-      IdMarca: selectedOptions7.length > 0 ? selectedOptions7 : "",
-      IdSegmento: selectedOptions8.length > 0 ? selectedOptions8 : "",
-      IdTamano: selectedOptions9.length > 0 ? selectedOptions9 : "",
-      IdRTamano: selectedOptions10.length > 0 ? selectedOptions10 : "",
-      IdProducto: selectedOptions11.length > 0 ? selectedOptions11 : "",
+      IdValor: selectedOptions.Periodo,
+      IdCanal: selectedOptions.Canal.length > 0 ? selectedOptions.Canal : "",
+      IdArea: selectedOptions.Area.length > 0 ? selectedOptions.Area : "",
+      IdZona: selectedOptions.Zona.length > 0 ? selectedOptions.Zona :"",
+      IdCesta: selectedOptions.Cesta.length > 0 ? selectedOptions.Cesta : "",
+      IdCategoria: selectedOptions.Categoria.length > 0 ? selectedOptions.Categoria : "",
+      IdFabricante: selectedOptions.Fabricante.length > 0 ? selectedOptions.Fabricante : "",
+      IdMarca: selectedOptions.Marca.length > 0 ? selectedOptions.Marca : "",
+      IdSegmento: selectedOptions.Segmento.length > 0 ? selectedOptions.Segmento : "",
+      IdTamano: selectedOptions.Tamanno.length > 0 ? selectedOptions.Tamanno : "",
+      IdRTamano: selectedOptions.RTamanno.length > 0 ? selectedOptions.RTamanno : "",
+      IdProducto: selectedOptions.Producto.length > 0 ? selectedOptions.Producto : "",
+      IdRetail:selectedOptionRetail.id
     });
 
     let reqOptions = {
@@ -1339,37 +1396,25 @@ export default function DataGrid() {
         console.log(error.response.headers);
       });
   };
-  const handleCloseCBarra = () => {
-    setOpenCBarra(false);
-  };
-  const handleOpenCBarra = () => {
-    setOpenCBarra(true);
-    peticionCBarra();
-    if (selectedOptions12.length >= 1) {
-      setSelectedOptions12([]);
-      setSelectedOptions13([]);
-    }
-  };
-  const handleCBarra = (event) => {
-    const value = event.target.value;
-    setSelectedOptions8(value);
-  };
-
   /*Funciones de Listar Nacionalidad 😄*/
-  const [openNacionalidad, setOpenNacionalidad] = React.useState(false);
-  // const [IDMarca, setIDMarca]=React.useState({});
   const peticionNacionalidad = async () => {
-    const { periodo } = botonreporte;
+    const {semanas,meses,trimestres,semestres}= botonreporte;
     let Tipo;
-    /* Valores condicionales necesarios para variable Semana o Periodo*/
-    switch (periodo) {
-      case true:
-        // Periodo
+    /* Valores condicionales necesarios para variable Semana, Meses, Trimestres y Semestres*/
+    switch (true) {
+      case semanas:
+        Tipo = [0];
+        break;
+      case meses:
         Tipo = [1];
         break;
-      // Semana
+      case trimestres:
+        Tipo = [2];
+      break;
+      case semestres:
+        Tipo = [3];
+      break;
       default:
-        Tipo = [0];
         break;
     }
     let headersList = {
@@ -1379,19 +1424,21 @@ export default function DataGrid() {
 
     let bodyContent = JSON.stringify({
       IdTipo: Tipo,
-      IdValor: selectedOptions1,
-      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : "",
-      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : "",
-      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : "",
-      IdCesta: selectedOptions4.length > 0 ? selectedOptions4 : "",
-      IdCategoria: selectedOptions5.length > 0 ? selectedOptions5 : "",
-      IdFabricante: selectedOptions6.length > 0 ? selectedOptions6 : "",
-      IdMarca: selectedOptions7.length > 0 ? selectedOptions7 : "",
-      IdSegmento: selectedOptions8.length > 0 ? selectedOptions8 : "",
-      IdTamano: selectedOptions9.length > 0 ? selectedOptions9 : "",
-      IdRTamano: selectedOptions10.length > 0 ? selectedOptions10 : "",
-      IdProducto: selectedOptions11.length > 0 ? selectedOptions11 : "",
-      IdCBarra: selectedOptions12.length > 0 ? selectedOptions12 : "",
+      IdValor: selectedOptions.Periodo,
+      IdCanal: selectedOptions.Canal.length > 0 ? selectedOptions.Canal : "",
+      IdArea: selectedOptions.Area.length > 0 ? selectedOptions.Area : "",
+      IdZona: selectedOptions.Zona.length > 0 ? selectedOptions.Zona :"",
+      IdCesta: selectedOptions.Cesta.length > 0 ? selectedOptions.Cesta : "",
+      IdCategoria: selectedOptions.Categoria.length > 0 ? selectedOptions.Categoria : "",
+      IdFabricante: selectedOptions.Fabricante.length > 0 ? selectedOptions.Fabricante : "",
+      IdMarca: selectedOptions.Marca.length > 0 ? selectedOptions.Marca : "",
+      IdSegmento: selectedOptions.Segmento.length > 0 ? selectedOptions.Segmento : "",
+      IdTamano: selectedOptions.Tamanno.length > 0 ? selectedOptions.Tamanno : "",
+      IdRTamano: selectedOptions.RTamanno.length > 0 ? selectedOptions.RTamanno : "",
+      IdProducto: selectedOptions.Producto.length > 0 ? selectedOptions.Producto : "",
+      IdCBarra: selectedOptions.CodBarra.length > 0 ? selectedOptions.CodBarra : "",
+      IdRetail:selectedOptionRetail.id
+
     });
 
     let reqOptions = {
@@ -1421,36 +1468,25 @@ export default function DataGrid() {
         console.log(error.response.headers);
       });
   };
-  const handleCloseNacionalidad = () => {
-    setOpenNacionalidad(false);
-  };
-  const handleOpenNacionalidad = () => {
-    setOpenNacionalidad(true);
-    peticionNacionalidad();
-    if (selectedOptions13.length >= 1) {
-      setSelectedOptions13([]);
-    }
-  };
-  const handleNacionalidad = (event) => {
-    const value = event.target.value;
-    setSelectedOptions8(value);
-  };
-
   /*Funciones de Listar Indicadores 😄*/
-  const [openIndicadores, setOpenIndicadores] = React.useState(false);
-  // const [IDMarca, setIDMarca]=React.useState({});
   const peticionIndicadores = async () => {
-    const { periodo } = botonreporte;
+    const {semanas,meses,trimestres,semestres}= botonreporte;
     let Tipo;
-    /* Valores condicionales necesarios para variable Semana o Periodo*/
-    switch (periodo) {
-      case true:
-        // Periodo
+    /* Valores condicionales necesarios para variable Semana, Meses, Trimestres y Semestres*/
+    switch (true) {
+      case semanas:
+        Tipo = [0];
+        break;
+      case meses:
         Tipo = [1];
         break;
-      // Semana
+      case trimestres:
+        Tipo = [2];
+      break;
+      case semestres:
+        Tipo = [3];
+      break;
       default:
-        Tipo = [0];
         break;
     }
     let headersList = {
@@ -1460,10 +1496,11 @@ export default function DataGrid() {
 
     let bodyContent = JSON.stringify({
       IdTipo: Tipo,
+      IdRetail:selectedOptionRetail.id
     });
 
     let reqOptions = {
-      url: process.env.REACT_APP_API_ENDPOINT + "ListarRTamano/",
+      url: process.env.REACT_APP_API_ENDPOINT + "Indicadores/",
       method: "POST",
       headers: headersList,
       data: bodyContent,
@@ -1489,65 +1526,185 @@ export default function DataGrid() {
         console.log(error.response.headers);
       });
   };
-  const handleCloseIndicadores = () => {
-    setOpenIndicadores(false);
-  };
-  const handleOpenIndicadores = () => {
-    setOpenIndicadores(true);
-    if (selectedOptions1.length > 0) {
-      peticionIndicadores();
+  /*Mis Selecciones*/
+  const [selecciones, setSelecciones]=useState([])
+  const peticionSelecciones = async () => {
+    let headersList = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+    let bodyContent = JSON.stringify({
+      idCliente:idClienteCrip
+    });
+
+    let reqOptions = {
+      url: process.env.REACT_APP_API_ENDPOINT + "Listarfiltros/",
+      method: "POST",
+      headers: headersList,
+      data: bodyContent,
+    };
+    try {
+      await axios.request(reqOptions)
+      .then((response) => {
+        if (response.data.message) {
+          setSelecciones([])
+          console.log(response.data.message)
+        } else {
+          setSelecciones(response.data.data);
+        }
+      })
+    } catch (error) {
+      if (error.response.status === 400 || 500) {
+        toast.fire({
+          icon: "error",
+          title: "" + error.response.data.message,
+        });
+      }
+      console.log(error.response.data.message);
+      console.log(error.response.status);
+      console.log(error.response.headers);
     }
   };
-  const handleIndicadores = (event) => {
-    const value = event.target.value;
-    setSelectedOptions14(value);
+  const handleFiltros = () => {
+    Swal.fire({
+      title: 'Coloque en nombre de su filtro',
+      input: 'text',
+      inputAttributes: {
+        autocapitalize: 'off'
+      },
+      showCancelButton: true,
+      confirmButtonText: 'Guardar Filtro',
+      showLoaderOnConfirm: true,
+      preConfirm: async (nombreFiltro) => {
+        let headersList = {
+          Authorization: `Bearer ${token}`,
+          "Content-Type": "application/json",
+        };
+        let bodyContent = JSON.stringify({
+          idCliente: idClienteCrip,
+          idPerfil: idPerfil,
+          NombreFiltro: nombreFiltro,
+          IdValor: selectedOptions.Periodo,
+          IdCanal: selectedOptions.Canales.length > 0 ? selectedOptions.Canales : "",
+          IdArea: selectedOptions.Areas.length > 0 ? selectedOptions.Areas : "",
+          IdZona: selectedOptions.Zona.length > 0 ? selectedOptions.Zona : "",
+          IdCesta: selectedOptions.Cesta.length > 0 ? selectedOptions.Cesta : "",
+          IdCategoria: selectedOptions.Categorias.length > 0 ? selectedOptions.Categorias : "",
+        });
+        console.log(bodyContent)
+        let reqOptions = {
+          url: process.env.REACT_APP_API_ENDPOINT + "Insertfiltros/",
+          method: "POST",
+          headers: headersList,
+          data: bodyContent,
+        };
+        try {
+          await axios.request(reqOptions)
+          .then((response) => {
+            peticionSelecciones()
+            toast.fire({
+              icon: "success",
+              title: "" + response.data.message,
+            })
+          })
+        } catch (error) {
+          if (error.response.status === 400 || 500) {
+            toast.fire({
+              icon: "error",
+              title: "" + error.response.data.message,
+            });
+          }
+          console.log(error.response.data.message);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        }
+      },
+      allowOutsideClick: () => !Swal.isLoading()
+    })
+  };
+  const ValueFiltros =(params)=>{
+    let ValSemana = params.Id_Semana.split(',').map(Number)
+    let ValRetail = params.Id_Retail.split(',').map(Number)
+    let ValEstado = params.Id_Estado.split(',').map(Number)
+    let ValTienda = params.Id_Tienda.split(',').map(Number)
+    let ValCategoria = params.Id_Categoria.split(',').map(Number)
+    let ValMarca = params.Id_Marca.split(',').map(Number)
+    let ValFabricante = params.Id_Fabricante.split(',').map(Number)
+    let ValCodigoBarra = params.CodigoBarra.split(',').map(Number)
+    setSelectedOption({
+      ...selectedOptions,
+      'Semanas':ValSemana,
+      'Retailers':ValRetail,
+      'Estados':ValEstado,
+      'Tiendas':ValTienda,
+      'Categorias':ValCategoria,
+      'Marcas':ValMarca,
+      'Fabricantes':ValFabricante,
+      'CodBarras':ValCodigoBarra,
+      'Monedas': params.Id_Moneda.split(',').map(Number),
+    })
+  }
+  const handleDeleteFiltros=(params) => {
+    let headersList = {
+      Authorization: `Bearer ${token}`,
+      "Content-Type": "application/json",
+    };
+    const {id, nombre}=params
+    Swal.fire({
+      icon: 'question',
+      html:`¿Desea eliminar el filtro: ${nombre}`,
+      showCancelButton: true,
+    }).then((result) => {
+      if (result.isConfirmed) {
+          let bodyContent = JSON.stringify({
+            idFiltro: id,
+          });
+          let reqOptions = {
+            url: process.env.REACT_APP_API_ENDPOINT + "Deletefiltros/",
+            method: "POST",
+            headers: headersList,
+            data: bodyContent,
+          };
+          axios.request(reqOptions)
+            .then((response) => {
+              peticionSelecciones()
+              setExpanded(false)
+              console.log(response)
+              Swal.fire(
+                'Deleted!',
+                response.data.message,
+                'success'
+              )
+            })
+            .catch ((error) =>{
+              peticionSelecciones()
+            if (error.response.status === 400 || 500) {
+              Swal.fire(
+                'Deleted!',
+                error.response.data.message,
+                'error'
+              )
+              toast.fire({
+                icon: "error",
+                title: "" + error.response.data.message,
+              });
+            }
+            console.log(error.response.data.message);
+            console.log(error.response.status);
+            console.log(error.response.headers);
+          })
+          }
+
+    })
+  }
+  const [expanded, setExpanded] = useState(false);
+  const handleChangeExpanded = (panel) => (event, isExpanded) => {
+    setExpanded(isExpanded ? panel : false);
+    peticionSelecciones()
   };
 
-  /*Mis Selecciones*/
-  const [chipData, setChipData] = React.useState({
-    nombre: "",
-    id: "",
-  });
-  const handleDelete = (chipToDelete) => () => {
-    setChipData((chips) => chips.nombre !== chipToDelete.key);
-  };
-  const handleChip = (e) => {
-    let ids;
-    const { name, value } = e.target;
-    if (selectedOptions1.length === render.length) {
-      let result = selectedOptions1.reduce((acc, cur) => {
-        let { id } = cur;
-        let ex = acc.find((x) => x.id === id);
-        if (!ex) {
-          ex = id;
-          acc.push(ex);
-        }
-        return acc;
-      }, []);
-      ids = result.concat(selectedOptions2, selectedOptions3).join("*");
-      setChipData({ [name]: value, id: ids });
-    } else {
-      ids = selectedOptions1
-        .concat(selectedOptions2, selectedOptions3)
-        .join("*");
-      setChipData({ [name]: value, id: ids });
-    }
-  };
-  const GuardarSelecciones = () => {
-    abrirCerrarModalSelect();
-    setChipData({ nombre: [] });
-  };
-  const [modalSelect, setModalSelect] = useState(false);
-  const [isSelected, setIsSelected] = useState({
-    selectedOptions1: false,
-    selectedOptions2: false,
-    selectedOptions3: false,
-    selectedOptions4: false,
-    selectedOptions5: false,
-    selectedOptions6: false,
-  });
   const comprobarCombos = async () => {
-    if (selectedOptions1.length > 0) {
+    if (selectedOptions.Periodo.length > 0) {
       handleNext();
     }
     let headersList = {
@@ -1555,25 +1712,35 @@ export default function DataGrid() {
       "Content-Type": "application/json",
     };
     let ValuePeticionData;
-    const { periodo } = botonreporte;
+    const { semanas,meses,trimestres,semestres } = botonreporte;
     /* Valores condicionales necesarios para variable Semana o Periodo*/
-    switch (periodo) {
-      case true:
-        // Periodo
-        ValuePeticionData = "GenerarDataPeriodo/";
-        break;
-      // Semana
-      default:
+
+    switch (true) {
+      case semanas:
         ValuePeticionData = "GenerarDataSemanal/";
+        break;
+      case meses:
+          ValuePeticionData = "GenerarDataPeriodo/";
+        break;
+      case trimestres:
+        ValuePeticionData = "GenerarDataTrimestral/";
+        break;
+      case semestres:
+        ValuePeticionData = "GenerarDataSemestral/";
+        break;
+        // Semana
+      default:
         break;
     }
     let bodyContent = JSON.stringify({
-      IdValor: selectedOptions1,
-      IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : "",
-      IdArea: selectedOptions3.length > 0 ? selectedOptions3 : "",
-      IdZona: selectedOptions33.length > 0 ? selectedOptions33 : "",
-      IdCesta: selectedOptions4.length > 0 ? selectedOptions4 : "",
-      IdCategoria: selectedOptions5.length > 0 ? selectedOptions5 : "",
+      IdValor: selectedOptions.Periodo,
+      IdCanal: selectedOptions.Canales.length > 0 ? selectedOptions.Canales : "",
+      IdArea: selectedOptions.Areas.length > 0 ? selectedOptions.Areas : "",
+      IdZona: selectedOptions.Zona.length > 0 ? selectedOptions.Zona : "",
+      IdCesta: selectedOptions.Cesta.length > 0 ? selectedOptions.Cesta : "",
+      IdCategoria: selectedOptions.Categorias.length > 0 ? selectedOptions.Categorias : "",
+      IdRetail: selectedOptions.Canales.indexOf(selectedOptionRetail.id) > -1?selectedOptionRetail.id:"",
+      IdIndicadores:selectedOptions.Indicador
     });
     let reqOptions = {
       url: process.env.REACT_APP_API_ENDPOINT + ValuePeticionData,
@@ -1581,31 +1748,15 @@ export default function DataGrid() {
       headers: headersList,
       data: bodyContent,
     };
-    // axios.request(reqOptions)
-    // .then(response => { console.log(response)
-    //   setGridApi(response.data.data)
-    // })
-    // .catch(error => {
-    //   console.error(error);
-    // })
     switch (true) {
-      case selectedOptions1.length === 0:
-        setIsSelected({ selectedOptions1: true });
+      case selectedOptions.Periodo.length === 0:
         toast.fire({
           icon: "error",
           title: "No ha Seleccionado un Período",
           confirmButtonText: `Ok`,
         });
         break;
-      case selectedOptions2.length === 0:
-        setIsSelected({ selectedOptions2: true });
-        toast.fire({
-          icon: "error",
-          title: "No ha Seleccionado un Canal",
-          confirmButtonText: `Ok`,
-        });
-        break;
-      case selectedOptions1.length !== 0:
+      case selectedOptions.Periodo.length !== 0:
         axios
           .request(reqOptions)
           .then((response) => {
@@ -1617,58 +1768,13 @@ export default function DataGrid() {
           });
         break;
       default:
-        setIsSelected({
-          selectedOptions1: false,
-          selectedOptions2: false,
-          selectedOptions3: false,
-        });
         break;
     }
   };
-  const abrirCerrarModalSelect = () => {
-    // comprobarCombos()
-  };
-  const bodyMySelect = (
-    <div
-      style={{ width: "25%", height: "40%", justifyContent: "space-around" }}
-      className={styles.modal}
-    >
-      <h1 style={{ textAlign: "center" }}>Crear Filtro de Selección</h1>
-      <div className={styles.agrupar}>
-        <div
-          style={{ width: "100%", overflow: "visible" }}
-          className="grupoEditar"
-        >
-          <TextField
-            name="nombre"
-            className={styles.inputMaterial}
-            type="text"
-            onChange={handleChip}
-            value={chipData && chipData.nombre}
-            label="Nombre del Filtro"
-            placeholder="Escriba el nombre de sus Selecciones"
-          />
-        </div>
-        <Stack direction="row" justifyContent={"flex-end"} spacing={2}>
-          <Button
-            style={{ background: "#2FAC6A" }}
-            variant="contained"
-            onClick={() => GuardarSelecciones()}
-          >
-            Guardar
-          </Button>
-          <Button variant="contained" onClick={() => abrirCerrarModalSelect()}>
-            Cancelar
-          </Button>
-        </Stack>
-      </div>
-    </div>
-  );
+
   const DeletePeriodo = () => {
-    if (selectedOptions1 !== []) {
-      setSelectedOptions1([]);
-      setSelectedOptions2([]);
-      setSelectedOptions3([]);
+    if (selectedOptions.Periodo !== []) {
+      setSelectedOption({...selectedOptions, 'Periodo':[]})
     }
   };
   const [botonreporte, setBotonreporte] = useState({
@@ -1679,55 +1785,8 @@ export default function DataGrid() {
     /* Indicador Perido usado en la llamada de canal periodo */
     periodo: false,
   });
-  /*Controles de Search*/
-  const [focus, setFocus] = React.useState(false);
-  const [render, setRender] = React.useState(false);
-  const [searchText, setSearchText] = React.useState({
-    periodo: "",
-    cesta: "",
-    categoria: "",
-    fabricante: "",
-    marca: "",
-    segmento: "",
-  });
-  console.log(searchText.periodo);
-  const handleChangeSearch = (e) => {
-    const { name, value } = e.target;
-    console.log(name, value);
-    setSearchText({ [name]: value });
-    setFocus(true);
-  };
-  /*Controles de Select All*/
-  const [showMenuItem, setShowMenuItem] = React.useState({
-    periodo: false,
-    cesta: "",
-    categoria: "",
-    fabricante: "",
-    marca: "",
-    segmento: "",
-  });
-  const controladorAll = () => {
-    switch (true) {
-      case data.length === 0:
-        setShowMenuItem({ periodo: false });
-        break;
-      case tiempoReporte === "Trimestres":
-        setShowMenuItem({ periodo: false });
-        break;
-      case tiempoReporte === "Semestres":
-        setShowMenuItem({ periodo: false });
-        break;
-      default:
-        setShowMenuItem({ periodo: true });
-        break;
-    }
-  };
-  const isAllSelectPeriodo =
-    data.length > 0 && selectedOptions1.length === render.length;
-  const isAllSelectCesta =
-    Cesta.length > 0 && selectedOptions4.length === Cesta.length;
-  const isAllSelectCategoria =
-    Categorias.length > 0 && selectedOptions5.length === Categorias.length;
+
+
   /*Grilla */
   const [gridApi, setGridApi] = useState(null);
   let valorEspecifivo;
@@ -1774,6 +1833,7 @@ export default function DataGrid() {
       enableRowGroup: true,
       hide: true,
       cellStyle: { textAlign: "left" },
+
     },
     {
       headerName: "Area",
@@ -1843,18 +1903,29 @@ export default function DataGrid() {
       field: "PrecioMaxDolar",
       filter: "agNumberColumnFilter",
       cellStyle: { textAlign: "left" },
+      valueFormatter: (params)=>{if (params.value !== undefined) {
+        return new Intl.NumberFormat("es-VE").format(params.value.toFixed(2))
+      }},
     },
     {
       headerName: "PrecioMin ($)",
       field: "PrecioMinDolar",
       filter: "agNumberColumnFilter",
       cellStyle: { textAlign: "left" },
+      valueFormatter: (params)=>{if (params.value !== undefined) {
+        return new Intl.NumberFormat("es-VE").format(params.value.toFixed(2))
+      }},
+
     },
     {
       headerName: "PrecioProm ($)",
       field: "PrecioPromDolar",
       filter: "agNumberColumnFilter",
       cellStyle: { textAlign: "left" },
+      valueFormatter: (params)=>{if (params.value !== undefined) {
+        return new Intl.NumberFormat("es-VE").format(params.value.toFixed(2))
+      }},
+
     },
     {
       headerName: "Producto",
@@ -1867,6 +1938,7 @@ export default function DataGrid() {
       field: "Retail",
       filter: "agNumberColumnFilter",
       cellStyle: { textAlign: "left" },
+
     },
     // { headerName:'ShareValor', field: 'ShareValor', filter: 'agNumberColumnFilter', pivot: true, cellStyle: { textAlign: "left"},},
     // { headerName:'ShareUnidades', field: 'ShareUnidades', filter: 'agNumberColumnFilter', pivot: true, cellStyle: { textAlign: "left"},},
@@ -1879,22 +1951,25 @@ export default function DataGrid() {
       field: "VentasUnidades",
       filter: "agNumberColumnFilter",
       cellStyle: { textAlign: "left" },
+      valueFormatter: (params)=>{if (params.value !== undefined) {
+        return new Intl.NumberFormat("es-VE").format(params.value.toFixed(2))
+      }},
+
+
     },
     {
       headerName: "VentasValor",
       field: "VentasValor",
       filter: "agNumberColumnFilter",
       cellStyle: { textAlign: "left" },
+      valueFormatter: (params)=>{if (params.value !== undefined) {
+        return new Intl.NumberFormat("es-VE").format(params.value.toFixed(2))
+      }},
+
     },
   ];
-  let bodyContent = JSON.stringify({
-    IdValor: selectedOptions1,
-    IdCanal: selectedOptions2.length > 0 ? selectedOptions2 : "",
-    IdArea: selectedOptions3.length > 0 ? selectedOptions3 : "",
-    IdZona: selectedOptions33.length > 0 ? selectedOptions33 : "",
-    IdCesta: selectedOptions4.length > 0 ? selectedOptions4 : "",
-    IdCategoria: selectedOptions5.length > 0 ? selectedOptions5 : "",
-  });
+ 
+
   const defaultColDef = useMemo(() => {
     return {
       sortable: true,
@@ -1905,14 +1980,18 @@ export default function DataGrid() {
       minWidth: 200,
       showRowGroup: false,
       enablePivot: true,
-      enableValue: true,
-    };
+      enableValue: true
+    }
+      
   }, []);
   const autoGroupColumnDef = useMemo(() => {
     return {
+      headerName: 'Grupo',
       minWidth: 200,
+      cellRendererParams: {suppressCount : true}
     };
   }, []);
+
   const sideBar = useMemo(() => {
     return {
       toolPanels: [
@@ -1938,38 +2017,68 @@ export default function DataGrid() {
       defaultToolPanel: "columns",
     };
   }, []);
+
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <BotonUsuario handleDrawerOpen={handleDrawerOpen} open={open} />
-
-      <DrawerComponent
+      <Drawer
+        style={{ borderTopRightRadius: '.5em', borderButtomRightRadius: '.5em' }}
+        sx={{
+            width:0,
+            flexShrink: 0,
+            borderTopRightRadius: '.5em',
+            '& .MuiDrawer-paper': {
+                width: '20%',
+                boxSizing: 'border-box',
+                borderTopRightRadius: '.5em',
+                borderButtomRightRadius: '.5em',
+            },
+        }}
+        variant="persistent"
+        anchor="left"
         open={open}
-        key={chipData.nombre}
-        label={chipData.nombre}
-        id={id}
-        openo={openo}
-        anchorEl={anchorEl}
-        handleClick={handleClick}
-        handleDrawerClose={handleDrawerClose}
-        handleClose={handleClose}
-        handleDelete={handleDelete}
-        chipData={chipData}
-        botonreporte={botonreporte}
-        seleccionarPeriodo={seleccionarPeriodo}
-        DeletePeriodo={DeletePeriodo}
-        peticionSemanas={peticionSemanas}
-        peticionMeses={peticionMeses}
-        peticionTrimestres={PeticionTrimestres}
-        peticionSemestres={PeticionSemestres}
-        setData={setData}
-        selectedOptionRetail={selectedOptionRetail}
-        setSelectedOptionRetail={setSelectedOptionRetail}
-        Retail={Retail}
-      ></DrawerComponent>
-      <Modal open={modalSelect} onClose={abrirCerrarModalSelect}>
-        {bodyMySelect}
-      </Modal>
+        className='Drawer'
+      >
+        <DrawerHeaderComponent
+          handleDrawerClose={handleDrawerClose}
+        />
+        {Boolean(idClienteCrip === process.env.REACT_APP_PUBLIC_ID_SECRET)?
+          <SelecctionRetail
+            selectedOptionRetail={selectedOptionRetail}
+            setSelectedOptionRetail={setSelectedOptionRetail}
+            Retail={Retail}
+            selectedOptions={selectedOptions}
+            setSelectedOption={setSelectedOption}
+          />
+          :
+          <MySelecctionComponent
+            ValueFiltros={ValueFiltros}
+            handleChange={handleChangeExpanded}
+            expanded={expanded}
+            data={selecciones}
+            handleDelete={handleDeleteFiltros}
+            peticionSelecciones={peticionSelecciones}
+          />
+        }
+        <Divider style={{ width: '90%', background: 'rgb(0 0 0 / 38%)' }} />
+        <CardComponents
+          botonreporte={botonreporte}
+          seleccionarPeriodo={seleccionarPeriodo}
+          DeletePeriodo={DeletePeriodo}
+          peticionSemanas={peticionSemanas}
+          peticionMeses={peticionMeses}
+          peticionTrimestres={PeticionTrimestres}
+          peticionSemestres={PeticionSemestres}
+          selectedOptionRetail={selectedOptionRetail}
+          setData={setData}
+        />
+        <Divider style={{ width: '90%', background: 'rgb(0 0 0 / 38%)' }} />
+        <MenuAtenas
+          anchorEl={anchorEl}
+          handleClick={handleClick}
+        />
+      </Drawer>
       <Main open={open}>
         {alerta}
         <div className="Contenedordata">
@@ -1987,163 +2096,117 @@ export default function DataGrid() {
                     </Box>
                   </Modal>
                   <HeaderComponent />
+                  {Boolean(idClienteCrip === process.env.REACT_APP_PUBLIC_ID_SECRET) && selectedOptionRetail.id.length!==0?
+                    <div style={{gridRow:'1/2', gridColumn:'1/2', width:'90%', display:'flex', alignItems:'center'}}>
+                      <Typography >Retail seleccionado: <u>{selectedOptionRetail.nombre}</u></Typography>
+                    </div>
+                    :
+                    ""
+                  }
                   <article className={styles.tableOfData}>
                     <SelectPeriodos
-                      className="propor"
                       tiempoReporte={tiempoReporte}
-                      selectedOptions1={selectedOptions1}
-                      isSelected={isSelected}
-                      openPeriodo={openPeriodo}
-                      handlePeriodos={handleChangeSelect}
-                      handleClosePeriodo={handleClosePeriodo}
-                      handleOpenPeriodo={handleOpenPeriodo}
-                      datos={data}
-                      isAllSelectPeriodo={isAllSelectPeriodo}
-                      showMenuItem={showMenuItem}
-                      handleChangeSearch={handleChangeSearch}
-                      focus={focus}
-                      searchText={searchText.periodo}
-                      setRender={setRender}
-                      setSearchText={setSearchText}
-                      setFocus={setFocus}
-                      render={render}
+                      value={selectedOptions.Periodo}
+                      openFiltro={Openfiltros.Periodo}
+                      handleChangeValue={handleChangeSelect}
+                      handleClose={handleCloseFiltros}
+                      handleOpen={handleOpenFiltros}
+                      disabled={Openfiltros}
+                      data={data}
                     />
                     <SelectCanales
-                      selectedOptions2={selectedOptions2}
-                      isSelected={isSelected}
-                      openCanales={openCanales}
-                      handleCanales={handleChangeSelect}
-                      handleCloseCanal={handleCloseCanal}
-                      handleOpenCanal={handleOpenCanales}
+                      idCliente={idClienteCrip}
                       selectedOptionRetail={selectedOptionRetail}
-                      canal={canal}
+                      value={selectedOptions.Canales}
+                      openFiltro={Openfiltros.Canales}
+                      handleChangeValue={handleChangeSelect}
+                      handleClose={handleCloseFiltros}
+                      handleOpen={handleOpenFiltros}
+                      disabled={Openfiltros}
+                      data={canal}
                     />
                     <SelectRegiones
-                      selectedOptions3={selectedOptions3}
-                      isSelected={isSelected}
-                      openRegiones={openRegiones}
-                      handleRegiones={handleChangeSelect}
-                      handleCloseRegion={handleCloseRegion}
-                      handleOpenRegiones={handleOpenRegiones}
-                      regiones={region}
-                      /* SubRegiones */
-                      idRegiones={idRegiones}
-                      SubRegion={SubRegion}
-                      selectedOptions33={selectedOptions33}
-                      handleSubRegiones={handleChangeSelect}
+                      disabled={Openfiltros}
+                      data={area}
+                      value={[selectedOptions.Areas, selectedOptions.Zona]}
+                      openFiltro={Openfiltros.Areas}
+                      handleChangeValue={handleChangeSelect}
+                      handleClose={handleCloseFiltros}
+                      handleOpen={handleOpenFiltros}
+
                     />
                     <SelectAtributos
-                      selectedOptions4={selectedOptions4}
-                      isSelected={isSelected}
-                      openCesta={openCesta}
-                      handleCesta={handleChangeSelect}
-                      handleCloseCesta={handleCloseCesta}
-                      handleOpenCesta={handleOpenCesta}
-                      Cesta={Cesta}
-                      setIDCesta={setIDCesta}
-                      IDCesta={IDCesta}
-                      isAllSelectCesta={isAllSelectCesta}
-                      setRender={setRender}
-                      setSearchText={setSearchText}
-                      showMenuItem={showMenuItem}
-                      handleChangeSearch={handleChangeSearch}
-                      searchText={searchText.cesta}
-                      render={render}
-                      //Categorias
-                      Categorias={Categorias}
-                      selectedOptions5={selectedOptions5}
-                      openCategoria={openCategoria}
-                      handleCategoria={handleChangeSelect}
-                      isAllSelectCategoria={isAllSelectCategoria}
-                      handleCloseCategoria={handleCloseCategoria}
-                      handleOpenCategoria={handleOpenCategoria}
-                      focus={focus}
-                      //Fabricantes
-                      Fabricante={Fabricante}
-                      selectedOptions6={selectedOptions6}
-                      openFabricante={openFabricante}
-                      handleFabricante={handleChangeSelect}
-                      handleCloseFabricante={handleCloseFabricante}
-                      handleOpenFabricante={handleOpenFabricante}
-                      setIDFabricante={setIDFabricante}
-                      //Marcas
-                      Marcas={Marcas}
-                      selectedOptions7={selectedOptions7}
-                      openMarcas={openMarcas}
-                      handleMarcas={handleChangeSelect}
-                      handleCloseMarcas={handleCloseMarcas}
-                      handleOpenMarcas={handleOpenMarcas}
-                      //Segmentos
-                      Segmentos={Segmentos}
-                      selectedOptions8={selectedOptions8}
-                      openSegmentos={openSegmentos}
-                      handleSegmentos={handleSegmentos}
-                      handleCloseSegmentos={handleCloseSegmentos}
-                      handleOpenSegmentos={handleOpenSegmentos}
-                      //Tamaño
-                      Tamanno={Tamanno}
-                      selectedOptions9={selectedOptions9}
-                      openTamanno={openTamanno}
-                      handleTamanno={handleTamanno}
-                      handleCloseTamanno={handleCloseTamanno}
-                      handleOpenTamanno={handleOpenTamanno}
-                      //Rango Tamaño
-                      RTamanno={RTamanno}
-                      selectedOptions10={selectedOptions10}
-                      openRTamanno={openRTamanno}
-                      handleRTamanno={handleRTamanno}
-                      handleCloseRTamanno={handleCloseRTamanno}
-                      handleOpenRTamanno={handleOpenRTamanno}
-                      //Producto
-                      Productos={Productos}
-                      selectedOptions11={selectedOptions11}
-                      openProductos={openProducto}
-                      handleProductos={handleProducto}
-                      handleCloseProductos={handleCloseProducto}
-                      handleOpenProductos={handleOpenProducto}
-                      //Codigo de Barras
-                      CBarra={CBarras}
-                      selectedOptions12={selectedOptions12}
-                      openCBarras={openCBarra}
-                      handleCBarras={handleCBarra}
-                      handleCloseCBarras={handleCloseCBarra}
-                      handleOpenCBarras={handleOpenCBarra}
-                      //Nacionalidad
-                      Nacionalidad={Nacionalidad}
-                      selectedOptions13={selectedOptions13}
-                      openNacionalidad={openNacionalidad}
-                      handleNacionalidad={handleNacionalidad}
-                      handleCloseNacionalidad={handleCloseNacionalidad}
-                      handleOpenNacionalidad={handleOpenNacionalidad}
+                      value={[
+                        selectedOptions.Cesta,
+                        selectedOptions.Categorias,
+                        selectedOptions.Fabricantes,
+                        selectedOptions.Marcas,
+                        selectedOptions.Segmento,
+                        selectedOptions.Tamanno,
+                        selectedOptions.RTamanno,
+                        selectedOptions.Producto,
+                        selectedOptions.CodBarra,
+                        selectedOptions.Nacionalidad
+                      ]}
+                      disabled={Openfiltros}
+                      data={[
+                        Cesta,
+                        Categorias,
+                        Fabricante,
+                        Marcas,
+                        Segmentos,
+                        Tamanno,
+                        RTamanno,
+                        Productos,
+                        CBarras,
+                        Nacionalidad
+                      ]}
+                      openFiltro={[
+                        Openfiltros.Cesta,
+                        Openfiltros.Categorias,
+                        Openfiltros.Fabricantes,
+                        Openfiltros.Marcas,
+                        Openfiltros.Segmentos,
+                        Openfiltros.Tamanno,
+                        Openfiltros.RTamanno,
+                        Openfiltros.Producto,
+                        Openfiltros.CodBarra,
+                        Openfiltros.Nacionalidad
+                      ]}
+                      handleChangeValue={handleChangeSelect}
+                      handleClose={handleCloseFiltros}
+                      handleOpen={handleOpenFiltros}
                     />
                     <SelectIndicadores
-                      Indicadores={Indicadores}
-                      selectedOptions14={selectedOptions14}
-                      openIndicadores={openIndicadores}
-                      handleIndicadores={handleIndicadores}
-                      handleCloseIndicadores={handleCloseIndicadores}
-                      handleOpenIndicadores={handleOpenIndicadores}
-                      setIDIndicadores={setIDFabricante}
-                      isSelected={isSelected}
+                      value={selectedOptions.Indicador}
+                      disabled={Openfiltros}
+                      data={Indicadores}
+                      openFiltro={Openfiltros.Indicador}
+                      handleChangeValue={handleChangeSelect}
+                      handleClose={handleCloseFiltros}
+                      handleOpen={handleOpenFiltros}
                     />
                   </article>
                   <Stack direction="row" className={styles.buttons}>
+                    {Boolean(idClienteCrip === process.env.REACT_APP_PUBLIC_ID_SECRET)?'':
                     <button
                       id="save"
                       style={{ width: "35%" }}
                       variant="contained"
-                      onClick={abrirCerrarModalSelect}
+                      onClick={handleFiltros}
                     >
                       Guardar
                     </button>
-                    <button
-                      id="process"
-                      style={{ width: "35%" }}
-                      variant="contained"
-                      onClick={comprobarCombos}
-                    >
-                      Procesar
-                    </button>
+                    }
+                      <button
+                        id="process"
+                        style={{ width: "35%" }}
+                        variant="contained"
+                        onClick={comprobarCombos}
+                      >
+                        Procesar
+                      </button>
+
                   </Stack>
                 </section>
               </StepContent>
@@ -2176,7 +2239,7 @@ export default function DataGrid() {
                         alwaysShowHorizontalScroll={true}
                         alwaysShowVerticalScroll={true}
                         rowGroupPanelShow={"always"}
-                        groupDisplayType={"groupRows"}
+                        // groupDisplayType={"groupRows"}
                         sideBar={sideBar}
                         enableCharts={true}
                         animateRows={true}
@@ -2184,6 +2247,7 @@ export default function DataGrid() {
                         enableRangeHandle={true}
                         enableFillHandle={true}
                         autoGroupColumnDef={autoGroupColumnDef}
+                        groupDisplayType={'singleColumn'}
                         domLayout="normal"
                         // pagination={true}
                       />

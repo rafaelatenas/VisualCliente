@@ -142,7 +142,7 @@ li.MuiListItem-root.MuiListItem-gutters {
     #save{
         border: none;
         border-radius: 1em;
-        background: #2FAC6A;
+        background: #32acff;
         height: 100%;
         font-size: 17px;
     }
@@ -159,14 +159,14 @@ li.MuiListItem-root.MuiListItem-gutters {
         text-decoration: none;
     }
     #save:hover{
-        color: #2FAC6A;
+        color: #32acff;
     }
     #process:hover {
         color: #F6B232;
     }
     #save:hover{
         background: #fff;
-        border: solid 2px #2FAC6A;
+        border: solid 2px #32acff;
     }
     #process:hover {
         background: #fff;

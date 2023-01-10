@@ -13,14 +13,15 @@ import CuadroFondoBlanco from '../../landing/Images/CuadroFondoBlanco.png'
 import atenaslogoEliseBlanca from '../../landing/Images/ATSElise.png'
 import atenasLogo from '../../landing/Images/ATSLOGO.png'
 import { useState } from 'react';
-import { useNavigate } from "react-router-dom";
 import { useAuthContext } from '../context/authContext';
+import { ModalRecovery } from './componentes/recoveryPasssword';
+import { encriptar } from '../../functionsValidas/cripto';
+import { useFormControl } from '@mui/material/FormControl';
 
 const recaptchaRef = React.createRef();
 
 function Login (){
   const style = styles()
-  const Navigate = useNavigate();
   const {login}=useAuthContext();
   const [email,setEmail] = useState('')
   const [password,setPassword] = useState('')
@@ -30,8 +31,6 @@ function Login (){
   const [validToken, setValidToken] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
   const [open,setOpen] = useState(false)
-  const [checked, setChecked] = React.useState(false);
-  const [emailRecovery,setEmailRecovery] = useState('')
   const [emailValidRecovery, setEmailValidRecovery] = useState(false)
 
 
@@ -48,8 +47,8 @@ function Login (){
         setFormErrors({Email: fieldValidationErrors.Email})
         break;
       case 'Password':
-        PasswordValid = value.length >= 6;
-        fieldValidationErrors.Password = PasswordValid ? '': 'Clave demasiado corta';
+        PasswordValid = value.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,15}/);
+        fieldValidationErrors.Password = PasswordValid ? '': 'Su Clave no es segura';
         setFormErrors({Password: fieldValidationErrors.Password})
         break;
       case 'EmailRecovery':
@@ -100,27 +99,27 @@ function Login (){
       password:password,
       captcha:responseKey
     } 
-    console.log(datosEnviar)
     axios.post(process.env.REACT_APP_API_ENDPOINT+"login",datosEnviar).then(result => {
       var nombre=result.data.NombresUsuarios;
-      var apellidos=result.data.ApellidosUsuarios;  
+      var apellidos=result.data.ApellidosUsuarios;
+      encriptar(process.env.REACT_APP_PUBLIC_KEY_NORMAL, result.data.ID_Retail.toString())
       sessionStorage.setItem('token', result.data.token);
-      sessionStorage.setItem('nombre', result.data.NombresUsuarios);
+      sessionStorage.setItem('Retail', result.data.Retail);
       sessionStorage.setItem('user', result.data.Login);
       sessionStorage.setItem('linkWop', result.data.LinkWop);
-      sessionStorage.setItem('Id_Cliente', result.data.ID_Cliente);
+      sessionStorage.setItem('ID_Crit', result.data.ID_Crit);
       sessionStorage.setItem('ID_Perfil', result.data.ID_Perfil);
+      sessionStorage.setItem('logo', result.data.Logo);
       sessionStorage.setItem('successAuthAtenas', result.data.success);
       if (result.data.success) {
-        login(sessionStorage.getItem('successAuthAtenas'));
-        console.log(result.data)
+        login(result.data.success);
+        console.log(result.data.LinkWop.length)
       }
       toast.fire({
           icon: 'success',
           title: ''+result.data.message+' '+nombre+' '+apellidos+'',
           confirmButtonText: `Ok`,
       })
-      
     }).catch(err => {
         if(err.response) {
           console.log(err.response)
@@ -138,14 +137,6 @@ function Login (){
   }
   
     /* Validación Google */
-  const onSubmitWithReCAPTCHA = async () => {
-    const recaptcha = recaptchaRef.current;
-      var responseCaptcha =  {captcha: await recaptcha.executeAsync(), size:recaptcha.props.size};
-      const value = responseCaptcha.captcha
-      if (value !== null) {
-        isHuman(responseCaptcha)
-      }
-  }
   const handleChangeLogin = value => {
     const responseCaptcha = {captcha: recaptchaRef.current.getValue(), size:recaptchaRef.current.props.size};
     if (value !== null) {
@@ -154,7 +145,6 @@ function Login (){
   }
   const isHuman=(valueResponse)=>{
     axios.post(process.env.REACT_APP_API_ENDPOINT+"ValidationCaptcha",valueResponse)
-    // axios.post("http://localhost:3005/VisorCliente_Api/ValidationCaptcha",valueResponse)
     .then(result => {
       console.log(result)
     switch (result.data.success) {
@@ -174,33 +164,23 @@ function Login (){
   const openModalPassword = ()=>{
     setOpen(!open)
   }
-  const handleChecked = (event) => {
-    const {checked}=event.target
-    setChecked(event.target.checked);
-    if (checked) {
-      onSubmitWithReCAPTCHA()
-    }
-  };
-  const handleUserEmailRecovery = (e) => {
-    const name = e.target.name;
-    const value = e.target.value;
-    validateField(name, value)
-    setEmailRecovery(value)
-  } 
-  const PasswordRecovery=()=>{
-    console.log(0)
+  const { focused } = useFormControl()||{}
+  if (focused) {
+    console.log(10)
   }
 
+
+console.log(focused)
   return (
     <section className={style.login}>
       <Box id='card-login' className={style.cardLogin}>
-        <FormControl className={style.form}>
+        <FormControl focused={true} className={style.form}>
           <img width={'80%'} height={'auto'} className={style.logoLogin} src={atenaslogoEliseBlanca} alt="Logo Atenas" title=''/>
           <TextField error={formErrors.Email === ''? false: true} helperText={formErrors.Email} className={formErrors.Email === ''? style.email: `${style.email} ${style.error}`} 
               variant="outlined" label="Correo" type='text' name='Email' value={email} onChange={(e)=>handleUserEmail(e)}/>
             <FormControl error={formErrors.Password === ''? false: true} className={formErrors.Password === ''? style.password: `${style.password} ${style.error}`} >
-              <InputLabel  style={{ zIndex:'30',background:'transparent'}} htmlFor="outlined-adornment-password">Clave</InputLabel>
-              <OutlinedInput id="outlined-adornment-password" type={showPassword?  'text' : 'password'} name='Password' value={password} onChange={(e)=>handleUserPassword(e)}
+              <InputLabel  style={{ zIndex:'30',background:'transparent'}} htmlFor="outlined-adornment-password">Contraseña</InputLabel>
+              <OutlinedInput autoComplete='false' id="outlined-adornment-password" type={showPassword?  'text' : 'password'} label="Contraseña" name='Password' value={password} onChange={(e)=>handleUserPassword(e)}
                 endAdornment={
                 <IconButton style={{width:'10%',height:'100%', margin:-7}} aria-label="toggle password visibility" onClick={handleClickShowPassword}  position="end">
                   {showPassword ? <VisibilityOff className={style.iconVisibility}/> : <Visibility className={style.iconVisibility}/>}
@@ -212,7 +192,7 @@ function Login (){
             <Button className={style.button} variant="outlined" disabled={!validToken} onClick={enviarDatos}>Confirmar</Button> 
         </FormControl>
           <Button className={style.recovery} onClick={()=>openModalPassword()}>
-            <p>¿Olvido su Clave?</p>
+            <p>¿Olvido su Contraseña?</p>
           </Button>
           
       </Box>
@@ -231,27 +211,9 @@ function Login (){
         aria-labelledby="modal-modal-title"
         aria-describedby="modal-modal-description"
       >
-        <Container className={style.containerRecovery}>
-          <Box className={style.boxRecovery}>
-            <img className={style.logoRecovery} src={atenasLogo} alt="Logo Atenas" title=''/>
-            <TextField error={formErrors.EmailRecovery === ''? false: true} 
-              helperText={formErrors.EmailRecovery} className={formErrors.EmailRecovery === ''? style.emailRecovery: `${style.emailRecovery} ${style.error}`} 
-              variant="outlined" label="Correo" type='text' name='EmailRecovery' value={emailRecovery} onChange={(e)=>handleUserEmailRecovery(e)}
-            />
-            <FormGroup className={style.gruopConfirm}>
-              <Typography className={style.dudeConfirm}>¿Esta seguro de realizar esta acción?</Typography>
-              <FormControlLabel control={<Checkbox checked={checked} onChange={handleChecked} className={style.confirmRecovery}/>} label="Si" />
-            </FormGroup>
-            <ReCAPTCHA 
-              className="recaptcha"
-              sitekey={'6Lew_48iAAAAAFbTFcQf7WgN8AEfIXw9dZfndnKu'}
-              size="invisible"
-              ref={recaptchaRef}
-            />
-            <Button variant="contained" disabled={!validToken} onClick={()=>PasswordRecovery()}>Confirmar</Button>
-         </Box>
-        </Container>
-        
+        <ModalRecovery
+        setOpen={setOpen}
+        />
       </Modal>
       
     </section>
@@ -288,9 +250,6 @@ const styles = makeStyles(()=>({
       borderRadius: '2em',
       backgroundColor: '#fff',
     },
-    '& label':{
-      top:-8,
-    }
   },
   password:{
     height: 'auto',
@@ -301,9 +260,6 @@ const styles = makeStyles(()=>({
       borderRadius: '2em',
       backgroundColor: '#fff',
     },
-    '& label':{
-      top:-8,
-    }
   },
   button:{
       width: '50%',
@@ -334,7 +290,7 @@ const styles = makeStyles(()=>({
       backgroundSize: 'contain',
       backgroundPosition: 'center',
       width: '50%',
-      height: '45%',
+      height: '35%',
       minWidth: 360,
       maxWidth: '500px !important',
       display: 'flex !important',
@@ -343,7 +299,7 @@ const styles = makeStyles(()=>({
       padding: '0 !important',
   },
   boxRecovery:{
-      width: '50%',
+      width: '45%',
       height: '95%',
       maxHeight: 490,
       minWidth: 250,
@@ -354,7 +310,7 @@ const styles = makeStyles(()=>({
       flexDirection: 'column',
   },
   logoRecovery:{
-    width: '60%',
+    width: '70%',
     height: 'auto',
     maxWidth: 250,
   },
@@ -385,7 +341,7 @@ const styles = makeStyles(()=>({
         alignItems: 'center',
         justifyContent: 'space-evenly',
       },
-      email:{
+      ema5l:{
         width: '90%',
         height: '10%',
         margin:'0 0 4% 0 !important',
@@ -461,9 +417,6 @@ const styles = makeStyles(()=>({
           },
         },
       },
-      confirmRecovery:{
-
-      },
       '@media screen and (max-height:600px)':{
         cardLogin:{
           height:'70%'
@@ -477,7 +430,6 @@ const styles = makeStyles(()=>({
           },
           '& label':{
             fontSize:13,
-            top:0,
           },
         },
         password:{
@@ -489,7 +441,6 @@ const styles = makeStyles(()=>({
           },
           '& label':{
             fontSize:13,
-            top:0
           },
         }
       },
@@ -515,9 +466,8 @@ const styles = makeStyles(()=>({
       },
       email:{
         width: '90%',
-        height: '10%',
+        height: '15%',
         '& label':{
-          top:-5,
           fontSize: '1.2em',
         }
       },
@@ -525,7 +475,6 @@ const styles = makeStyles(()=>({
         width: '90%',
         height: '10%',
         '& label':{
-          top:-5,
           fontSize: '1.2em',
         }
       },
@@ -567,17 +516,15 @@ const styles = makeStyles(()=>({
       },
       email:{
         width: '90%',
-        height: '10%',
+        height: '15%',
         '& label':{
-          top:-5,
           fontSize: '1.2em',
         }
       },
       password:{
           width: '90%',
-          height: '10%',
+          height: '15%',
           '& label':{
-          top:-5,
           fontSize: '1.2em',
         }
       },
@@ -616,18 +563,16 @@ const styles = makeStyles(()=>({
       },
       email:{
         width: '90%',
-        height: '10%',
+        height: '15%',
         '& label':{
           fontSize: '1.6em',
-          top: -12,
         }
       },
       password:{
           width: '90%',
-          height: '10%',
+          height: '15%',
           '& label':{
             fontSize: '1.6em',
-            top: -12,
         }
       },
       error:{
@@ -672,11 +617,11 @@ const styles = makeStyles(()=>({
       },
       email:{
         width: '90%',
-        height: '10%',
+        height: '15%',
       },
       password:{
           width: '90%',
-          height: '10%',
+          height: '15%',
       },
       error:{
           height: '10%',
@@ -726,7 +671,7 @@ const styles = makeStyles(()=>({
         maxHeight:490,
       },
       logoLogin:{
-        width: '80%',
+        width: '55%',
         height: 'auto',
         maxWidth: 460,
       },
@@ -742,14 +687,14 @@ const styles = makeStyles(()=>({
         width: '90%',
         height: '10%',
         '& label':{
-          fontSize: '1.3em',
+          fontSize: 16,
         }
       },
       password:{
         width: '90%',
         height: '10%',
         '& label':{
-          fontSize: '1.3em',
+          fontSize: 16,
         }
       },
       error:{

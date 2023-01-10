@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { BrowserRouter, Navigate, Route, Routes } from "react-router-dom";
+import { BrowserRouter, HashRouter, Route, Routes } from "react-router-dom";
 import DataReport from './componentes/manegadorRetail/data';
 import Home from './componentes/Home/Home'
 import Login from './componentes/login/login'
@@ -19,6 +19,7 @@ import MoneyMarket from './componentes/moneyMarket/MoneyMarket';
 import ItemCarousel from './componentes/Admin/componentesAdmin/carousel/crearItem';
 import 'ag-grid-community/styles/ag-grid.css'; // Core grid CSS, always needed
 import 'ag-grid-community/styles/ag-theme-alpine.css'; // Optional theme CSS
+import Wop from './componentes/moneyMarket copy/prueba';
 function App() {
   const {IdUser} = useAuthContext();
 
@@ -32,13 +33,15 @@ function App() {
               {/* <Route exact path="/retailservices/activar/usuario" element={<ActivarUsuario/>}  /> */}
               <Route exact path="/retailservices/enableuser/:email" element={<ActivarUsuario/>}  />
               <Route exact path="/retailservices/recoverypassword/:email/:token" element={<RecuperarClave/>}/>
+              <Route exact path="/retailservices/changepassword/:email/:token" element={<CambiarClave/>}/>
             </Route>
             {/*Rutas Privadas*/}
             <Route path='/retailservices/home/' element={<Privado/>}>
               <Route index element={<Home/>} />
-              <Route path='/retailservices/home/data/'  element={<DataReport/>} />
+              <Route path='/retailservices/home/retailscanning/'  element={<DataReport/>} />
               {/* <Route exact path='/retailservices/home/report' element={<Report/>}/> */}
               <Route exact path='/retailservices/home/moneymarket' element={<MoneyMarket/>}/>
+              <Route exact path='/retailservices/home/wop/:token' element={<Wop/>}/>
               <Route exact path="/retailservices/home/changepassword/:email" element={<CambiarClave/>}/>
               
               {/* 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import withReactContent from 'sweetalert2-react-content';
 import Swal from 'sweetalert2';
@@ -13,11 +13,13 @@ import { makeStyles } from '@material-ui/styles';
 import logoCuadro from '../../landing/Images/logo-cauadro.png'
 import { FooterMovile } from '../Home/homeComponents';
 import { ArrowCircleDownRounded } from '@mui/icons-material';
+import { desencriptar } from '../../functionsValidas/cripto';
 
 export default function CambiarClave(){
   const style = styles()
   const Navigate = useNavigate();
-  let { email,token } = useParams()
+  let { email } = useParams()
+  console.log(typeof email, email)
   const {logout}=useAuthContext();
   const [password,setPassword] = useState('')
   const [password2,setPassword2] = useState('')
@@ -26,6 +28,20 @@ export default function CambiarClave(){
   const [passwordValid, setPasswordValid] = useState(false)
   const [confirmPasswordValid,setConfirmPasswordValid] = useState(false)
   const [showPassword, setShowPassword] = useState(false)
+
+  useEffect(()=>{
+    
+    console.log(email)
+    const Peticiondesencriptado = async () => {
+      try{
+        const desencriptado = await desencriptar(process.env.REACT_APP_PUBLIC_KEY_NORMAL, email);
+        console.log(desencriptado)
+      } catch(e){
+        console.log("Error desencriptando: " + e.message + ". ¿La contraseña es la correcta y la información está en base64?")
+      }
+    }
+    Peticiondesencriptado()
+  },[])
 
   const validateField = (fieldName, value) => {
     let fieldValidationErrors = formErrors;
@@ -90,7 +106,7 @@ export default function CambiarClave(){
     });
     e.preventDefault();
     var datosEnviar={
-      email:email,
+      // email:email,
       password:password,
     } 
     axios.post(process.env.REACT_APP_API_ENDPOINT+"Activar",datosEnviar).then(result => {
@@ -170,7 +186,7 @@ export default function CambiarClave(){
       <div className={style.changePassword}>
         <FormControl className={style.formChange}>
           <img className={style.logoActivate} src={atenaslogoEliseBlanca} alt='Logo Elise Blanca. Atenas Grupo Consultor' title=''/>
-          <FormLabel className={style.text}>{email}</FormLabel>
+          <FormLabel className={style.text}>email</FormLabel>
           <TextField className={style.textPassword} label="Clave"  type={showPassword ? 'text' : 'password'} value={password}
             onChange={(e)=>handleUserPassword(e)} name='Password'
           />
@@ -274,10 +290,11 @@ const styles = makeStyles(()=>({
   },
   '@media screen and (min-width:1024px)':{
     changePassword:{
-      backgroundSize:'30% 90%'
+      backgroundSize:'25% 80%'
     },
     formChange:{
-      width:'25%'
+      width:'20%',
+      height:'70%'
     },
     back:{
       display:'block !important',

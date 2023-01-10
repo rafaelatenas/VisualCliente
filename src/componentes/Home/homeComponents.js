@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { ManageAccounts, ExitToApp, Settings, AdminPanelSettings, ExitToAppRounded, HomeRounded, PersonRounded } from "@mui/icons-material";
 import { Avatar, BottomNavigation, BottomNavigationAction, Box, Button, Card, CardActionArea, CardContent, CardMedia, Container, CssBaseline, IconButton, Paper, Popover, Skeleton, SpeedDial, SpeedDialAction, SwipeableDrawer, Typography } from "@mui/material";
 import eliseAtenas from '../../landing/Images/ats_logo-elise-blanca.png'
@@ -13,13 +13,9 @@ import HPantry from '../../landing/Images/ATSLogoHP.png'
 import Excecution from '../../landing/Images/ATSLogoExecution.png'
 import CI from '../../landing/Images/ATSLogoCI.png'
 // Iconos Reportes
-import NSE from '../../landing/Images/IconATSNSE.jpg'
 import CanalesCadenas from '../../landing/Images/IconATSCanalesCadenas.jpg'
 import Categorias from '../../landing/Images/IconATSCategorias.png'
 import Omnibus from '../../landing/Images/IconATSOmnibus.png'
-import RankingCategorias from '../../landing/Images/IconATSRankingCategorias.png'
-import TopProveedores from '../../landing/Images/IconATSTopProveedores.jpg'
-import TopSkus from '../../landing/Images/IconATSTopSkus.png'
 //------//
 import WOP from '../../landing/Images/ATSLogoWop.png'
 import MoneyMarket from '../../landing/Images/ATSLogoMoneyMarket.png'
@@ -28,10 +24,11 @@ import { useAuthContext } from "../context/authContext";
 import temporal from "../../landing/Images/provisional.png"
 import SwipeableViews from "react-swipeable-views";
 import { Global } from "@emotion/react";
+import { encriptar } from "../../functionsValidas/cripto";
 
 
 const reports = [
-    { key: 1, name: 'WOP', icon: RServices, style: { height: '90%' } },
+    { key: 1, name: 'WOP', icon: WOP, style: { height: '90%' } },
     { key: 2, name: 'Retail Scanning', icon: RScanning, style: { height: '80%', width: '80%' } },
     { key: 3, name: 'Home Pantry', icon: HPantry, style: { height: '85%' } },
     { key: 4, name: 'CI', icon: CI, style: { height: '90%', minWidth: 100, minHeight: 120, padding: '5%' } },
@@ -65,12 +62,25 @@ const useStylesMoViles = makeStyles((withdScreen, heightScreen) => ({
 }))
 export function HeaderDesktop(props) {
     const { logout, isAuthenticated } = useAuthContext();
-    const nombreUsuario = sessionStorage.getItem('nombre')
+    const nombreUsuario = sessionStorage.getItem('Retail')
+    const logoRetail = sessionStorage.getItem('logo')
+    const [urlCript, setUrlCript] = useState()
 
+    useEffect(() => {
+        const Peticionencriptado = async () => {
+            try{
+              const encriptado = await encriptar(process.env.REACT_APP_PUBLIC_KEY_NORMAL, sessionStorage.getItem('user')/sessionStorage.getItem('Id_Cliente'), 0);
+              setUrlCript(encriptado)
+            } catch(e){
+              console.log("Error desencriptando: " + e.message + ". ¿La contraseña es la correcta y la información está en base64?")
+            }
+          }
+          Peticionencriptado()
+    },[])
     const styles = useStyles();
     const actions = [
         { icon: <ExitToApp className='IconsSpeedDial' onClick={() => logout()} />, name: 'Salir', admin: 0 },
-        { icon: <NavLink className='LinkIcons' to={`/retailservices/home/changepassword/${sessionStorage.getItem('user')}`} ><Settings className='IconsSpeedDial' /></NavLink>, name: 'Configuraciones', admin: 0 },
+        { icon: <NavLink className='LinkIcons' to={`/retailservices/home/changepassword/${urlCript}`} ><Settings className='IconsSpeedDial' /></NavLink>, name: 'Configuraciones', admin: 0 },
     ];
     const [openSpeedDial, setOpenSpeedDial] = React.useState(false);
     const handleOpenSpeedDial = () => setOpenSpeedDial(true);
