@@ -79,7 +79,11 @@ function Login (){
   const handleClickShowPassword = () => {
     setShowPassword(!showPassword) 
   };
-  const enviarDatos=(e)=>{ 
+  const encript = async(key, data) => {
+    const encriptado = await encriptar(key, data)
+    sessionStorage.setItem('ID_Crit', encriptado);
+  } 
+  const enviarDatos= (e) =>{ 
     const MySwal = withReactContent(Swal)
     const toast = MySwal.mixin({
       toast: true,
@@ -102,12 +106,12 @@ function Login (){
     axios.post(process.env.REACT_APP_API_ENDPOINT+"login",datosEnviar).then(result => {
       var nombre=result.data.NombresUsuarios;
       var apellidos=result.data.ApellidosUsuarios;
-      encriptar(process.env.REACT_APP_PUBLIC_KEY_NORMAL, result.data.ID_Retail.toString())
+      encript(process.env.REACT_APP_PUBLIC_KEY_NORMAL, result.data.ID_Perfil.toString())
+
       sessionStorage.setItem('token', result.data.token);
       sessionStorage.setItem('Retail', result.data.Retail);
       sessionStorage.setItem('user', result.data.Login);
       sessionStorage.setItem('linkWop', result.data.LinkWop);
-      sessionStorage.setItem('ID_Crit', result.data.ID_Crit);
       sessionStorage.setItem('ID_Perfil', result.data.ID_Perfil);
       sessionStorage.setItem('logo', result.data.Logo);
       sessionStorage.setItem('successAuthAtenas', result.data.success);

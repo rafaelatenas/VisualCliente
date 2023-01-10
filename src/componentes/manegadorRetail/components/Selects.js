@@ -184,9 +184,9 @@ export function SelectCanales(params) {
     idCliente
   } = params;
   const classes = useStyles();
-  var ID_Cliente = sessionStorage.getItem("Id_Cliente");
-
-  const MiCADENA=[{id:parseInt(idCliente) !== 11? parseInt(ID_Cliente): selectedOptionRetail.id, nombre: "Mi Cadena"}]
+  var ID_Cliente = sessionStorage.getItem("ID_Perfil");
+  // parseInt(desencriptado) === (parseInt(process.env.REACT_APP_PUBLIC_ID_SECRET)-10
+  const MiCADENA=[{id:parseInt(ID_Cliente) !== 1? parseInt(ID_Cliente): selectedOptionRetail.id, nombre: "Mi Cadena"}]
 
   let dataUnificada =
     data.length > 0

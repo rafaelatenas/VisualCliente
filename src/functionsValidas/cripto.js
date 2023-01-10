@@ -35,45 +35,41 @@ export const encriptar = async (contraseña, textoPlano, tipo) => {
         clave,
         bufferTextoPlano
     );
-    let valor
-    switch (tipo) {
-        case 0:
-            valor =
-            bufferABase64([
-                ...sal,
-                ...vectorInicializacion,
-                ...new Uint8Array(encrypted)
-            ]);
-            break;
-        case 1:
-            valor =
-            sessionStorage.setItem('Id_Cliente', bufferABase64([
-                ...sal,
-                ...vectorInicializacion,
-                ...new Uint8Array(encrypted)
-            ]));
-            break;
-        default:
-            break;
-    }
-    
-    return valor
+    return bufferABase64([
+        ...sal,
+        ...vectorInicializacion,
+        ...new Uint8Array(encrypted)
+    ]);
+    // switch (tipo) {
+    //     case 0:
+    //         valor =
+    //         bufferABase64([
+    //             ...sal,
+    //             ...vectorInicializacion,
+    //             ...new Uint8Array(encrypted)
+    //         ]);
+    //         break;
+    //     case 1:
+            
+    //         break;
+    //     default:
+    //         break;
+    // }
 };
 
 export const desencriptar = async (contraseña, encriptadoEnBase64) => {
-    console.log(contraseña, encriptadoEnBase64)
     const decoder = new TextDecoder();
-    const datosEncriptados = base64ABuffer(encriptadoEnBase64);
+    const datosEncriptados = base64ABuffer('zs87bdaFx2Al+YnJRNIebF+hwEhlA8K7kpNhx8c5itHkHzBo/MiPR4MlDXquW8w8');
+		console.log(typeof encriptadoEnBase64 === "string")
 
     const sal = datosEncriptados.slice(0, LONGITUD_SAL);
     const vectorInicializacion = datosEncriptados.slice(0 + LONGITUD_SAL, LONGITUD_SAL + LONGITUD_VECTOR_INICIALIZACION);
     const clave = await derivacionDeClaveBasadaEnContraseña(contraseña, sal, 100000, 256, 'SHA-256');
-    console.log(clave)
     const datosDesencriptadosComoBuffer = await window.crypto.subtle.decrypt(
         { name: "AES-CBC", iv: vectorInicializacion },
         clave,
         datosEncriptados.slice(LONGITUD_SAL + LONGITUD_VECTOR_INICIALIZACION)
     );
-    console.log(decoder.decode(datosDesencriptadosComoBuffer))
     return decoder.decode(datosDesencriptadosComoBuffer);
+
 }

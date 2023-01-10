@@ -208,9 +208,10 @@ export default function DataGrid() {
     };
     const Peticiondesencriptado = async () => {
       try{
-        const desencriptado = await desencriptar(process.env.REACT_APP_PUBLIC_KEY_NORMAL, sessionStorage.getItem('Id_Cliente'));
+        const desencriptado = await desencriptar(process.env.REACT_APP_PUBLIC_KEY_NORMAL, sessionStorage.getItem('ID_Crit'));
         setidCliente(desencriptado)
-        switch (desencriptado === process.env.REACT_APP_PUBLIC_ID_SECRET) {
+        console.log(desencriptado)
+        switch (parseInt(desencriptado) === (parseInt(process.env.REACT_APP_PUBLIC_ID_SECRET)-10)) {
           case true:
             PeticionRetailers()
             break;
@@ -1821,7 +1822,7 @@ console.log(bodyContent)
       headerName: "Segmento",
       field: "Segmento",
       filter: "agNumberColumnFilter",
-      cellStyle: { textAlign: "left" },
+      cellStyle: { textAlign: "right" },
     },
     {
       headerName: "Canal",
@@ -1896,13 +1897,13 @@ console.log(bodyContent)
       headerName: "Codigo de Barra",
       field: "CodigoBarra",
       filter: "agNumberColumnFilter",
-      cellStyle: { textAlign: "left" },
+      cellStyle: { textAlign: "right" },
     },
     {
       headerName: "PrecioMax ($)",
       field: "PrecioMaxDolar",
       filter: "agNumberColumnFilter",
-      cellStyle: { textAlign: "left" },
+      cellStyle: { textAlign: "right" },
       valueFormatter: (params)=>{if (params.value !== undefined) {
         return new Intl.NumberFormat("es-VE").format(params.value.toFixed(2))
       }},
@@ -1911,7 +1912,7 @@ console.log(bodyContent)
       headerName: "PrecioMin ($)",
       field: "PrecioMinDolar",
       filter: "agNumberColumnFilter",
-      cellStyle: { textAlign: "left" },
+      cellStyle: { textAlign: "right" },
       valueFormatter: (params)=>{if (params.value !== undefined) {
         return new Intl.NumberFormat("es-VE").format(params.value.toFixed(2))
       }},
@@ -1921,7 +1922,7 @@ console.log(bodyContent)
       headerName: "PrecioProm ($)",
       field: "PrecioPromDolar",
       filter: "agNumberColumnFilter",
-      cellStyle: { textAlign: "left" },
+      cellStyle: { textAlign: "right" },
       valueFormatter: (params)=>{if (params.value !== undefined) {
         return new Intl.NumberFormat("es-VE").format(params.value.toFixed(2))
       }},
@@ -1931,13 +1932,13 @@ console.log(bodyContent)
       headerName: "Producto",
       field: "Producto",
       filter: "agNumberColumnFilter",
-      cellStyle: { textAlign: "left" },
+      cellStyle: { textAlign: "right" },
     },
     {
       headerName: "Retail",
       field: "Retail",
       filter: "agNumberColumnFilter",
-      cellStyle: { textAlign: "left" },
+      cellStyle: { textAlign: "right" },
 
     },
     // { headerName:'ShareValor', field: 'ShareValor', filter: 'agNumberColumnFilter', pivot: true, cellStyle: { textAlign: "left"},},
@@ -1950,7 +1951,7 @@ console.log(bodyContent)
       headerName: "VentasUnidades",
       field: "VentasUnidades",
       filter: "agNumberColumnFilter",
-      cellStyle: { textAlign: "left" },
+      cellStyle: { textAlign: "right" },
       valueFormatter: (params)=>{if (params.value !== undefined) {
         return new Intl.NumberFormat("es-VE").format(params.value.toFixed(2))
       }},
@@ -1961,7 +1962,7 @@ console.log(bodyContent)
       headerName: "VentasValor",
       field: "VentasValor",
       filter: "agNumberColumnFilter",
-      cellStyle: { textAlign: "left" },
+      cellStyle: { textAlign: "right" },
       valueFormatter: (params)=>{if (params.value !== undefined) {
         return new Intl.NumberFormat("es-VE").format(params.value.toFixed(2))
       }},
@@ -2017,7 +2018,7 @@ console.log(bodyContent)
       defaultToolPanel: "columns",
     };
   }, []);
-
+console.log(idClienteCrip)
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -2043,7 +2044,7 @@ console.log(bodyContent)
         <DrawerHeaderComponent
           handleDrawerClose={handleDrawerClose}
         />
-        {Boolean(idClienteCrip === process.env.REACT_APP_PUBLIC_ID_SECRET)?
+        {Boolean(parseInt(idClienteCrip) === (parseInt(process.env.REACT_APP_PUBLIC_ID_SECRET)-10))?
           <SelecctionRetail
             selectedOptionRetail={selectedOptionRetail}
             setSelectedOptionRetail={setSelectedOptionRetail}
