@@ -163,7 +163,7 @@ export function MySelecctionComponent(params) {
   );
 }
 export function SelecctionRetail(params) {
-    const {selectedOptionRetail,setSelectedOptionRetail,setSelectedOption,selectedOptions,Retail}=params
+    const {selectedOptionRetail,setSelectedOptionRetail,handleOpen,selectedOptions,Retail}=params
     
     const handlePeriodos = (event) => {
       let algo = []
@@ -206,6 +206,7 @@ export function SelecctionRetail(params) {
                 name="Retail"
                 value={selectedOptionRetail}
                 onChange={handlePeriodos}
+                onOpen={() => handleOpen("Retail")}
                 sx={{
                     width: "100%",
                     overflow: "visible",

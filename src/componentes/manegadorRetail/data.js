@@ -7,18 +7,15 @@ import "./data.css";
 import { styled } from "@mui/material/styles";
 import { Box, CssBaseline, IconButton } from "@material-ui/core";
 import { ArrowBack, ArrowUpwardRounded } from "@material-ui/icons";
-import {Stack,Button,Step,StepLabel,StepContent,Tooltip,CircularProgress, Drawer, Divider,Stepper, Typography} from "@mui/material";
-import { useState } from "react";
+import {Stack,Button,Step,StepLabel,StepContent,Tooltip, Drawer, Divider,Stepper, Typography} from "@mui/material";
 import { makeStyles } from "@material-ui/core/styles";
-import { Modal } from "@material-ui/core";
 import axios from "axios";
 import Swal from "sweetalert2";
 import withReactContent from "sweetalert2-react-content";
-import {BotonUsuario,HeaderComponent, DrawerHeaderComponent, CardComponents, MySelecctionComponent, MenuAtenas, SelecctionRetail,} from "./components/Components";
+import {BotonUsuario,HeaderComponent, DrawerHeaderComponent, CardComponents, MySelecctionComponent, MenuAtenas, SelecctionRetail} from "./components/Components";
 import {SelectCanales,SelectAtributos,SelectIndicadores,SelectPeriodos,SelectRegiones,} from "./components/Selects";
 import Alert from "@mui/material/Alert";
-import { useMemo } from "react";
-import { useEffect } from "react";
+import { useMemo, useEffect, useState, useCallback} from "react";
 import { desencriptar } from "../../functionsValidas/cripto";
 
 const MySwal = withReactContent(Swal);
@@ -423,6 +420,24 @@ export default function DataGrid() {
   const handleOpenFiltros = (name) => {
     setOpenfiltros({ ...Openfiltros, [name]: true });
     switch (name) {
+      case "Retail":
+        setSelectedOption({ ...selectedOptions,
+          'Periodo': [],
+          'Canales': [],
+          'Areas': [],
+          'Zona': [],
+          'Cesta': [],
+          'Categorias': [],
+          'Fabricantes': [],
+          'Marcas': [],
+          'Segmento': [],
+          'Tamanno': [],
+          'RTamanno': [],
+          'Producto': [],
+          'CodBarra': [],
+          'Nacionalidad': [],
+          'Indicador': [],})
+          break;
       case "Periodo":
         setSelectedOption({ ...selectedOptions,
           'Canales': [],
@@ -841,7 +856,6 @@ export default function DataGrid() {
       IdZona: selectedOptions.Zona.length > 0 ? selectedOptions.Zona :"",
       IdRetail: selectedOptions.Canales.indexOf(selectedOptionRetail.id) > -1?selectedOptionRetail.id:"",
     });
-console.log(bodyContent)
     let reqOptions = {
       url: process.env.REACT_APP_API_ENDPOINT + "ListarCesta/",
       method: "POST",
@@ -1821,8 +1835,11 @@ console.log(bodyContent)
     {
       headerName: "Segmento",
       field: "Segmento",
-      filter: "agNumberColumnFilter",
-      cellStyle: { textAlign: "right" },
+      filter: "agTextColumnFilter",
+      pivot: true,
+      enablePivot: true,
+      enableRowGroup: true,
+      cellStyle: { textAlign: "left" },
     },
     {
       headerName: "Canal",
@@ -1970,7 +1987,6 @@ console.log(bodyContent)
     },
   ];
  
-
   const defaultColDef = useMemo(() => {
     return {
       sortable: true,
@@ -2018,7 +2034,34 @@ console.log(bodyContent)
       defaultToolPanel: "columns",
     };
   }, []);
-console.log(idClienteCrip)
+
+
+
+  const getLocaleText = useCallback((params) => {
+    switch (params.key) {
+      case "rowGroupColumnsEmptyMessage":
+        return "Arrastre aquí para agrupar.";
+      case "loadingOoo":
+        return params.respuesta!==undefined?params.respuesta:"Cargando...";
+      case "noRowsToShow":
+        return params.respuesta!==undefined?params.respuesta:"No hay información que mostrar";
+      case "autosizeThiscolumn":
+        return "Autodimennsionar esta columna";
+      case "autosizeAllColumns":
+        return "Autodimennsionar todas las columnas";
+      default:
+        if (params.defaultValue) {
+          // the &lrm; marker should not be made uppercase
+          const val = params.defaultValue.split("&lrm;");
+          const newVal = val[0].toUpperCase();
+          if (val.length > 1) {
+            return `${newVal}&lrm;`;
+          }
+          return newVal;
+        }
+        return "";
+    }
+  }, []);
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -2048,6 +2091,7 @@ console.log(idClienteCrip)
           <SelecctionRetail
             selectedOptionRetail={selectedOptionRetail}
             setSelectedOptionRetail={setSelectedOptionRetail}
+            handleOpen={handleOpenFiltros}
             Retail={Retail}
             selectedOptions={selectedOptions}
             setSelectedOption={setSelectedOption}
@@ -2091,13 +2135,8 @@ console.log(idClienteCrip)
             <Step className={styles.stepCombo}>
               <StepContent sx={{ "& div": { height: "100% !important" } }}>
                 <section className={styles.table}>
-                  <Modal>
-                    <Box sx={{ display: "flex" }}>
-                      <CircularProgress/>
-                    </Box>
-                  </Modal>
                   <HeaderComponent />
-                  {Boolean(idClienteCrip === process.env.REACT_APP_PUBLIC_ID_SECRET) && selectedOptionRetail.id.length!==0?
+                  {Boolean(parseInt(idClienteCrip) === (parseInt(process.env.REACT_APP_PUBLIC_ID_SECRET)-10)) && selectedOptionRetail.id.length!==0?
                     <div style={{gridRow:'1/2', gridColumn:'1/2', width:'90%', display:'flex', alignItems:'center'}}>
                       <Typography >Retail seleccionado: <u>{selectedOptionRetail.nombre}</u></Typography>
                     </div>
@@ -2241,6 +2280,8 @@ console.log(idClienteCrip)
                         alwaysShowVerticalScroll={true}
                         rowGroupPanelShow={"always"}
                         // groupDisplayType={"groupRows"}
+                        getLocaleText={getLocaleText}
+
                         sideBar={sideBar}
                         enableCharts={true}
                         animateRows={true}

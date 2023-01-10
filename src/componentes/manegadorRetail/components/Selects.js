@@ -63,7 +63,7 @@ export function SelectPeriodos(params) {
         alignItems: "center",
       }}
     >
-      <InputLabel style={{ width: "auto", padding: "10% 0 5%", fontSize: 18 }}>
+      <InputLabel style={{ width: "auto", padding: "10% 0 5%"}}>
         PERÍODOS
       </InputLabel>
       <FormControl
@@ -249,6 +249,7 @@ export function SelectCanales(params) {
           onClose={() => handleClose("Canales")}
           onOpen={() => handleOpen("Canales")}
           renderValue={(selected) => {
+            console.log(selected);
             if (selected.length > 1 && selected.length < dataUnificada.length) {
               return (
                 <ListItemText
@@ -317,7 +318,9 @@ export function SelectRegiones(params) {
   } = params;
   const valueArea = value[0];
   const classes = useStyles();
+
   let dataUnificada = data.length > 0 ? data : [];
+
   const OptionRegiones = dataUnificada.map((item) => (
     <MenuItem key={item.id} value={item.id} className="items">
       <Checkbox checked={valueArea.indexOf(item.id) > -1} />
